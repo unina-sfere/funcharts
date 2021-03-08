@@ -794,12 +794,14 @@ get_mfd_fd <- function(fdobj) {
     }
     if (identical(colnames(coefs), fdobj$fdnames[[2]])) {
       coefs <- array(coefs, dim = c(nrow(coefs), ncol(coefs), 1))
+      dimnames(coefs) <- list()
       dimnames(coefs)[[1]] <- dimnames(fdobj$coefs)[[1]]
       dimnames(coefs)[[2]] <- fdobj$fdnames[[2]]
       dimnames(coefs)[[3]] <- fdobj$fdnames[[3]]
     }
     if (identical(colnames(coefs), fdobj$fdnames[[3]])) {
       coefs <- array(coefs, dim = c(nrow(coefs), 1, ncol(coefs)))
+      dimnames(coefs) <- list()
       dimnames(coefs)[[1]] <- dimnames(fdobj$coefs)[[1]]
       dimnames(coefs)[[2]] <- fdobj$fdnames[[2]]
       dimnames(coefs)[[3]] <- fdobj$fdnames[[3]]

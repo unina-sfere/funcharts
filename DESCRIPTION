@@ -14,7 +14,7 @@ Authors@R: c(
     )
 Description: Provides functional control charts 
     for statistical process monitoring of functional data.
-Depends: fda, dplyr, ggplot2, R (>= 3.6.0)
+Depends: fda, dplyr, ggplot2, R (>= 3.3.0)
 Imports: rlang, parallel, tidyr, patchwork
 License: GPL-3
 Encoding: UTF-8
