@@ -113,7 +113,7 @@ ggplot() +
 For class `mfd` we provide a function `pca_mfd`, which is a wrapper to `pca.fd`.
 It returns multivariate functional principal component scores summed over variables (`fda::pca.fd` returns an array of scores when providing a multivariate functional data object).
 Moreover, the eigenfunctions or multivariate functional principal components given in `harmonics` argument are converted to the `mfd` class.
-We also provide a plot function for the eigenfunctions (the argument `harm` selects which componets to plot).
+We also provide a plot function for the eigenfunctions (the argument `harm` selects which components to plot).
 
 ```{r}
 pca <- pca_mfd(mfdobj_x1)
