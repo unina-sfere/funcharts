@@ -10,3 +10,7 @@
 ^\.github$
 ^cran-comments.md
 ^CRAN-RELEASE$
+^vignettes/capezza2020\.Rmd\.orig$
+^vignettes/centofanti2020\.Rmd\.orig$
+^vignettes/mfd\.Rmd\.orig$
+^vignettes/precompile.R$

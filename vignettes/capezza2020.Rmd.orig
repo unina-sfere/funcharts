@@ -12,7 +12,17 @@ body {
 text-align: justify}
 </style>
 
-
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>",
+    out.extra='style="display:block; margin: auto"',
+    fig.align="center",
+    fig.path = "capezza2020-",
+    tidy=FALSE,
+    fig.width=7,
+    fig.height=4)
+```
 
 # Control charts for monitoring a scalar response variable and multivariate functional covariates based on scalar-on-function regression
 
@@ -26,8 +36,7 @@ NOTE: since the objective of this vignette is only to illustrate how the package
 
 First of all, starting from the discrete data, let us build the multivariate functional data objects of class `mfd`, see `vignette("mfd")`.
 
-
-```r
+```{r}
 library(funcharts)
 data("air")
 fun_covariates <- names(air)[names(air) != "NO2"]
@@ -39,15 +48,13 @@ mfdobj_x <- get_mfd_list(air[fun_covariates],
 
 Then, we extract the scalar response variable, i.e. the mean of `NO2` at each observation:
 
-
-```r
+```{r}
 y <- rowMeans(air$NO2)
 ```
 
 In order to perform the statistical process monitoring analysis, we divide the data set into a phase I and a phase II dataset.
 
-
-```r
+```{r}
 rows1 <- 1:300
 rows2 <- 301:355
 mfdobj_x1 <- mfdobj_x[rows1]
@@ -67,8 +74,7 @@ Three alternatives are available (default is `variance`):
 * if "PRESS", each j-th functional principal component is retained into the MFPCA model if, by adding it to the set of the first j-1 functional principal components, then the predicted residual error sum of squares (PRESS) statistic decreases, and at the same time the fraction of variance explained by that single component is greater than `single_min_variance_explained.` This criterion is used in Capezza et al. (2020).
 * if "gcv", the criterion is equal as in the previous "PRESS" case, but the "PRESS" statistic is substituted by the generalized cross-validation (GCV) score.
 
-
-```r
+```{r}
 mod <- sof_pc(y = y1,
               mfdobj_x = mfdobj_x1,
               selection = "PRESS",
@@ -78,21 +84,15 @@ mod <- sof_pc(y = y1,
 As a result you get a list with the original data used for model estimation, the result of applying `pca_mfd` on the multivariate functional covariates, the estimated regression model.
 It is possible to plot the estimated functional regression coefficients, which is also a multivariate functional data object of class `mfd`:
 
-
-```r
+```{r plot_beta}
 plot_mfd(mod$beta)
 ```
 
-<img src="capezza2020-plot_beta-1.png" title="plot of chunk plot_beta" alt="plot of chunk plot_beta" style="display:block; margin: auto" style="display: block; margin: auto;" />
-
 Moreover bootstrap can be used to obtain uncertainty quantification:
 
-
-```r
+```{r plot_bootstrap_sof_pc}
 plot_bootstrap_sof_pc(mod, nboot = 10)
 ```
-
-<img src="capezza2020-plot_bootstrap_sof_pc-1.png" title="plot of chunk plot_bootstrap_sof_pc" alt="plot of chunk plot_bootstrap_sof_pc" style="display:block; margin: auto" style="display: block; margin: auto;" />
 
 
 ## Control charts
@@ -110,15 +110,12 @@ The argument `newdata` contains the phase II data set of observations of multiva
 that are to be monitored with the control charts.
 The function `plot_control_charts` returns a ggplot with the control charts.
 
-
-```r
+```{r plot_control_charts_pca}
 cclist_pca <- control_charts_pca(pca = mod$pca,
                                  components = mod$components,
                                  newdata = mfdobj_x2)
 plot_control_charts(cclist_pca)
 ```
-
-<img src="capezza2020-plot_control_charts_pca-1.png" title="plot of chunk plot_control_charts_pca" alt="plot of chunk plot_control_charts_pca" style="display:block; margin: auto" style="display: block; margin: auto;" />
 
 ### Supervised monitoring
 
@@ -127,15 +124,12 @@ The function `control_charts_sof_pc` provides a data frame with all the informat
 The same function `plot_control_charts` can be used to obtain ggplot with the three control charts.
 As for unsupervised monitoring, you can pass a `tuning_data` set (see previous section).
 
-
-```r
+```{r plot_control_charts_sof_pc}
 cclist_sof_pc <- control_charts_sof_pc(mod = mod,
                                        y_test = y2,
                                        mfdobj_x_test = mfdobj_x2)
 plot_control_charts(cclist_sof_pc)
 ```
-
-<img src="capezza2020-plot_control_charts_sof_pc-1.png" title="plot of chunk plot_control_charts_sof_pc" alt="plot of chunk plot_control_charts_sof_pc" style="display:block; margin: auto" style="display: block; margin: auto;" />
 
 ## Fault detection
 
@@ -146,26 +140,9 @@ which variable was possibly responsible of the anomalous observation.
 We can get the out of control observations using `which_ooc`.
 In the following, we focus on the supervised monitoring.
 
-
-```r
+```{r}
 ooc_index <- which_ooc(cclist_sof_pc)
 ooc_index
-#> $T2
-#>    n  id
-#> 1  5 305
-#> 2 12 312
-#> 
-#> $spe
-#>   n  id
-#> 1 9 309
-#> 
-#> $y
-#>    n  id
-#> 1 29 329
-#> 2 52 352
-#> 3 53 353
-#> 4 54 354
-#> 5 55 355
 ```
 
 
@@ -173,20 +150,14 @@ From the control charts it is possible to see some phase II observations out of 
 For example, let us consider observation 9. We can exploit the contribution plots using the function `cont_plot` to identify the variables responsible of the anomaly.
 The contributions are plotted as bar plots, against upper control limits estimated empirically on the training data.
 
-
-```r
+```{r cont_plot}
 cont_plot(cclist_sof_pc, 9)
 ```
-
-<img src="capezza2020-cont_plot-1.png" title="plot of chunk cont_plot" alt="plot of chunk cont_plot" style="display:block; margin: auto" style="display: block; margin: auto;" />
 Finally, we can also plot any multivariate functional observation against a reference data set by using the function `plot_mon`:
 
-
-```r
+```{r plot_mon}
 plot_mon(cclist_sof_pc, mfdobj_x1, mfdobj_x2[9])
 ```
-
-<img src="capezza2020-plot_mon-1.png" title="plot of chunk plot_mon" alt="plot of chunk plot_mon" style="display:block; margin: auto" style="display: block; margin: auto;" />
 This helps to understand which part of the observations were anomalous. Variables exceeding contribution plot limits are coloured in red.
 
 
@@ -196,8 +167,7 @@ In Capezza et al. (2020), we have also implemented real-time monitoring (both un
 Given the domain interval $(a, b)$ of the functional data, for each current domain point $k$ to be monitored, it filters the available functional data in the interval $(a,k)$.
 The function `get_mfd_list_real_time` gives a list of functional data objects each evolving up to the intermediate domain point $k$.
 
-
-```r
+```{r}
 mfd_list <- get_mfd_list_real_time(
   data_list = air[fun_covariates],
   grid = 1:24,
@@ -210,15 +180,13 @@ mfd_list2 <- lapply(mfd_list, function(x) x[rows2])
 
 Then, the function `sof_pc_real_time` applies the function `sof_pc` to each element in `mfd_list1`.
 
-
-```r
+```{r}
 mod_list <- sof_pc_real_time(y = y1, mfd_real_time_list = mfd_list1)
 ```
 
 Then, we can use `control_charts_sof_pc_real_time` to apply `control_charts_sof_pc` to each element in `mod_list` and produce control charts for the phase II data `mfd_list2` and `y2`.
 
-
-```r
+```{r}
 cc_list_real_time <- control_charts_sof_pc_real_time(
   mod_list = mod_list,
   y_test = y2,
@@ -229,12 +197,9 @@ cc_list_real_time <- control_charts_sof_pc_real_time(
 Finally, we can plot the real-time control charts for a single observations, giving for each $k$ the monitoring statistics calculated on the data observed in $(a, k)$.
 Here follows an example showing the real time control charts for a single phase II observation (id number 9).
 
-
-```r
+```{r plot_control_charts_real_time}
 plot_control_charts_real_time(cc_list_real_time, id_num = 9)
 ```
-
-<img src="capezza2020-plot_control_charts_real_time-1.png" title="plot of chunk plot_control_charts_real_time" alt="plot of chunk plot_control_charts_real_time" style="display:block; margin: auto" style="display: block; margin: auto;" />
 
 
 # References
