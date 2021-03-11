@@ -68,8 +68,7 @@ mfd_list <- get_mfd_list_real_time(
   grid = 1:24,
   n_basis = 15,
   lambda = 1e-2,
-  n_instants = 7,
-  start = .5)
+  k_seq = seq(0.5, 1, length.out = 7))
 mfd_list1 <- lapply(mfd_list, function(x) x[rows1])
 mfd_list2 <- lapply(mfd_list, function(x) x[rows2])
 

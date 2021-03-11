@@ -80,7 +80,7 @@ mod <- sof_pc(y = y1,
               single_min_variance_explained = .01)
 ```
 
-As a result you get a list with the original data used for model estimation, the result of applying `pca_mfd` on the multivariate functional covariates, the estiamted regression model.
+As a result you get a list with the original data used for model estimation, the result of applying `pca_mfd` on the multivariate functional covariates, the estimated regression model.
 It is possible to plot the estimated functional regression coefficients, which is also a multivariate functional data object of class `mfd`:
 
 ```{r}
@@ -172,8 +172,7 @@ mfd_list <- get_mfd_list_real_time(
   grid = 1:24,
   n_basis = 15,
   lambda = 1e-2,
-  n_instants = 7,
-  start = .5)
+  k_seq = seq(0.5, 1, length.out = 7))
 mfd_list1 <- lapply(mfd_list, function(x) x[rows1])
 mfd_list2 <- lapply(mfd_list, function(x) x[rows2])
 ```

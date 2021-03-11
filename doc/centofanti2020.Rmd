@@ -117,8 +117,7 @@ mfd_list <- get_mfd_list_real_time(data_list = air,
                                    grid = 1:24,
                                    n_basis = 15,
                                    lambda = 1e-2,
-                                   n_instants = 7,
-                                   start = .5)
+                                   k_seq = seq(0.5, 1, length.out = 7))
 
 mfd_list_x1 <- lapply(mfd_list, function(x) x[rows1, fun_covariates])
 mfd_list_x2 <- lapply(mfd_list, function(x) x[rows2, fun_covariates])
