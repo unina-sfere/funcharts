@@ -13,7 +13,9 @@ Authors@R: c(
     person("Simone", "Vantini", role = c("aut"))
     )
 Description: Provides functional control charts 
-    for statistical process monitoring of functional data, using the methods of Capezza et al. (2020) <doi:10.1002/asmb.2507> and Centofanti et al. (2020) <doi:10.1080/00401706.2020.1753581>.
+    for statistical process monitoring of functional data, 
+    using the methods of Capezza et al. (2020) <doi:10.1002/asmb.2507> and 
+    Centofanti et al. (2020) <doi:10.1080/00401706.2020.1753581>.
 Depends: fda, dplyr, ggplot2, R (>= 4.0.0)
 Imports: rlang, parallel, tidyr, patchwork
 License: GPL-3

@@ -1,6 +1,9 @@
 #' \code{funcharts} package
 #'
-#' Functional control charts.
+#' Provides functional control charts
+#' for statistical process monitoring of functional data,
+#' using the methods of Capezza et al. (2020) <doi:10.1002/asmb.2507> and
+#' Centofanti et al. (2020) <doi:10.1080/00401706.2020.1753581>.
 #'
 #'
 #' @docType package
@@ -14,6 +17,19 @@
 #' approxfun as.formula hatvalues lm predict quantile setNames var
 #' @importFrom rlang .data
 #' @importFrom stats rnorm
+#'
+#' @references
+#' Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+#' Control charts for
+#' monitoring ship operating conditions and CO2 emissions based
+#' on scalar-on-function regression.
+#' \emph{Applied Stochastic Models in Business and Industry},
+#' 36(3):477--500.
+#' <doi:10.1002/asmb.2507>
+#'
+#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+#' Functional Regression Control Chart.
+#' \emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
 NULL
 
 # Quiets concerns of R CMD check re: the .'s that appear in pipelines
