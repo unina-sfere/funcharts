@@ -41,17 +41,17 @@ corresponding training data set to be compared.
 \examples{
 library(funcharts)
 data("air")
-air <- lapply(air, function(x) x[1:300, , drop = FALSE])
+air <- lapply(air, function(x) x[201:300, , drop = FALSE])
 fun_covariates <- c("CO", "temperature")
 mfdobj_x <- get_mfd_list(air[fun_covariates],
                          n_basis = 15,
                          lambda = 1e-2)
 y <- rowMeans(air$NO2)
-y1 <- y[1:100]
-y2 <- y[181:200]
-mfdobj_x1 <- mfdobj_x[1:100]
-mfdobj_x_tuning <- mfdobj_x[101:180]
-mfdobj_x2 <- mfdobj_x[181:200]
+y1 <- y[1:60]
+y2 <- y[91:100]
+mfdobj_x1 <- mfdobj_x[1:60]
+mfdobj_x_tuning <- mfdobj_x[61:90]
+mfdobj_x2 <- mfdobj_x[91:100]
 mod <- sof_pc(y1, mfdobj_x1)
 cclist <- control_charts_sof_pc(mod = mod,
                                 y_test = y2,
@@ -59,5 +59,6 @@ cclist <- control_charts_sof_pc(mod = mod,
                                 mfdobj_x_tuning = mfdobj_x_tuning)
 plot_control_charts(cclist)
 cont_plot(cclist, 3)
-plot_mon(cclist, mfdobj_x1, mfdobj_x2[3])
+plot_mon(cclist, fd_train = mfdobj_x1, fd_test = mfdobj_x2[3])
+
 }

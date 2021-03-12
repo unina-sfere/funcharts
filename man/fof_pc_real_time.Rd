@@ -63,11 +63,11 @@ air <- lapply(air, function(x) x[1:10, , drop = FALSE])
 mfdobj_y_list <- get_mfd_list_real_time(air["NO2"],
                                         n_basis = 15,
                                         lambda = 1e-2,
-                                        k_seq = seq(0.25, 1, length = 5))
+                                        k_seq = c(0.5, 0.75, 1))
 mfdobj_x_list <- get_mfd_list_real_time(air[c("CO", "temperature")],
                                         n_basis = 15,
                                         lambda = 1e-2,
-                                        k_seq = seq(0.25, 1, length = 5))
+                                        k_seq = c(0.5, 0.75, 1))
 mod_list <- fof_pc_real_time(mfdobj_y_list, mfdobj_x_list)
 
 }

@@ -33,7 +33,7 @@ appropriately designed for phase I monitoring to identify outliers.
 library(funcharts)
 data("air")
 air <- lapply(air, function(x) x[1:10, , drop = FALSE])
-fun_covariates <- names(air)[names(air) != "NO2"]
+fun_covariates <- c("CO", "temperature")
 mfdobj_x <- get_mfd_list(air[fun_covariates], lambda = 1e-2)
 y <- rowMeans(air$NO2)
 get_sof_pc_outliers(y, mfdobj_x)

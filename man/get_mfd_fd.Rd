@@ -18,6 +18,7 @@ multivariate functional data class.
 Convert a \code{fd} object into a Multivariate Functional Data object.
 }
 \examples{
+library(funcharts)
 fdobj <- fd()
 mfdobj <- get_mfd_fd(fdobj)
 plot_mfd(mfdobj)

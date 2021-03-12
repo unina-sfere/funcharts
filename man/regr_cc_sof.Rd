@@ -59,17 +59,16 @@ with the built control charts.
 }
 \examples{
 library(funcharts)
-data("air")
-air <- lapply(air, function(x) x[1:220, , drop = FALSE])
+air <- lapply(air, function(x) x[1:100, , drop = FALSE])
 fun_covariates <- c("CO", "temperature")
 mfdobj_x <- get_mfd_list(air[fun_covariates],
                          n_basis = 15,
                          lambda = 1e-2)
 y <- rowMeans(air$NO2)
-y1 <- y[1:200]
-y2 <- y[201:220]
-mfdobj_x1 <- mfdobj_x[1:200]
-mfdobj_x2 <- mfdobj_x[201:220]
+y1 <- y[1:80]
+y2 <- y[81:100]
+mfdobj_x1 <- mfdobj_x[1:80]
+mfdobj_x2 <- mfdobj_x[81:100]
 mod <- sof_pc(y1, mfdobj_x1)
 cclist <- regr_cc_sof(object = mod,
                       y_new = y2,

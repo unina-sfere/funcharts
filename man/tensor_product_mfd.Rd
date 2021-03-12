@@ -32,6 +32,7 @@ Multivariate Functional Data objects.
 Each object must contain only one replication.
 }
 \examples{
+library(funcharts)
 mfdobj1 <- data_sim_mfd(nobs = 1, nvar = 3)
 mfdobj2 <- data_sim_mfd(nobs = 1, nvar = 2)
 tensor_product_mfd(mfdobj1)

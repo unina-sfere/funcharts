@@ -49,6 +49,7 @@ when you use \code{fda::\link[fda]{mean.fd}}
 and \code{fda::\link[fda]{sd.fd}}.
 }
 \examples{
+library(funcharts)
 mfdobj <- data_sim_mfd()
 mfdobj_scaled <- scale_mfd(mfdobj)
 }

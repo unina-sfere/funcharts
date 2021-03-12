@@ -38,9 +38,10 @@ multivariate functional data class.
 Get Multivariate Functional Data from a three-dimensional array
 }
 \examples{
+library(funcharts)
 data("CanadianWeather")
-mfdobj <- get_mfd_array(CanadianWeather$dailyAv[, , 1:2],
-                        lambda = 1e-2)
+mfdobj <- get_mfd_array(CanadianWeather$dailyAv[, 1:10, ],
+                        lambda = 1e-5)
 plot_mfd(mfdobj)
 
 }

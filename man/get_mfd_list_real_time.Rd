@@ -52,8 +52,10 @@ library(funcharts)
 data("air")
 # Only take first 5 multivariate functional observations from air
 air_small <- lapply(air, function(x) x[1:5, ])
+# Consider only 3 domain points: 0.5, 0.75, 1
 mfdobj <- get_mfd_list_real_time(data_list = air_small,
-                                 lambda = 1e-2)
+                                 lambda = 1e-2,
+                                 k_seq = c(0.5, 0.75, 1))
 
 }
 \seealso{

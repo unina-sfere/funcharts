@@ -26,6 +26,7 @@ principal components contained in the object \code{pca}.
 Plot the harmonics of a \code{pca_mfd} object
 }
 \examples{
+library(funcharts)
 mfdobj <- data_sim_mfd()
 pca_obj <- pca_mfd(mfdobj)
 plot_pca_mfd(pca_obj)

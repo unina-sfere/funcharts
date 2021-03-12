@@ -22,12 +22,14 @@ variables in mfdobj1 and mfdobj2.
 Bind variables of two Multivariate Functional Data Objects
 }
 \examples{
+library(funcharts)
 mfdobj1 <- data_sim_mfd(nvar = 3, seed = 1)
 mfdobj2 <- data_sim_mfd(nvar = 2, seed = 2)
 dimnames(mfdobj2$coefs)[[3]] <- mfdobj2$fdnames[[3]] <- c("var10", "var11")
 
 plot_mfd(mfdobj1)
 plot_mfd(mfdobj2)
-cbind_mfd(mfdobj1, mfdobj2) \%>\% plot_mfd
+mfdobj_cbind <- cbind_mfd(mfdobj1, mfdobj2)
+plot_mfd(mfdobj_cbind)
 
 }

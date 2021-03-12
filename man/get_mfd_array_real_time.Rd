@@ -48,9 +48,11 @@ and to build control charts for real-time  monitoring.
 It calls the function \code{\link{get_mfd_array}} for each domain point.
 }
 \examples{
+library(funcharts)
 data("CanadianWeather")
-mfdobj <- get_mfd_array_real_time(CanadianWeather$dailyAv[, 1:5, 1:2],
-                                  lambda = 1e-2)
+fdobj <- get_mfd_array_real_time(CanadianWeather$dailyAv[, 1:5, 1:2],
+                                 lambda = 1e-2)
+
 }
 \seealso{
 \code{\link{get_mfd_array}}

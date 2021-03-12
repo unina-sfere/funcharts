@@ -80,8 +80,9 @@ In this case, see \code{get_mfd_df}.
 \examples{
 library(funcharts)
 data("air")
-# Only take first 5 multivariate functional observations from air
-air_small <- lapply(air, function(x) x[1:5, ])
+# Only take first 5 multivariate functional observations
+# and only two variables from air
+air_small <- lapply(air[, c("NO2", "CO")], function(x) x[1:5, ])
 mfdobj <- get_mfd_list(data_list = air_small)
 
 }

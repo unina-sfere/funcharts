@@ -108,7 +108,8 @@ mfdobj <- get_mfd_df(dt = df,
                      domain = c(1, 10),
                      arg = "x",
                      id = "id",
-                     variables = c("y1", "y2"))
+                     variables = c("y1", "y2"),
+                     lambda = 1e-5)
 
 }
 \seealso{

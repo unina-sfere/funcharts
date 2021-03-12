@@ -23,5 +23,6 @@ Simulate random coefficients and create a multivariate functional data
 object of class `mfd`.
 }
 \examples{
+library(funcharts)
 data_sim_mfd()
 }

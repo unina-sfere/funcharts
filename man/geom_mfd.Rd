@@ -60,6 +60,7 @@ Creates a geom layer to plot a Multivariate Functional Data Object
 with \code{ggplot}
 }
 \examples{
+library(funcharts)
 mfdobj <- data_sim_mfd()
 ids <- mfdobj$fdnames[[2]]
 df <- data.frame(id = ids, first_two_obs = ids \%in\% c("rep1", "rep2"))

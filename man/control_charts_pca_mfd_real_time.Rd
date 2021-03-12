@@ -79,11 +79,11 @@ air2 <- lapply(air, function(x) x[9:10, , drop = FALSE])
 mfdobj_x1_list <- get_mfd_list_real_time(air1[c("CO", "temperature")],
                                          n_basis = 15,
                                          lambda = 1e-2,
-                                         k_seq = seq(0.25, 1, length = 5))
+                                         k_seq = c(0.5, 1))
 mfdobj_x2_list <- get_mfd_list_real_time(air2[c("CO", "temperature")],
                                          n_basis = 15,
                                          lambda = 1e-2,
-                                         k_seq = seq(0.25, 1, length = 5))
+                                         k_seq = c(0.5, 1))
 pca_list <- pca_mfd_real_time(mfdobj_x1_list)
 cclist <- control_charts_pca_mfd_real_time(
   pca_list = pca_list,

@@ -151,7 +151,7 @@ See Centofanti et al. (2020) for additional details.
 library(funcharts)
 data("air")
 air <- lapply(air, function(x) x[1:10, , drop = FALSE])
-fun_covariates <- names(air)[names(air) != "NO2"]
+fun_covariates <- c("CO", "temperature")
 mfdobj <- get_mfd_list(air, lambda = 1e-2)
 mfdobj_y <- mfdobj[, "NO2"]
 mfdobj_x <- mfdobj[, fun_covariates]

@@ -17,6 +17,7 @@ an object of class ggplot, created using
 Plot an object of class \code{mfd} using \code{ggplot2}.
 }
 \examples{
+library(funcharts)
 mfdobj <- data_sim_mfd()
 plot_mfd(mfdobj)
 

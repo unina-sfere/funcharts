@@ -20,6 +20,7 @@ Plot an object of class \code{bifd} using
 The object must contain only one single functional replication.
 }
 \examples{
+library(funcharts)
 mfdobj <- data_sim_mfd(nobs = 1)
 tp <- tensor_product_mfd(mfdobj)
 plot_bifd(tp)

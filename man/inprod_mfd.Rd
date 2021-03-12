@@ -36,6 +36,7 @@ which for each observation is the sum of the \emph{L^2}
 inner products obtained for each functional variable.
 }
 \examples{
+library(funcharts)
 mfdobj1 <- data_sim_mfd(seed = 123)
 mfdobj2 <- data_sim_mfd(seed = 987)
 inprod_mfd(mfdobj1)

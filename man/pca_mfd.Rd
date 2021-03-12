@@ -31,6 +31,7 @@ It is a wrapper to \code{fda::\link[fda]{pca.fd}},
 providing some additional arguments.
 }
 \examples{
+library(funcharts)
 mfdobj <- data_sim_mfd()
 pca_obj <- pca_mfd(mfdobj)
 plot_pca_mfd(pca_obj)

@@ -86,26 +86,26 @@ multivariate functional covariates
 each evolving up to an intermediate domain point.
 }
 \examples{
-  library(funcharts)
+library(funcharts)
 data("air")
 air1 <- lapply(air, function(x) x[1:8, , drop = FALSE])
 air2 <- lapply(air, function(x) x[9:10, , drop = FALSE])
 mfdobj_x1_list <- get_mfd_list_real_time(air1[c("CO", "temperature")],
                                          n_basis = 15,
                                          lambda = 1e-2,
-                                         k_seq = seq(0.25, 1, length = 5))
+                                         k_seq = c(0.5, 1))
 mfdobj_x2_list <- get_mfd_list_real_time(air2[c("CO", "temperature")],
                                          n_basis = 15,
                                          lambda = 1e-2,
-                                         k_seq = seq(0.25, 1, length = 5))
+                                         k_seq = c(0.5, 1))
 mfdobj_y1_list <- get_mfd_list_real_time(air1["NO2"],
                                          n_basis = 15,
                                          lambda = 1e-2,
-                                         k_seq = seq(0.25, 1, length = 5))
+                                         k_seq = c(0.5, 1))
 mfdobj_y2_list <- get_mfd_list_real_time(air2["NO2"],
                                          n_basis = 15,
                                          lambda = 1e-2,
-                                         k_seq = seq(0.25, 1, length = 5))
+                                         k_seq = c(0.5, 1))
 mod_list <- fof_pc_real_time(mfdobj_y1_list, mfdobj_x1_list)
 cclist <- regr_cc_fof_real_time(
   mod_list = mod_list,
