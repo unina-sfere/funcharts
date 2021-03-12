@@ -107,36 +107,10 @@ text-align: justify}
 <p>First of all, starting from the discrete data, let us build the multivariate functional data objects of class <code>mfd</code>, see <code><a href="../articles/mfd.html">vignette("mfd")</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts">funcharts</a></span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: fda</span>
-<span class="co">#&gt; Loading required package: splines</span>
-<span class="co">#&gt; Loading required package: Matrix</span>
-<span class="co">#&gt; Loading required package: fds</span>
-<span class="co">#&gt; Loading required package: rainbow</span>
-<span class="co">#&gt; Loading required package: MASS</span>
-<span class="co">#&gt; Loading required package: pcaPP</span>
-<span class="co">#&gt; Loading required package: RCurl</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'fda'</span>
-<span class="co">#&gt; The following object is masked from 'package:graphics':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     matplot</span>
-<span class="co">#&gt; Loading required package: dplyr</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'dplyr'</span>
-<span class="co">#&gt; The following object is masked from 'package:MASS':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     select</span>
-<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     filter, lag</span>
-<span class="co">#&gt; The following objects are masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
-<span class="co">#&gt; Loading required package: ggplot2</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span>
 <span class="va">fun_covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">air</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">air</span><span class="op">)</span> <span class="op">!=</span> <span class="st">"NO2"</span><span class="op">]</span>
 <span class="va">mfdobj_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span><span class="op">[</span><span class="va">fun_covariates</span><span class="op">]</span>,
-                       grid <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">24</span>,  
+                       grid <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">24</span>,
                        n_basis <span class="op">=</span> <span class="fl">15</span>,
                        lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></code></pre></div>
 <p>Then, we extract the scalar response variable, i.e. the mean of <code>NO2</code> at each observation:</p>
@@ -160,18 +134,18 @@ text-align: justify}
 <li>if “gcv”, the criterion is equal as in the previous “PRESS” case, but the “PRESS” statistic is substituted by the generalized cross-validation (GCV) score.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sof_pc.html">sof_pc</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y1</span>, 
-              mfdobj_x <span class="op">=</span> <span class="va">mfdobj_x1</span>, 
-              selection <span class="op">=</span> <span class="st">"PRESS"</span>, 
+<code class="sourceCode R"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sof_pc.html">sof_pc</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y1</span>,
+              mfdobj_x <span class="op">=</span> <span class="va">mfdobj_x1</span>,
+              selection <span class="op">=</span> <span class="st">"PRESS"</span>,
               single_min_variance_explained <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span></code></pre></div>
 <p>As a result you get a list with the original data used for model estimation, the result of applying <code>pca_mfd</code> on the multivariate functional covariates, the estimated regression model. It is possible to plot the estimated functional regression coefficients, which is also a multivariate functional data object of class <code>mfd</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_mfd.html">plot_mfd</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">beta</span><span class="op">)</span></code></pre></div>
-<p><img src="capezza2020_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display:block; margin: auto"></p>
+<p><img src="../../../R%20packages/funcharts/vignettes/capezza2020-plot_beta-1.png" title="plot of chunk plot_beta" alt="plot of chunk plot_beta" style="display:block; margin: auto"></p>
 <p>Moreover bootstrap can be used to obtain uncertainty quantification:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_bootstrap_sof_pc.html">plot_bootstrap_sof_pc</a></span><span class="op">(</span><span class="va">mod</span>, nboot <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
-<p><img src="capezza2020_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display:block; margin: auto"></p>
+<p><img src="../../../R%20packages/funcharts/vignettes/capezza2020-plot_bootstrap_sof_pc-1.png" title="plot of chunk plot_bootstrap_sof_pc" alt="plot of chunk plot_bootstrap_sof_pc" style="display:block; margin: auto"></p>
 </div>
 <div id="control-charts" class="section level2">
 <h2 class="hasAnchor">
@@ -182,11 +156,11 @@ text-align: justify}
 <a href="#unsupervised-monitoring" class="anchor"></a>Unsupervised monitoring</h3>
 <p>The function <code>control_charts_pca</code> provides a data frame with all the information required to plot the desired control charts on multivariate functional data, based on the Hotelling’s T^2 and the squared prediction error statistics (see Capezza et al. (2020) and Centofanti et al. (2020)). Among the arguments, you can pass a <code>tuning_data</code> set, that is not used for model estimation/training, but is used only to estimate control chart limits. If this data set is not provided, control chart limits are calculated on the basis of the training data. The argument <code>newdata</code> contains the phase II data set of observations of multivariate functional covariates, that are to be monitored with the control charts. The function <code>plot_control_charts</code> returns a ggplot with the control charts.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cclist_pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/control_charts_pca.html">control_charts_pca</a></span><span class="op">(</span>pca <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">pca</span>, 
-                                 components <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">components</span>, 
+<code class="sourceCode R"><span class="va">cclist_pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/control_charts_pca.html">control_charts_pca</a></span><span class="op">(</span>pca <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">pca</span>,
+                                 components <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">components</span>,
                                  newdata <span class="op">=</span> <span class="va">mfdobj_x2</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot_control_charts.html">plot_control_charts</a></span><span class="op">(</span><span class="va">cclist_pca</span><span class="op">)</span></code></pre></div>
-<p><img src="capezza2020_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display:block; margin: auto"></p>
+<p><img src="../../../R%20packages/funcharts/vignettes/capezza2020-plot_control_charts_pca-1.png" title="plot of chunk plot_control_charts_pca" alt="plot of chunk plot_control_charts_pca" style="display:block; margin: auto"></p>
 </div>
 <div id="supervised-monitoring" class="section level3">
 <h3 class="hasAnchor">
@@ -197,7 +171,7 @@ text-align: justify}
                                        y_test <span class="op">=</span> <span class="va">y2</span>,
                                        mfdobj_x_test <span class="op">=</span> <span class="va">mfdobj_x2</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot_control_charts.html">plot_control_charts</a></span><span class="op">(</span><span class="va">cclist_sof_pc</span><span class="op">)</span></code></pre></div>
-<p><img src="capezza2020_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display:block; margin: auto"></p>
+<p><img src="../../../R%20packages/funcharts/vignettes/capezza2020-plot_control_charts_sof_pc-1.png" title="plot of chunk plot_control_charts_sof_pc" alt="plot of chunk plot_control_charts_sof_pc" style="display:block; margin: auto"></p>
 </div>
 </div>
 <div id="fault-detection" class="section level2">
@@ -207,7 +181,7 @@ text-align: justify}
 <p>We can get the out of control observations using <code>which_ooc</code>. In the following, we focus on the supervised monitoring.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ooc_index</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/which_ooc.html">which_ooc</a></span><span class="op">(</span><span class="va">cclist_sof_pc</span><span class="op">)</span>
-<span class="va">ooc_index</span> 
+<span class="va">ooc_index</span>
 <span class="co">#&gt; $T2</span>
 <span class="co">#&gt;    n  id</span>
 <span class="co">#&gt; 1  5 305</span>
@@ -227,10 +201,10 @@ text-align: justify}
 <p>From the control charts it is possible to see some phase II observations out of control. For example, let us consider observation 9. We can exploit the contribution plots using the function <code>cont_plot</code> to identify the variables responsible of the anomaly. The contributions are plotted as bar plots, against upper control limits estimated empirically on the training data.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/cont_plot.html">cont_plot</a></span><span class="op">(</span><span class="va">cclist_sof_pc</span>, <span class="fl">9</span><span class="op">)</span></code></pre></div>
-<p><img src="capezza2020_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display:block; margin: auto"> Finally, we can also plot any multivariate functional observation against a reference data set by using the function <code>plot_mon</code>:</p>
+<p><img src="../../../R%20packages/funcharts/vignettes/capezza2020-cont_plot-1.png" title="plot of chunk cont_plot" alt="plot of chunk cont_plot" style="display:block; margin: auto"> Finally, we can also plot any multivariate functional observation against a reference data set by using the function <code>plot_mon</code>:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_mon.html">plot_mon</a></span><span class="op">(</span><span class="va">cclist_sof_pc</span>, <span class="va">mfdobj_x1</span>, <span class="va">mfdobj_x2</span><span class="op">[</span><span class="fl">9</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<p><img src="capezza2020_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display:block; margin: auto"> This helps to understand which part of the observations were anomalous. Variables exceeding contribution plot limits are coloured in red.</p>
+<p><img src="../../../R%20packages/funcharts/vignettes/capezza2020-plot_mon-1.png" title="plot of chunk plot_mon" alt="plot of chunk plot_mon" style="display:block; margin: auto"> This helps to understand which part of the observations were anomalous. Variables exceeding contribution plot limits are coloured in red.</p>
 </div>
 <div id="real-time-monitoring" class="section level2">
 <h2 class="hasAnchor">
@@ -258,7 +232,7 @@ text-align: justify}
 <p>Finally, we can plot the real-time control charts for a single observations, giving for each <span class="math inline">\(k\)</span> the monitoring statistics calculated on the data observed in <span class="math inline">\((a, k)\)</span>. Here follows an example showing the real time control charts for a single phase II observation (id number 9).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_control_charts_real_time.html">plot_control_charts_real_time</a></span><span class="op">(</span><span class="va">cc_list_real_time</span>, id_num <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></code></pre></div>
-<p><img src="capezza2020_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display:block; margin: auto"></p>
+<p><img src="../../../R%20packages/funcharts/vignettes/capezza2020-plot_control_charts_real_time-1.png" title="plot of chunk plot_control_charts_real_time" alt="plot of chunk plot_control_charts_real_time" style="display:block; margin: auto"></p>
 </div>
 </div>
 <div id="references" class="section level1">

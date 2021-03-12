@@ -107,36 +107,10 @@ text-align: justify}
 <p>First of all, starting from the discrete data, let us build the multivariate functional data objects of class <code>mfd</code>, see <code><a href="../articles/mfd.html">vignette("mfd")</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts">funcharts</a></span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: fda</span>
-<span class="co">#&gt; Loading required package: splines</span>
-<span class="co">#&gt; Loading required package: Matrix</span>
-<span class="co">#&gt; Loading required package: fds</span>
-<span class="co">#&gt; Loading required package: rainbow</span>
-<span class="co">#&gt; Loading required package: MASS</span>
-<span class="co">#&gt; Loading required package: pcaPP</span>
-<span class="co">#&gt; Loading required package: RCurl</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'fda'</span>
-<span class="co">#&gt; The following object is masked from 'package:graphics':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     matplot</span>
-<span class="co">#&gt; Loading required package: dplyr</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'dplyr'</span>
-<span class="co">#&gt; The following object is masked from 'package:MASS':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     select</span>
-<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     filter, lag</span>
-<span class="co">#&gt; The following objects are masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
-<span class="co">#&gt; Loading required package: ggplot2</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span>
 <span class="va">fun_covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">air</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">air</span><span class="op">)</span> <span class="op">!=</span> <span class="st">"NO2"</span><span class="op">]</span>
 <span class="va">mfdobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span>,
-                       grid <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">24</span>,  
+                       grid <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">24</span>,
                        n_basis <span class="op">=</span> <span class="fl">15</span>,
                        lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span>
 <span class="va">mfdobj_y</span> <span class="op">&lt;-</span> <span class="va">mfdobj</span><span class="op">[</span>, <span class="st">"NO2"</span><span class="op">]</span>
@@ -159,7 +133,7 @@ text-align: justify}
 <p>As a result you get a list with the original data used for model estimation, the result of applying <code>pca_mfd</code> on the multivariate functional covariates, the functional response, and the residuals, the estimated regression model and additional information. It is possible to plot the estimated functional regression coefficients, which is a bivariate functional data object of class <code>bifd</code> using the function <code>plot_bifd</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_bifd.html">plot_bifd</a></span><span class="op">(</span><span class="va">mod_fof</span><span class="op">$</span><span class="va">beta_fd</span><span class="op">)</span></code></pre></div>
-<p><img src="centofanti2020_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display:block; margin: auto"></p>
+<p><img src="../../../R%20packages/funcharts/vignettes/centofanti2020-plot_bifd-1.png" title="plot of chunk plot_bifd" alt="plot of chunk plot_bifd" style="display:block; margin: auto"></p>
 </div>
 <div id="plotting-the-functional-regression-control-chart" class="section level2">
 <h2 class="hasAnchor">
@@ -170,7 +144,7 @@ text-align: justify}
                        mfdobj_y_new <span class="op">=</span> <span class="va">mfdobj_y2</span>,
                        mfdobj_x_new <span class="op">=</span> <span class="va">mfdobj_x2</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot_control_charts.html">plot_control_charts</a></span><span class="op">(</span><span class="va">frcc_df</span><span class="op">)</span></code></pre></div>
-<p><img src="centofanti2020_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display:block; margin: auto"></p>
+<p><img src="../../../R%20packages/funcharts/vignettes/centofanti2020-plot_control_charts-1.png" title="plot of chunk plot_control_charts" alt="plot of chunk plot_control_charts" style="display:block; margin: auto"></p>
 <p>We can also plot the new functions to be monitored, against the reference training data set, by first using <code>predict_fof_pc</code>, which produces the prediction of new observations of the functional response given the new observations of the functional covariates, as well as the corresponding prediction error:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">y_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_fof_pc.html">predict_fof_pc</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod_fof</span>,
@@ -181,7 +155,7 @@ text-align: justify}
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_mon.html">plot_mon</a></span><span class="op">(</span>cclist <span class="op">=</span> <span class="va">frcc_df</span>,
          fd_train <span class="op">=</span> <span class="va">mod_fof</span><span class="op">$</span><span class="va">residuals</span>,
          fd_test <span class="op">=</span> <span class="va">y_hat</span><span class="op">$</span><span class="va">pred_error</span><span class="op">[</span><span class="fl">54</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<p><img src="centofanti2020_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display:block; margin: auto"></p>
+<p><img src="../../../R%20packages/funcharts/vignettes/centofanti2020-plot_mon-1.png" title="plot of chunk plot_mon" alt="plot of chunk plot_mon" style="display:block; margin: auto"></p>
 </div>
 <div id="real-time-functional-regression-control-chart" class="section level2">
 <h2 class="hasAnchor">
@@ -213,7 +187,7 @@ text-align: justify}
 <p>Finally, we can plot the real-time control charts for a single observations, giving for each <span class="math inline">\(k\)</span> the monitoring statistics calculated on the data observed in <span class="math inline">\((a, k)\)</span>. Here follows an example showing the real time control charts for a single phase II observation (id number 54).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_control_charts_real_time.html">plot_control_charts_real_time</a></span><span class="op">(</span><span class="va">cc_list_real_time</span>, id_num <span class="op">=</span> <span class="fl">54</span><span class="op">)</span></code></pre></div>
-<p><img src="centofanti2020_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display:block; margin: auto"></p>
+<p><img src="../../../R%20packages/funcharts/vignettes/centofanti2020-plot_control_charts_real_time-1.png" title="plot of chunk plot_control_charts_real_time" alt="plot of chunk plot_control_charts_real_time" style="display:block; margin: auto"></p>
 </div>
 </div>
 <div id="references" class="section level1">

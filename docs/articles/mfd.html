@@ -143,9 +143,9 @@ text-align: justify}
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span>
 <span class="va">fun_covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">air</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">air</span><span class="op">)</span> <span class="op">!=</span> <span class="st">"NO2"</span><span class="op">]</span>
 <span class="va">mfdobj_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span><span class="op">[</span><span class="va">fun_covariates</span><span class="op">]</span>,
-                       grid <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">24</span>,  
-                       n_basis <span class="op">=</span> <span class="fl">5</span>,
-                       lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></code></pre></div>
+                         grid <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">24</span>,
+                         n_basis <span class="op">=</span> <span class="fl">5</span>,
+                         lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></code></pre></div>
 <p>In order to perform the statistical process monitoring analysis, we divide the dataset into a phase I and a phase II dataset.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rows1</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">300</span>
@@ -164,21 +164,21 @@ text-align: justify}
 <p>We also provide plotting functions using ggplot2.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_mfd.html">plot_mfd</a></span><span class="op">(</span><span class="va">mfdobj_x1</span><span class="op">)</span></code></pre></div>
-<p><img src="mfd_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display:block; margin: auto"></p>
+<p><img src="../../../R%20packages/funcharts/vignettes/mfd-plot_mfd-1.png" title="plot of chunk plot_mfd" alt="plot of chunk plot_mfd" style="display:block; margin: auto"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_mfd.html">plot_mfd</a></span><span class="op">(</span><span class="va">mfdobj_x1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CO"</span>, <span class="st">"C6H6"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<p><img src="mfd_files/figure-html/unnamed-chunk-5-2.png" width="672" style="display:block; margin: auto"></p>
+<p><img src="../../../R%20packages/funcharts/vignettes/mfd-plot_mfd-2.png" title="plot of chunk plot_mfd" alt="plot of chunk plot_mfd" style="display:block; margin: auto"></p>
 <p>This functions provides a layer <code>geom_mfd</code>, which is basically a <code>geom_line</code> that is added to <code>ggplot()</code> to plot functional data. It also allows to plot the original raw data by adding the argument <code>type_mfd = "raw"</code>. <code>geom_mfd</code> accepts the argument <code>data</code> as input, which must be a data frame with two columns, <code>id</code> and <code>var</code>, in order to use aesthetic mappings that allow for example to colour different functions according to some columns in this data frame.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">mfdobj_x1</span><span class="op">$</span><span class="va">raw</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">mfdobj_x1</span><span class="op">$</span><span class="va">raw</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">mutate</span><span class="op">(</span>id_greater_than_100 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">100</span><span class="op">)</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="../reference/geom_mfd.html">geom_mfd</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>col <span class="op">=</span> <span class="va">id_greater_than_100</span><span class="op">)</span>, 
-           mfdobj <span class="op">=</span> <span class="va">mfdobj_x1</span>, 
-           data <span class="op">=</span> <span class="va">dat</span>, 
-           alpha <span class="op">=</span> <span class="fl">.2</span>, 
+<span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_mfd.html">geom_mfd</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>col <span class="op">=</span> <span class="va">id_greater_than_100</span><span class="op">)</span>,
+           mfdobj <span class="op">=</span> <span class="va">mfdobj_x1</span>,
+           data <span class="op">=</span> <span class="va">dat</span>,
+           alpha <span class="op">=</span> <span class="fl">.2</span>,
            lwd <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span></code></pre></div>
-<p><img src="mfd_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display:block; margin: auto"></p>
+<p><img src="../../../R%20packages/funcharts/vignettes/mfd-geom_mfd-1.png" title="plot of chunk geom_mfd" alt="plot of chunk geom_mfd" style="display:block; margin: auto"></p>
 </div>
 <div id="multivariate-functional-principal-component-analysis" class="section level2">
 <h2 class="hasAnchor">
@@ -187,7 +187,7 @@ text-align: justify}
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pca_mfd.html">pca_mfd</a></span><span class="op">(</span><span class="va">mfdobj_x1</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot_pca_mfd.html">plot_pca_mfd</a></span><span class="op">(</span><span class="va">pca</span>, harm <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></code></pre></div>
-<p><img src="mfd_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display:block; margin: auto"></p>
+<p><img src="../../../R%20packages/funcharts/vignettes/mfd-plot_pca_mfd-1.png" title="plot of chunk plot_pca_mfd" alt="plot of chunk plot_pca_mfd" style="display:block; margin: auto"></p>
 </div>
 </div>
   </div>

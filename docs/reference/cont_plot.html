@@ -183,25 +183,46 @@ Bars are coloured by red if contributions exceed their limit.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/unina-sfere/funcharts'>funcharts</a></span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"air"</span><span class='op'>)</span>
-<span class='va'>air</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>air</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>300</span>, , drop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>]</span><span class='op'>)</span>
+<span class='va'>air</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>air</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span><span class='op'>[</span><span class='fl'>201</span><span class='op'>:</span><span class='fl'>300</span>, , drop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>]</span><span class='op'>)</span>
 <span class='va'>fun_covariates</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CO"</span>, <span class='st'>"temperature"</span><span class='op'>)</span>
 <span class='va'>mfdobj_x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_mfd_list.html'>get_mfd_list</a></span><span class='op'>(</span><span class='va'>air</span><span class='op'>[</span><span class='va'>fun_covariates</span><span class='op'>]</span>,
                          n_basis <span class='op'>=</span> <span class='fl'>15</span>,
                          lambda <span class='op'>=</span> <span class='fl'>1e-2</span><span class='op'>)</span>
 <span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>rowMeans</a></span><span class='op'>(</span><span class='va'>air</span><span class='op'>$</span><span class='va'>NO2</span><span class='op'>)</span>
-<span class='va'>y1</span> <span class='op'>&lt;-</span> <span class='va'>y</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>]</span>
-<span class='va'>y2</span> <span class='op'>&lt;-</span> <span class='va'>y</span><span class='op'>[</span><span class='fl'>181</span><span class='op'>:</span><span class='fl'>200</span><span class='op'>]</span>
-<span class='va'>mfdobj_x1</span> <span class='op'>&lt;-</span> <span class='va'>mfdobj_x</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>]</span>
-<span class='va'>mfdobj_x_tuning</span> <span class='op'>&lt;-</span> <span class='va'>mfdobj_x</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>180</span><span class='op'>]</span>
-<span class='va'>mfdobj_x2</span> <span class='op'>&lt;-</span> <span class='va'>mfdobj_x</span><span class='op'>[</span><span class='fl'>181</span><span class='op'>:</span><span class='fl'>200</span><span class='op'>]</span>
+<span class='va'>y1</span> <span class='op'>&lt;-</span> <span class='va'>y</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>60</span><span class='op'>]</span>
+<span class='va'>y2</span> <span class='op'>&lt;-</span> <span class='va'>y</span><span class='op'>[</span><span class='fl'>91</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>]</span>
+<span class='va'>mfdobj_x1</span> <span class='op'>&lt;-</span> <span class='va'>mfdobj_x</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>60</span><span class='op'>]</span>
+<span class='va'>mfdobj_x_tuning</span> <span class='op'>&lt;-</span> <span class='va'>mfdobj_x</span><span class='op'>[</span><span class='fl'>61</span><span class='op'>:</span><span class='fl'>90</span><span class='op'>]</span>
+<span class='va'>mfdobj_x2</span> <span class='op'>&lt;-</span> <span class='va'>mfdobj_x</span><span class='op'>[</span><span class='fl'>91</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>]</span>
 <span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sof_pc.html'>sof_pc</a></span><span class='op'>(</span><span class='va'>y1</span>, <span class='va'>mfdobj_x1</span><span class='op'>)</span>
 <span class='va'>cclist</span> <span class='op'>&lt;-</span> <span class='fu'><a href='control_charts_sof_pc.html'>control_charts_sof_pc</a></span><span class='op'>(</span>mod <span class='op'>=</span> <span class='va'>mod</span>,
                                 y_test <span class='op'>=</span> <span class='va'>y2</span>,
                                 mfdobj_x_test <span class='op'>=</span> <span class='va'>mfdobj_x2</span>,
                                 mfdobj_x_tuning <span class='op'>=</span> <span class='va'>mfdobj_x_tuning</span><span class='op'>)</span>
-<span class='fu'><a href='plot_control_charts.html'>plot_control_charts</a></span><span class='op'>(</span><span class='va'>cclist</span><span class='op'>)</span>
-</div><div class='img'><img src='cont_plot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>cont_plot</span><span class='op'>(</span><span class='va'>cclist</span>, <span class='fl'>3</span><span class='op'>)</span>
-</div><div class='img'><img src='cont_plot-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='get_ooc.html'>get_ooc</a></span><span class='op'>(</span><span class='va'>cclist</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      id    T2   spe     y contribution_T2_CO contribution_T2_temperature
+#&gt; 91   91 FALSE FALSE FALSE              FALSE                       FALSE
+#&gt; 92   92 FALSE FALSE FALSE              FALSE                       FALSE
+#&gt; 93   93  TRUE FALSE FALSE               TRUE                       FALSE
+#&gt; 94   94 FALSE FALSE FALSE              FALSE                       FALSE
+#&gt; 95   95 FALSE FALSE FALSE              FALSE                       FALSE
+#&gt; 96   96 FALSE FALSE FALSE              FALSE                       FALSE
+#&gt; 97   97 FALSE FALSE FALSE              FALSE                       FALSE
+#&gt; 98   98 FALSE FALSE FALSE              FALSE                       FALSE
+#&gt; 99   99 FALSE FALSE  TRUE              FALSE                       FALSE
+#&gt; 100 100 FALSE FALSE  TRUE              FALSE                       FALSE
+#&gt;     contribution_spe_CO contribution_spe_temperature
+#&gt; 91                FALSE                        FALSE
+#&gt; 92                FALSE                        FALSE
+#&gt; 93                FALSE                        FALSE
+#&gt; 94                FALSE                        FALSE
+#&gt; 95                FALSE                        FALSE
+#&gt; 96                FALSE                        FALSE
+#&gt; 97                FALSE                        FALSE
+#&gt; 98                FALSE                        FALSE
+#&gt; 99                FALSE                        FALSE
+#&gt; 100               FALSE                        FALSE</div><div class='input'><span class='fu'>cont_plot</span><span class='op'>(</span><span class='va'>cclist</span>, <span class='fl'>3</span><span class='op'>)</span>
+</div><div class='img'><img src='cont_plot-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

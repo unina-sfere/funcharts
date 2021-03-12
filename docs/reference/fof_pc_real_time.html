@@ -226,11 +226,11 @@ corresponding to a given instant.</p>
 <span class='va'>mfdobj_y_list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_mfd_list_real_time.html'>get_mfd_list_real_time</a></span><span class='op'>(</span><span class='va'>air</span><span class='op'>[</span><span class='st'>"NO2"</span><span class='op'>]</span>,
                                         n_basis <span class='op'>=</span> <span class='fl'>15</span>,
                                         lambda <span class='op'>=</span> <span class='fl'>1e-2</span>,
-                                        k_seq <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.25</span>, <span class='fl'>1</span>, length <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
+                                        k_seq <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>0.75</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>mfdobj_x_list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_mfd_list_real_time.html'>get_mfd_list_real_time</a></span><span class='op'>(</span><span class='va'>air</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CO"</span>, <span class='st'>"temperature"</span><span class='op'>)</span><span class='op'>]</span>,
                                         n_basis <span class='op'>=</span> <span class='fl'>15</span>,
                                         lambda <span class='op'>=</span> <span class='fl'>1e-2</span>,
-                                        k_seq <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.25</span>, <span class='fl'>1</span>, length <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
+                                        k_seq <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>0.75</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>mod_list</span> <span class='op'>&lt;-</span> <span class='fu'>fof_pc_real_time</span><span class='op'>(</span><span class='va'>mfdobj_y_list</span>, <span class='va'>mfdobj_x_list</span><span class='op'>)</span>
 
 </div></pre>

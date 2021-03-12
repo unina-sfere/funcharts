@@ -187,22 +187,22 @@ on the response.</p>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/unina-sfere/funcharts'>funcharts</a></span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"air"</span><span class='op'>)</span>
 <span class='va'>air</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>air</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, , drop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>]</span><span class='op'>)</span>
-<span class='va'>fun_covariates</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>air</span><span class='op'>)</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>air</span><span class='op'>)</span> <span class='op'>!=</span> <span class='st'>"NO2"</span><span class='op'>]</span>
+<span class='va'>fun_covariates</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CO"</span>, <span class='st'>"temperature"</span><span class='op'>)</span>
 <span class='va'>mfdobj_x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_mfd_list.html'>get_mfd_list</a></span><span class='op'>(</span><span class='va'>air</span><span class='op'>[</span><span class='va'>fun_covariates</span><span class='op'>]</span>, lambda <span class='op'>=</span> <span class='fl'>1e-2</span><span class='op'>)</span>
 <span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>rowMeans</a></span><span class='op'>(</span><span class='va'>air</span><span class='op'>$</span><span class='va'>NO2</span><span class='op'>)</span>
 <span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sof_pc.html'>sof_pc</a></span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mfdobj_x</span><span class='op'>)</span>
 <span class='fu'>predict_sof_pc</span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;         fit      lwr      upr
-#&gt; 1  7.306757 7.239627 7.373888
-#&gt; 2  7.363669 7.296200 7.431139
-#&gt; 3  7.391444 7.327498 7.455390
-#&gt; 4  7.359601 7.293523 7.425680
-#&gt; 5  7.498679 7.436206 7.561152
-#&gt; 6  7.456403 7.399907 7.512900
-#&gt; 7  7.439771 7.376226 7.503315
-#&gt; 8  7.442382 7.384245 7.500519
-#&gt; 9  7.453164 7.388864 7.517465
-#&gt; 10 7.378384 7.317635 7.439132</div><div class='input'>
+#&gt; 1  7.328334 7.238311 7.418357
+#&gt; 2  7.363441 7.270679 7.456202
+#&gt; 3  7.388641 7.305097 7.472185
+#&gt; 4  7.359027 7.263622 7.454431
+#&gt; 5  7.519707 7.427189 7.612226
+#&gt; 6  7.453271 7.375113 7.531429
+#&gt; 7  7.442539 7.358797 7.526280
+#&gt; 8  7.446191 7.370297 7.522085
+#&gt; 9  7.404423 7.326023 7.482823
+#&gt; 10 7.384682 7.304245 7.465120</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
