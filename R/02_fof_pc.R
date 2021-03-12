@@ -142,7 +142,7 @@
 #' library(funcharts)
 #' data("air")
 #' air <- lapply(air, function(x) x[1:10, , drop = FALSE])
-#' fun_covariates <- names(air)[names(air) != "NO2"]
+#' fun_covariates <- c("CO", "temperature")
 #' mfdobj <- get_mfd_list(air, lambda = 1e-2)
 #' mfdobj_y <- mfdobj[, "NO2"]
 #' mfdobj_x <- mfdobj[, fun_covariates]
@@ -611,37 +611,3 @@ predict_fof_pc <- function(object,
 #'           panel.border = element_rect(colour = "black"))
 #'
 #' }
-
-
-
-# #' Title
-# #'
-# #' @param mod
-# #'
-# #' @return
-# #' @export
-# #'
-# #' @examples
-# plot_fof_pc <- function(mod) {
-#
-#   xbasis <- mod$pca_x$harmonics$basis
-#   ybasis <- mod$pca_res$harmonics$basis
-#
-#   x_arg <- seq(xbasis$rangeval[1],
-#                xbasis$rangeval[2], l = 100)
-#   y_arg <- seq(ybasis$rangeval[1],
-#                ybasis$rangeval[2], l = 100)
-#   variables <- mod$pca_x$harmonics$fdnames[[3]]
-#   fig_list <- lapply(seq_along(variables), function(jj) {
-#     axz <- list(zaxis = list(title = variables[jj]))
-#     beta <- eval.bifd(x_arg, y_arg, mod$beta_fd)[,,1,jj]
-#     plot_ly(z = ~beta,
-#             scene = paste0("scene", jj)) %>%
-#       add_surface(
-#         x = x_arg,
-#         y = y_arg)
-#   })
-#   do.call(subplot, fig_list) %>%
-#     layout(title = "Regression coefficients")
-#
-# }

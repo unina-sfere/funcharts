@@ -16,25 +16,22 @@
 #' @examples
 #' library(funcharts)
 #' data("air")
-#' air <- lapply(air, function(x) x[1:220, , drop = FALSE])
+#' air <- lapply(air, function(x) x[201:300, , drop = FALSE])
 #' fun_covariates <- c("CO", "temperature")
 #' mfdobj_x <- get_mfd_list(air[fun_covariates],
 #'                          n_basis = 15,
 #'                          lambda = 1e-2)
-#' mfdobj_y <- get_mfd_list(air["NO2"],
-#'                          n_basis = 15,
-#'                          lambda = 1e-2)
-#' y_scalar <- rowMeans(air$NO2)
-#' y1_scalar <- y_scalar[1:200]
-#' y2_scalar <- y_scalar[201:220]
-#' mfdobj_y1 <- mfdobj_y[1:200]
-#' mfdobj_y2 <- mfdobj_y[201:220]
-#' mfdobj_x1 <- mfdobj_x[1:200]
-#' mfdobj_x2 <- mfdobj_x[201:220]
-#' mod_fof <- fof_pc(mfdobj_y1, mfdobj_x1)
-#' cclist <- regr_cc_fof(mod_fof,
-#'                       mfdobj_y_new = mfdobj_y2,
-#'                       mfdobj_x_new = mfdobj_x2)
+#' y <- rowMeans(air$NO2)
+#' y1 <- y[1:60]
+#' y2 <- y[91:100]
+#' mfdobj_x1 <- mfdobj_x[1:60]
+#' mfdobj_x_tuning <- mfdobj_x[61:90]
+#' mfdobj_x2 <- mfdobj_x[91:100]
+#' mod <- sof_pc(y1, mfdobj_x1)
+#' cclist <- control_charts_sof_pc(mod = mod,
+#'                                 y_test = y2,
+#'                                 mfdobj_x_test = mfdobj_x2,
+#'                                 mfdobj_x_tuning = mfdobj_x_tuning)
 #' get_ooc(cclist)
 #'
 #'
@@ -99,25 +96,22 @@ get_ooc <- function(cclist) {
 #' @examples
 #' library(funcharts)
 #' data("air")
-#' air <- lapply(air, function(x) x[1:220, , drop = FALSE])
+#' air <- lapply(air, function(x) x[201:300, , drop = FALSE])
 #' fun_covariates <- c("CO", "temperature")
 #' mfdobj_x <- get_mfd_list(air[fun_covariates],
 #'                          n_basis = 15,
 #'                          lambda = 1e-2)
-#' mfdobj_y <- get_mfd_list(air["NO2"],
-#'                          n_basis = 15,
-#'                          lambda = 1e-2)
-#' y_scalar <- rowMeans(air$NO2)
-#' y1_scalar <- y_scalar[1:200]
-#' y2_scalar <- y_scalar[201:220]
-#' mfdobj_y1 <- mfdobj_y[1:200]
-#' mfdobj_y2 <- mfdobj_y[201:220]
-#' mfdobj_x1 <- mfdobj_x[1:200]
-#' mfdobj_x2 <- mfdobj_x[201:220]
-#' mod_fof <- fof_pc(mfdobj_y1, mfdobj_x1)
-#' cclist <- regr_cc_fof(mod_fof,
-#'                       mfdobj_y_new = mfdobj_y2,
-#'                       mfdobj_x_new = mfdobj_x2)
+#' y <- rowMeans(air$NO2)
+#' y1 <- y[1:60]
+#' y2 <- y[91:100]
+#' mfdobj_x1 <- mfdobj_x[1:60]
+#' mfdobj_x_tuning <- mfdobj_x[61:90]
+#' mfdobj_x2 <- mfdobj_x[91:100]
+#' mod <- sof_pc(y1, mfdobj_x1)
+#' cclist <- control_charts_sof_pc(mod = mod,
+#'                                 y_test = y2,
+#'                                 mfdobj_x_test = mfdobj_x2,
+#'                                 mfdobj_x_tuning = mfdobj_x_tuning)
 #' which_ooc(cclist)
 #'
 which_ooc <- function(cclist) {
@@ -144,25 +138,6 @@ which_ooc <- function(cclist) {
   out
 
 }
-
-
-# #' Title
-# #'
-# #' @param cclist
-# #'
-# #' @return
-# #' @export
-# #'
-# #' @examples
-# which_ooc_T2_spe <- function(cclist) {
-#
-#   ooc <- which_ooc(cclist)
-#
-#   sort(unique(c(ooc$T2$n, ooc$spe$n)))
-#
-# }
-
-
 
 
 #' Produce contribution plots
@@ -203,23 +178,23 @@ which_ooc <- function(cclist) {
 #' @examples
 #' library(funcharts)
 #' data("air")
-#' air <- lapply(air, function(x) x[1:300, , drop = FALSE])
+#' air <- lapply(air, function(x) x[201:300, , drop = FALSE])
 #' fun_covariates <- c("CO", "temperature")
 #' mfdobj_x <- get_mfd_list(air[fun_covariates],
 #'                          n_basis = 15,
 #'                          lambda = 1e-2)
 #' y <- rowMeans(air$NO2)
-#' y1 <- y[1:100]
-#' y2 <- y[181:200]
-#' mfdobj_x1 <- mfdobj_x[1:100]
-#' mfdobj_x_tuning <- mfdobj_x[101:180]
-#' mfdobj_x2 <- mfdobj_x[181:200]
+#' y1 <- y[1:60]
+#' y2 <- y[91:100]
+#' mfdobj_x1 <- mfdobj_x[1:60]
+#' mfdobj_x_tuning <- mfdobj_x[61:90]
+#' mfdobj_x2 <- mfdobj_x[91:100]
 #' mod <- sof_pc(y1, mfdobj_x1)
 #' cclist <- control_charts_sof_pc(mod = mod,
 #'                                 y_test = y2,
 #'                                 mfdobj_x_test = mfdobj_x2,
 #'                                 mfdobj_x_tuning = mfdobj_x_tuning)
-#' plot_control_charts(cclist)
+#' get_ooc(cclist)
 #' cont_plot(cclist, 3)
 #'
 cont_plot <- function(cclist,
@@ -339,17 +314,17 @@ cont_plot <- function(cclist,
 #' @examples
 #' library(funcharts)
 #' data("air")
-#' air <- lapply(air, function(x) x[1:300, , drop = FALSE])
+#' air <- lapply(air, function(x) x[201:300, , drop = FALSE])
 #' fun_covariates <- c("CO", "temperature")
 #' mfdobj_x <- get_mfd_list(air[fun_covariates],
 #'                          n_basis = 15,
 #'                          lambda = 1e-2)
 #' y <- rowMeans(air$NO2)
-#' y1 <- y[1:100]
-#' y2 <- y[181:200]
-#' mfdobj_x1 <- mfdobj_x[1:100]
-#' mfdobj_x_tuning <- mfdobj_x[101:180]
-#' mfdobj_x2 <- mfdobj_x[181:200]
+#' y1 <- y[1:60]
+#' y2 <- y[91:100]
+#' mfdobj_x1 <- mfdobj_x[1:60]
+#' mfdobj_x_tuning <- mfdobj_x[61:90]
+#' mfdobj_x2 <- mfdobj_x[91:100]
 #' mod <- sof_pc(y1, mfdobj_x1)
 #' cclist <- control_charts_sof_pc(mod = mod,
 #'                                 y_test = y2,
@@ -357,7 +332,8 @@ cont_plot <- function(cclist,
 #'                                 mfdobj_x_tuning = mfdobj_x_tuning)
 #' plot_control_charts(cclist)
 #' cont_plot(cclist, 3)
-#' plot_mon(cclist, mfdobj_x1, mfdobj_x2[3])
+#' plot_mon(cclist, fd_train = mfdobj_x1, fd_test = mfdobj_x2[3])
+#'
 plot_mon <- function(cclist, fd_train, fd_test, print_id = FALSE) {
 
   id_num <- which(cclist$id == fd_test$fdnames[[2]])

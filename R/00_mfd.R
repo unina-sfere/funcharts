@@ -158,6 +158,7 @@ is.mfd <- function(mfdobj) if (inherits(mfdobj, "mfd")) TRUE else FALSE
 #' @export
 #'
 #' @examples
+#' library(funcharts)
 #' data_sim_mfd()
 data_sim_mfd <- function(nobs = 5,
                          nbasis = 4,
@@ -293,6 +294,7 @@ data_sim_mfd <- function(nobs = 5,
 #'
 #' @export
 #' @examples
+#' library(funcharts)
 #' mfdobj1 <- data_sim_mfd(seed = 123)
 #' mfdobj2 <- data_sim_mfd(seed = 987)
 #' inprod_mfd(mfdobj1)
@@ -456,7 +458,8 @@ norm.mfd <- function(mfdobj) {
 #'                      domain = c(1, 10),
 #'                      arg = "x",
 #'                      id = "id",
-#'                      variables = c("y1", "y2"))
+#'                      variables = c("y1", "y2"),
+#'                      lambda = 1e-5)
 #'
 get_mfd_df <- function(dt,
                        domain,
@@ -637,8 +640,9 @@ get_mfd_df <- function(dt,
 #' @examples
 #' library(funcharts)
 #' data("air")
-#' # Only take first 5 multivariate functional observations from air
-#' air_small <- lapply(air, function(x) x[1:5, ])
+#' # Only take first 5 multivariate functional observations
+#' # and only two variables from air
+#' air_small <- lapply(air[, c("NO2", "CO")], function(x) x[1:5, ])
 #' mfdobj <- get_mfd_list(data_list = air_small)
 #'
 get_mfd_list <- function(data_list,
@@ -737,9 +741,10 @@ get_mfd_list <- function(data_list,
 #' \code{\link{get_mfd_list}}, \code{\link{get_mfd_df}}
 #'
 #' @examples
+#' library(funcharts)
 #' data("CanadianWeather")
-#' mfdobj <- get_mfd_array(CanadianWeather$dailyAv[, , 1:2],
-#'                         lambda = 1e-2)
+#' mfdobj <- get_mfd_array(CanadianWeather$dailyAv[, 1:10, ],
+#'                         lambda = 1e-5)
 #' plot_mfd(mfdobj)
 #'
 get_mfd_array <- function(data_array,
@@ -777,6 +782,7 @@ get_mfd_array <- function(data_array,
 #' \code{mfd}
 #'
 #' @examples
+#' library(funcharts)
 #' fdobj <- fd()
 #' mfdobj <- get_mfd_fd(fdobj)
 #' plot_mfd(mfdobj)
@@ -858,6 +864,7 @@ get_mfd_fd <- function(fdobj) {
 #' and \code{fda::\link[fda]{sd.fd}}.
 #' @export
 #' @examples
+#' library(funcharts)
 #' mfdobj <- data_sim_mfd()
 #' mfdobj_scaled <- scale_mfd(mfdobj)
 scale_mfd <- function(mfdobj, center = TRUE, scale = TRUE) {
@@ -1033,6 +1040,7 @@ descale_mfd <- function(scaled_mfd, center, scale) {
 #'
 #' @export
 #' @examples
+#' library(funcharts)
 #' mfdobj1 <- data_sim_mfd(nobs = 1, nvar = 3)
 #' mfdobj2 <- data_sim_mfd(nobs = 1, nvar = 2)
 #' tensor_product_mfd(mfdobj1)
@@ -1110,13 +1118,15 @@ tensor_product_mfd <- function(mfdobj1, mfdobj2 = NULL) {
 #' @export
 #'
 #' @examples
+#' library(funcharts)
 #' mfdobj1 <- data_sim_mfd(nvar = 3, seed = 1)
 #' mfdobj2 <- data_sim_mfd(nvar = 2, seed = 2)
 #' dimnames(mfdobj2$coefs)[[3]] <- mfdobj2$fdnames[[3]] <- c("var10", "var11")
 #'
 #' plot_mfd(mfdobj1)
 #' plot_mfd(mfdobj2)
-#' cbind_mfd(mfdobj1, mfdobj2) %>% plot_mfd
+#' mfdobj_cbind <- cbind_mfd(mfdobj1, mfdobj2)
+#' plot_mfd(mfdobj_cbind)
 #'
 cbind_mfd <- function(mfdobj1, mfdobj2) {
 
@@ -1169,14 +1179,14 @@ cbind_mfd <- function(mfdobj1, mfdobj2) {
 #' @export
 #'
 #' @examples
+#' library(funcharts)
 #' mfdobj1 <- data_sim_mfd(nvar = 3, seed = 1, nobs = 4)
 #' mfdobj2 <- data_sim_mfd(nvar = 3, seed = 2, nobs = 5)
 #' dimnames(mfdobj2$coefs)[[2]] <-
 #'   mfdobj2$fdnames[[2]] <-
 #'   c("rep11", "rep12", "rep13", "rep14", "rep15")
-#' plot_mfd(mfdobj1)
-#' plot_mfd(mfdobj2)
-#' rbind_mfd(mfdobj1, mfdobj2) %>% plot_mfd
+#' mfdobj_rbind <- rbind_mfd(mfdobj1, mfdobj2)
+#' plot_mfd(mfdobj_rbind)
 #'
 rbind_mfd <- function(mfdobj1, mfdobj2) {
 
@@ -1312,6 +1322,7 @@ mfd_to_df <- function(mfdobj) {
 #'
 #' @seealso \code{\link{geom_mfd}}
 #' @examples
+#' library(funcharts)
 #' mfdobj <- data_sim_mfd()
 #' plot_mfd(mfdobj)
 #'
@@ -1359,6 +1370,7 @@ plot_mfd <- function(mfdobj) {
 #' in order to plot \code{mfdobj}.
 #' @export
 #' @examples
+#' library(funcharts)
 #' mfdobj <- data_sim_mfd()
 #' ids <- mfdobj$fdnames[[2]]
 #' df <- data.frame(id = ids, first_two_obs = ids %in% c("rep1", "rep2"))
@@ -1440,6 +1452,7 @@ geom_mfd <- function(mapping = NULL,
 #' @export
 #'
 #' @examples
+#' library(funcharts)
 #' mfdobj <- data_sim_mfd(nobs = 1)
 #' tp <- tensor_product_mfd(mfdobj)
 #' plot_bifd(tp)

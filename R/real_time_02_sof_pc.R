@@ -53,7 +53,7 @@
 #' mfdobj_list <- get_mfd_list_real_time(air[c("CO", "temperature")],
 #'                                       n_basis = 15,
 #'                                       lambda = 1e-2,
-#'                                       k_seq = seq(0.25, 1, length = 5))
+#'                                       k_seq = c(0.5, 0.75, 1))
 #' y <- rowMeans(air$NO2)
 #' mod_list <- sof_pc_real_time(y, mfdobj_list)
 #'

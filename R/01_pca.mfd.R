@@ -26,6 +26,7 @@
 #' @seealso \code{\link{scale_mfd}}
 #'
 #' @examples
+#' library(funcharts)
 #' mfdobj <- data_sim_mfd()
 #' pca_obj <- pca_mfd(mfdobj)
 #' plot_pca_mfd(pca_obj)
@@ -114,6 +115,7 @@ pca_mfd <- function(mfdobj, scale = TRUE, nharm = 20) {
 #' principal components contained in the object \code{pca}.
 #' @export
 #' @examples
+#' library(funcharts)
 #' mfdobj <- data_sim_mfd()
 #' pca_obj <- pca_mfd(mfdobj)
 #' plot_pca_mfd(pca_obj)
