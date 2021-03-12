@@ -642,7 +642,7 @@ get_mfd_df <- function(dt,
 #' data("air")
 #' # Only take first 5 multivariate functional observations
 #' # and only two variables from air
-#' air_small <- lapply(air[, c("NO2", "CO")], function(x) x[1:5, ])
+#' air_small <- lapply(air[c("NO2", "CO")], function(x) x[1:5, ])
 #' mfdobj <- get_mfd_list(data_list = air_small)
 #'
 get_mfd_list <- function(data_list,
