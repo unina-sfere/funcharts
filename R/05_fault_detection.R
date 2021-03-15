@@ -290,7 +290,7 @@ cont_plot <- function(cclist,
 #' @param fd_train
 #' An object of class \code{mfd} containing
 #' the training data set of the functional variables.
-#' They are plotted in grey in the background.
+#' They are plotted in gray in the background.
 #' @param fd_test
 #' An object of class \code{mfd} containing
 #' the phase II data set of the functional variables to be monitored.
@@ -304,7 +304,7 @@ cont_plot <- function(cclist,
 #' A ggplot of the multivariate functional data.
 #' In particular, the multivariate functional data given in
 #' \code{fd_train} are plotted on
-#' the background in grey, while the multivariate functional data given in
+#' the background in gray, while the multivariate functional data given in
 #' \code{fd_test} are
 #' plotted on the foreground, the colour
 #' of each curve is black or red depending on if that curve

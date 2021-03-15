@@ -363,7 +363,7 @@ predict_sof_pc <- function(object, newdata = NULL, alpha = .05) {
 #' A ggplot showing several bootstrap replicates
 #' of the multivariate functional coefficients estimated
 #' fitting the scalar-on-function linear model.
-#' Grey lines indicate the different bootstrap estimates,
+#' Gray lines indicate the different bootstrap estimates,
 #' the black line indicate the estimate on the entire dataset.
 #' @export
 #' @examples
