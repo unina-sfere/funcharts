@@ -141,11 +141,11 @@ text-align: justify}
 <p>As a result you get a list with the original data used for model estimation, the result of applying <code>pca_mfd</code> on the multivariate functional covariates, the estimated regression model. It is possible to plot the estimated functional regression coefficients, which is also a multivariate functional data object of class <code>mfd</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_mfd.html">plot_mfd</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">beta</span><span class="op">)</span></code></pre></div>
-<p><img src="../../../R%20packages/funcharts/vignettes/capezza2020-plot_beta-1.png" title="plot of chunk plot_beta" alt="plot of chunk plot_beta" style="display:block; margin: auto"></p>
+<p><img src="capezza2020-plot_beta-1.png" title="plot of chunk plot_beta" alt="plot of chunk plot_beta" style="display:block; margin: auto"></p>
 <p>Moreover bootstrap can be used to obtain uncertainty quantification:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_bootstrap_sof_pc.html">plot_bootstrap_sof_pc</a></span><span class="op">(</span><span class="va">mod</span>, nboot <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
-<p><img src="../../../R%20packages/funcharts/vignettes/capezza2020-plot_bootstrap_sof_pc-1.png" title="plot of chunk plot_bootstrap_sof_pc" alt="plot of chunk plot_bootstrap_sof_pc" style="display:block; margin: auto"></p>
+<p><img src="capezza2020-plot_bootstrap_sof_pc-1.png" title="plot of chunk plot_bootstrap_sof_pc" alt="plot of chunk plot_bootstrap_sof_pc" style="display:block; margin: auto"></p>
 </div>
 <div id="control-charts" class="section level2">
 <h2 class="hasAnchor">
@@ -160,7 +160,7 @@ text-align: justify}
                                  components <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">components</span>,
                                  newdata <span class="op">=</span> <span class="va">mfdobj_x2</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot_control_charts.html">plot_control_charts</a></span><span class="op">(</span><span class="va">cclist_pca</span><span class="op">)</span></code></pre></div>
-<p><img src="../../../R%20packages/funcharts/vignettes/capezza2020-plot_control_charts_pca-1.png" title="plot of chunk plot_control_charts_pca" alt="plot of chunk plot_control_charts_pca" style="display:block; margin: auto"></p>
+<p><img src="capezza2020-plot_control_charts_pca-1.png" title="plot of chunk plot_control_charts_pca" alt="plot of chunk plot_control_charts_pca" style="display:block; margin: auto"></p>
 </div>
 <div id="supervised-monitoring" class="section level3">
 <h3 class="hasAnchor">
@@ -171,7 +171,7 @@ text-align: justify}
                                        y_test <span class="op">=</span> <span class="va">y2</span>,
                                        mfdobj_x_test <span class="op">=</span> <span class="va">mfdobj_x2</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot_control_charts.html">plot_control_charts</a></span><span class="op">(</span><span class="va">cclist_sof_pc</span><span class="op">)</span></code></pre></div>
-<p><img src="../../../R%20packages/funcharts/vignettes/capezza2020-plot_control_charts_sof_pc-1.png" title="plot of chunk plot_control_charts_sof_pc" alt="plot of chunk plot_control_charts_sof_pc" style="display:block; margin: auto"></p>
+<p><img src="capezza2020-plot_control_charts_sof_pc-1.png" title="plot of chunk plot_control_charts_sof_pc" alt="plot of chunk plot_control_charts_sof_pc" style="display:block; margin: auto"></p>
 </div>
 </div>
 <div id="fault-detection" class="section level2">
@@ -201,10 +201,10 @@ text-align: justify}
 <p>From the control charts it is possible to see some phase II observations out of control. For example, let us consider observation 9. We can exploit the contribution plots using the function <code>cont_plot</code> to identify the variables responsible of the anomaly. The contributions are plotted as bar plots, against upper control limits estimated empirically on the training data.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/cont_plot.html">cont_plot</a></span><span class="op">(</span><span class="va">cclist_sof_pc</span>, <span class="fl">9</span><span class="op">)</span></code></pre></div>
-<p><img src="../../../R%20packages/funcharts/vignettes/capezza2020-cont_plot-1.png" title="plot of chunk cont_plot" alt="plot of chunk cont_plot" style="display:block; margin: auto"> Finally, we can also plot any multivariate functional observation against a reference data set by using the function <code>plot_mon</code>:</p>
+<p><img src="capezza2020-cont_plot-1.png" title="plot of chunk cont_plot" alt="plot of chunk cont_plot" style="display:block; margin: auto"> Finally, we can also plot any multivariate functional observation against a reference data set by using the function <code>plot_mon</code>:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_mon.html">plot_mon</a></span><span class="op">(</span><span class="va">cclist_sof_pc</span>, <span class="va">mfdobj_x1</span>, <span class="va">mfdobj_x2</span><span class="op">[</span><span class="fl">9</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<p><img src="../../../R%20packages/funcharts/vignettes/capezza2020-plot_mon-1.png" title="plot of chunk plot_mon" alt="plot of chunk plot_mon" style="display:block; margin: auto"> This helps to understand which part of the observations were anomalous. Variables exceeding contribution plot limits are coloured in red.</p>
+<p><img src="capezza2020-plot_mon-1.png" title="plot of chunk plot_mon" alt="plot of chunk plot_mon" style="display:block; margin: auto"> This helps to understand which part of the observations were anomalous. Variables exceeding contribution plot limits are coloured in red.</p>
 </div>
 <div id="real-time-monitoring" class="section level2">
 <h2 class="hasAnchor">
@@ -232,7 +232,7 @@ text-align: justify}
 <p>Finally, we can plot the real-time control charts for a single observations, giving for each <span class="math inline">\(k\)</span> the monitoring statistics calculated on the data observed in <span class="math inline">\((a, k)\)</span>. Here follows an example showing the real time control charts for a single phase II observation (id number 9).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_control_charts_real_time.html">plot_control_charts_real_time</a></span><span class="op">(</span><span class="va">cc_list_real_time</span>, id_num <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></code></pre></div>
-<p><img src="../../../R%20packages/funcharts/vignettes/capezza2020-plot_control_charts_real_time-1.png" title="plot of chunk plot_control_charts_real_time" alt="plot of chunk plot_control_charts_real_time" style="display:block; margin: auto"></p>
+<p><img src="capezza2020-plot_control_charts_real_time-1.png" title="plot of chunk plot_control_charts_real_time" alt="plot of chunk plot_control_charts_real_time" style="display:block; margin: auto"></p>
 </div>
 </div>
 <div id="references" class="section level1">
