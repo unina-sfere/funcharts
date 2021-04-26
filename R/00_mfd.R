@@ -379,15 +379,19 @@ norm.mfd <- function(mfdobj) {
 #' all possible couples of observations.
 #' This means that, if \code{mfdobj1} has \code{n1} observations
 #' and \code{mfdobj2} has \code{n2} observations,
-#' then for each variable \code{n1 \times n2} inner products are calculated.
+#' then for each variable \code{n1 X n2} inner products are calculated.
 #' However, often one is intersted only in calculating the \code{n} inner products
 #' between the \code{n} observations of \code{mfdobj1} and the corresponding \code{n}
 #' observations of \code{mfdobj2}. This function provides this "diagonal" inner products only,
 #' saving a lot of computation with respect to using \code{fda::inprod} and then extracting the
 #' diagonal elements.
+#' Note that the code of this function calls a modified version of \code{fda::inprod()}.
 #' @export
 #'
 #' @examples
+#' mfdobj <- data_sim_mfd()
+#' inprod_mfd_diag(mfdobj)
+#'
 inprod_mfd_diag <- function(mfdobj1, mfdobj2 = NULL) {
 
   if (!is.mfd(mfdobj1)) {
@@ -471,7 +475,7 @@ inprod_fd_diag_single <- function(fdobj1, fdobj2 = NULL) {
   iter <- 0
   rngvec <- range1
   if ((all(c(coef1) == 0) || all(c(coef2) == 0))) {
-    return(numeric(0, nrep1))
+    return(numeric(nrep1))
   }
 
   JMAX <- 25
@@ -993,7 +997,7 @@ get_mfd_array <- function(data_array,
 #' plot_mfd(mfdobj)
 get_mfd_fd <- function(fdobj) {
 
-  if (length(fdobj$fdnames[[1]] > 1)) fdobj$fdnames[[1]] <- "time"
+  if (length(fdobj$fdnames[[1]]) > 1) fdobj$fdnames[[1]] <- "time"
 
   if (!is.fd(fdobj)) {
     stop("fdobj must be an object of class fd.")
