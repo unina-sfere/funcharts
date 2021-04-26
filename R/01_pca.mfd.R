@@ -238,11 +238,10 @@ get_scores <- function(pca, components, newdata = NULL) {
 #'
 get_pre_scores <- function(pca, components, newdata = NULL) {
 
-  fd_std <- scale_mfd(pca$data, scale = pca$scale)
-
   if (is.null(newdata)) {
     inprods <- pca$scores[, components, , drop = FALSE]
   } else {
+    fd_std <- scale_mfd(pca$data, scale = pca$scale)
     center <- attr(fd_std, "scaled:center")
     scale <- if (pca$scale) attr(fd_std, "scaled:scale") else FALSE
     fd_std <- scale_mfd(newdata, center, scale)
@@ -471,11 +470,7 @@ get_spe <- function(pca, components, newdata = NULL) {
   res_fd <- minus.fd(fd_std, fit)
   res_fd <- mfd(res_fd$coefs, res_fd$basis, res_fd$fdnames)
 
-  cont_spe <- inprod_mfd(res_fd)
-  cont_spe <- apply(cont_spe, 3, diag)
-  cont_spe <- matrix(cont_spe,
-                     nrow = length(obs),
-                     ncol = length(vars))
+  cont_spe <- inprod_mfd_diag(res_fd)
   rownames(cont_spe) <- obs
   colnames_cont_spe <- paste0("contribution_spe_", vars)
   spe <- rowSums(cont_spe)

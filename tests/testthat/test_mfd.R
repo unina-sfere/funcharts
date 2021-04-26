@@ -75,3 +75,59 @@ test_that("scale_mfd returns error with one single obs", {
   "mfd")
 })
 
+test_that("scale_mfd requires center to be fd object", {
+  mfdobj1 <- data_sim_mfd(seed = 1)
+  mfdobj2 <- data_sim_mfd(seed = 123)
+
+  # Normal scaling
+  mfdobj1_scaled <- scale_mfd(mfdobj1)
+  expect_s3_class(mfdobj1_scaled, "mfd")
+  expect_s3_class(attr(mfdobj1_scaled, "scaled:center"), "fd")
+  expect_is(attr(mfdobj1_scaled, "scaled:scale"), "fd")
+
+  # Only scale
+  mfdobj1_scaled <- scale_mfd(mfdobj1, center = FALSE)
+  expect_s3_class(mfdobj1_scaled, "mfd")
+  expect_null(attr(mfdobj1_scaled, "scaled:center"))
+  expect_is(attr(mfdobj1_scaled, "scaled:scale"), "fd")
+
+  # Only center
+  mfdobj1_scaled <- scale_mfd(mfdobj1, scale = FALSE)
+  expect_s3_class(mfdobj1_scaled, "mfd")
+  expect_s3_class(attr(mfdobj1_scaled, "scaled:center"), "fd")
+  expect_null(attr(mfdobj1_scaled, "scaled:scale"))
+
+  # Provide center, scale TRUE
+  mfdobj2_scaled <- scale_mfd(mfdobj2,
+                              center = attr(mfdobj1_scaled, "scaled:center"))
+  expect_s3_class(mfdobj2_scaled, "mfd")
+  expect_s3_class(attr(mfdobj2_scaled, "scaled:center"), "fd")
+  expect_is(attr(mfdobj2_scaled, "scaled:scale"), "fd")
+
+  # Provide center, scale FALSE
+  mfdobj1_scaled <- scale_mfd(mfdobj1)
+  mfdobj2_scaled <- scale_mfd(mfdobj2,
+                              center = attr(mfdobj1_scaled, "scaled:center"),
+                              scale = FALSE)
+  expect_s3_class(mfdobj2_scaled, "mfd")
+  expect_s3_class(attr(mfdobj2_scaled, "scaled:center"), "fd")
+  expect_null(attr(mfdobj2_scaled, "scaled:scale"))
+
+  # Provide scale, center TRUE
+  mfdobj2_scaled <- scale_mfd(mfdobj2,
+                              scale = attr(mfdobj1_scaled, "scaled:scale"))
+  expect_s3_class(mfdobj2_scaled, "mfd")
+  expect_s3_class(attr(mfdobj2_scaled, "scaled:center"), "fd")
+  expect_is(attr(mfdobj2_scaled, "scaled:scale"), "fd")
+
+  # Provide scale, center FALSE
+  mfdobj2_scaled <- scale_mfd(mfdobj2,
+                              scale = attr(mfdobj1_scaled, "scaled:scale"),
+                              center = FALSE)
+  expect_s3_class(mfdobj2_scaled, "mfd")
+  expect_null(attr(mfdobj2_scaled, "scaled:center"))
+  expect_is(attr(mfdobj2_scaled, "scaled:scale"), "fd")
+
+})
+
+

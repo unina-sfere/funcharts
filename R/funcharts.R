@@ -12,7 +12,7 @@
 #' @import parallel
 #' @import dplyr
 #' @import ggplot2
-#' @importFrom tidyr pivot_longer
+#' @importFrom tidyr pivot_longer drop_na
 #' @importFrom stats
 #' approxfun as.formula hatvalues lm predict quantile setNames var
 #' @importFrom rlang .data

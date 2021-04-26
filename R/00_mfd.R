@@ -251,8 +251,8 @@ data_sim_mfd <- function(nobs = 5,
 
   coefs <- mfdobj$coefs[, i, j, drop = FALSE]
   fdnames <- mfdobj$fdnames
-  fdnames[[2]] <- dimnames(mfdobj$coefs[, i, , drop = FALSE])[[2]]
-  fdnames[[3]] <- dimnames(mfdobj$coefs[, , j, drop = FALSE])[[3]]
+  fdnames[[2]] <- dimnames(coefs)[[2]]
+  fdnames[[3]] <- dimnames(coefs)[[3]]
   if (is.null(mfdobj$raw))
     raw_filtered <- id_var <- NULL else {
       raw <- mfdobj$raw
@@ -360,11 +360,216 @@ norm.mfd <- function(mfdobj) {
     stop("Input is not a multivariate functional data object.")
   }
 
-  inprods <- inprod_mfd(mfdobj)
-  inprods_sum_over_vars <- apply(inprods, 1:2, sum)
-  sqrt(diag(inprods_sum_over_vars))
+  inprods <- inprod_mfd_diag(mfdobj)
+  sqrt(rowSums(inprods))
 
 }
+
+
+
+#' Inner product of two multivariate functional data objects, for each observation
+#'
+#' @param mfdobj1 A multivariate functional data object of class \code{mfd}.
+#' @param mfdobj2 A multivariate functional data object of class \code{mfd},
+#' with the same number of functional variables and observations as \code{mfdobj1}.
+#' If NULL, then \code{mfdobj2=mfdobj1}. Default is NULL.
+#'
+#' @return It calculates the inner product of two multivariate functional data objects.
+#' The main function \code{inprod} of the package \code{fda} calculates inner products among
+#' all possible couples of observations.
+#' This means that, if \code{mfdobj1} has \code{n1} observations
+#' and \code{mfdobj2} has \code{n2} observations,
+#' then for each variable \code{n1 \times n2} inner products are calculated.
+#' However, often one is intersted only in calculating the \code{n} inner products
+#' between the \code{n} observations of \code{mfdobj1} and the corresponding \code{n}
+#' observations of \code{mfdobj2}. This function provides this "diagonal" inner products only,
+#' saving a lot of computation with respect to using \code{fda::inprod} and then extracting the
+#' diagonal elements.
+#' @export
+#'
+#' @examples
+inprod_mfd_diag <- function(mfdobj1, mfdobj2 = NULL) {
+
+  if (!is.mfd(mfdobj1)) {
+    stop("Only mfd class allowed for mfdobj1 input")
+  }
+
+  if (!(is.fd(mfdobj2) | is.null(mfdobj2))) {
+    stop("mfdobj2 input must be of class mfd, or NULL")
+  }
+
+  nvar1 <- dim(mfdobj1$coefs)[3]
+
+  if (is.fd(mfdobj2)) {
+    nvar2 <- dim(mfdobj2$coefs)[3]
+    if (nvar1 != nvar2) {
+      stop("mfdobj1 and mfdobj2 must have the same number of variables")
+    }
+  }
+
+  sapply(1:nvar1, function(jj) {
+    fdobj1_jj <- fd(matrix(mfdobj1$coefs[, , jj],
+                           nrow = dim(mfdobj1$coefs)[1],
+                           ncol = dim(mfdobj1$coefs)[2]),
+                    mfdobj1$basis)
+    if (is.null(mfdobj2)) {
+      out <- inprod_fd_diag_single(fdobj1_jj)
+    } else {
+      fdobj2_jj <- fd(matrix(mfdobj2$coefs[, , jj],
+                             nrow = dim(mfdobj2$coefs)[1],
+                             ncol = dim(mfdobj2$coefs)[2]),
+                      mfdobj2$basis)
+      out <- inprod_fd_diag_single(fdobj1_jj, fdobj2_jj)
+    }
+    out
+  })
+
+}
+
+#' @noRd
+#'
+inprod_fd_diag_single <- function(fdobj1, fdobj2 = NULL) {
+
+  if (!is.fd(fdobj1)) {
+    stop("Only fd class allowed for fdobj1 input")
+  }
+
+  nrep1 <- dim(fdobj1$coefs)[2]
+  coef1 <- fdobj1$coefs
+  basisobj1 <- fdobj1$basis
+  type1 <- basisobj1$type
+  range1 <- basisobj1$rangeval
+
+  if (!(is.fd(fdobj2) | is.null(fdobj2))) {
+    stop("fdobj2 input must be of class fd, or NULL")
+  }
+
+  if (is.fd(fdobj2)) {
+    type_calculated <- "inner_product"
+    nrep2 <- dim(fdobj2$coefs)[2]
+    if (nrep1 != nrep2) {
+      stop("fdobj1 and fdobj2 must have the same number of observations")
+    }
+    coef2 <- fdobj2$coefs
+    basisobj2 <- fdobj2$basis
+    type2 <- basisobj2$type
+    range2 <- basisobj2$rangeval
+    if (!all(range1 == range2)) {
+      stop("fdobj1 and fdobj2 must have the same domain")
+    }
+  }
+
+  if (is.null(fdobj2)) {
+    type_calculated <- "norm"
+    nrep2 <- nrep1
+    coef2 <- coef1
+    basisobj2 <- basisobj1
+    type2 <- type1
+    range2 <- range1
+  }
+
+  iter <- 0
+  rngvec <- range1
+  if ((all(c(coef1) == 0) || all(c(coef2) == 0))) {
+    return(numeric(0, nrep1))
+  }
+
+  JMAX <- 25
+  JMIN <- 5
+  EPS <- 1e-6
+
+  inprodmat <- numeric(nrep1)
+  nrng <- length(rngvec)
+  for (irng in 2:nrng) {
+    rngi <- c(rngvec[irng - 1], rngvec[irng])
+    if (irng > 2)
+      rngi[1] <- rngi[1] + 1e-10
+    if (irng < nrng)
+      rngi[2] <- rngi[2] - 1e-10
+    iter <- 1
+    width <- rngi[2] - rngi[1]
+    JMAXP <- JMAX + 1
+    h <- rep(1, JMAXP)
+    h[2] <- 0.25
+    s <- vector(mode = "list", length = JMAXP)
+    fx1 <- eval.fd(rngi, fdobj1)
+    if (type_calculated == "inner_product") {
+      fx2 <- eval.fd(rngi, fdobj2)
+      s[[1]] <- width * colSums(fx1 * fx2) / 2
+    }
+    if (type_calculated == "norm") {
+      s[[1]] <- width * colSums(fx1^2) / 2
+    }
+    tnm <- 0.5
+    for (iter in 2:JMAX) {
+      tnm <- tnm * 2
+      if (iter == 2) {
+        x <- mean(rngi)
+      } else {
+        del <- width/tnm
+        x <- seq(rngi[1] + del/2, rngi[2] - del/2, del)
+      }
+      fx1 <- eval.fd(x, fdobj1)
+
+      if (type_calculated == "inner_product") {
+        fx2 <- eval.fd(x, fdobj2)
+        chs <- width * colSums(fx1 * fx2) / tnm
+      }
+      if (type_calculated == "norm") {
+        chs <- width * colSums(fx1^2) / tnm
+      }
+
+      s[[iter]] <- (s[[iter - 1]] + chs) / 2
+
+      if (iter >= 5) {
+        ind <- (iter - 4):iter
+        ya <- s[ind]
+        xa <- h[ind]
+        absxa <- abs(xa)
+        absxamin <- min(absxa)
+        ns <- min((1:length(absxa))[absxa == absxamin])
+        cs <- ya
+        ds <- ya
+        y <- ya[[ns]]
+        ns <- ns - 1
+        for (m in 1:4) {
+          for (i in 1:(5 - m)) {
+            ho <- xa[i]
+            hp <- xa[i + m]
+            w <- (cs[[i + 1]] - ds[[i]])/(ho - hp)
+            ds[[i]] <- hp * w
+            cs[[i]] <- ho * w
+          }
+          if (2 * ns < 5 - m) {
+            dy <- cs[[ns + 1]]
+          } else {
+            dy <- ds[[ns]]
+            ns <- ns - 1
+          }
+          y <- y + dy
+        }
+        ss <- y
+        errval <- max(abs(dy))
+        ssqval <- max(abs(ss))
+        if (all(ssqval > 0)) {
+          crit <- errval/ssqval
+        } else {
+          crit <- errval
+        }
+        if (crit < EPS && iter >= JMIN) break
+      }
+      s[[iter + 1]] <- s[[iter]]
+      h[iter + 1] <- 0.25 * h[iter]
+      if (iter == JMAX)
+        warning("Failure to converge.")
+    }
+    inprodmat <- inprodmat + ss
+  }
+  names(inprodmat) <- NULL
+  inprodmat
+}
+
+
 
 #' Get Multivariate Functional Data from a data frame
 #'
@@ -787,6 +992,9 @@ get_mfd_array <- function(data_array,
 #' mfdobj <- get_mfd_fd(fdobj)
 #' plot_mfd(mfdobj)
 get_mfd_fd <- function(fdobj) {
+
+  if (length(fdobj$fdnames[[1]] > 1)) fdobj$fdnames[[1]] <- "time"
+
   if (!is.fd(fdobj)) {
     stop("fdobj must be an object of class fd.")
   }
@@ -992,13 +1200,13 @@ descale_mfd <- function(scaled_mfd, center, scale) {
 
   coef_sd_list <- lapply(1:nvar, function(jj) {
     matrix(scale$coefs[, jj], nrow = nbasis, ncol = nobs)
-    })
+  })
   coef_sd <- simplify2array(coef_sd_list)
   sd_fd <- fd(coef_sd, scale$basis, scaled_mfd$fdnames)
 
   coef_mean_list <- lapply(1:nvar, function(jj) {
     matrix(center$coefs[, 1, jj], nrow = nbasis, ncol = nobs)
-    })
+  })
   coef_mean <- simplify2array(coef_mean_list)
   mean_fd <- fd(coef_mean, center$basis, scaled_mfd$fdnames)
 
@@ -1264,7 +1472,8 @@ mfd_to_df_raw <- function(mfdobj) {
     rename(id = !!id_var) %>%
     filter(id %in% !!obs) %>%
     pivot_longer(variables, names_to = "var") %>%
-    arrange(id, var, !!arg_var)
+    arrange(id, var, !!arg_var) %>%
+    drop_na()
 }
 
 

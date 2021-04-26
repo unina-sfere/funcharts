@@ -34,6 +34,12 @@ In particular:
 
 ## Installation
 
+You can install the CRAN version of the R package `funcharts` by doing:
+
+``` r
+install.packages("funcharts")
+```
+
 You can install the development version from GitHub with:
 
 ``` r
