@@ -79,18 +79,6 @@ calculate_limits <- function(pca,
     stop("pca must be a list produced by pca_mfd.")
   }
 
-  if (!identical(names(pca), c(
-    "harmonics",
-    "values",
-    "scores",
-    "varprop",
-    "meanfd",
-    "pcscores",
-    "data",
-    "scale"
-  ))) {
-    stop("pca must be a list produced by pca_mfd.")
-  }
   if (!is.null(tuning_data)) {
     if (!is.mfd(tuning_data)) {
       stop("tuning_data must be an object from mfd class.")
@@ -101,9 +89,23 @@ calculate_limits <- function(pca,
     }
   }
 
-  T2 <- get_T2(pca, components, newdata = tuning_data)
-  spe <- get_spe(pca, components, newdata = tuning_data)
-  id <- data.frame(id = tuning_data$fdnames[[2]])
+  if (!is.null(tuning_data)) {
+    tuning_data <- scale_mfd(tuning_data,
+                                    center = pca$center_fd,
+                                    scale = if (pca$scale) pca$scale_fd else FALSE)
+  }
+
+  T2_spe <- get_T2_spe(pca, components, newdata_scaled = tuning_data)
+  T2 <- select(T2_spe, contains("T2", ignore.case = FALSE))
+  spe <- select(T2_spe, contains("spe", ignore.case = FALSE))
+
+  obs <- if (!is.null(tuning_data)) {
+    tuning_data$fdnames[[2]]
+  } else {
+    pca$data$fdnames[[2]]
+  }
+
+  id <- data.frame(id = obs)
   T2_lim <- apply(T2, 2, function(x) quantile(x, 1 - alpha$T2))
   spe_lim <- apply(spe, 2, function(x) quantile(x, 1 - alpha$spe))
 
@@ -199,19 +201,6 @@ calculate_cv_limits <- function(pca,
                                 ncores = 1) {
 
   if (!is.list(pca)) {
-    stop("pca must be a list produced by pca_mfd.")
-  }
-
-  if (!identical(names(pca), c(
-    "harmonics",
-    "values",
-    "scores",
-    "varprop",
-    "meanfd",
-    "pcscores",
-    "data",
-    "scale"
-  ))) {
     stop("pca must be a list produced by pca_mfd.")
   }
 

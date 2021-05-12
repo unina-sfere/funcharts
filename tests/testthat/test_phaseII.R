@@ -17,20 +17,6 @@ mfdobj_x2 <- mfdobj_x[201:220]
 mod_sof <- sof_pc(y1_scalar, mfdobj_x1)
 mod_fof <- fof_pc(mfdobj_y1, mfdobj_x1)
 
-test_that("control_charts_pca works", {
-  expect_error(control_charts_pca(pca = 0,
-                                  components = components,
-                                  tuning_data = mfdobj_x_tuning,
-                                  newdata = mfdobj_x2),
-               "pca must be a list produced by pca_mfd.")
-  expect_error(control_charts_pca(pca = list(123),
-                                  components = components,
-                                  tuning_data = mfdobj_x_tuning,
-                                  newdata = mfdobj_x2),
-               "pca must be a list produced by pca_mfd.")
-})
-
-
 test_that("regr_sof_pc works", {
   expect_error(regr_cc_sof(object = 0,
                            y_new = y2_scalar,

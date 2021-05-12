@@ -155,21 +155,6 @@ control_charts_pca <- function(pca,
     stop("pca must be a list produced by pca_mfd.")
   }
 
-  if (!identical(names(pca), c(
-    "harmonics",
-    "values",
-    "scores",
-    "varprop",
-    "meanfd",
-    "pcscores",
-    "data",
-    "scale"
-  ))) {
-    stop("pca must be a list produced by pca_mfd.")
-  }
-
-  if (is.null(tuning_data)) tuning_data <- pca$data
-
   if (length(limits) != 1) {
     stop("Only one type of 'limits' allowed.")
   }
@@ -190,11 +175,14 @@ control_charts_pca <- function(pca,
     nfold = nfold,
     ncores = ncores)
 
-  T2 <- get_T2(pca, components, newdata = newdata)
-  spe <- get_spe(pca, components, newdata = newdata)
+  newdata_scaled <- scale_mfd(newdata,
+                              center = pca$center_fd,
+                              scale = if (pca$scale) pca$scale_fd else FALSE)
+
+  T2_spe <- get_T2_spe(pca, components, newdata_scaled = newdata_scaled)
   id <- data.frame(id = newdata$fdnames[[2]])
 
-  cbind(id, T2, spe, lim)
+  cbind(id, T2_spe, lim)
 }
 
 
