@@ -1151,7 +1151,6 @@ scale_mfd <- function(mfdobj, center = TRUE, scale = TRUE) {
     sd_inv_coefs <- aperm(sd_inv_coefs, c(1, 3, 2))
     sd_inv_rep <- fd(sd_inv_coefs, bs, mfdobj$fdnames)
     fd_std <- times.fd(cen_fd, sd_inv_rep, bs)
-    fd_std <- times.fd(cen_fd, sd_inv_rep, bs)
     fd_std$fdnames <- mfdobj$fdnames
     dimnames(fd_std$coefs) <- dimnames(mfdobj$coefs)
     dimnames(fd_std$fdnames) <- NULL
