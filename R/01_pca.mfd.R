@@ -36,12 +36,12 @@ pca_mfd <- function(mfdobj, scale = TRUE, nharm = 20) {
   obs_names <- mfdobj$fdnames[[2]]
   variables <- mfdobj$fdnames[[3]]
 
-  data <- scale_mfd(mfdobj, scale = scale)
+  data_scaled <- scale_mfd(mfdobj, scale = scale)
 
   data_pca <- if (length(variables) == 1)
-    fd(data$coefs[, , 1],
-       data$basis,
-       data$fdnames) else data
+    fd(data_scaled$coefs[, , 1],
+       data_scaled$basis,
+       data_scaled$fdnames) else data_scaled
 
   nobs <- length(obs_names)
   nvar <- length(variables)
@@ -57,18 +57,21 @@ pca_mfd <- function(mfdobj, scale = TRUE, nharm = 20) {
 
   pc_names <- pca$harmonics$fdnames[[2]]
   rownames(pca$scores) <- rownames(pca$pcscores) <- obs_names
-  colnames(
-    pca$scores) <- colnames(pca$pcscores) <- pc_names
+  colnames(pca$scores) <- colnames(pca$pcscores) <- pc_names
   if (length(variables) > 1) dimnames(pca$scores)[[3]] <- variables
   pca$data <- mfdobj
+  pca$data_scaled <- data_scaled
   pca$scale <- scale
+  pca$center_fd <- attr(data_scaled, "scaled:center")
+  pca$scale_fd <- if (scale) attr(data_scaled, "scaled:scale") else NULL
 
   if (length(variables) > 1) {
     coefs <- pca$harmonics$coefs
   } else {
-    coefs <- array(pca$harmonics$coefs, dim = c(nrow(pca$harmonics$coefs),
-                                       ncol(pca$harmonics$coefs),
-                                       1))
+    coefs <- array(pca$harmonics$coefs,
+                   dim = c(nrow(pca$harmonics$coefs),
+                           ncol(pca$harmonics$coefs),
+                           1))
     dimnames(coefs) <- list(
       dimnames(pca$harmonics$coefs)[[1]],
       dimnames(pca$harmonics$coefs)[[2]],
@@ -184,9 +187,9 @@ plot_pca_mfd <- function(pca, harm = 0, scaled = FALSE) {
 #' @noRd
 #' @seealso \code{\link{get_pre_scores}}
 #'
-get_scores <- function(pca, components, newdata = NULL) {
+get_scores <- function(pca, components, newdata_scaled = NULL) {
 
-  inprods <- get_pre_scores(pca, components, newdata)
+  inprods <- get_pre_scores(pca, components, newdata_scaled)
   apply(inprods, 1:2, sum)
 
 }
@@ -236,16 +239,12 @@ get_scores <- function(pca, components, newdata = NULL) {
 #' @noRd
 #' @seealso \code{\link{get_scores}}
 #'
-get_pre_scores <- function(pca, components, newdata = NULL) {
+get_pre_scores <- function(pca, components, newdata_scaled = NULL) {
 
-  if (is.null(newdata)) {
+  if (is.null(newdata_scaled)) {
     inprods <- pca$scores[, components, , drop = FALSE]
   } else {
-    fd_std <- scale_mfd(pca$data, scale = pca$scale)
-    center <- attr(fd_std, "scaled:center")
-    scale <- if (pca$scale) attr(fd_std, "scaled:scale") else FALSE
-    fd_std <- scale_mfd(newdata, center, scale)
-    inprods <- inprod_mfd(fd_std, pca$harmonics[components])
+    inprods <- inprod_mfd(newdata_scaled, pca$harmonics[components])
   }
 
   inprods
@@ -289,11 +288,9 @@ get_pre_scores <- function(pca, components, newdata = NULL) {
 #'
 #' @seealso \code{\link{get_fit_pca_given_scores}}
 #'
-get_fit_pca <- function(pca, components, newdata = NULL) {
+get_fit_pca <- function(pca, components, newdata_scaled = NULL) {
 
-  scores <- get_scores(pca, components, newdata)
-  pca_coefs <- pca$harmonics$coefs[, components, , drop = FALSE]
-
+  scores <- get_scores(pca, components, newdata_scaled)
   get_fit_pca_given_scores(scores, pca$harmonics[components])
 
 }
@@ -391,14 +388,13 @@ get_fit_pca_given_scores <- function(scores, harmonics) {
 #' \emph{Applied Stochastic Models in Business and Industry},
 #' 36(3):477--500. <doi:10.1002/asmb.2507>
 #'
-get_T2 <- function(pca, components, newdata = NULL) {
-
-  inprods <- get_pre_scores(pca, components, newdata)
+get_T2_spe <- function(pca, components, newdata_scaled = NULL) {
+  inprods <- get_pre_scores(pca, components, newdata_scaled)
   scores <- apply(inprods, 1:2, sum)
   values <- pca$values[components]
   T2 <- colSums(t(scores^2) / values)
   variables <- dimnames(inprods)[[3]]
-  obs <- if (is.null(newdata)) pca$data$fdnames[[2]] else newdata$fdnames[[2]]
+  obs <- if (is.null(newdata_scaled)) pca$data$fdnames[[2]] else newdata_scaled$fdnames[[2]]
   contribution <- sapply(variables, function(variable) {
     rowSums(t(t(inprods[, , variable] * scores) / values))
   })
@@ -409,75 +405,28 @@ get_T2 <- function(pca, components, newdata = NULL) {
   contribution <- data.frame(contribution)
   names_contribution <- paste0("contribution_T2_", variables)
 
-  out <- data.frame(T2 = T2, contribution)
-  names(out) <- c("T2", names_contribution)
-  out
-}
+  out_T2 <- data.frame(T2 = T2, contribution)
+  names(out_T2) <- c("T2", names_contribution)
 
 
-#' Calculate the Squared Prediction Error statistics of
-#' multivariate functional data
-#'
-#' Calculate the Squared Prediction Error (SPE) statistics
-#' of multivariate functional data projected
-#' onto a multivariate functional principal component subspace,
-#' i.e. the squared norm of the difference between the original data and
-#' their projection onto the subspace.
-#'
-#' @param pca
-#' A fitted MFPCA object of class \code{pca_mfd}.
-#' @param components
-#' A vector of integers with the components over
-#' which to project the data.
-#' @param newdata
-#' An object of class \code{mfd} containing
-#' new multivariate functional data to be projected onto the desired subspace.
-#' If NULL, it is set to the data used to get \code{pca}, i.e. \code{pca$data}.
-#' Default is NULL.
-#'
-#' @return
-#' A \code{data.frame} with as many rows as the number of
-#' functional replications in \code{newdata}.
-#' It has one \code{spe} column containing the SPE statistic calculated
-#' for all observations,
-#' as well as one column per each functional variable, containing its
-#' contribution to the SPE statistic.
-#' See Capezza et al. (2020) for definition of contributions.
-#' @noRd
-#'
-#' @references
-#' Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
-#' Control charts for
-#' monitoring ship operating conditions and CO2 emissions based on
-#' scalar-on-function regression.
-#' \emph{Applied Stochastic Models in Business and Industry},
-#' 36(3):477--500. <doi:10.1002/asmb.2507>
-#'
-get_spe <- function(pca, components, newdata = NULL) {
+  fit <- get_fit_pca_given_scores(scores, pca$harmonics[components])
 
-  fd_std <- scale_mfd(pca$data, scale = pca$scale)
-
-  if (!is.null(newdata)) {
-    center <- attr(fd_std, "scaled:center")
-    scale <- if (pca$scale) attr(fd_std, "scaled:scale") else FALSE
-    fd_std <- scale_mfd(newdata, center, scale)
+  res_fd <- if (is.null(newdata_scaled)) {
+    minus.fd(pca$data_scaled, fit)
+  } else {
+    minus.fd(newdata_scaled, fit)
   }
 
-  obs <- fd_std$fdnames[[2]]
-  vars <- fd_std$fdnames[[3]]
-
-  fit <- get_fit_pca(pca, components, newdata)
-  res_fd <- minus.fd(fd_std, fit)
   res_fd <- mfd(res_fd$coefs, res_fd$basis, res_fd$fdnames)
 
   cont_spe <- inprod_mfd_diag(res_fd)
   rownames(cont_spe) <- obs
-  colnames_cont_spe <- paste0("contribution_spe_", vars)
+  colnames_cont_spe <- paste0("contribution_spe_", variables)
   spe <- rowSums(cont_spe)
 
-  out <- data.frame(spe = spe, cont_spe)
-  colnames(out) <- c("spe", colnames_cont_spe)
-  out
+  out_spe <- data.frame(spe = spe, cont_spe)
+  colnames(out_spe) <- c("spe", colnames_cont_spe)
+
+  cbind(out_T2, out_spe)
 
 }
-
