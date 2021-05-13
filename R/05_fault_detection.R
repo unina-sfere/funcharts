@@ -336,9 +336,13 @@ cont_plot <- function(cclist,
 #'
 plot_mon <- function(cclist, fd_train, fd_test, print_id = FALSE) {
 
-  id_num <- which(cclist$id == fd_test$fdnames[[2]])
-  title <- paste("Observation", id_num)
-  if (print_id) title <- paste(title, cclist$id[id_num])
+  id_num <- if (length(fd_test$fdnames[[2]]) == 1) {
+    id_num <- which(cclist$id == fd_test$fdnames[[2]])
+    title <- paste("Observation", id_num)
+    if (print_id) title <- paste(title, cclist$id[id_num])
+  } else {
+    title <- ""
+  }
 
   ooc <- get_ooc(cclist)
   mapping <- NULL
