@@ -96,8 +96,8 @@ calculate_limits <- function(pca,
   }
 
   T2_spe <- get_T2_spe(pca, components, newdata_scaled = tuning_data)
-  T2 <- select(T2_spe, contains("T2", ignore.case = FALSE))
-  spe <- select(T2_spe, contains("spe", ignore.case = FALSE))
+  T2 <- select(T2_spe, "T2", contains("contribution_T2", ignore.case = FALSE))
+  spe <- select(T2_spe, "spe", contains("contribution_spe", ignore.case = FALSE))
 
   obs <- if (!is.null(tuning_data)) {
     tuning_data$fdnames[[2]]
