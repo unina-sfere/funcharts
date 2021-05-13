@@ -328,7 +328,16 @@ predict_sof_pc <- function(object, newdata = NULL, alpha = .05) {
   pca <- object$pca
   components <- object$components
 
-  scores <- as.data.frame(get_scores(pca, components, newdata = newdata))
+  if (is.null(newdata)) {
+    newdata_scaled <- pca$data_scaled
+  } else {
+    newdata_scaled <- scale_mfd(newdata,
+                                center = pca$center_fd,
+                                scale = if (pca$scale) pca$scale_fd else FALSE)
+  }
+  scores <- as.data.frame(get_scores(pca,
+                                     components,
+                                     newdata_scaled = newdata_scaled))
 
   y_hat_int <- predict(mod,
                        newdata = scores,

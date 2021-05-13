@@ -438,6 +438,17 @@ fof_pc <- function(mfdobj_y,
 #' Functional Regression Control Chart.
 #' \emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
 #'
+#' @example
+#' library(funcharts)
+#' data("air")
+#' air <- lapply(air, function(x) x[1:10, , drop = FALSE])
+#' fun_covariates <- c("CO", "temperature")
+#' mfdobj_x <- get_mfd_list(air[fun_covariates], lambda = 1e-2)
+#' mfdobj_y <- get_mfd_list(air["NO2"], lambda = 1e-2)
+#' mod <- fof_pc(mfdobj_y, mfdobj_x)
+#' predict_fof_pc(mod,
+#'                mfdobj_y_new = mfdobj_y,
+#'                mfdobj_x_new = mfdobj_x)
 predict_fof_pc <- function(object,
                            mfdobj_y_new,
                            mfdobj_x_new) {
@@ -495,7 +506,17 @@ predict_fof_pc <- function(object,
   nobs_train <- length(obs_train)
   nobs_new <- length(obs_new)
 
-  x_new <- get_scores(pca_x, components_x, mfdobj_x_new)
+  if (is.null(mfdobj_x_new)) {
+    mfdobj_x_new_scaled <- pca_x$data_scaled
+  } else {
+    mfdobj_x_new_scaled <- scale_mfd(mfdobj_x_new,
+                                     center = pca_x$center_fd,
+                                     scale = if (pca_x$scale) pca_x$scale_fd else FALSE)
+  }
+
+  x_new <- get_scores(pca = pca_x,
+                      components = components_x,
+                      newdata_scaled = mfdobj_x_new_scaled)
   df_x_new <- data.frame(x_new)
   names(df_x_new) <- paste0("x.", names(df_x_new))
 
@@ -532,9 +553,10 @@ predict_fof_pc <- function(object,
   if (object$type_residuals == "studentized") {
 
     X <- pca_x$pcscores[, object$components_x, drop = FALSE]
-    XX <- crossprod(X)
-    XXinv <- solve(XX)
-    gain_new <- diag(x_new %*% XXinv %*% t(x_new))
+    # XX <- crossprod(X)
+    # XXinv <- solve(XX)
+    # gain_new <- diag(x_new %*% XXinv %*% t(x_new))
+    gain_new <- rowSums(t(t(x_new)^2 / colSums(X^2)))
     pred_error <- object$get_studentized_residuals(
       gain = gain_new,
       pred_error = pred_error_original_scale)
