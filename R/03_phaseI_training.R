@@ -207,6 +207,7 @@ calculate_cv_limits <- function(pca,
   set.seed(seed)
   mfdobj <- pca$data
   nobs <- dim(mfdobj$coefs)[2]
+  nvar <- dim(mfdobj$coefs)[3]
   folds <- split(1:nobs, sample(cut(1:nobs, nfold, labels = FALSE)))
 
   single_cv <- function(ii) {
@@ -245,26 +246,28 @@ calculate_cv_limits <- function(pca,
     bind_rows() %>%
     arrange(id)
 
-  T2 <- statistics_cv %>%
+  cont_T2 <- statistics_cv %>%
     dplyr::select(!contains("_lim")) %>%
-    dplyr::select(-id) %>%
-    dplyr::select(T2, contains("contribution_T2", ignore.case = FALSE))
+    dplyr::select(contains("contribution_T2", ignore.case = FALSE))
 
-  spe <- statistics_cv %>%
+  cont_spe <- statistics_cv %>%
     dplyr::select(!contains("_lim")) %>%
-    dplyr::select(-id) %>%
-    dplyr::select(spe, contains("contribution_spe", ignore.case = FALSE))
+    dplyr::select(contains("contribution_spe", ignore.case = FALSE))
 
-  T2_lim  <- apply(T2, 2, function(x) quantile(x, 1 - alpha$T2))
-  spe_lim <-  apply(spe, 2, function(x) quantile(x, 1 - alpha$T2))
+  T2_lim <- data.frame(T2 = quantile(statistics_cv$T2, 1 - alpha$T2))
+  spe_lim <- data.frame(spe = quantile(statistics_cv$spe, 1 - alpha$T2))
 
-  T2_lim <- as.data.frame(t(T2_lim))
-  spe_lim <- as.data.frame(t(spe_lim))
+  cont_T2_lim  <- apply(cont_T2, 2, function(x) quantile(x, 1 - alpha$T2 / nvar))
+  cont_spe_lim <-  apply(cont_spe, 2, function(x) quantile(x, 1 - alpha$spe / nvar))
 
-  names(T2_lim) <- paste0(names(T2_lim), "_lim")
-  names(spe_lim) <- paste0(names(spe_lim), "_lim")
+  cont_T2_lim <- as.data.frame(t(cont_T2_lim))
+  cont_spe_lim <- as.data.frame(t(cont_spe_lim))
 
-  cbind(T2_lim, spe_lim)
+  df_limits <- bind_cols(T2_lim, cont_T2_lim, spe_lim, cont_spe_lim)
+
+  names(df_limits) <- paste0(names(df_limits), "_lim")
+
+  df_limits
 
 }
 
