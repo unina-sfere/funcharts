@@ -214,11 +214,14 @@ calculate_cv_limits <- function(pca,
     fd_test <- mfdobj[folds[[ii]]]
 
     pca_cv <- pca_mfd(fd_train, scale = pca$scale)
+    control_charts_pca(pca = pca_cv,
+                       components = components,
+                       newdata = fd_test)
 
-    T2 <- get_T2(pca_cv, components, newdata = fd_test)
-    spe <- get_spe(pca_cv, components, newdata = fd_test)
-
-    list(id = fd_test$fdnames[[2]], T2 = T2, spe = spe)
+    # T2 <- get_T2(pca_cv, components, newdata = fd_test)
+    # spe <- get_spe(pca_cv, components, newdata = fd_test)
+    #
+    # list(id = fd_test$fdnames[[2]], T2 = T2, spe = spe)
   }
   if (ncores == 1) {
     statistics_cv <- lapply(1:nfold, single_cv)
@@ -238,8 +241,19 @@ calculate_cv_limits <- function(pca,
     }
   }
 
-  T2       <- bind_rows(lapply(statistics_cv, function(x) x$T2))
-  spe      <- bind_rows(lapply(statistics_cv, function(x) x$spe))
+  statistics_cv <- statistics_cv %>%
+    bind_rows() %>%
+    arrange(id)
+
+  T2 <- statistics_cv %>%
+    dplyr::select(!contains("_lim")) %>%
+    dplyr::select(-id) %>%
+    dplyr::select(T2, contains("contribution_T2", ignore.case = FALSE))
+
+  spe <- statistics_cv %>%
+    dplyr::select(!contains("_lim")) %>%
+    dplyr::select(-id) %>%
+    dplyr::select(spe, contains("contribution_spe", ignore.case = FALSE))
 
   T2_lim  <- apply(T2, 2, function(x) quantile(x, 1 - alpha$T2))
   spe_lim <-  apply(spe, 2, function(x) quantile(x, 1 - alpha$T2))
