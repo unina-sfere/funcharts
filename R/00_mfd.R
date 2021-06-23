@@ -1135,6 +1135,7 @@ scale_mfd <- function(mfdobj, center = TRUE, scale = TRUE) {
   } else {
     if (is.logical(scale) && scale == TRUE) {
       sd_fd <- sd.fd(mfdobj)
+      sd_fd$coefs <- pmax(sd_fd$coefs, 0)
     }
     if (is.fd(scale)) {
       sd_fd <- scale
