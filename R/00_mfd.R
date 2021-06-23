@@ -434,6 +434,7 @@ inprod_mfd_diag <- function(mfdobj1, mfdobj2 = NULL) {
   })
 
   if (nobs1 == 1) inprods <- matrix(inprods, nrow = 1)
+  inprods
 
 }
 
