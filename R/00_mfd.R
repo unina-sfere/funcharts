@@ -403,15 +403,20 @@ inprod_mfd_diag <- function(mfdobj1, mfdobj2 = NULL) {
   }
 
   nvar1 <- dim(mfdobj1$coefs)[3]
+  nobs1 <- dim(mfdobj1$coefs)[2]
 
   if (is.fd(mfdobj2)) {
     nvar2 <- dim(mfdobj2$coefs)[3]
     if (nvar1 != nvar2) {
       stop("mfdobj1 and mfdobj2 must have the same number of variables")
     }
+    nobs2 <- dim(mfdobj2$coefs)[2]
+    if (nobs1 != nobs2) {
+      stop("mfdobj1 and mfdobj2 must have the same number of observations")
+    }
   }
 
-  sapply(1:nvar1, function(jj) {
+  inprods <- sapply(1:nvar1, function(jj) {
     fdobj1_jj <- fd(matrix(mfdobj1$coefs[, , jj],
                            nrow = dim(mfdobj1$coefs)[1],
                            ncol = dim(mfdobj1$coefs)[2]),
@@ -427,6 +432,8 @@ inprod_mfd_diag <- function(mfdobj1, mfdobj2 = NULL) {
     }
     out
   })
+
+  if (nobs1 == 1) inprods <- matrix(inprods, nrow = 1)
 
 }
 
