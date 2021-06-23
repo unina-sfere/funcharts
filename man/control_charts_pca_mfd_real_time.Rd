@@ -6,7 +6,7 @@
 \usage{
 control_charts_pca_mfd_real_time(
   pca_list,
-  components,
+  components_list,
   mfdobj_x_test,
   mfdobj_x_tuning = NULL,
   alpha = list(T2 = 0.0125, spe = 0.0125),
@@ -22,7 +22,8 @@ containing a list of multivariate functional principal component analysis
 models estimated
 on functional data each evolving up to an intermediate domain point.}
 
-\item{components}{See \code{\link{pca_mfd}}.}
+\item{components_list}{A list of components given as input to \code{\link{pca_mfd}}
+for each intermediate domain point.}
 
 \item{mfdobj_x_test}{A list created using
 \code{\link{get_mfd_df_real_time}} or
@@ -85,9 +86,13 @@ mfdobj_x2_list <- get_mfd_list_real_time(air2[c("CO", "temperature")],
                                          lambda = 1e-2,
                                          k_seq = c(0.5, 1))
 pca_list <- pca_mfd_real_time(mfdobj_x1_list)
+components_list <- lapply(pca_list, function(x) {
+  sum(cumsum(x$varprop) <= .8)
+})
+
 cclist <- control_charts_pca_mfd_real_time(
   pca_list = pca_list,
-  components = 1:3,
+  components_list = 1:3,
   mfdobj_x_test = mfdobj_x2_list)
 plot_control_charts_real_time(cclist, 1)
 
