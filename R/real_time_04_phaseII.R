@@ -133,7 +133,7 @@ control_charts_pca_mfd_real_time <- function(pca_list,
       cl <- makeCluster(ncores)
       clusterExport(cl,
                     c("pca_list",
-                      "components",
+                      "components_list",
                       "mfdobj_x_test",
                       "mfdobj_x_tuning",
                       "alpha",
