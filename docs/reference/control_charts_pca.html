@@ -86,7 +86,7 @@ to be monitored with the built control charts." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -118,6 +118,9 @@ to be monitored with the built control charts." />
       <a href="../articles/mfd.html">mfd</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -286,31 +289,34 @@ based on scalar-on-function regression.
 <p>Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
 Functional Regression Control Chart.
 <em>Technometrics</em>. &lt;doi:10.1080/00401706.2020.1753581&gt;</p>
-<p>library(funcharts)
-data("air")
-air &lt;- lapply(air, function(x) x[1:220, , drop = FALSE])
-fun_covariates &lt;- c("CO", "temperature")
-mfdobj_x &lt;- get_mfd_list(air[fun_covariates],
-                         n_basis = 15,
-                         lambda = 1e-2)
-y &lt;- rowMeans(air$NO2)
-y1 &lt;- y[1:100]
-y_tuning &lt;- y[101:200]
-y2 &lt;- y[201:220]
-mfdobj_x1 &lt;- mfdobj_x[1:100]
-mfdobj_x_tuning &lt;- mfdobj_x[101:200]
-mfdobj_x2 &lt;- mfdobj_x[201:220]
-pca &lt;- pca_mfd(mfdobj_x1)
-components &lt;- 1:which(cumsum(pca$varprop) &gt;= .90)[1]
-cclist &lt;- control_charts_pca(pca = pca,
-                             components = components,
-                             tuning_data = mfdobj_x_tuning,
-                             newdata = mfdobj_x2)
-plot_control_charts(cclist)</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='regr_cc_fof.html'>regr_cc_fof</a></code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/unina-sfere/funcharts'>funcharts</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"air"</span><span class='op'>)</span>
+<span class='va'>air</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>air</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>220</span>, , drop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>]</span><span class='op'>)</span>
+<span class='va'>fun_covariates</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CO"</span>, <span class='st'>"temperature"</span><span class='op'>)</span>
+<span class='va'>mfdobj_x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_mfd_list.html'>get_mfd_list</a></span><span class='op'>(</span><span class='va'>air</span><span class='op'>[</span><span class='va'>fun_covariates</span><span class='op'>]</span>,
+                         n_basis <span class='op'>=</span> <span class='fl'>15</span>,
+                         lambda <span class='op'>=</span> <span class='fl'>1e-2</span><span class='op'>)</span>
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>rowMeans</a></span><span class='op'>(</span><span class='va'>air</span><span class='op'>$</span><span class='va'>NO2</span><span class='op'>)</span>
+<span class='va'>y1</span> <span class='op'>&lt;-</span> <span class='va'>y</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>]</span>
+<span class='va'>y_tuning</span> <span class='op'>&lt;-</span> <span class='va'>y</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>200</span><span class='op'>]</span>
+<span class='va'>y2</span> <span class='op'>&lt;-</span> <span class='va'>y</span><span class='op'>[</span><span class='fl'>201</span><span class='op'>:</span><span class='fl'>220</span><span class='op'>]</span>
+<span class='va'>mfdobj_x1</span> <span class='op'>&lt;-</span> <span class='va'>mfdobj_x</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>]</span>
+<span class='va'>mfdobj_x_tuning</span> <span class='op'>&lt;-</span> <span class='va'>mfdobj_x</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>200</span><span class='op'>]</span>
+<span class='va'>mfdobj_x2</span> <span class='op'>&lt;-</span> <span class='va'>mfdobj_x</span><span class='op'>[</span><span class='fl'>201</span><span class='op'>:</span><span class='fl'>220</span><span class='op'>]</span>
+<span class='va'>pca</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pca_mfd.html'>pca_mfd</a></span><span class='op'>(</span><span class='va'>mfdobj_x1</span><span class='op'>)</span>
+<span class='va'>components</span> <span class='op'>&lt;-</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cumsum.html'>cumsum</a></span><span class='op'>(</span><span class='va'>pca</span><span class='op'>$</span><span class='va'>varprop</span><span class='op'>)</span> <span class='op'>&gt;=</span> <span class='fl'>.90</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
+<span class='va'>cclist</span> <span class='op'>&lt;-</span> <span class='fu'>control_charts_pca</span><span class='op'>(</span>pca <span class='op'>=</span> <span class='va'>pca</span>,
+                             components <span class='op'>=</span> <span class='va'>components</span>,
+                             tuning_data <span class='op'>=</span> <span class='va'>mfdobj_x_tuning</span>,
+                             newdata <span class='op'>=</span> <span class='va'>mfdobj_x2</span><span class='op'>)</span>
+<span class='fu'><a href='plot_control_charts.html'>plot_control_charts</a></span><span class='op'>(</span><span class='va'>cclist</span><span class='op'>)</span>
+</div><div class='img'><img src='control_charts_pca-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

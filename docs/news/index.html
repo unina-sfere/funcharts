@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Confirm Object has Class mfd — is.mfd • funcharts</title>
+<title>Changelog • funcharts</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,7 @@
 
 
 
-<meta property="og:title" content="Confirm Object has Class mfd — is.mfd" />
-<meta property="og:description" content="Check that an argument is a multivariate
-functional data object of class mfd." />
+<meta property="og:title" content="Changelog" />
 
 
 
@@ -60,7 +58,7 @@ functional data object of class mfd." />
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -130,37 +128,49 @@ functional data object of class mfd." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Confirm Object has Class <code>mfd</code></h1>
-    <small class="dont-index">Source: <a href='https://github.com/unina-sfere/funcharts/blob/master/R/00_mfd.R'><code>R/00_mfd.R</code></a></small>
-    <div class="hidden name"><code>is.mfd.Rd</code></div>
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/unina-sfere/funcharts/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="ref-description">
-    <p>Check that an argument is a multivariate
-functional data object of class <code>mfd</code>.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>is.mfd</span><span class='op'>(</span><span class='va'>mfdobj</span><span class='op'>)</span></pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>mfdobj</th>
-      <td><p>An object to be checked.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>a logical value: TRUE if the class is correct, FALSE otherwise.</p>
-
+    <div id="funcharts-110" class="section level1">
+<h1 class="page-header" data-toc-text="1.1.0">
+<a href="#funcharts-110" class="anchor"></a>funcharts 1.1.0<small> Unreleased </small>
+</h1>
+<div id="major-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#major-changes" class="anchor"></a>Major changes</h2>
+<ul>
+<li>
+<code><a href="../reference/simulate_mfd.html">simulate_mfd()</a></code> simulates example data for <code>funcharts</code>. It creates a data set with three functional covariates, a functional response generated as a function of the three functional covariates through a function-on-function linear model, and a scalar response generated as a function of the three functional covariates through a scalar-on-function linear model. This function covers the simulation study in Centofanti et al. (2020) for the function-on-function case and also simulates data in a similar way for the scalar response case.</li>
+</ul>
+</div>
+<div id="minor-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-changes" class="anchor"></a>Minor changes</h2>
+<ul>
+<li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
+<li>
+<code><a href="../reference/inprod_mfd_diag.html">inprod_mfd_diag()</a></code> calculates the inner product between two multivariate functional data objects observation by observation, avoiding calculating it between all possible couples of observations. Therefore, there are <span class="math inline"><em>n</em></span> calculations instead of <span class="math inline"><em>n</em><sup>2</sup></span>, saving much computational time when calculating the squared prediction error statistic when <span class="math inline"><em>n</em></span> is large.</li>
+<li>Code has been improved so that <code><a href="../reference/scale_mfd.html">scale_mfd()</a></code> is pre-computed and therefore is not called many times unnecessarily along the different functions.</li>
+</ul>
+</div>
+</div>
+    <div id="funcharts-100" class="section level1">
+<h1 class="page-header" data-toc-text="1.0.0">
+<a href="#funcharts-100" class="anchor"></a>funcharts 1.0.0<small> 2021-03-15 </small>
+</h1>
+<ul>
+<li>Initial release</li>
+</ul>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
+
 </div>
 
 

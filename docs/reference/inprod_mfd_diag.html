@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Confirm Object has Class mfd — is.mfd • funcharts</title>
+<title>Inner product of two multivariate functional data objects, for each observation — inprod_mfd_diag • funcharts</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Confirm Object has Class mfd — is.mfd" />
-<meta property="og:description" content="Check that an argument is a multivariate
-functional data object of class mfd." />
+<meta property="og:title" content="Inner product of two multivariate functional data objects, for each observation — inprod_mfd_diag" />
+<meta property="og:description" content="Inner product of two multivariate functional data objects, for each observation" />
 
 
 
@@ -130,31 +129,57 @@ functional data object of class mfd." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Confirm Object has Class <code>mfd</code></h1>
+    <h1>Inner product of two multivariate functional data objects, for each observation</h1>
     <small class="dont-index">Source: <a href='https://github.com/unina-sfere/funcharts/blob/master/R/00_mfd.R'><code>R/00_mfd.R</code></a></small>
-    <div class="hidden name"><code>is.mfd.Rd</code></div>
+    <div class="hidden name"><code>inprod_mfd_diag.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Check that an argument is a multivariate
-functional data object of class <code>mfd</code>.</p>
+    <p>Inner product of two multivariate functional data objects, for each observation</p>
     </div>
 
-    <pre class="usage"><span class='fu'>is.mfd</span><span class='op'>(</span><span class='va'>mfdobj</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>inprod_mfd_diag</span><span class='op'>(</span><span class='va'>mfdobj1</span>, mfdobj2 <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>mfdobj</th>
-      <td><p>An object to be checked.</p></td>
+      <th>mfdobj1</th>
+      <td><p>A multivariate functional data object of class <code>mfd</code>.</p></td>
+    </tr>
+    <tr>
+      <th>mfdobj2</th>
+      <td><p>A multivariate functional data object of class <code>mfd</code>,
+with the same number of functional variables and observations as <code>mfdobj1</code>.
+If NULL, then <code>mfdobj2=mfdobj1</code>. Default is NULL.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a logical value: TRUE if the class is correct, FALSE otherwise.</p>
+    <p>It calculates the inner product of two multivariate functional data objects.
+The main function <code>inprod</code> of the package <code>fda</code> calculates inner products among
+all possible couples of observations.
+This means that, if <code>mfdobj1</code> has <code>n1</code> observations
+and <code>mfdobj2</code> has <code>n2</code> observations,
+then for each variable <code>n1 X n2</code> inner products are calculated.
+However, often one is interested only in calculating the <code>n</code> inner products
+between the <code>n</code> observations of <code>mfdobj1</code> and the corresponding <code>n</code>
+observations of <code>mfdobj2</code>. This function provides this "diagonal" inner products only,
+saving a lot of computation with respect to using <code><a href='https://rdrr.io/pkg/fda/man/inprod.html'>fda::inprod</a></code> and then extracting the
+diagonal elements.
+Note that the code of this function calls a modified version of <code><a href='https://rdrr.io/pkg/fda/man/inprod.html'>fda::inprod()</a></code>.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>mfdobj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='data_sim_mfd.html'>data_sim_mfd</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>inprod_mfd_diag</span><span class='op'>(</span><span class='va'>mfdobj</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;           [,1]      [,2]
+#&gt; [1,] 0.8421529 0.1360602
+#&gt; [2,] 0.4480575 0.1276129
+#&gt; [3,] 0.6737779 0.3169002
+#&gt; [4,] 0.3365663 0.3290411
+#&gt; [5,] 0.2181010 0.1934453</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

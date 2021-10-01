@@ -76,7 +76,7 @@ each evolving up to an intermediate domain point." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -108,6 +108,9 @@ each evolving up to an intermediate domain point." />
       <a href="../articles/mfd.html">mfd</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -145,7 +148,7 @@ each evolving up to an intermediate domain point.</p>
 
     <pre class="usage"><span class='fu'>control_charts_pca_mfd_real_time</span><span class='op'>(</span>
   <span class='va'>pca_list</span>,
-  <span class='va'>components</span>,
+  <span class='va'>components_list</span>,
   <span class='va'>mfdobj_x_test</span>,
   mfdobj_x_tuning <span class='op'>=</span> <span class='cn'>NULL</span>,
   alpha <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>T2 <span class='op'>=</span> <span class='fl'>0.0125</span>, spe <span class='op'>=</span> <span class='fl'>0.0125</span><span class='op'>)</span>,
@@ -166,8 +169,9 @@ models estimated
 on functional data each evolving up to an intermediate domain point.</p></td>
     </tr>
     <tr>
-      <th>components</th>
-      <td><p>See <code><a href='pca_mfd.html'>pca_mfd</a></code>.</p></td>
+      <th>components_list</th>
+      <td><p>A list of components given as input to <code><a href='pca_mfd.html'>pca_mfd</a></code>
+for each intermediate domain point.</p></td>
     </tr>
     <tr>
       <th>mfdobj_x_test</th>
@@ -243,12 +247,16 @@ corresponding to a given instant.</p>
                                          lambda <span class='op'>=</span> <span class='fl'>1e-2</span>,
                                          k_seq <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>pca_list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pca_mfd_real_time.html'>pca_mfd_real_time</a></span><span class='op'>(</span><span class='va'>mfdobj_x1_list</span><span class='op'>)</span>
+<span class='va'>components_list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>pca_list</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cumsum.html'>cumsum</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>varprop</span><span class='op'>)</span> <span class='op'>&lt;=</span> <span class='fl'>.8</span><span class='op'>)</span>
+<span class='op'>}</span><span class='op'>)</span>
+
 <span class='va'>cclist</span> <span class='op'>&lt;-</span> <span class='fu'>control_charts_pca_mfd_real_time</span><span class='op'>(</span>
   pca_list <span class='op'>=</span> <span class='va'>pca_list</span>,
-  components <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>,
+  components_list <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>,
   mfdobj_x_test <span class='op'>=</span> <span class='va'>mfdobj_x2_list</span><span class='op'>)</span>
 <span class='fu'><a href='plot_control_charts_real_time.html'>plot_control_charts_real_time</a></span><span class='op'>(</span><span class='va'>cclist</span>, <span class='fl'>1</span><span class='op'>)</span>
-</div><div class='img'><img src='control_charts_pca_mfd_real_time-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span></div><div class='img'><img src='control_charts_pca_mfd_real_time-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

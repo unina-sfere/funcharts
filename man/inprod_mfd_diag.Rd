@@ -20,7 +20,7 @@ all possible couples of observations.
 This means that, if \code{mfdobj1} has \code{n1} observations
 and \code{mfdobj2} has \code{n2} observations,
 then for each variable \code{n1 X n2} inner products are calculated.
-However, often one is intersted only in calculating the \code{n} inner products
+However, often one is interested only in calculating the \code{n} inner products
 between the \code{n} observations of \code{mfdobj1} and the corresponding \code{n}
 observations of \code{mfdobj2}. This function provides this "diagonal" inner products only,
 saving a lot of computation with respect to using \code{fda::inprod} and then extracting the
