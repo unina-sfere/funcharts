@@ -1,13 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
-<!-- [![CRAN status](https://www.r-pkg.org/badges/version/funcharts)](https://CRAN.R-project.org/package=funcharts) -->
-
+[![CRAN status](https://www.r-pkg.org/badges/version/funcharts)](https://CRAN.R-project.org/package=funcharts)
 [![R-CMD-check](https://github.com/unina-sfere/funcharts/workflows/R-CMD-check/badge.svg)](https://github.com/unina-sfere/funcharts/actions)
-[![Build
-Status](https://www.travis-ci.com/unina-sfere/funcharts.svg?branch=main)](https://www.travis-ci.com/unina-sfere/funcharts)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/funcharts)](https://CRAN.R-project.org/package=funcharts)
 <!-- badges: end -->
 
 # funcharts
