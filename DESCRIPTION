@@ -17,11 +17,11 @@ Description: Provides functional control charts
     using the methods of Capezza et al. (2020) <doi:10.1002/asmb.2507> and 
     Centofanti et al. (2020) <doi:10.1080/00401706.2020.1753581>.
 Depends: fda, dplyr, ggplot2, R (>= 4.0.0)
-Imports: rlang, parallel, tidyr, patchwork
+Imports: rlang, parallel, tidyr, patchwork, RSpectra
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Suggests: 
     knitr,
     rmarkdown,

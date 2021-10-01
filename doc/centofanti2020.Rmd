@@ -15,6 +15,7 @@ text-align: justify}
 
 
 
+
 # Functional Regression Control Chart
 
 In this vignette we show how to use the `funcharts` package to apply the methods proposed in Centofanti et al. (2020) to build the functional regression control chart, when we have a functional response variable and multivariate functional covariates.
@@ -158,6 +159,9 @@ Here follows an example showing the real time control charts for a single phase 
 
 ```r
 plot_control_charts_real_time(cc_list_real_time, id_num = 54)
+#> Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> = "none")` instead.
+
+#> Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> = "none")` instead.
 ```
 
 <img src="centofanti2020-plot_control_charts_real_time-1.png" title="plot of chunk plot_control_charts_real_time" alt="plot of chunk plot_control_charts_real_time" style="display:block; margin: auto" style="display: block; margin: auto;" />

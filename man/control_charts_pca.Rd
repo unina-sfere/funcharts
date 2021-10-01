@@ -119,19 +119,7 @@ the control chart limits.
 A phase II data set contains the observations
 to be monitored with the built control charts.
 }
-\references{
-Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
-Control charts for
-monitoring ship operating conditions and CO2 emissions
-based on scalar-on-function regression.
-\emph{Applied Stochastic Models in Business and Industry},
-36(3):477--500.
-<doi:10.1002/asmb.2507>
-
-Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
-Functional Regression Control Chart.
-\emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
-
+\examples{
 library(funcharts)
 data("air")
 air <- lapply(air, function(x) x[1:220, , drop = FALSE])
@@ -153,6 +141,20 @@ cclist <- control_charts_pca(pca = pca,
                              tuning_data = mfdobj_x_tuning,
                              newdata = mfdobj_x2)
 plot_control_charts(cclist)
+
+}
+\references{
+Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+Control charts for
+monitoring ship operating conditions and CO2 emissions
+based on scalar-on-function regression.
+\emph{Applied Stochastic Models in Business and Industry},
+36(3):477--500.
+<doi:10.1002/asmb.2507>
+
+Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+Functional Regression Control Chart.
+\emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
 }
 \seealso{
 \code{\link{regr_cc_fof}}

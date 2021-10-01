@@ -14,10 +14,9 @@
 #' @import ggplot2
 #' @importFrom tidyr pivot_longer drop_na
 #' @importFrom stats
-#' approxfun as.formula hatvalues lm predict quantile setNames var
+#' approxfun as.formula hatvalues lm predict quantile setNames var rnorm dnorm approx
 #' @importFrom rlang .data
-#' @importFrom stats rnorm
-#'
+#' @importFrom RSpectra eigs_sym
 #' @references
 #' Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
 #' Control charts for

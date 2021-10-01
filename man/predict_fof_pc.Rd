@@ -42,6 +42,18 @@ and calculate the corresponding prediction error
 given new observations of functional covariates and
 a fitted function-on-function linear regression model.
 }
+\examples{
+library(funcharts)
+data("air")
+air <- lapply(air, function(x) x[1:10, , drop = FALSE])
+fun_covariates <- c("CO", "temperature")
+mfdobj_x <- get_mfd_list(air[fun_covariates], lambda = 1e-2)
+mfdobj_y <- get_mfd_list(air["NO2"], lambda = 1e-2)
+mod <- fof_pc(mfdobj_y, mfdobj_x)
+predict_fof_pc(mod,
+               mfdobj_y_new = mfdobj_y,
+               mfdobj_x_new = mfdobj_x)
+}
 \references{
 Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
 Functional Regression Control Chart.

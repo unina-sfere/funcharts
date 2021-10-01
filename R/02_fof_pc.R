@@ -438,7 +438,7 @@ fof_pc <- function(mfdobj_y,
 #' Functional Regression Control Chart.
 #' \emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
 #'
-#' @example
+#' @examples
 #' library(funcharts)
 #' data("air")
 #' air <- lapply(air, function(x) x[1:10, , drop = FALSE])
