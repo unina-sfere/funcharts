@@ -869,6 +869,9 @@ get_mfd_list <- function(data_list,
                          lambda_grid = 10^seq(-10, 1, length.out = 10),
                          ncores = 1) {
 
+  if (!missing(ncores)) {
+    warning("argument ncores is deprecated.", call. = FALSE)
+  }
   if (!(is.list(data_list))) {
     stop("data_list must be a list of matrices")
   }
@@ -887,44 +890,14 @@ get_mfd_list <- function(data_list,
       ncol(data_list[[1]])))
   }
 
-  if (is.null(grid)) grid <- seq(0, 1, l = n_args)
-  domain <- range(grid)
-  bs <- create.bspline.basis(domain, n_basis)
+  data_array <- simplify2array(data_list)
+  aperm(data_array, c(2, 1, 3))
 
-  variables <- names(data_list)
-  n_var <- length(variables)
-
-  ids <- rownames(data_list[[1]])
-  if (is.null(ids)) ids <- 1:nrow(data_list[[1]])
-  n_obs <- length(ids)
-
-  lambda_search <- if (!is.null(lambda)) lambda else lambda_grid
-  n_lam <- length(lambda_search)
-  ncores <- min(ncores, n_obs)
-
-
-  df <- cbind(
-    data.frame(arg = rep(grid, n_obs)),
-    data.frame(id = rep(ids, each = n_args)),
-    lapply(seq_along(data_list), function(ii) {
-      data_list[[ii]] %>%
-        t() %>%
-        as.data.frame() %>%
-        setNames(ids) %>%
-        pivot_longer(everything()) %>%
-        mutate(name = factor(.data$name, levels = ids)) %>%
-        arrange(.data$name) %>%
-        select(.data$value) %>%
-        setNames(variables[ii])
-    }) %>%
-      bind_cols()
-  ) %>%
-    mutate(id = factor(id, levels = ids))
-
-  get_mfd_df(dt = df, domain = domain, arg = "arg", id = "id",
-             variables = variables, n_basis = n_basis,
-             lambda = lambda,
-             ncores = ncores)
+  get_mfd_array(data_array = aperm(data_array, c(2, 1, 3)),
+                grid = grid,
+                n_basis = n_basis,
+                lambda = lambda,
+                lambda_grid = lambda_grid)
 
 }
 
@@ -947,7 +920,7 @@ get_mfd_list <- function(data_list,
 #' @param lambda_grid
 #' See \code{\link{get_mfd_list}}.
 #' @param ncores
-#' See \code{\link{get_mfd_list}}.
+#' Deprecated. See \code{\link{get_mfd_list}}.
 #'
 #' @return
 #' An object of class \code{mfd}.
@@ -970,18 +943,86 @@ get_mfd_array <- function(data_array,
                           lambda = NULL,
                           lambda_grid = 10^seq(- 10, 1, length.out = 10),
                           ncores = 1) {
-
+  if (!missing(ncores)) {
+    warning("argument ncores is deprecated.", call. = FALSE)
+  }
   n_var <- dim(data_array)[3]
-  data_list <- list()
-  for (ii in 1:n_var) data_list[[ii]] <- t(data_array[, , ii])
-  names(data_list) <- dimnames(data_array)[[3]]
-  get_mfd_list(data_list,
-               grid = grid,
-               n_basis = n_basis,
-               lambda = lambda,
-               lambda_grid = lambda_grid,
-               ncores = ncores)
+  n_args <- dim(data_array)[1]
+  if (!is.null(grid) & (length(grid) != n_args)) {
+    stop(paste0(
+      "grid length, ", length(grid),
+      " has not the same length as number of ",
+      "observed data per functional observation, ",
+      dim(data_array)[1]))
+  }
+  if (is.null(grid)) grid <- seq(0, 1, l = n_args)
+  domain <- range(grid)
+  bs <- create.bspline.basis(domain, n_basis)
+
+  variables <- dimnames(data_array)[[3]]
+  ids <- dimnames(data_array)[[2]]
+  if (is.null(ids)) ids <- as.character(1:dim(data_array)[[2]])
+  n_obs <- length(ids)
+
+  lambda_search <- if (!is.null(lambda)) lambda else lambda_grid
+  n_lam <- length(lambda_search)
+
+  coefList <- list()
+  gcv <- array(data = NA, dim = c(n_obs, n_var, n_lam))
+
+  dimnames(gcv)[[1]] <- ids
+  dimnames(gcv)[[2]] <- variables
+  dimnames(gcv)[[3]] <- lambda_search
+  for (h in 1:n_lam) {
+    fdpenalty <- fdPar(bs, 2, lambda_search[h])
+    smoothObj <- smooth.basis(grid, data_array, fdpenalty)
+    coefList[[h]] <- smoothObj$fd$coefs
+    gcv[, , h] <- smoothObj$gcv
+  }
+
+  # If only NA in a row,
+  # consider as optimal smoothing parameter the first one in the sequence.
+  gcvmin <- apply(gcv, 1:2, function(x) {
+    if(sum(is.na(x)) < n_lam) which.min(x) else 1
+  })
+
+
+  coef <- array(NA, dim = c(n_basis, n_obs, n_var))
+  dimnames(coef)[[1]] <- as.character(bs$names)
+  dimnames(coef)[[2]] <- as.character(ids)
+  dimnames(coef)[[3]] <- as.character(variables)
+  for (ii in 1:n_obs) {
+    for (jj in 1:n_var) {
+      coef[, ii, jj] <- coefList[[gcvmin[ii, jj]]][, ii, jj]
+    }
+  }
+
+  df_raw <- bind_cols(
+    data.frame(id = rep(ids, each = n_args)),
+    data.frame(arg = rep(grid, n_obs)),
+    lapply(1:dim(data_array)[3], function(ii) {
+      data_array[, , ii] %>%
+        as.data.frame() %>%
+        setNames(ids) %>%
+        tidyr::pivot_longer(everything()) %>%
+        mutate(name = factor(.data$name, levels = ids)) %>%
+        arrange(.data$name) %>%
+        dplyr::select(.data$value) %>%
+        setNames(variables[ii])
+    }) %>%
+      bind_cols()
+  ) %>%
+    mutate(id = factor(id, levels = ids))
+
+  fdObj <- mfd(coef = coef,
+               basisobj = bs,
+               fdnames = list("arg", as.character(ids), as.character(variables)),
+               raw = df_raw,
+               id_var = "id")
+  fdObj
+
 }
+
 
 
 #' Convert a \code{fd} object into a Multivariate Functional Data object.
@@ -1483,7 +1524,7 @@ mfd_to_df_raw <- function(mfdobj) {
     select(variables, !!id_var, !!arg_var) %>%
     rename(id = !!id_var) %>%
     filter(id %in% !!obs) %>%
-    pivot_longer(variables, names_to = "var") %>%
+    tidyr::pivot_longer(variables, names_to = "var") %>%
     arrange(id, var, !!arg_var) %>%
     drop_na()
 }
@@ -1523,7 +1564,7 @@ mfd_to_df <- function(mfdobj) {
       setNames(id)
     .df[[arg_var]] <- evalarg
     .df$var <- variable
-    pivot_longer(.df, -c(!!arg_var, var), names_to = "id")
+    tidyr::pivot_longer(.df, -c(!!arg_var, var), names_to = "id")
   }) %>%
     bind_rows() %>%
     mutate(var = factor(var, levels = !!variables),
@@ -1705,7 +1746,7 @@ plot_bifd <- function(bifd_obj) {
         data.frame() %>%
         setNames(t_eval) %>%
         mutate(s = s_eval) %>%
-        pivot_longer(-.data$s, names_to = "t", values_to = "value") %>%
+        tidyr::pivot_longer(-.data$s, names_to = "t", values_to = "value") %>%
         mutate(t = as.numeric(.data$t),
                variable = bifd_obj$bifdnames[[4]][ii])
     }) %>%
