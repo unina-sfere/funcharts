@@ -1,3 +1,5 @@
+# funcharts 1.1.0.9000
+
 # funcharts 1.1.0
 
 ## Major changes
