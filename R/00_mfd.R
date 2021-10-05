@@ -822,8 +822,7 @@ get_mfd_df <- function(dt,
 #' the grid of values over which the optimal smoothing parameter is
 #' searched. Default value is \code{10^seq(-10,1,l=20)}.
 #' @param ncores
-#' If you want parallelization, give the number of cores/threads
-#' to be used when doing GCV separately on all observations.
+#' Deprecated.
 #'
 #'
 #' @details
@@ -976,7 +975,11 @@ get_mfd_array <- function(data_array,
   for (h in 1:n_lam) {
     fdpenalty <- fdPar(bs, 2, lambda_search[h])
     smoothObj <- smooth.basis(grid, data_array, fdpenalty)
-    coefList[[h]] <- smoothObj$fd$coefs
+    cc <- smoothObj$fd$coefs
+    if (n_var == 1) {
+      cc <- array(cc, dim = c(dim(cc)[1], dim(cc)[2], 1))
+    }
+    coefList[[h]] <- cc
     gcv[, , h] <- smoothObj$gcv
   }
 

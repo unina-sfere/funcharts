@@ -27,7 +27,7 @@ and the third to variables within replications.}
 
 \item{lambda_grid}{See \code{\link{get_mfd_list}}.}
 
-\item{ncores}{See \code{\link{get_mfd_list}}.}
+\item{ncores}{Deprecated. See \code{\link{get_mfd_list}}.}
 }
 \value{
 An object of class \code{mfd}.

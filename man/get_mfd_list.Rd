@@ -49,8 +49,7 @@ If \code{lambda} is NULL, then this provides
 the grid of values over which the optimal smoothing parameter is
 searched. Default value is \code{10^seq(-10,1,l=20)}.}
 
-\item{ncores}{If you want parallelization, give the number of cores/threads
-to be used when doing GCV separately on all observations.}
+\item{ncores}{Deprecated.}
 }
 \value{
 An object of class \code{mfd}.
