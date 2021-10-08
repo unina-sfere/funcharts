@@ -241,6 +241,9 @@ get_scores <- function(pca, components, newdata_scaled = NULL) {
 #'
 get_pre_scores <- function(pca, components, newdata_scaled = NULL) {
 
+  if (missing(components)) {
+    stop("components argument must be provided")
+  }
   if (is.null(newdata_scaled)) {
     inprods <- pca$scores[, components, , drop = FALSE]
   } else {
