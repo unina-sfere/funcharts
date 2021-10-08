@@ -59,10 +59,10 @@
 #' @param type_residuals
 #' A character value that can be
 #' "standard" or "studentized".
-#' If "standard", the MFPCA on functional residuals calculated on
+#' If "standard", the MFPCA on functional residuals is calculated on
 #' the standardized covariates and response.
 #' If "studentized", the MFPCA on studentized version of
-#' the functional residuals calculated on the
+#' the functional residuals is calculated on the
 #' non-standardized covariates and response.
 #' See Centofanti et al. (2020) for additional details.
 #'
