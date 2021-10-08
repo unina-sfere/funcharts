@@ -17,6 +17,7 @@
 #' approxfun as.formula hatvalues lm predict quantile setNames var rnorm dnorm approx
 #' @importFrom rlang .data
 #' @importFrom RSpectra eigs_sym
+#' @importFrom matrixStats rowCumsums
 #' @references
 #' Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
 #' Control charts for

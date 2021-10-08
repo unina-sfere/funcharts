@@ -167,24 +167,14 @@ sof_pc <- function(y,
   pca <- pca_mfd(mfdobj_x, nharm = nharm)
   scores <- pca$pcscores
 
-  get_press <- function(mod) {
-    sum(mod$residuals ^ 2 / (1 - hatvalues(mod))^2)
-  }
-  get_gcv <- function(mod) {
-    mean(mod$residuals ^ 2 / (1 - mean(hatvalues(mod)))^2)
-  }
-
-  PRESS <- gcv <- numeric(nharm + 1)
-  mod <- lm(y ~ 1)
-  PRESS[1] <- get_press(mod)
-  gcv[1] <- get_gcv(mod)
-
-  for (kk in 1:ncol(scores)) {
-    mod <- lm(y ~ ., data = data.frame(scores[, 1:kk, drop = FALSE], y = y))
-    PRESS[kk + 1] <- get_press(mod)
-    gcv[kk + 1] <- get_gcv(mod)
-  }
-  names(PRESS) <- names(gcv) <- names(mod$coefficients)
+  XtX_diag <- colSums(scores^2)
+  X2 <- scores^2
+  beta_scores <- c(mean(y), crossprod(scores, y) / XtX_diag)
+  yhat <- matrixStats::rowCumsums(t(t(cbind(1, scores)) * beta_scores))
+  res2 <- (y - yhat)^2
+  H <- matrixStats::rowCumsums(cbind(1 / length(y), t(t(scores^2) / XtX_diag)))
+  PRESS <- colSums(res2 / (1 - H)^2)
+  gcv <- colMeans(t(t(res2 / (1 - colMeans(H)^2))))
 
   if (is.null(components)) {
 
