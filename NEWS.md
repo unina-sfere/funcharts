@@ -2,6 +2,7 @@
 
 * `get_mfd_list()` and `get_mfd_array()`, with the corresponding real time versions, are now much faster.
 * cross-validation in scalar-on-function regression is now much faster, since the for loop is avoided
+* inner products are more precise and much faster, because they rely on the pre-computed inner products of the B-spline basis functions, calculated via `inprod.bspline()`.
 
 # funcharts 1.1.0
 
