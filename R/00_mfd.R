@@ -161,13 +161,14 @@ is.mfd <- function(mfdobj) if (inherits(mfdobj, "mfd")) TRUE else FALSE
 #' library(funcharts)
 #' data_sim_mfd()
 data_sim_mfd <- function(nobs = 5,
-                         nbasis = 4,
+                         nbasis = 5,
                          nvar = 2,
                          seed = 0) {
   set.seed(seed)
   coef <- array(stats::rnorm(nobs * nbasis * nvar),
                 dim = c(nbasis, nobs, nvar))
   bs <- create.bspline.basis(rangeval = c(0, 1), nbasis = nbasis)
+  bs$B <- inprod.bspline(fd(diag(1, bs$nbasis), bs))
   mfd(coef = coef, basisobj = bs)
 }
 
@@ -328,7 +329,12 @@ inprod_mfd <- function(mfdobj1, mfdobj2 = NULL) {
   inprods[] <- sapply(1:n_var, function(jj) {
     mfdobj1_jj <- fd(mfdobj1$coefs[, , jj], bs1)
     mfdobj2_jj <- fd(mfdobj2$coefs[, , jj], bs2)
-    inprod(mfdobj1_jj, mfdobj2_jj)
+    if (identical(bs1, bs2)) {
+      out <- t(mfdobj1_jj$coef) %*% bs1$B %*% mfdobj2_jj$coef
+    } else {
+      out <- inprod(mfdobj1_jj, mfdobj2_jj)
+    }
+    out
   })
 
   inprods
@@ -416,22 +422,32 @@ inprod_mfd_diag <- function(mfdobj1, mfdobj2 = NULL) {
     }
   }
 
-  inprods <- sapply(1:nvar1, function(jj) {
-    fdobj1_jj <- fd(matrix(mfdobj1$coefs[, , jj],
-                           nrow = dim(mfdobj1$coefs)[1],
-                           ncol = dim(mfdobj1$coefs)[2]),
-                    mfdobj1$basis)
-    if (is.null(mfdobj2)) {
-      out <- inprod_fd_diag_single(fdobj1_jj)
-    } else {
-      fdobj2_jj <- fd(matrix(mfdobj2$coefs[, , jj],
-                             nrow = dim(mfdobj2$coefs)[1],
-                             ncol = dim(mfdobj2$coefs)[2]),
-                      mfdobj2$basis)
-      out <- inprod_fd_diag_single(fdobj1_jj, fdobj2_jj)
-    }
-    out
-  })
+  if (is.null(mfdobj2)) mfdobj2 <- mfdobj1
+
+  if (identical(mfdobj1$basis, mfdobj2$basis)) {
+    inprods <- sapply(1:nvar1, function(jj) {
+        C1jj <- mfdobj1$coefs[, , jj]
+        C2jj <- mfdobj2$coefs[, , jj]
+        rowSums(t(C1jj) %*% mfdobj1$basis$B * t(C2jj))
+    })
+  } else {
+    inprods <- sapply(1:nvar1, function(jj) {
+
+      fdobj1_jj <- fd(matrix(mfdobj1$coefs[, , jj],
+                             nrow = dim(mfdobj1$coefs)[1],
+                             ncol = dim(mfdobj1$coefs)[2]),
+                      mfdobj1$basis)
+      if (is.null(mfdobj2)) {
+        out <- inprod_fd_diag_single(fdobj1_jj)
+      } else {
+        fdobj2_jj <- fd(matrix(mfdobj2$coefs[, , jj],
+                               nrow = dim(mfdobj2$coefs)[1],
+                               ncol = dim(mfdobj2$coefs)[2]),
+                        mfdobj2$basis)
+        out <- inprod_fd_diag_single(fdobj1_jj, fdobj2_jj)
+      }
+    })
+  }
 
   if (nobs1 == 1) inprods <- matrix(inprods, nrow = 1)
   inprods
@@ -705,6 +721,7 @@ get_mfd_df <- function(dt,
   }
 
   bs <- create.bspline.basis(domain, n_basis)
+  bs$B <- inprod.bspline(fd(diag(1, bs$nbasis), bs))
   ids <- levels(factor(dt[[id]]))
   n_obs <- length(ids)
   n_var <- length(variables)
@@ -957,6 +974,7 @@ get_mfd_array <- function(data_array,
   if (is.null(grid)) grid <- seq(0, 1, l = n_args)
   domain <- range(grid)
   bs <- create.bspline.basis(domain, n_basis)
+  bs$B <- inprod.bspline(fd(diag(1, bs$nbasis), bs))
 
   variables <- dimnames(data_array)[[3]]
   ids <- dimnames(data_array)[[2]]

@@ -51,7 +51,7 @@ test_that("tensor_product_mfd works with multivariate objects", {
   expect_equal({
     tp <- tensor_product_mfd(mfdobj1, mfdobj2)
     dim(tp$coef)
-  }, c(4, 4, 1, 3 * 2))
+  }, c(5, 5, 1, 3 * 2))
 })
 
 test_that("scale_mfd returns error with one single obs", {

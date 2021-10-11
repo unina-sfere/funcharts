@@ -4,7 +4,7 @@
 \alias{data_sim_mfd}
 \title{Simulate multivariate functional data}
 \usage{
-data_sim_mfd(nobs = 5, nbasis = 4, nvar = 2, seed = 0)
+data_sim_mfd(nobs = 5, nbasis = 5, nvar = 2, seed = 0)
 }
 \arguments{
 \item{nobs}{Number of functional observations to be simulated.}
