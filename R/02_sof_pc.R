@@ -55,7 +55,6 @@
 #' generalized cross-validation (GCV) score.
 #'
 #' Default value is "variance".
-#'
 #' @param components
 #' A vector of integers with the components over which
 #' to project the functional covariates.

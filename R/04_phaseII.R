@@ -23,6 +23,15 @@
 #' @param components
 #' A vector of integers with the components over which
 #' to project the multivariate functional data.
+#' If this is not NULL, the arguments `single_min_variance_explained`
+#' and `tot_variance_explained` are ignored.
+#' If NULL, components are selected such that
+#' the total fraction of variance explained by them
+#' is at least equal to the argument `tot_variance_explained`,
+#' where only components explaining individually a fraction of variance
+#' at least equal to the argument `single_min_variance_explained`
+#' are considered to be retained.
+#' Default is NULL.
 #' @param tuning_data
 #' An object of class \code{mfd} containing
 #' the tuning set of the multivariate functional data, used to estimate the
@@ -67,6 +76,19 @@
 #' in the k groups in parallel,
 #' give the number of cores/threads.
 #' Otherwise, this argument is ignored.
+#' @param single_min_variance_explained
+#' The minimum fraction of variance
+#' that has to be explained
+#' by each multivariate functional principal component
+#' such that it is retained into the MFPCA model.
+#' Default is 0.
+#' @param tot_variance_explained
+#' The minimum fraction of variance
+#' that has to be explained
+#' by the set of multivariate functional principal components
+#' retained into the MFPCA model
+#' fitted on the functional covariates.
+#' Default is 0.9.
 #'
 #' @return
 #' A \code{data.frame} with as many rows as the number of
@@ -135,22 +157,22 @@
 #' mfdobj_x_tuning <- mfdobj_x[101:200]
 #' mfdobj_x2 <- mfdobj_x[201:220]
 #' pca <- pca_mfd(mfdobj_x1)
-#' components <- 1:which(cumsum(pca$varprop) >= .90)[1]
 #' cclist <- control_charts_pca(pca = pca,
-#'                              components = components,
 #'                              tuning_data = mfdobj_x_tuning,
 #'                              newdata = mfdobj_x2)
 #' plot_control_charts(cclist)
 #'
 control_charts_pca <- function(pca,
-                               components,
+                               components = NULL,
                                tuning_data = NULL,
                                newdata,
                                alpha = list(T2 = .025, spe = .025),
                                limits = "standard",
                                seed = 0,
                                nfold = 5,
-                               ncores = 1) {
+                               ncores = 1,
+                               tot_variance_explained = 0.9,
+                               single_min_variance_explained = 0) {
 
   if (!is.list(pca)) {
     stop("pca must be a list produced by pca_mfd.")
@@ -161,6 +183,16 @@ control_charts_pca <- function(pca,
   }
   if (!(limits %in% c("standard", "cv"))) {
     stop("'limits' argument can be only 'standard' or 'cv'.")
+  }
+
+  if (is.null(components)) {
+    components_enough_var <- cumsum(pca$varprop) > tot_variance_explained
+    if (sum(components_enough_var) == 0)
+      ncomponents <- length(pca$varprop) else
+        ncomponents <- which(cumsum(pca$varprop) > tot_variance_explained)[1]
+      components <- 1:ncomponents
+      components <-
+        which(pca$varprop[1:ncomponents] > single_min_variance_explained)
   }
 
   if (limits == "standard") lim <- calculate_limits(

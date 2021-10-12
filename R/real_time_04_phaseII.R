@@ -46,6 +46,10 @@
 #' See \code{\link{control_charts_pca}}.
 #' @param nfold
 #' See \code{\link{control_charts_pca}}.
+#' @param single_min_variance_explained
+#' See \code{\link{control_charts_pca}}.
+#' @param tot_variance_explained
+#' See \code{\link{control_charts_pca}}.
 #' @param ncores
 #' If you want parallelization, give the number of cores/threads
 #' to be used when creating objects separately for different instants.
@@ -72,9 +76,6 @@
 #'                                          lambda = 1e-2,
 #'                                          k_seq = c(0.5, 1))
 #' pca_list <- pca_mfd_real_time(mfdobj_x1_list)
-#' components_list <- lapply(pca_list, function(x) {
-#'   sum(cumsum(x$varprop) <= .8)
-#' })
 #'
 #' cclist <- control_charts_pca_mfd_real_time(
 #'   pca_list = pca_list,
@@ -83,7 +84,7 @@
 #' plot_control_charts_real_time(cclist, 1)
 #'
 control_charts_pca_mfd_real_time <- function(pca_list,
-                                             components_list,
+                                             components_list = NULL,
                                              mfdobj_x_test,
                                              mfdobj_x_tuning = NULL,
                                              alpha = list(T2 = .0125,
@@ -91,6 +92,8 @@ control_charts_pca_mfd_real_time <- function(pca_list,
                                              limits = "standard",
                                              seed = 0,
                                              nfold = NULL,
+                                             tot_variance_explained = 0.9,
+                                             single_min_variance_explained = 0,
                                              ncores = 1) {
 
   if (is.null(mfdobj_x_tuning)) {
@@ -98,6 +101,10 @@ control_charts_pca_mfd_real_time <- function(pca_list,
   }
 
   kk_seq <- as.numeric(names(pca_list))
+
+  if (is.null(components_list)) {
+    components_list <- vector("list", length(kk_seq))
+  }
 
   single_k <- function(ii) {
 
@@ -110,7 +117,9 @@ control_charts_pca_mfd_real_time <- function(pca_list,
       limits = limits,
       seed = seed,
       nfold = nfold,
-      ncores = 1
+      ncores = 1,
+      tot_variance_explained = tot_variance_explained,
+      single_min_variance_explained = single_min_variance_explained
     )
 
     cclist_kk$arg <- pca_list[[ii]]$data$fdnames[[1]]
@@ -140,14 +149,15 @@ control_charts_pca_mfd_real_time <- function(pca_list,
                       "limits",
                       "seed",
                       "nfold",
-                      "kk_seq"),
+                      "kk_seq",
+                      "tot_variance_explained",
+                      "single_min_variance_explained"),
                     envir = environment())
       control_charts_out <- parLapply(cl, seq_along(pca_list), single_k)
       stopCluster(cl)
     }
   }
-  control_charts_out %>%
-    bind_rows()
+  bind_rows(control_charts_out)
 
 }
 
@@ -587,7 +597,7 @@ plot_control_charts_real_time <- function(cclist, id_num) {
                     group = .data$group)) +
       scale_linetype_manual(values = c("T2" = 1, "UCL" = 2, "LCL" = 2)) +
       scale_colour_manual(values = c("FALSE" = "black", "TRUE" = "tomato1")) +
-      guides(colour = FALSE) +
+      guides(colour = "none") +
       geom_blank(aes(y = 0)) +
       scale_x_continuous(limits = c(xmin, xmax),
                          breaks = x_axis_tick,
@@ -642,7 +652,7 @@ plot_control_charts_real_time <- function(cclist, id_num) {
                     group = .data$group)) +
       scale_linetype_manual(values = c("SPE" = 1, "UCL" = 2, "LCL" = 2)) +
       scale_colour_manual(values = c("FALSE" = "black", "TRUE" = "tomato1")) +
-      guides(colour = FALSE) +
+      guides(colour = "none") +
       geom_blank(aes(y = 0)) +
       scale_x_continuous(limits = c(xmin, xmax),
                          breaks = x_axis_tick,
@@ -717,7 +727,7 @@ plot_control_charts_real_time <- function(cclist, id_num) {
                     group = .data$group)) +
       scale_linetype_manual(values = c("prediction error [t]" = 1, "UCL" = 2, "LCL" = 2)) +
       scale_colour_manual(values = c("FALSE" = "black", "TRUE" = "tomato1")) +
-      guides(colour = FALSE) +
+      guides(colour = "none") +
       geom_blank(aes(y = 0)) +
       scale_x_continuous(limits = c(xmin, xmax),
                          breaks = x_axis_tick,
