@@ -431,19 +431,19 @@ regr_cc_fof_real_time <- function(mod_list,
 
   kk_seq <- as.numeric(names(mod_list))
 
-  single_k <- function(ii) {
+  if (is.null(mfdobj_y_tuning_list) | is.null(mfdobj_x_tuning_list)) {
+    mfdobj_y_tuning_list <- lapply(mod_list, function(mod_ii) mod_ii$pca_y$data)
+    mfdobj_x_tuning_list <- lapply(mod_list, function(mod_ii) mod_ii$pca_x$data)
+  }
 
-    if (is.null(mfdobj_y_tuning_list) | is.null(mfdobj_x_tuning_list)) {
-      mfdobj_y_tuning_list_ii <- mod_list[[ii]]$pca_y$data
-      mfdobj_x_tuning_list_ii <- mod_list[[ii]]$pca_x$data
-    }
+  single_k <- function(ii) {
 
     regr_cc_fof_kk <- regr_cc_fof(
       object = mod_list[[ii]],
       mfdobj_y_new = mfdobj_y_new_list[[ii]],
       mfdobj_x_new = mfdobj_x_new_list[[ii]],
-      mfdobj_y_tuning = mfdobj_y_tuning_list_ii,
-      mfdobj_x_tuning = mfdobj_x_tuning_list_ii,
+      mfdobj_y_tuning = mfdobj_y_tuning_list[[ii]],
+      mfdobj_x_tuning = mfdobj_x_tuning_list[[ii]],
       alpha = alpha
     )
 
