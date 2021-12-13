@@ -214,7 +214,7 @@ calculate_cv_limits <- function(pca,
     fd_train <- mfdobj[- folds[[ii]]]
     fd_test <- mfdobj[folds[[ii]]]
 
-    pca_cv <- pca_mfd(fd_train, scale = pca$scale)
+    pca_cv <- pca_mfd(fd_train, scale = pca$scale, nharm = max(components))
     control_charts_pca(pca = pca_cv,
                        components = components,
                        newdata = fd_test)
