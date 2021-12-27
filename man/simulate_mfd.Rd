@@ -7,7 +7,7 @@
 simulate_mfd(
   nobs = 1000,
   R2 = 0.97,
-  seed = 0,
+  seed,
   shift_type_y = "0",
   shift_type_x1 = "0",
   shift_type_x2 = "0",
@@ -28,7 +28,8 @@ In both the scalar and functional response cases, only three values are allowed,
 i.e. 0.97, 0.86, 0.74.
 Default is 0.97.}
 
-\item{seed}{Set seed for reproducibility. Default is 0.}
+\item{seed}{Deprecated: use \code{set.seed()} before calling
+the function for reproducibility.}
 
 \item{shift_type_y}{The shift type for the functional response.
 There are five possibilities: "0" if there is no shift,
