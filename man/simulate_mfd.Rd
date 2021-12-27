@@ -2,7 +2,7 @@
 % Please edit documentation in R/simulate.R
 \name{simulate_mfd}
 \alias{simulate_mfd}
-\title{Simulate example data for funcharts}
+\title{Simulate a data set for funcharts}
 \usage{
 simulate_mfd(
   nobs = 1000,

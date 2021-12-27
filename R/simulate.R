@@ -1,5 +1,64 @@
 #' Simulate example data for funcharts
 #'
+#' Function used to simulate three data sets to illustrate the use of \code{funcharts}.
+#' It uses the function \code{\link[funcharts]{simulate_mfd}},
+#' which creates a data set with three functional covariates,
+#' a functional response generated as a function of the three functional covariates,
+#' and a scalar response generated as a function of the three functional covariates.
+#' This function generates three data sets, one for phase I (1000 observations),
+#' one for tuning (1000 observations), i.e.,
+#' to estimate the control chart limits, and one for phase II monitoring (60 observations).
+#' see also \code{\link[funcharts]{simulate_mfd}}.
+#'
+#' @return
+#' A list with three objects, \code{datI} contains the phase I data,
+#' \code{datI_tun} contains the tuning data,
+#' \code{datII} contains the phase II data.
+#' In the phase II data, the first group of 20 observations are in control,
+#' the second group of 20 observations contains a moderate mean shift,
+#' while the third group of 20 observations contains a severe mean shift.
+#' The shift types are described in the paper from Centofanti et al. (2020),
+#' @export
+#'
+#' @references
+#'
+#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+#' Functional Regression Control Chart.
+#' \emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
+sim_funcharts <- function() {
+
+  datI <- simulate_mfd(nobs=1000)
+  datI_tun <- simulate_mfd(nobs=1000)
+  datII_ic <- simulate_mfd(20)
+  datII_oc1 <- simulate_mfd(20,
+                            shift_type_x3 = "A",
+                            d_x3 = 20,
+                            d_y_scalar = 1,
+                            shift_type_y = "D",
+                            d_y = 0.5)
+  datII_oc2 <- simulate_mfd(20,
+                            shift_type_x3 = "A",
+                            d_x3 = 40,
+                            d_y_scalar = 2,
+                            shift_type_y = "D",
+                            d_y = 1.5)
+  datII <- list()
+  for (ii in 1:4) {
+    datII[[ii]] <- rbind(datII_ic[[ii]], datII_oc1[[ii]], datII_oc2[[ii]])
+    datII[[ii]] <- rbind(datII_ic[[ii]], datII_oc1[[ii]], datII_oc2[[ii]])
+    datII[[ii]] <- rbind(datII_ic[[ii]], datII_oc1[[ii]], datII_oc2[[ii]])
+  }
+  datII[[5]] <- c(datII_ic[[5]],datII_oc1[[5]],datII_oc2[[5]])
+  names(datII) <- names(datI)
+
+  list(datI = datI, datI_tun = datI_tun, datII = datII)
+}
+
+
+
+
+#' Simulate a data set for funcharts
+#'
 #' Function used to simulate a data set to illustrate the use of \code{funcharts}.
 #' It creates a data set with three functional covariates,
 #' a functional response generated as a function of the three functional covariates

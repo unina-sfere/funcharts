@@ -11,7 +11,7 @@ get_mfd_list_real_time(
   n_basis = 30,
   lambda = NULL,
   lambda_grid = 10^seq(-10, 1, length.out = 10),
-  k_seq = seq(from = 0.25, to = 1, length.out = 10),
+  k_seq = seq(from = 0.2, to = 1, by = 0.1),
   ncores = 1
 )
 }
@@ -29,7 +29,7 @@ get_mfd_list_real_time(
 \item{k_seq}{A vector of values between 0 and 1, containing the domain points
 over which functional data are to be evaluated in real time.
 If the domain is the interval (a,b), for each instant k in the sequence,
-functions are evaluated in (a,k(b-a)).}
+functions are evaluated in (a,a+k(b-a)).}
 
 \item{ncores}{If you want parallelization, give the number of cores/threads
 to be used when creating mfd objects separately for different instants.}
