@@ -95,7 +95,7 @@
 #' \emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
 simulate_mfd <- function(nobs = 1000,
                          R2 = 0.97,
-                         seed = 0,
+                         seed,
                          shift_type_y = "0",
                          shift_type_x1 = "0",
                          shift_type_x2 = "0",
@@ -106,6 +106,12 @@ simulate_mfd <- function(nobs = 1000,
                          d_x3 = 0,
                          d_y_scalar = 0,
                          save_beta = FALSE) {
+
+  if (!missing(seed)) {
+    warning(paste0("argument seed is deprecated; ",
+            "please use set.seed() before calling simulate_mfd() instead."),
+            call. = FALSE)
+  }
 
   if (!(R2 %in% c(0.97, 0.86, 0.74))) {
     stop("only 0.97, 0.86, 0.74 values allowed for R2.")
@@ -161,8 +167,6 @@ simulate_mfd <- function(nobs = 1000,
   meig2 <- e$vectors[501:1000, 1:n_comp_x] / sqrt(w)
   meig3 <- e$vectors[1001:1500, 1:n_comp_x] / sqrt(w)
   meigenvalues <- e$values[1:n_comp_x] * w
-
-  set.seed(seed)
 
   b_perfect <- sqrt(eigy$values / meigenvalues[1:10])
   b_perfect_sof <- rep(1 / sqrt(sum(meigenvalues[1:10])), 10)
