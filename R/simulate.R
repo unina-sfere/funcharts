@@ -21,7 +21,8 @@
 #' In both the scalar and functional response cases, only three values are allowed,
 #' i.e. 0.97, 0.86, 0.74.
 #' Default is 0.97.
-#' @param seed Set seed for reproducibility. Default is 0.
+#' @param seed Deprecated: use \code{set.seed()} before calling
+#' the function for reproducibility.
 #' @param shift_type_y
 #' The shift type for the functional response.
 #' There are five possibilities: "0" if there is no shift,
