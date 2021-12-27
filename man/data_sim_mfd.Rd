@@ -4,7 +4,7 @@
 \alias{data_sim_mfd}
 \title{Simulate multivariate functional data}
 \usage{
-data_sim_mfd(nobs = 5, nbasis = 5, nvar = 2, seed = 0)
+data_sim_mfd(nobs = 5, nbasis = 5, nvar = 2, seed)
 }
 \arguments{
 \item{nobs}{Number of functional observations to be simulated.}
@@ -13,7 +13,8 @@ data_sim_mfd(nobs = 5, nbasis = 5, nvar = 2, seed = 0)
 
 \item{nvar}{Number of functional covariates.}
 
-\item{seed}{Set seed for reproducibility.}
+\item{seed}{Deprecated: use \code{set.seed()} before calling
+the function for reproducibility.}
 }
 \value{
 A simulated object of class `mfd`.

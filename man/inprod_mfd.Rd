@@ -37,8 +37,9 @@ inner products obtained for each functional variable.
 }
 \examples{
 library(funcharts)
-mfdobj1 <- data_sim_mfd(seed = 123)
-mfdobj2 <- data_sim_mfd(seed = 987)
+set.seed(123)
+mfdobj1 <- data_sim_mfd()
+mfdobj2 <- data_sim_mfd()
 inprod_mfd(mfdobj1)
 inprod_mfd(mfdobj1, mfdobj2)
 }

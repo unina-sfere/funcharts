@@ -11,7 +11,7 @@ control_charts_sof_pc_real_time(
   mfdobj_x_tuning = NULL,
   alpha = list(T2 = 0.0125, spe = 0.0125, y = 0.025),
   limits = "standard",
-  seed = 0,
+  seed,
   nfold = NULL,
   ncores = 1
 )
@@ -52,7 +52,7 @@ Default is NULL.}
 
 \item{limits}{See \code{\link{control_charts_sof_pc}}.}
 
-\item{seed}{See \code{\link{control_charts_sof_pc}}.}
+\item{seed}{Deprecated: see \code{\link{control_charts_sof_pc}}.}
 
 \item{nfold}{See \code{\link{control_charts_sof_pc}}.}
 

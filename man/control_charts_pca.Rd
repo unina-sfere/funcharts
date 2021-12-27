@@ -11,7 +11,7 @@ control_charts_pca(
   newdata,
   alpha = list(T2 = 0.025, spe = 0.025),
   limits = "standard",
-  seed = 0,
+  seed,
   nfold = 5,
   ncores = 1,
   tot_variance_explained = 0.9,
@@ -65,7 +65,8 @@ using \code{calculate_cv_limits}. Default is "standard".}
 \item{seed}{If \code{limits=="cv"},
 since the split in the k groups is random,
 you can fix a seed to ensure reproducibility.
-Otherwise, this argument is ignored.}
+Deprecated: use \code{set.seed()} before calling
+the function for reproducibility.}
 
 \item{nfold}{If \code{limits=="cv"}, this gives the number of groups k
 used for k-fold cross-validation.

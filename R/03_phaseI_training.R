@@ -150,7 +150,8 @@ calculate_limits <- function(pca,
 #' while the difference between the original functional data
 #' and the projected ones (based on the
 #' selected components) is used to calculate the SPE statistic.
-#' @param seed
+#' @param seed Deprecated: use \code{set.seed()} before calling
+#' the function for reproducibility.
 #' Since the split in the k groups is random,
 #' you can fix a seed to ensure reproducibility.
 #' @param nfold
@@ -195,16 +196,21 @@ calculate_limits <- function(pca,
 #'
 calculate_cv_limits <- function(pca,
                                 components,
-                                seed = 0,
+                                seed,
                                 nfold = 5,
                                 alpha = list(T2 = .025, spe = .025),
                                 ncores = 1) {
+
+  if (!missing(seed)) {
+    warning(paste0("argument seed is deprecated; ",
+                   "please use set.seed() before calling the function instead."),
+            call. = FALSE)
+  }
 
   if (!is.list(pca)) {
     stop("pca must be a list produced by pca_mfd.")
   }
 
-  set.seed(seed)
   mfdobj <- pca$data
   nobs <- dim(mfdobj$coefs)[2]
   nvar <- dim(mfdobj$coefs)[3]

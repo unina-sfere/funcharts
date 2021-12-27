@@ -151,7 +151,8 @@ is.mfd <- function(mfdobj) if (inherits(mfdobj, "mfd")) TRUE else FALSE
 #' @param nobs Number of functional observations to be simulated.
 #' @param nbasis Number of basis functions.
 #' @param nvar Number of functional covariates.
-#' @param seed Set seed for reproducibility.
+#' @param seed Deprecated: use \code{set.seed()} before calling
+#' the function for reproducibility.
 #'
 #' @return
 #' A simulated object of class `mfd`.
@@ -163,8 +164,12 @@ is.mfd <- function(mfdobj) if (inherits(mfdobj, "mfd")) TRUE else FALSE
 data_sim_mfd <- function(nobs = 5,
                          nbasis = 5,
                          nvar = 2,
-                         seed = 0) {
-  set.seed(seed)
+                         seed) {
+  if (!missing(seed)) {
+    warning(paste0("argument seed is deprecated; ",
+                   "please use set.seed() before calling the function instead."),
+            call. = FALSE)
+  }
   coef <- array(stats::rnorm(nobs * nbasis * nvar),
                 dim = c(nbasis, nobs, nvar))
   bs <- create.bspline.basis(rangeval = c(0, 1), nbasis = nbasis)
@@ -296,8 +301,9 @@ data_sim_mfd <- function(nobs = 5,
 #' @export
 #' @examples
 #' library(funcharts)
-#' mfdobj1 <- data_sim_mfd(seed = 123)
-#' mfdobj2 <- data_sim_mfd(seed = 987)
+#' set.seed(123)
+#' mfdobj1 <- data_sim_mfd()
+#' mfdobj2 <- data_sim_mfd()
 #' inprod_mfd(mfdobj1)
 #' inprod_mfd(mfdobj1, mfdobj2)
 inprod_mfd <- function(mfdobj1, mfdobj2 = NULL) {
@@ -1401,8 +1407,8 @@ tensor_product_mfd <- function(mfdobj1, mfdobj2 = NULL) {
 #'
 #' @examples
 #' library(funcharts)
-#' mfdobj1 <- data_sim_mfd(nvar = 3, seed = 1)
-#' mfdobj2 <- data_sim_mfd(nvar = 2, seed = 2)
+#' mfdobj1 <- data_sim_mfd(nvar = 3)
+#' mfdobj2 <- data_sim_mfd(nvar = 2)
 #' dimnames(mfdobj2$coefs)[[3]] <- mfdobj2$fdnames[[3]] <- c("var10", "var11")
 #'
 #' plot_mfd(mfdobj1)
@@ -1462,8 +1468,8 @@ cbind_mfd <- function(mfdobj1, mfdobj2) {
 #'
 #' @examples
 #' library(funcharts)
-#' mfdobj1 <- data_sim_mfd(nvar = 3, seed = 1, nobs = 4)
-#' mfdobj2 <- data_sim_mfd(nvar = 3, seed = 2, nobs = 5)
+#' mfdobj1 <- data_sim_mfd(nvar = 3, nobs = 4)
+#' mfdobj2 <- data_sim_mfd(nvar = 3, nobs = 5)
 #' dimnames(mfdobj2$coefs)[[2]] <-
 #'   mfdobj2$fdnames[[2]] <-
 #'   c("rep11", "rep12", "rep13", "rep14", "rep15")

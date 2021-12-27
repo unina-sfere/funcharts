@@ -11,7 +11,7 @@ control_charts_pca_mfd_real_time(
   mfdobj_x_tuning = NULL,
   alpha = list(T2 = 0.0125, spe = 0.0125),
   limits = "standard",
-  seed = 0,
+  seed,
   nfold = NULL,
   tot_variance_explained = 0.9,
   single_min_variance_explained = 0,
@@ -55,7 +55,7 @@ Default is NULL.}
 
 \item{limits}{See \code{\link{control_charts_pca}}.}
 
-\item{seed}{See \code{\link{control_charts_pca}}.}
+\item{seed}{Deprecated: See \code{\link{control_charts_pca}}.}
 
 \item{nfold}{See \code{\link{control_charts_pca}}.}
 

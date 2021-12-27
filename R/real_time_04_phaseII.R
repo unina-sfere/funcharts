@@ -43,7 +43,7 @@
 #' @param limits
 #' See \code{\link{control_charts_pca}}.
 #' @param seed
-#' See \code{\link{control_charts_pca}}.
+#' Deprecated: See \code{\link{control_charts_pca}}.
 #' @param nfold
 #' See \code{\link{control_charts_pca}}.
 #' @param single_min_variance_explained
@@ -90,11 +90,17 @@ control_charts_pca_mfd_real_time <- function(pca_list,
                                              alpha = list(T2 = .0125,
                                                           spe = .0125),
                                              limits = "standard",
-                                             seed = 0,
+                                             seed,
                                              nfold = NULL,
                                              tot_variance_explained = 0.9,
                                              single_min_variance_explained = 0,
                                              ncores = 1) {
+
+  if (!missing(seed)) {
+    warning(paste0("argument seed is deprecated; ",
+                   "please use set.seed() before calling the function instead."),
+            call. = FALSE)
+  }
 
   if (is.null(mfdobj_x_tuning)) {
     mfdobj_x_tuning <- lapply(pca_list, function(pca_ii) pca_ii$data)
@@ -115,7 +121,6 @@ control_charts_pca_mfd_real_time <- function(pca_list,
       newdata = mfdobj_x_test[[ii]],
       alpha = alpha,
       limits = limits,
-      seed = seed,
       nfold = nfold,
       ncores = 1,
       tot_variance_explained = tot_variance_explained,
@@ -147,7 +152,6 @@ control_charts_pca_mfd_real_time <- function(pca_list,
                       "mfdobj_x_tuning",
                       "alpha",
                       "limits",
-                      "seed",
                       "nfold",
                       "kk_seq",
                       "tot_variance_explained",
@@ -208,7 +212,7 @@ control_charts_pca_mfd_real_time <- function(pca_list,
 #' @param limits
 #' See \code{\link{control_charts_sof_pc}}.
 #' @param seed
-#' See \code{\link{control_charts_sof_pc}}.
+#' Deprecated: see \code{\link{control_charts_sof_pc}}.
 #' @param nfold
 #' See \code{\link{control_charts_sof_pc}}.
 #' @param ncores
@@ -254,9 +258,15 @@ control_charts_sof_pc_real_time <- function(mod_list,
                                               spe = .0125,
                                               y = .025),
                                             limits = "standard",
-                                            seed = 0,
+                                            seed,
                                             nfold = NULL,
                                             ncores = 1) {
+
+  if (!missing(seed)) {
+    warning(paste0("argument seed is deprecated; ",
+                   "please use set.seed() before calling the function instead."),
+            call. = FALSE)
+  }
 
   if (is.null(mfdobj_x_tuning)) {
     mfdobj_x_tuning <- lapply(mod_list, function(mod_ii) mod_ii$pca$data)
@@ -273,7 +283,6 @@ control_charts_sof_pc_real_time <- function(mod_list,
       mfdobj_x_tuning = mfdobj_x_tuning[[ii]],
       alpha = alpha,
       limits = limits,
-      seed = seed,
       nfold = nfold,
       ncores = 1
     )
@@ -303,7 +312,6 @@ control_charts_sof_pc_real_time <- function(mod_list,
                       "mfdobj_x_tuning",
                       "alpha",
                       "limits",
-                      "seed",
                       "nfold",
                       "kk_seq"),
                     envir = environment())

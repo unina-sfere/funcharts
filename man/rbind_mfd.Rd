@@ -23,8 +23,8 @@ Bind replications of two Multivariate Functional Data Objects
 }
 \examples{
 library(funcharts)
-mfdobj1 <- data_sim_mfd(nvar = 3, seed = 1, nobs = 4)
-mfdobj2 <- data_sim_mfd(nvar = 3, seed = 2, nobs = 5)
+mfdobj1 <- data_sim_mfd(nvar = 3, nobs = 4)
+mfdobj2 <- data_sim_mfd(nvar = 3, nobs = 5)
 dimnames(mfdobj2$coefs)[[2]] <-
   mfdobj2$fdnames[[2]] <-
   c("rep11", "rep12", "rep13", "rep14", "rep15")

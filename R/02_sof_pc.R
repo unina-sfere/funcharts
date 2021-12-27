@@ -381,7 +381,6 @@ plot_bootstrap_sof_pc <- function(mod, nboot = 25, ncores = 1) {
   nn <- nrow(mod$mod$model)
   components <- mod$components
 
-  set.seed(0)
   single_boot <- function(ii) {
     rows_B <- sample(1:nn, nn, TRUE)
     mod <- sof_pc(mfdobj_x = mod$pca$data[rows_B],

@@ -63,7 +63,8 @@
 #' If \code{limits=="cv"},
 #' since the split in the k groups is random,
 #' you can fix a seed to ensure reproducibility.
-#' Otherwise, this argument is ignored.
+#' Deprecated: use \code{set.seed()} before calling
+#' the function for reproducibility.
 #' @param nfold
 #' If \code{limits=="cv"}, this gives the number of groups k
 #' used for k-fold cross-validation.
@@ -168,11 +169,17 @@ control_charts_pca <- function(pca,
                                newdata,
                                alpha = list(T2 = .025, spe = .025),
                                limits = "standard",
-                               seed = 0,
+                               seed,
                                nfold = 5,
                                ncores = 1,
                                tot_variance_explained = 0.9,
                                single_min_variance_explained = 0) {
+
+  if (!missing(seed)) {
+    warning(paste0("argument seed is deprecated; ",
+                   "please use set.seed() before calling the function instead."),
+            call. = FALSE)
+  }
 
   if (!is.list(pca)) {
     stop("pca must be a list produced by pca_mfd.")
@@ -204,7 +211,6 @@ control_charts_pca <- function(pca,
     pca = pca,
     components = components,
     alpha = alpha,
-    seed = seed,
     nfold = nfold,
     ncores = ncores)
 
@@ -427,7 +433,8 @@ regr_cc_sof <- function(object,
 #' If \code{limits=="cv"},
 #' since the split in the k groups is random,
 #' you can fix a seed to ensure reproducibility.
-#' Otherwise, this argument is ignored.
+#' Deprecated: use \code{set.seed()} before calling
+#' the function for reproducibility.
 #' @param nfold
 #' If \code{limits=="cv"}, this gives the number of groups k
 #' used for k-fold cross-validation.
@@ -526,9 +533,15 @@ control_charts_sof_pc <- function(mod,
                                     spe = .0125,
                                     y   = .025),
                                   limits = "standard",
-                                  seed = 0,
+                                  seed,
                                   nfold = NULL,
                                   ncores = 1) {
+
+  if (!missing(seed)) {
+    warning(paste0("argument seed is deprecated; ",
+                   "please use set.seed() before calling the function instead."),
+            call. = FALSE)
+  }
 
   if (!is.list(mod)) {
     stop("object must be a list produced by sof_pc.")
@@ -559,7 +572,6 @@ control_charts_sof_pc <- function(mod,
                             tuning_data = mfdobj_x_tuning,
                             alpha = alpha,
                             limits = limits,
-                            seed = seed,
                             nfold = nfold,
                             ncores = ncores)
   y <- regr_cc_sof(object = mod,
