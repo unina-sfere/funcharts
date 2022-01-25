@@ -1069,9 +1069,9 @@ get_mfd_array <- function(data_array,
 #'
 #' @examples
 #' library(funcharts)
-#' fdobj <- fd()
+#' bs <- create.bspline.basis(nbasis = 10)
+#' fdobj <- fd(coef = 1:10, basisobj = bs)
 #' mfdobj <- get_mfd_fd(fdobj)
-#' plot_mfd(mfdobj)
 get_mfd_fd <- function(fdobj) {
 
   if (length(fdobj$fdnames[[1]]) > 1) fdobj$fdnames[[1]] <- "time"
