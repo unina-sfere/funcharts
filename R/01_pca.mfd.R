@@ -494,7 +494,7 @@ pca.fd_inprods_faster <- function (fdobj,
   Wmat <- crossprod(t(ctemp))/nrep
   if (identical(harmbasis, basisobj)) {
     bs_fd <- fd(coef = diag(1, harmbasis$nbasis), basisobj = harmbasis)
-    Jmat <- t(bs_fd$coef) %*% harmbasis$B %*% bs_fd$coef
+    Jmat <- t(bs_fd$coef) %*% as.matrix(harmbasis$B) %*% bs_fd$coef
   } else Jmat = inprod(harmbasis, basisobj)
   MIJW = crossprod(Mmatinv, Jmat)
   if (nvar == 1) {
@@ -539,7 +539,7 @@ pca.fd_inprods_faster <- function (fdobj,
   if (nvar == 1) {
     if (identical(fdobj$basis, harmfd$basis)) {
       bs <- fdobj$basis
-      harmscr <- t(fdobj$coefs) %*% bs$B %*% harmfd$coefs
+      harmscr <- t(fdobj$coefs) %*% as.matrix(bs$B) %*% harmfd$coefs
     } else harmscr <- inprod(fdobj, harmfd)
   }
   else {
@@ -551,7 +551,7 @@ pca.fd_inprods_faster <- function (fdobj,
       harmfdj <- fd(as.matrix(harmcoefarray[, , j]), basisobj)
       if (identical(fdobjj$basis, harmfdj$basis)) {
         bs <- fdobjj$basis
-        harmscr[, , j] <- t(fdobjj$coefs) %*% bs$B %*% harmfdj$coefs
+        harmscr[, , j] <- t(fdobjj$coefs) %*% as.matrix(bs$B) %*% harmfdj$coefs
       } else harmscr[, , j] <- inprod(fdobjj, harmfdj)
     }
   }

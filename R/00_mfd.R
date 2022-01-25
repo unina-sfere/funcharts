@@ -173,7 +173,8 @@ data_sim_mfd <- function(nobs = 5,
   coef <- array(stats::rnorm(nobs * nbasis * nvar),
                 dim = c(nbasis, nobs, nvar))
   bs <- create.bspline.basis(rangeval = c(0, 1), nbasis = nbasis)
-  bs$B <- inprod.bspline(fd(diag(1, bs$nbasis), bs))
+  bs$B <- Matrix(inprod.bspline(fd(diag(1, bs$nbasis), bs)),
+                 sparse = TRUE)
   mfd(coef = coef, basisobj = bs)
 }
 
@@ -336,7 +337,7 @@ inprod_mfd <- function(mfdobj1, mfdobj2 = NULL) {
     mfdobj1_jj <- fd(mfdobj1$coefs[, , jj], bs1)
     mfdobj2_jj <- fd(mfdobj2$coefs[, , jj], bs2)
     if (identical(bs1, bs2)) {
-      out <- t(mfdobj1_jj$coef) %*% bs1$B %*% mfdobj2_jj$coef
+      out <- as.matrix(t(mfdobj1_jj$coef) %*% as.matrix(bs1$B) %*% mfdobj2_jj$coef)
     } else {
       out <- inprod(mfdobj1_jj, mfdobj2_jj)
     }
@@ -434,7 +435,7 @@ inprod_mfd_diag <- function(mfdobj1, mfdobj2 = NULL) {
     inprods <- sapply(1:nvar1, function(jj) {
         C1jj <- mfdobj1$coefs[, , jj]
         C2jj <- mfdobj2$coefs[, , jj]
-        rowSums(t(C1jj) %*% mfdobj1$basis$B * t(C2jj))
+        rowSums(as.matrix(t(C1jj) %*% as.matrix(mfdobj1$basis$B) * t(C2jj)))
     })
   } else {
     inprods <- sapply(1:nvar1, function(jj) {
@@ -727,7 +728,7 @@ get_mfd_df <- function(dt,
   }
 
   bs <- create.bspline.basis(domain, n_basis)
-  bs$B <- inprod.bspline(fd(diag(1, bs$nbasis), bs))
+  bs$B <- Matrix(inprod.bspline(fd(diag(1, bs$nbasis), bs)), sparse = TRUE)
   ids <- levels(factor(dt[[id]]))
   n_obs <- length(ids)
   n_var <- length(variables)
@@ -980,7 +981,7 @@ get_mfd_array <- function(data_array,
   if (is.null(grid)) grid <- seq(0, 1, l = n_args)
   domain <- range(grid)
   bs <- create.bspline.basis(domain, n_basis)
-  bs$B <- inprod.bspline(fd(diag(1, bs$nbasis), bs))
+  bs$B <- Matrix(inprod.bspline(fd(diag(1, bs$nbasis), bs)), sparse = TRUE)
 
   variables <- dimnames(data_array)[[3]]
   ids <- dimnames(data_array)[[2]]
@@ -1101,6 +1102,9 @@ get_mfd_fd <- function(fdobj) {
       dimnames(coefs)[[3]] <- fdobj$fdnames[[3]]
     }
   }
+  bs <- fdobj$basis
+  fdobj$basis$B <- Matrix(inprod.bspline(fd(diag(1, bs$nbasis), bs)),
+                          sparse = TRUE)
   mfd(coefs,
       fdobj$basis,
       fdobj$fdnames)

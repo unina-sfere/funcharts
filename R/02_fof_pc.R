@@ -309,7 +309,7 @@ fof_pc <- function(mfdobj_y,
 
     domain <- res_original$basis$rangeval
     bs <- create.bspline.basis(domain, 200)
-    bs$B <- inprod.bspline(fd(diag(1, bs$nbasis), bs))
+    bs$B <- Matrix(inprod.bspline(fd(diag(1, bs$nbasis), bs)), sparse = TRUE)
 
     sd_res <- sd.fd(res_original)
     var_res <- times.fd(sd_res, sd_res, bs)
