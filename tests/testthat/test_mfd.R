@@ -24,10 +24,12 @@ test_that("domain must be a vector of 2 numbers", {
 })
 
 test_that("get_mfd_fd correctly converts fd objects", {
-  expect_equal(get_mfd_fd(fd()),
-               mfd(coef = array(c(0, 0), dim = c(2, 1, 1)),
-                   basisobj = fd()$basis,
-                   fdnames = fd()$fdnames))
+  bs <- create.bspline.basis(nbasis = 10)
+  fdobj <- fd(basisobj = bs)
+  expect_equal(get_mfd_fd(fdobj),
+               mfd(coef = array(0, dim = c(10, 1, 1)),
+                   basisobj = fdobj$basis,
+                   fdnames = fdobj$fdnames))
   expect_equal({
     mfdobj <- data_sim_mfd()
     fdobj <- fd(mfdobj$coefs, mfdobj$basis, mfdobj$fdnames)

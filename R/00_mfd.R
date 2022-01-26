@@ -125,6 +125,8 @@ mfd <- function(coef, basisobj, fdnames = NULL, raw = NULL, id_var = NULL) {
   fdobj <- fd(coef, basisobj, fdnames)
   fdobj$raw <- raw
   fdobj$id_var <- id_var
+  fdobj$basis$B <- Matrix(inprod.bspline(fd(diag(1, basisobj$nbasis), basisobj)),
+                          sparse = TRUE)
   class(fdobj) <- c("mfd", "fd")
   fdobj
 }
