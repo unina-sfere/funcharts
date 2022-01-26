@@ -56,7 +56,7 @@ test_that("tensor_product_mfd works with multivariate objects", {
 
 test_that("scale_mfd returns error with one single obs", {
   mfdobj1 <- data_sim_mfd()
-  mfdobj2 <- data_sim_mfd(nobs = 1, seed = 123)
+  mfdobj2 <- data_sim_mfd(nobs = 1)
   expect_error({
     scale_mfd(mfdobj2)
   },
@@ -76,8 +76,8 @@ test_that("scale_mfd returns error with one single obs", {
 })
 
 test_that("scale_mfd requires center to be fd object", {
-  mfdobj1 <- data_sim_mfd(seed = 1)
-  mfdobj2 <- data_sim_mfd(seed = 123)
+  mfdobj1 <- data_sim_mfd()
+  mfdobj2 <- data_sim_mfd()
 
   # Normal scaling
   mfdobj1_scaled <- scale_mfd(mfdobj1)
