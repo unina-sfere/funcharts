@@ -75,7 +75,7 @@
 #' library(funcharts)
 #' set.seed(0)
 #' nobs <- 5
-#' nbasis <- 4
+#' nbasis <- 10
 #' nvar <- 2
 #' coef <- array(rnorm(nobs * nbasis * nvar), dim = c(nbasis, nobs, nvar))
 #' bs <- create.bspline.basis(rangeval = c(0, 1), nbasis = nbasis)
