@@ -261,19 +261,16 @@ fof_pc <- function(mfdobj_y,
   B <- mod$coefficients
   B <- as.matrix(B)
 
-  beta_coef_dim <- c(x_pca$harmonics$basis$nbasis,
-                     y_pca$harmonics$basis$nbasis,
-                     1, n_var_x * n_var_y)
-
-  beta_coefs <- array(0, dim = beta_coef_dim)
-  for (kk_xx in components_x) {
-    for (kk_yy in components_y) {
-      phi_st <- tensor_product_mfd(
-        x_pca$harmonics[kk_xx],
-        y_pca$harmonics[kk_yy])
-      beta_coefs <- beta_coefs + B[kk_xx, kk_yy] * phi_st$coefs
-      }
-    }
+  pp <- dim(x_pca$harmonics$coefs)[3]
+  Gx <- x_pca$harmonics$coefs[, components_x, ]
+  Gx <- do.call(rbind, lapply(1:pp, function(jj) Gx[, , jj]))
+  Gy <- y_pca$harmonics$coefs[, components_y, 1, drop = FALSE]
+  Gy <- matrix(as.numeric(Gy), nrow = dim(Gy)[1], ncol = dim(Gy)[2])
+  beta_coefs <- Gx %*% B %*% t(Gy)
+  k1 <- x_pca$harmonics$basis$nbasis
+  k2 <- y_pca$harmonics$basis$nbasis
+  beta_coefs <- array(as.numeric(t(beta_coefs)), dim = c(k2, k1, 1, pp))
+  beta_coefs <- aperm(beta_coefs, perm = c(2, 1, 3, 4))
   beta_fd <- bifd(beta_coefs,
                   x_pca$harmonics$basis,
                   y_pca$harmonics$basis,
