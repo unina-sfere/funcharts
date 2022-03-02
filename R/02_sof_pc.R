@@ -217,7 +217,7 @@ sof_pc <- function(y,
   coefs <- array(coefs, dim = c(n_basis, 1, n_var))
   dimnames(coefs) <- list(bs$names, "beta", variables)
   fdnames <- list(pca$harmonics$fdnames[[1]], "beta", variables)
-  beta_fd <- mfd(coefs, bs, fdnames)
+  beta_fd <- mfd(coefs, bs, fdnames, B = bs$B)
 
   list(mod = mod,
        pca = pca,
@@ -412,7 +412,8 @@ plot_bootstrap_sof_pc <- function(mod, nboot = 25, ncores = 1) {
     mod$beta_fd$basis,
     list(mod$beta_fd$fdnames[[1]],
          1:nboot,
-         variables))
+         variables),
+    B = mod$beta_fd$basis$B)
   ggplot() +
     geom_mfd(mfdobj = B_mfd, alpha = .3, lwd = .3, col = "darkgray") +
     geom_hline(yintercept = 0, lty = 2) +

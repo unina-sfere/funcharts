@@ -91,8 +91,7 @@ pca_mfd <- function(mfdobj, scale = TRUE, nharm = 20) {
   pca$harmonics <- mfd(coefs,
                        pca$harmonics$basis,
                        pca$harmonics$fdnames,
-                       NULL,
-                       NULL)
+                       B = mfdobj$basis$B)
 
   class(pca) <- c("pca_mfd", "pca.fd")
   pca
@@ -353,7 +352,7 @@ get_fit_pca_given_scores <- function(scores, harmonics) {
   fdnames <- list(harmonics$fdnames[[1]],
                   obs, variables)
 
-  mfd(fit_coefs, basis, fdnames)
+  mfd(fit_coefs, basis, fdnames, B = basis$B)
 }
 
 #' Calculate the Hotelling's T^2 statistics of multivariate functional data
@@ -420,7 +419,7 @@ get_T2_spe <- function(pca, components, newdata_scaled = NULL) {
     minus.fd(newdata_scaled, fit)
   }
 
-  res_fd <- mfd(res_fd$coefs, res_fd$basis, res_fd$fdnames)
+  res_fd <- mfd(res_fd$coefs, res_fd$basis, res_fd$fdnames, B = res_fd$basis$B)
 
   cont_spe <- inprod_mfd_diag(res_fd)
   rownames(cont_spe) <- obs
@@ -493,9 +492,9 @@ pca.fd_inprods_faster <- function (fdobj,
   Mmatinv <- solve(Mmat)
   Wmat <- crossprod(t(ctemp))/nrep
   if (identical(harmbasis, basisobj)) {
-    bs_fd <- fd(coef = diag(1, harmbasis$nbasis), basisobj = harmbasis)
-    Jmat <- t(bs_fd$coef) %*% as.matrix(harmbasis$B) %*% bs_fd$coef
-  } else Jmat = inprod(harmbasis, basisobj)
+    Jmat <- inprod.bspline(fd(diag(harmbasis$nbasis), harmbasis))
+  } else Jmat = inprod.bspline(fd(diag(harmbasis$nbasis), harmbasis),
+                               fd(diag(harmbasis$nbasis), basisobj))
   MIJW = crossprod(Mmatinv, Jmat)
   if (nvar == 1) {
     Cmat = MIJW %*% Wmat %*% t(MIJW)
@@ -536,10 +535,15 @@ pca.fd_inprods_faster <- function (fdobj,
   if (length(coefd) == 3)
     harmnames <- list(coefnames[[1]], harmnames, coefnames[[3]])
   harmfd <- fd(harmcoef, harmbasis, harmnames)
+  if (is.null(fdobj$basis$B)) {
+    B <- inprod.bspline(fd(diag(fdobj$basis$nbasis), fdobj$basis))
+  } else {
+    B <- fdobj$basis$B
+  }
+
   if (nvar == 1) {
     if (identical(fdobj$basis, harmfd$basis)) {
-      bs <- fdobj$basis
-      harmscr <- t(fdobj$coefs) %*% as.matrix(bs$B) %*% harmfd$coefs
+      harmscr <- t(fdobj$coefs) %*% B %*% harmfd$coefs
     } else harmscr <- inprod(fdobj, harmfd)
   }
   else {
@@ -550,8 +554,7 @@ pca.fd_inprods_faster <- function (fdobj,
       fdobjj <- fd(as.matrix(coefarray[, , j]), basisobj)
       harmfdj <- fd(as.matrix(harmcoefarray[, , j]), basisobj)
       if (identical(fdobjj$basis, harmfdj$basis)) {
-        bs <- fdobjj$basis
-        harmscr[, , j] <- t(fdobjj$coefs) %*% as.matrix(bs$B) %*% harmfdj$coefs
+        harmscr[, , j] <- t(fdobjj$coefs) %*% B %*% harmfdj$coefs
       } else harmscr[, , j] <- inprod(fdobjj, harmfdj)
     }
   }

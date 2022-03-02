@@ -586,7 +586,7 @@ plot_control_charts_real_time <- function(cclist, id_num) {
 
     plot_list$p_hot <- df_hot_plot %>%
       rename(T2 = .data$statistic) %>%
-      pivot_longer(cols = c(.data$T2, .data$UCL),
+      tidyr::pivot_longer(cols = c(.data$T2, .data$UCL),
                    names_to = "line_type") %>%
       mutate(
         line_type = factor(
@@ -641,7 +641,7 @@ plot_control_charts_real_time <- function(cclist, id_num) {
 
     plot_list$p_spe <- df_spe_plot %>%
       rename(SPE = .data$statistic) %>%
-      pivot_longer(cols = c(.data$SPE, .data$UCL),
+      tidyr::pivot_longer(cols = c(.data$SPE, .data$UCL),
                    names_to = "line_type") %>%
       mutate(
         line_type = factor(
@@ -716,7 +716,7 @@ plot_control_charts_real_time <- function(cclist, id_num) {
 
     plot_list$p_y <- df_y_plot %>%
       rename(`prediction error [t]` = .data$statistic) %>%
-      pivot_longer(cols = c(.data$`prediction error [t]`, .data$UCL, .data$LCL),
+      tidyr::pivot_longer(cols = c(.data$`prediction error [t]`, .data$UCL, .data$LCL),
                    names_to = "line_type") %>%
       mutate(
         line_type = factor(

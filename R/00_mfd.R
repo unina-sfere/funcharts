@@ -82,7 +82,7 @@
 #' mfdobj <- mfd(coef = coef, basisobj = bs)
 #' plot_mfd(mfdobj)
 #'
-mfd <- function(coef, basisobj, fdnames = NULL, raw = NULL, id_var = NULL) {
+mfd <- function(coef, basisobj, fdnames = NULL, raw = NULL, id_var = NULL, B = NULL) {
 
   if (is.null(fdnames)) {
     fdnames <- list(
@@ -125,8 +125,11 @@ mfd <- function(coef, basisobj, fdnames = NULL, raw = NULL, id_var = NULL) {
   fdobj <- fd(coef, basisobj, fdnames)
   fdobj$raw <- raw
   fdobj$id_var <- id_var
-  fdobj$basis$B <- Matrix(inprod.bspline(fd(diag(1, basisobj$nbasis), basisobj)),
-                          sparse = TRUE)
+  nb <- basisobj$nbasis
+  if (is.null(B)) B <- inprod.bspline(fd(diag(nb), basisobj))
+  if (!is.matrix(B)) stop("B must be a matrix")
+  if (nrow(B) != nb | ncol(B) != nb) stop("B must have the right number of rows and columns")
+  fdobj$basis$B <- B
   class(fdobj) <- c("mfd", "fd")
   fdobj
 }
@@ -175,8 +178,6 @@ data_sim_mfd <- function(nobs = 5,
   coef <- array(stats::rnorm(nobs * nbasis * nvar),
                 dim = c(nbasis, nobs, nvar))
   bs <- create.bspline.basis(rangeval = c(0, 1), nbasis = nbasis)
-  bs$B <- Matrix(inprod.bspline(fd(diag(1, bs$nbasis), bs)),
-                 sparse = TRUE)
   mfd(coef = coef, basisobj = bs)
 }
 
@@ -270,7 +271,7 @@ data_sim_mfd <- function(nobs = 5,
     }
 
   mfd(coef = coefs, basisobj = mfdobj$basis, fdnames = fdnames,
-      raw = raw_filtered, id_var = id_var)
+      raw = raw_filtered, id_var = id_var, B = mfdobj$basis$B)
 }
 
 #' Inner products of functional data contained in \code{mfd} objects.
@@ -339,7 +340,7 @@ inprod_mfd <- function(mfdobj1, mfdobj2 = NULL) {
     mfdobj1_jj <- fd(mfdobj1$coefs[, , jj], bs1)
     mfdobj2_jj <- fd(mfdobj2$coefs[, , jj], bs2)
     if (identical(bs1, bs2)) {
-      out <- as.matrix(t(mfdobj1_jj$coef) %*% as.matrix(bs1$B) %*% mfdobj2_jj$coef)
+      out <- as.matrix(t(mfdobj1_jj$coef) %*% bs1$B %*% mfdobj2_jj$coef)
     } else {
       out <- inprod(mfdobj1_jj, mfdobj2_jj)
     }
@@ -437,7 +438,7 @@ inprod_mfd_diag <- function(mfdobj1, mfdobj2 = NULL) {
     inprods <- sapply(1:nvar1, function(jj) {
         C1jj <- mfdobj1$coefs[, , jj]
         C2jj <- mfdobj2$coefs[, , jj]
-        rowSums(as.matrix(t(C1jj) %*% as.matrix(mfdobj1$basis$B) * t(C2jj)))
+        rowSums(as.matrix(t(C1jj) %*% mfdobj1$basis$B * t(C2jj)))
     })
   } else {
     inprods <- sapply(1:nvar1, function(jj) {
@@ -730,7 +731,6 @@ get_mfd_df <- function(dt,
   }
 
   bs <- create.bspline.basis(domain, n_basis)
-  bs$B <- Matrix(inprod.bspline(fd(diag(1, bs$nbasis), bs)), sparse = TRUE)
   ids <- levels(factor(dt[[id]]))
   n_obs <- length(ids)
   n_var <- length(variables)
@@ -983,7 +983,6 @@ get_mfd_array <- function(data_array,
   if (is.null(grid)) grid <- seq(0, 1, l = n_args)
   domain <- range(grid)
   bs <- create.bspline.basis(domain, n_basis)
-  bs$B <- Matrix(inprod.bspline(fd(diag(1, bs$nbasis), bs)), sparse = TRUE)
 
   variables <- dimnames(data_array)[[3]]
   ids <- dimnames(data_array)[[2]]
@@ -1105,8 +1104,6 @@ get_mfd_fd <- function(fdobj) {
     }
   }
   bs <- fdobj$basis
-  fdobj$basis$B <- Matrix(inprod.bspline(fd(diag(1, bs$nbasis), bs)),
-                          sparse = TRUE)
   mfd(coefs,
       fdobj$basis,
       fdobj$fdnames)
@@ -1185,17 +1182,15 @@ scale_mfd <- function(mfdobj, center = TRUE, scale = TRUE) {
   } else {
     if (is.logical(center) && center == TRUE) {
       mean_fd <- mean.fd(mfdobj)
-      cen_fd <- center.fd(mfdobj)
-      cen_fd$fdnames <- mfdobj$fdnames
     }
     if (is.fd(center)) {
       mean_fd <- center
-      mean_fd_coefs <- array(
-        mean_fd$coefs[, 1, ], dim = c(dim(mean_fd$coefs)[c(1, 3)], n_obs))
-      mean_fd_coefs <- aperm(mean_fd_coefs, c(1, 3, 2))
-      mean_fd_rep <- fd(mean_fd_coefs, bs, mfdobj$fdnames)
-      cen_fd <- minus.fd(mfdobj, mean_fd_rep)
     }
+    mean_fd_coefs <- array(mean_fd$coefs[, 1, ],
+                           dim = c(dim(mean_fd$coefs)[c(1, 3)], n_obs))
+    mean_fd_coefs <- aperm(mean_fd_coefs, c(1, 3, 2))
+    mean_fd_rep <- fd(mean_fd_coefs, bs, mfdobj$fdnames)
+    cen_fd <- minus.fd(mfdobj, mean_fd_rep)
   }
 
   # Scale
@@ -1301,7 +1296,7 @@ descale_mfd <- function(scaled_mfd, center, scale) {
   dimnames(descaled$coefs) <- dimnames(scaled_mfd$coefs)
   descaled$fdnames <- scaled_mfd$fdnames
 
-  mfd(descaled$coefs, descaled$basis, descaled$fdnames)
+  mfd(descaled$coefs, descaled$basis, descaled$fdnames, B = basis$B)
 }
 
 
@@ -1453,7 +1448,8 @@ cbind_mfd <- function(mfdobj1, mfdobj2) {
       fdnames = list(mfdobj1$fdnames[[1]],
                      mfdobj1$fdnames[[2]],
                      c(mfdobj1$fdnames[[3]],
-                       mfdobj2$fdnames[[3]])))
+                       mfdobj2$fdnames[[3]])),
+      B = mfdobj1$basis$B)
 }
 
 
@@ -1518,10 +1514,9 @@ rbind_mfd <- function(mfdobj1, mfdobj2) {
       fdnames = list(mfdobj1$fdnames[[1]],
                      c(mfdobj1$fdnames[[2]],
                        mfdobj2$fdnames[[2]]),
-                     mfdobj2$fdnames[[3]]))
+                     mfdobj2$fdnames[[3]]),
+      B = mfdobj1$basis$B)
 }
-
-
 
 # Plots -------------------------------------------------------------------
 

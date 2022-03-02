@@ -360,7 +360,7 @@ plot_mon <- function(cclist, fd_train, fd_test, print_id = FALSE) {
     cont_out <- data.frame(cont_T2 | cont_spe)
     names(cont_out) <- gsub("contribution_T2_", "", names(cont_T2))
     df <- bind_cols(df, cont_out) %>%
-      pivot_longer(- id, values_to = "contribution ooc", names_to = "var")
+      tidyr::pivot_longer(- id, values_to = "contribution ooc", names_to = "var")
   } else {
     df <- df %>%
       mutate(`contribution ooc` =
