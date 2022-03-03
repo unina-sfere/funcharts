@@ -4,7 +4,7 @@
 \alias{mfd}
 \title{Define a Multivariate Functional Data Object}
 \usage{
-mfd(coef, basisobj, fdnames = NULL, raw = NULL, id_var = NULL)
+mfd(coef, basisobj, fdnames = NULL, raw = NULL, id_var = NULL, B = NULL)
 }
 \arguments{
 \item{coef}{A three-dimensional array of coefficients:
@@ -48,6 +48,10 @@ containing the discrete functional values for each variable.}
 in the \code{raw} argument
 containing the functional observations (as in \code{fdnames[[2]]}),
 default is NULL.}
+
+\item{B}{A matrix with the inner products of the basis functions.
+If NULL, it is calculated from the basis object provided.
+Default is NULL.}
 }
 \value{
 A multivariate functional data object

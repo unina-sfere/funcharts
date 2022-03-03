@@ -50,6 +50,10 @@
 #' in the \code{raw} argument
 #' containing the functional observations (as in \code{fdnames[[2]]}),
 #' default is NULL.
+#' @param B
+#' A matrix with the inner products of the basis functions.
+#' If NULL, it is calculated from the basis object provided.
+#' Default is NULL.
 #'
 #' @return
 #' A multivariate functional data object
