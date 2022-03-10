@@ -262,7 +262,7 @@ fof_pc <- function(mfdobj_y,
   B <- as.matrix(B)
 
   Gx <- x_pca$harmonics$coefs[, components_x, , drop = FALSE]
-  Gx <- do.call(rbind, lapply(1:n_var_x, function(jj) Gx[, , jj]))
+  Gx <- do.call(rbind, lapply(1:n_var_x, function(jj) matrix(Gx[, , jj], nrow = dim(Gx)[1])))
   Gy <- y_pca$harmonics$coefs[, components_y, 1, drop = FALSE]
   Gy <- matrix(as.numeric(Gy), nrow = dim(Gy)[1], ncol = dim(Gy)[2])
   beta_coefs <- Gx %*% B %*% t(Gy)
