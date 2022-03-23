@@ -263,17 +263,22 @@ fof_pc <- function(mfdobj_y,
 
   Gx <- x_pca$harmonics$coefs[, components_x, , drop = FALSE]
   Gx <- do.call(rbind, lapply(1:n_var_x, function(jj) matrix(Gx[, , jj], nrow = dim(Gx)[1])))
-  Gy <- y_pca$harmonics$coefs[, components_y, 1, drop = FALSE]
-  Gy <- matrix(as.numeric(Gy), nrow = dim(Gy)[1], ncol = dim(Gy)[2])
+  Gy <- y_pca$harmonics$coefs[, components_y, , drop = FALSE]
+  Gy <- do.call(rbind, lapply(1:n_var_y, function(jj) matrix(Gy[, , jj], nrow = dim(Gy)[1])))
   beta_coefs <- Gx %*% B %*% t(Gy)
-  k1 <- x_pca$harmonics$basis$nbasis
-  k2 <- y_pca$harmonics$basis$nbasis
-  beta_coefs <- array(as.numeric(t(beta_coefs)), dim = c(k2, k1, 1, n_var_x))
-  beta_coefs <- aperm(beta_coefs, perm = c(2, 1, 3, 4))
+  kx <- x_pca$harmonics$basis$nbasis
+  ky <- y_pca$harmonics$basis$nbasis
+  beta_coefs <- array(as.numeric(beta_coefs), dim = c(kx, n_var_x, ky, n_var_y))
+  beta_coefs <- aperm(beta_coefs, perm = c(1, 3, 2, 4))
+  beta_coefs <- array(as.numeric(beta_coefs), dim = c(kx, ky, 1, n_var_x * n_var_y))
+
+  fdnames <- as.matrix(expand.grid(x_pca$harmonics$fdnames[[3]], y_pca$harmonics$fdnames[[3]]))
+  fdnames <- apply(fdnames, 1, function(x) paste(x, collapse = " "))
+
   bifdnames <- list(x_pca$harmonics$basis$names,
                     y_pca$harmonics$basis$names,
                     "",
-                    x_pca$harmonics$fdnames[[3]])
+                    fdnames)
   beta_fd <- bifd(beta_coefs,
                   x_pca$harmonics$basis,
                   y_pca$harmonics$basis,
