@@ -1276,31 +1276,48 @@ scale_mfd <- function(mfdobj, center = TRUE, scale = TRUE) {
 #' adding \code{center}.
 #' @noRd
 #'
-descale_mfd <- function(scaled_mfd, center, scale) {
+descale_mfd <- function (scaled_mfd, center = FALSE, scale = FALSE) {
+
+  if (!is.mfd(scaled_mfd)) stop("scaled_mfd must be from class mfd")
 
   basis <- scaled_mfd$basis
   nbasis <- basis$nbasis
   nobs <- length(scaled_mfd$fdnames[[2]])
   nvar <- length(scaled_mfd$fdnames[[3]])
 
-  coef_sd_list <- lapply(1:nvar, function(jj) {
-    matrix(scale$coefs[, jj], nrow = nbasis, ncol = nobs)
-  })
-  coef_sd <- simplify2array(coef_sd_list)
-  sd_fd <- fd(coef_sd, scale$basis, scaled_mfd$fdnames)
+  if (is.fd(scale)) {
 
-  coef_mean_list <- lapply(1:nvar, function(jj) {
-    matrix(center$coefs[, 1, jj], nrow = nbasis, ncol = nobs)
-  })
-  coef_mean <- simplify2array(coef_mean_list)
-  mean_fd <- fd(coef_mean, center$basis, scaled_mfd$fdnames)
+    coef_sd_list <- lapply(1:nvar, function(jj) {
+      matrix(scale$coefs[, jj], nrow = nbasis, ncol = nobs)
+    })
+    coef_sd <- simplify2array(coef_sd_list)
+    sd_fd <- fd(coef_sd, scaled_mfd$basis)
+    centered <- times.fd(scaled_mfd, sd_fd, basisobj = basis)
 
-  centered <- times.fd(scaled_mfd, sd_fd, basisobj = basis)
-  descaled <- centered + mean_fd
-  dimnames(descaled$coefs) <- dimnames(scaled_mfd$coefs)
-  descaled$fdnames <- scaled_mfd$fdnames
+  } else {
+    if (is.logical(scale) & !scale & length(scale) == 1) {
+      centered <- scaled_mfd
+    } else {
+      stop("scale must be either an mfd object or FALSE")
+    }
+  }
 
-  mfd(descaled$coefs, descaled$basis, descaled$fdnames, B = basis$B)
+  if (is.fd(center)) {
+
+    descaled_mean_list <- lapply(1:nvar, function(jj) {
+      centered$coefs[, , jj] + center$coefs[, 1, jj]
+    })
+    descaled_coef <- simplify2array(descaled_mean_list)
+
+  } else {
+    if (is.logical(center) & !center & length(center) == 1) {
+      descaled_coef <- centered$coef
+    } else {
+      stop("center must be either an mfd object or FALSE")
+    }
+  }
+
+  mfd(descaled_coef, scaled_mfd$basis, scaled_mfd$fdnames, B = scaled_mfd$basis$B)
 }
 
 
