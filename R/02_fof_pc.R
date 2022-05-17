@@ -272,8 +272,8 @@ fof_pc <- function(mfdobj_y,
   beta_coefs <- aperm(beta_coefs, perm = c(1, 3, 2, 4))
   beta_coefs <- array(as.numeric(beta_coefs), dim = c(kx, ky, 1, n_var_x * n_var_y))
 
-  fdnames <- as.matrix(expand.grid(x_pca$harmonics$fdnames[[3]], y_pca$harmonics$fdnames[[3]]))
-  fdnames <- apply(fdnames, 1, function(x) paste(x, collapse = " "))
+  fdnames <- as.matrix(expand.grid(y_pca$harmonics$fdnames[[3]], x_pca$harmonics$fdnames[[3]]))
+  fdnames <- apply(fdnames, 1, function(x) paste(x, collapse = " vs "))
 
   bifdnames <- list(x_pca$harmonics$basis$names,
                     y_pca$harmonics$basis$names,
