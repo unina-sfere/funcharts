@@ -161,7 +161,7 @@ which is a bivariate functional data object of class <code>bifd</code>
 using the function <code>plot_bifd</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_bifd.html">plot_bifd</a></span><span class="op">(</span><span class="va">mod_fof</span><span class="op">$</span><span class="va">beta_fd</span><span class="op">)</span></code></pre></div>
-<p><img src="../../../R%20packages/funcharts/articles/centofanti2021-plot_bifd-1.png" title="plot of chunk plot_bifd" alt="plot of chunk plot_bifd" style="display:block; margin: auto"></p>
+<p><img src="centofanti2021-plot_bifd-1.png" title="plot of chunk plot_bifd" alt="plot of chunk plot_bifd" style="display:block; margin: auto"></p>
 </div>
 <div class="section level3">
 <h3 id="plotting-the-functional-regression-control-chart">Plotting the functional regression control chart<a class="anchor" aria-label="anchor" href="#plotting-the-functional-regression-control-chart"></a>
@@ -184,7 +184,7 @@ ggplot with the control charts.</p>
                        mfdobj_y_new <span class="op">=</span> <span class="va">mfdobj_y2</span>,
                        mfdobj_x_new <span class="op">=</span> <span class="va">mfdobj_x2</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot_control_charts.html">plot_control_charts</a></span><span class="op">(</span><span class="va">frcc_df</span><span class="op">)</span></code></pre></div>
-<p><img src="../../../R%20packages/funcharts/articles/centofanti2021-plot_control_charts-1.png" title="plot of chunk plot_control_charts" alt="plot of chunk plot_control_charts" style="display:block; margin: auto"></p>
+<p><img src="centofanti2021-plot_control_charts-1.png" title="plot of chunk plot_control_charts" alt="plot of chunk plot_control_charts" style="display:block; margin: auto"></p>
 <p>We can also plot the new functions to be monitored, against the
 reference training data set, by first using <code>predict_fof_pc</code>,
 which produces the prediction of new observations of the functional
@@ -202,7 +202,7 @@ observation 54</p>
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_mon.html">plot_mon</a></span><span class="op">(</span>cclist <span class="op">=</span> <span class="va">frcc_df</span>,
          fd_train <span class="op">=</span> <span class="va">mod_fof</span><span class="op">$</span><span class="va">residuals</span>,
          fd_test <span class="op">=</span> <span class="va">y_hat</span><span class="op">$</span><span class="va">pred_error</span><span class="op">[</span><span class="fl">54</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<p><img src="../../../R%20packages/funcharts/articles/centofanti2021-plot_mon-1.png" title="plot of chunk plot_mon" alt="plot of chunk plot_mon" style="display:block; margin: auto"></p>
+<p><img src="centofanti2021-plot_mon-1.png" title="plot of chunk plot_mon" alt="plot of chunk plot_mon" style="display:block; margin: auto"></p>
 </div>
 <div class="section level3">
 <h3 id="real-time-functional-regression-control-chart">Real-time functional regression control chart<a class="anchor" aria-label="anchor" href="#real-time-functional-regression-control-chart"></a>
@@ -250,7 +250,7 @@ the real time control charts for a single phase II observation (id
 number 54).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_control_charts_real_time.html">plot_control_charts_real_time</a></span><span class="op">(</span><span class="va">cc_list_real_time</span>, id_num <span class="op">=</span> <span class="fl">54</span><span class="op">)</span></code></pre></div>
-<p><img src="../../../R%20packages/funcharts/articles/centofanti2021-plot_control_charts_real_time-1.png" title="plot of chunk plot_control_charts_real_time" alt="plot of chunk plot_control_charts_real_time" style="display:block; margin: auto"></p>
+<p><img src="centofanti2021-plot_control_charts_real_time-1.png" title="plot of chunk plot_control_charts_real_time" alt="plot of chunk plot_control_charts_real_time" style="display:block; margin: auto"></p>
 </div>
 </div>
 <div class="section level2">
