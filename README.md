@@ -25,7 +25,7 @@ In particular:
     chart, i.e. control charts for monitoring a functional response
     variable conditionally on multivariate functional covariates. See
     the
-    [`vignette("centofanti2020", package = "funcharts")`](https://unina-sfere.github.io/funcharts/articles/centofanti2020.html).
+    [`vignette("centofanti2021", package = "funcharts")`](https://unina-sfere.github.io/funcharts/articles/centofanti2020.html).
 
 ## Installation
 

@@ -67,10 +67,9 @@ corresponding to a given instant.
 \description{
 This function produces a list of data frames,
 each of them is produced by \code{\link{control_charts_sof_pc}}
-and is needed to plot control charts for monitoring
-a scalar response variable and
-multivariate functional covariates
-each evolving up to an intermediate domain point.
+and is needed to plot control charts for monitoring in real time
+a scalar quality characteristic adjusted for
+by the effect of multivariate functional covariates.
 }
 \examples{
 library(funcharts)

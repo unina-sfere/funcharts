@@ -55,7 +55,7 @@ predict_fof_pc(mod,
                mfdobj_x_new = mfdobj_x)
 }
 \references{
-Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 Functional Regression Control Chart.
-\emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
+\emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
 }

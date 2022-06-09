@@ -2,8 +2,8 @@
 % Please edit documentation in R/04_phaseII.R
 \name{control_charts_sof_pc}
 \alias{control_charts_sof_pc}
-\title{Control charts for monitoring multivariate functional covariates
-and a scalar response}
+\title{Control charts for monitoring a scalar quality characteristic adjusted for
+by the effect of multivariate functional covariates}
 \usage{
 control_charts_sof_pc(
   mod,
@@ -126,10 +126,9 @@ prediction interval on the prediction error,
 \description{
 This function builds a data frame needed to
 plot control charts
-for monitoring a multivariate functional covariates based on
-multivariate functional principal component analysis (MFPCA) and
-a related scalar response variable using the
-scalar-on-function regression control chart,
+for monitoring a monitoring a scalar quality characteristic adjusted for
+the effect of multivariate functional covariates based on
+scalar-on-function regression,
 as proposed in Capezza et al. (2020).
 
 In particular, this function provides:
@@ -145,10 +144,10 @@ the multivariate functional covariates and \code{\link{regr_cc_sof}}
 for the scalar regression control chart.
 
 The training data have already been used to fit the model.
-A tuning data set can be provided that is used to estimate
+An optional tuning data set can be provided that is used to estimate
 the control chart limits.
 A phase II data set contains the observations to be monitored
-with the built control charts.
+with the control charts.
 }
 \examples{
 library(funcharts)

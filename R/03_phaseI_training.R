@@ -34,7 +34,7 @@
 #' Note that at the moment you have to take into account manually
 #' the family-wise error rate and adjust
 #' the two values accordingly. See Capezza et al. (2020) and
-#' Centofanti et al. (2020)
+#' Centofanti et al. (2021)
 #' for additional details. Default value is
 #' \code{list(T2 = 0.025, spe = 0.025)}.
 #'
@@ -67,9 +67,9 @@
 #' 36(3):477--500.
 #' <doi:10.1002/asmb.2507>
 #'
-#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 #' Functional Regression Control Chart.
-#' \emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
+#' \emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
 calculate_limits <- function(pca,
                              tuning_data = NULL,
                              components,
@@ -166,7 +166,7 @@ calculate_limits <- function(pca,
 #' Note that at the moment you have to take into account manually
 #' the family-wise error rate and adjust
 #' the two values accordingly. See Capezza et al. (2020) and
-#' Centofanti et al. (2020)
+#' Centofanti et al. (2021)
 #' for additional details. Default value is
 #' \code{list(T2 = 0.025, spe = 0.025)}.
 #' @param ncores

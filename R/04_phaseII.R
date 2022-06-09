@@ -5,16 +5,13 @@
 #' control charts
 #' based on multivariate functional principal component analysis
 #' (MFPCA) performed
-#' on multivariate functional data,
-#' proposed in Capezza et al. (2020) together with the scalar control chart
-#' and used also to build the
-#' functional regression control chart proposed in Centofanti et al. (2020)
-#' (this function is used by \code{\link{regr_cc_fof}}).
+#' on multivariate functional data, as Capezza et al. (2020)
+#' for the multivariate functional covariates.
 #' The training data have already been used to fit the model.
-#' A tuning data set can be provided that is used to estimate
+#' An optional tuning data set can be provided to estimate
 #' the control chart limits.
 #' A phase II data set contains the observations
-#' to be monitored with the built control charts.
+#' to be monitored with the control charts.
 #'
 #' @param pca
 #' An object of class \code{pca_mfd}
@@ -50,7 +47,7 @@
 #' Note that at the moment you have to take into account manually
 #' the family-wise error rate and adjust
 #' the two values accordingly. See Capezza et al. (2020) and
-#' Centofanti et al. (2020)
+#' Centofanti et al. (2021)
 #' for additional details. Default value is
 #' \code{list(T2 = 0.025, spe = 0.025)}.
 #' @param limits
@@ -130,6 +127,7 @@
 #' @seealso \code{\link{regr_cc_fof}}
 #'
 #' @references
+#'
 #' Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
 #' Control charts for
 #' monitoring ship operating conditions and CO2 emissions
@@ -137,10 +135,6 @@
 #' \emph{Applied Stochastic Models in Business and Industry},
 #' 36(3):477--500.
 #' <doi:10.1002/asmb.2507>
-#'
-#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
-#' Functional Regression Control Chart.
-#' \emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
 #'
 #' @examples
 #' library(funcharts)
@@ -362,16 +356,15 @@ regr_cc_sof <- function(object,
 }
 
 
-#' Control charts for monitoring multivariate functional covariates
-#' and a scalar response
+#' Control charts for monitoring a scalar quality characteristic adjusted for
+#' by the effect of multivariate functional covariates
 #'
 #' @description
 #' This function builds a data frame needed to
 #' plot control charts
-#' for monitoring a multivariate functional covariates based on
-#' multivariate functional principal component analysis (MFPCA) and
-#' a related scalar response variable using the
-#' scalar-on-function regression control chart,
+#' for monitoring a monitoring a scalar quality characteristic adjusted for
+#' the effect of multivariate functional covariates based on
+#' scalar-on-function regression,
 #' as proposed in Capezza et al. (2020).
 #'
 #' In particular, this function provides:
@@ -387,10 +380,10 @@ regr_cc_sof <- function(object,
 #' for the scalar regression control chart.
 #'
 #' The training data have already been used to fit the model.
-#' A tuning data set can be provided that is used to estimate
+#' An optional tuning data set can be provided that is used to estimate
 #' the control chart limits.
 #' A phase II data set contains the observations to be monitored
-#' with the built control charts.
+#' with the control charts.
 #'
 #'
 #' @param mod
@@ -588,13 +581,16 @@ control_charts_sof_pc <- function(mod,
 #'
 #' It builds a data frame needed to plot the
 #' Functional Regression Control Chart
-#' introduced in Centofanti et al. (2020), based on a fitted
+#' introduced in Centofanti et al. (2021),
+#' for monitoring a functional quality characteristic adjusted for
+#' by the effect of multivariate functional covariates,
+#' based on a fitted
 #' function-on-function linear regression model.
 #' The training data have already been used to fit the model.
-#' A tuning data set can be provided that is used to estimate
+#' An optional tuning data set can be provided that is used to estimate
 #' the control chart limits.
 #' A phase II data set contains the observations to be monitored
-#' with the built control charts.
+#' with the control charts.
 #'
 #' @param object
 #' A list obtained as output from \code{fof_pc},
@@ -631,7 +627,7 @@ control_charts_sof_pc <- function(mod,
 #' the desired Type I error probability of the corresponding control chart.
 #' Note that at the moment you have to take into account manually
 #' the family-wise error rate and adjust
-#' the two values accordingly. See Centofanti et al. (2020)
+#' the two values accordingly. See Centofanti et al. (2021)
 #' for additional details.
 #' Default value is \code{list(T2 = 0.025, spe = 0.025)}.
 #'
@@ -644,9 +640,9 @@ control_charts_sof_pc <- function(mod,
 #' @seealso \code{\link{control_charts_pca}}
 #'
 #' @references
-#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 #' Functional Regression Control Chart.
-#' \emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
+#' \emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
 #'
 #' @examples
 #' library(funcharts)

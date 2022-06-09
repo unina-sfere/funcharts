@@ -80,10 +80,9 @@ corresponding to a given instant.
 \description{
 This function produces a list of data frames,
 each of them is produced by \code{\link{regr_cc_fof}}
-and is needed to plot control charts for monitoring
-a functional response variable and
-multivariate functional covariates
-each evolving up to an intermediate domain point.
+and is needed to plot control charts for monitoring in real time
+a functional quality characteristic adjusted for
+by the effect of multivariate functional covariates.
 }
 \examples{
 library(funcharts)

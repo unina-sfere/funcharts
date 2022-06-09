@@ -1,4 +1,4 @@
-#' Real-time unsupervised multivariate functional control charts
+#' Real-time T^2 and SPE control charts for multivariate functional data
 #'
 #' This function produces a list of data frames,
 #' each of them is produced by \code{\link{control_charts_pca}}
@@ -171,10 +171,9 @@ control_charts_pca_mfd_real_time <- function(pca_list,
 #'
 #' This function produces a list of data frames,
 #' each of them is produced by \code{\link{control_charts_sof_pc}}
-#' and is needed to plot control charts for monitoring
-#' a scalar response variable and
-#' multivariate functional covariates
-#' each evolving up to an intermediate domain point.
+#' and is needed to plot control charts for monitoring in real time
+#' a scalar quality characteristic adjusted for
+#' by the effect of multivariate functional covariates.
 #'
 #' @param mod_list
 #' A list of lists produced by \code{\link{sof_pc_real_time}},
@@ -330,10 +329,9 @@ control_charts_sof_pc_real_time <- function(mod_list,
 #'
 #' This function produces a list of data frames,
 #' each of them is produced by \code{\link{regr_cc_fof}}
-#' and is needed to plot control charts for monitoring
-#' a functional response variable and
-#' multivariate functional covariates
-#' each evolving up to an intermediate domain point.
+#' and is needed to plot control charts for monitoring in real time
+#' a functional quality characteristic adjusted for
+#' by the effect of multivariate functional covariates.
 #'
 #' @param mod_list
 #' A list of lists produced by \code{\link{fof_pc_real_time}},
@@ -591,11 +589,11 @@ plot_control_charts_real_time <- function(cclist, id_num) {
       mutate(
         line_type = factor(
           x = .data$line_type,
-          levels = c("UCL", "T2", "LCL")),
+          levels = c("UCL", "T2")),
         group = paste0(.data$group, .data$line_type),
         ooc = case_when(
           line_type == "T2" ~ ooc,
-          line_type %in% c("UCL", "LCL") ~ FALSE
+          line_type %in% c("UCL") ~ FALSE
         )) %>%
       ggplot() +
       geom_line(aes(x     = .data$kk,
@@ -603,7 +601,7 @@ plot_control_charts_real_time <- function(cclist, id_num) {
                     lty   = .data$line_type,
                     col   = .data$ooc,
                     group = .data$group)) +
-      scale_linetype_manual(values = c("T2" = 1, "UCL" = 2, "LCL" = 2)) +
+      scale_linetype_manual(values = c("T2" = 1, "UCL" = 2)) +
       scale_colour_manual(values = c("FALSE" = "black", "TRUE" = "tomato1")) +
       guides(colour = "none") +
       geom_blank(aes(y = 0)) +
@@ -646,11 +644,11 @@ plot_control_charts_real_time <- function(cclist, id_num) {
       mutate(
         line_type = factor(
           x = .data$line_type,
-          levels = c("UCL", "SPE", "LCL")),
+          levels = c("UCL", "SPE")),
         group = paste0(.data$group, .data$line_type),
         ooc = case_when(
           line_type == "SPE" ~ ooc,
-          line_type %in% c("UCL", "LCL") ~ FALSE
+          line_type %in% c("UCL") ~ FALSE
         )) %>%
       ggplot() +
       geom_line(aes(x     = .data$kk,
@@ -658,7 +656,7 @@ plot_control_charts_real_time <- function(cclist, id_num) {
                     lty   = .data$line_type,
                     col   = .data$ooc,
                     group = .data$group)) +
-      scale_linetype_manual(values = c("SPE" = 1, "UCL" = 2, "LCL" = 2)) +
+      scale_linetype_manual(values = c("SPE" = 1, "UCL" = 2)) +
       scale_colour_manual(values = c("FALSE" = "black", "TRUE" = "tomato1")) +
       guides(colour = "none") +
       geom_blank(aes(y = 0)) +

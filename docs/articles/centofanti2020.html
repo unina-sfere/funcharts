@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>centofanti2020 • funcharts</title>
+<title>centofanti2021 • funcharts</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -40,7 +40,7 @@
 <li>
   <a href="../index.html">
     <span class="fas fa-home fa-lg"></span>
-     
+
   </a>
 </li>
 <li>
@@ -49,7 +49,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -72,7 +72,7 @@
 <li>
   <a href="https://github.com/unina-sfere/funcharts/">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -83,21 +83,21 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><script src="centofanti2020_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>centofanti2020</h1>
-            
-      
+
+
       <small class="dont-index">Source: <a href="https://github.com/unina-sfere/funcharts/blob/master/vignettes/centofanti2020.Rmd"><code>vignettes/centofanti2020.Rmd</code></a></small>
       <div class="hidden name"><code>centofanti2020.Rmd</code></div>
 
     </div>
 
-    
-    
+
+
 <style>
 body {
 text-align: justify}
@@ -136,7 +136,7 @@ text-align: justify}
 <p>As a result you get a list with the original data used for model estimation, the result of applying <code>pca_mfd</code> on the multivariate functional covariates, the functional response, and the residuals, the estimated regression model and additional information. It is possible to plot the estimated functional regression coefficients, which is a bivariate functional data object of class <code>bifd</code> using the function <code>plot_bifd</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_bifd.html">plot_bifd</a></span><span class="op">(</span><span class="va">mod_fof</span><span class="op">$</span><span class="va">beta_fd</span><span class="op">)</span></code></pre></div>
-<p><img src="../../../R%20packages/funcharts/vignettes/centofanti2020-plot_bifd-1.png" title="plot of chunk plot_bifd" alt="plot of chunk plot_bifd" style="display:block; margin: auto"></p>
+<p><img src="centofanti2020-plot_bifd-1.png" title="plot of chunk plot_bifd" alt="plot of chunk plot_bifd" style="display:block; margin: auto"></p>
 </div>
 <div id="plotting-the-functional-regression-control-chart" class="section level2">
 <h2 class="hasAnchor">
@@ -147,7 +147,7 @@ text-align: justify}
                        mfdobj_y_new <span class="op">=</span> <span class="va">mfdobj_y2</span>,
                        mfdobj_x_new <span class="op">=</span> <span class="va">mfdobj_x2</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot_control_charts.html">plot_control_charts</a></span><span class="op">(</span><span class="va">frcc_df</span><span class="op">)</span></code></pre></div>
-<p><img src="../../../R%20packages/funcharts/vignettes/centofanti2020-plot_control_charts-1.png" title="plot of chunk plot_control_charts" alt="plot of chunk plot_control_charts" style="display:block; margin: auto"></p>
+<p><img src="centofanti2020-plot_control_charts-1.png" title="plot of chunk plot_control_charts" alt="plot of chunk plot_control_charts" style="display:block; margin: auto"></p>
 <p>We can also plot the new functions to be monitored, against the reference training data set, by first using <code>predict_fof_pc</code>, which produces the prediction of new observations of the functional response given the new observations of the functional covariates, as well as the corresponding prediction error:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">y_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_fof_pc.html">predict_fof_pc</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod_fof</span>,
@@ -158,7 +158,7 @@ text-align: justify}
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_mon.html">plot_mon</a></span><span class="op">(</span>cclist <span class="op">=</span> <span class="va">frcc_df</span>,
          fd_train <span class="op">=</span> <span class="va">mod_fof</span><span class="op">$</span><span class="va">residuals</span>,
          fd_test <span class="op">=</span> <span class="va">y_hat</span><span class="op">$</span><span class="va">pred_error</span><span class="op">[</span><span class="fl">54</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<p><img src="../../../R%20packages/funcharts/vignettes/centofanti2020-plot_mon-1.png" title="plot of chunk plot_mon" alt="plot of chunk plot_mon" style="display:block; margin: auto"></p>
+<p><img src="centofanti2020-plot_mon-1.png" title="plot of chunk plot_mon" alt="plot of chunk plot_mon" style="display:block; margin: auto"></p>
 </div>
 <div id="real-time-functional-regression-control-chart" class="section level2">
 <h2 class="hasAnchor">
@@ -193,7 +193,7 @@ text-align: justify}
 <span class="co">#&gt; Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span>
 
 <span class="co">#&gt; Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span></code></pre></div>
-<p><img src="../../../R%20packages/funcharts/vignettes/centofanti2020-plot_control_charts_real_time-1.png" title="plot of chunk plot_control_charts_real_time" alt="plot of chunk plot_control_charts_real_time" style="display:block; margin: auto"></p>
+<p><img src="centofanti2020-plot_control_charts_real_time-1.png" title="plot of chunk plot_control_charts_real_time" alt="plot of chunk plot_control_charts_real_time" style="display:block; margin: auto"></p>
 </div>
 </div>
 <div id="references" class="section level1">
@@ -231,7 +231,7 @@ text-align: justify}
       </footer>
 </div>
 
-  
+
 
 
   </body>

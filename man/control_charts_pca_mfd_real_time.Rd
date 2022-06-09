@@ -2,7 +2,7 @@
 % Please edit documentation in R/real_time_04_phaseII.R
 \name{control_charts_pca_mfd_real_time}
 \alias{control_charts_pca_mfd_real_time}
-\title{Real-time unsupervised multivariate functional control charts}
+\title{Real-time T^2 and SPE control charts for multivariate functional data}
 \usage{
 control_charts_pca_mfd_real_time(
   pca_list,

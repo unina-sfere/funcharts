@@ -52,7 +52,7 @@ the corresponding control chart.
 Note that at the moment you have to take into account manually
 the family-wise error rate and adjust
 the two values accordingly. See Capezza et al. (2020) and
-Centofanti et al. (2020)
+Centofanti et al. (2021)
 for additional details. Default value is
 \code{list(T2 = 0.025, spe = 0.025)}.}
 
@@ -133,16 +133,13 @@ the Hotelling's T^2 and squared prediction error (SPE)
 control charts
 based on multivariate functional principal component analysis
 (MFPCA) performed
-on multivariate functional data,
-proposed in Capezza et al. (2020) together with the scalar control chart
-and used also to build the
-functional regression control chart proposed in Centofanti et al. (2020)
-(this function is used by \code{\link{regr_cc_fof}}).
+on multivariate functional data, as Capezza et al. (2020)
+for the multivariate functional covariates.
 The training data have already been used to fit the model.
-A tuning data set can be provided that is used to estimate
+An optional tuning data set can be provided to estimate
 the control chart limits.
 A phase II data set contains the observations
-to be monitored with the built control charts.
+to be monitored with the control charts.
 }
 \examples{
 library(funcharts)
@@ -174,10 +171,6 @@ based on scalar-on-function regression.
 \emph{Applied Stochastic Models in Business and Industry},
 36(3):477--500.
 <doi:10.1002/asmb.2507>
-
-Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
-Functional Regression Control Chart.
-\emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
 }
 \seealso{
 \code{\link{regr_cc_fof}}

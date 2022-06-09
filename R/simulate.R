@@ -23,14 +23,14 @@
 #' In the phase II data, the first group of observations are in control,
 #' the second group of observations contains a moderate mean shift,
 #' while the third group of observations contains a severe mean shift.
-#' The shift types are described in the paper from Centofanti et al. (2020),
+#' The shift types are described in the paper from Centofanti et al. (2021),
 #' @export
 #'
 #' @references
 #'
-#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 #' Functional Regression Control Chart.
-#' \emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
+#' \emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
 sim_funcharts <- function(nobs1 = 1000, nobs_tun = 1000, nobs2 = 60) {
 
   datI <- simulate_mfd(nobs = nobs1)
@@ -71,12 +71,12 @@ sim_funcharts <- function(nobs1 = 1000, nobs_tun = 1000, nobs2 = 60) {
 #' through a function-on-function linear model,
 #' and a scalar response generated as a function of the three functional covariates
 #' through a scalar-on-function linear model.
-#' This function covers the simulation study in Centofanti et al. (2020)
+#' This function covers the simulation study in Centofanti et al. (2021)
 #' for the function-on-function case and also simulates data in a similar way
 #' for the scalar response case.
 #' In the default case, the function generates in-control data.
 #' Additional arguments can be used to generate additional data that are out of control,
-#' with mean shifts according to the scenarios proposed by Centofanti et al. (2020).
+#' with mean shifts according to the scenarios proposed by Centofanti et al. (2021).
 #' Each simulated observation of a functional variable consists of
 #' a vector of 150 discrete points, equally spaced between 0 and 1, generated with noise.
 #' @param nobs
@@ -92,25 +92,25 @@ sim_funcharts <- function(nobs1 = 1000, nobs_tun = 1000, nobs2 = 60) {
 #' The shift type for the functional response.
 #' There are five possibilities: "0" if there is no shift,
 #' "A", "B", "C" or "D" for the corresponding shift types
-#' shown in Centofanti et al. (2020).
+#' shown in Centofanti et al. (2021).
 #' Default is "0".
 #' @param shift_type_x1
 #' #' The shift type for the first functional covariate.
 #' There are five possibilities: "0" if there is no shift,
 #' "A", "B", "C" or "D" for the corresponding shift types
-#' shown in Centofanti et al. (2020).
+#' shown in Centofanti et al. (2021).
 #' Default is "0".
 #' @param shift_type_x2
 #' #' The shift type for the second functional covariate.
 #' #' There are five possibilities: "0" if there is no shift,
 #' "A", "B", "C" or "D" for the corresponding shift types
-#' shown in Centofanti et al. (2020).
+#' shown in Centofanti et al. (2021).
 #' Default is "0".
 #' @param shift_type_x3
 #' #' The shift type for the third functional covariate.
 #' #' There are five possibilities: "0" if there is no shift,
 #' "A", "B", "C" or "D" for the corresponding shift types
-#' shown in Centofanti et al. (2020).
+#' shown in Centofanti et al. (2021).
 #' Default is "0".
 #' @param d_y
 #' A number indicating the severity of the shift type for the functional response.
@@ -156,9 +156,9 @@ sim_funcharts <- function(nobs1 = 1000, nobs_tun = 1000, nobs2 = 60) {
 #'
 #' @references
 #'
-#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 #' Functional Regression Control Chart.
-#' \emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
+#' \emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
 simulate_mfd <- function(nobs = 1000,
                          R2 = 0.97,
                          seed,

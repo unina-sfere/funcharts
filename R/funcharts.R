@@ -3,7 +3,7 @@
 #' Provides functional control charts
 #' for statistical process monitoring of functional data,
 #' using the methods of Capezza et al. (2020) <doi:10.1002/asmb.2507> and
-#' Centofanti et al. (2020) <doi:10.1080/00401706.2020.1753581>.
+#' Centofanti et al. (2021) <doi:10.1080/00401706.2020.1753581>.
 #'
 #'
 #' @docType package
@@ -28,9 +28,9 @@
 #' 36(3):477--500.
 #' <doi:10.1002/asmb.2507>
 #'
-#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 #' Functional Regression Control Chart.
-#' \emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
+#' \emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
 NULL
 
 # Quiets concerns of R CMD check re: the .'s that appear in pipelines

@@ -26,9 +26,9 @@ knitr::opts_chunk$set(
     fig.height=4)
 ```
 
-# Control charts for monitoring a scalar response variable and multivariate functional covariates based on scalar-on-function regression
+# Control charts for monitoring a scalar quality characteristic adjusted for by the effect of multivariate functional covariates
 
-In this vignette we show how to use the `funcharts` package to apply the methods proposed in Capezza et al. (2020) to build control charts for monitoring a scalar response variable and multivariate functional covariates based on scalar-on-function regression.
+In this vignette we show how to use the `funcharts` package to apply the methods proposed in Capezza et al. (2020) to build control charts for monitoring scalar quality characteristic adjusted for by the effect of multivariate functional covariates, based on scalar-on-function regression.
 Let us show how the `funcharts` package works through an example with the dataset `air`,
 which has been included from the R package `FRegSigCom` and is used in the paper of Qi and Luo (2019).
 The authors propose a function-on-function regression model of the `NO2` functional variable on all the other functional variables available in the dataset.
@@ -102,9 +102,9 @@ plot_bootstrap_sof_pc(mod, nboot = 10)
 We can build control charts to monitor both functional covariates and the scalar response.
 We can either monitor the functional covariates alone (unsupervised monitoring) or the functional covariates and the scalar response together (supervised monitoring), as performed in Capezza et al. (2020).
 
-### Unsupervised monitoring
+### Monitoring the multivariate functional covariates
 
-The function `control_charts_pca` provides a data frame with all the information required to plot the desired control charts on multivariate functional data, based on the Hotelling's T^2 and the squared prediction error statistics (see Capezza et al. (2020) and Centofanti et al. (2020)).
+The function `control_charts_pca` provides a data frame with all the information required to plot the desired control charts on multivariate functional data, based on the Hotelling's T^2 and the squared prediction error statistics (see Capezza et al. (2020) and Centofanti et al. (2021)).
 Among the arguments, you can pass a `tuning_data` set, that is not used for model estimation/training, but is used only
 to estimate control chart limits.
 If this data set is not provided, control chart limits are calculated on the basis of the training data.
@@ -119,12 +119,12 @@ cclist_pca <- control_charts_pca(pca = mod$pca,
 plot_control_charts(cclist_pca)
 ```
 
-### Supervised monitoring
+### Monitoring the scalar quality characteristic adjusted for by the effect of the functional covariates
 
 
 The function `control_charts_sof_pc` provides a data frame with all the information required to plot the desired control charts. In addition to the Hotelling's T^2 and the squared prediction error statistics obtained using `control_charts_pca` (see previous section), this function provides the scalar regression control charts, which also monitors the prediction error on the response variable.
 The same function `plot_control_charts` can be used to obtain ggplot with the three control charts.
-As for unsupervised monitoring, you can pass a `tuning_data` set (see previous section).
+As for monitoring the functional covariates, you can pass a `tuning_data` set (see previous section).
 
 ```{r plot_control_charts_sof_pc}
 cclist_sof_pc <- control_charts_sof_pc(mod = mod,
@@ -165,7 +165,7 @@ This helps to understand which part of the observations were anomalous. Variable
 
 ## Real-time monitoring
 
-In Capezza et al. (2020), we have also implemented real-time monitoring (both unsupervised and supervised).
+In Capezza et al. (2020), we have also implemented real-time monitoring.
 Given the domain interval $(a, b)$ of the functional data, for each current domain point $k$ to be monitored, it filters the available functional data in the interval $(a,k)$.
 The function `get_mfd_list_real_time` gives a list of functional data objects each evolving up to the intermediate domain point $k$.
 

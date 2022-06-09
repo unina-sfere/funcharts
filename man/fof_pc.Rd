@@ -66,7 +66,7 @@ the standardized covariates and response.
 If "studentized", the MFPCA on studentized version of
 the functional residuals is calculated on the
 non-standardized covariates and response.
-See Centofanti et al. (2020) for additional details.}
+See Centofanti et al. (2021) for additional details.}
 }
 \value{
 A list containing the following arguments:
@@ -145,7 +145,7 @@ of the response scores on the
 covariate scores.
 Both functional covariates and response are standardized before
 the regression.
-See Centofanti et al. (2020) for additional details.
+See Centofanti et al. (2021) for additional details.
 }
 \examples{
 library(funcharts)
@@ -159,7 +159,7 @@ mod <- fof_pc(mfdobj_y, mfdobj_x)
 
 }
 \references{
-Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 Functional Regression Control Chart.
-\emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
+\emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
 }

@@ -1816,3 +1816,38 @@ plot_bifd <- function(bifd_obj) {
 }
 
 
+#' @noRd
+#'
+project_mfd <- function(X, n_basis) {
+
+  fdnames <- NULL
+  if (is.mfd(X)) {
+    p <- dim(X$coef)[3]
+    bs <- X$basis
+    rb <- bs$rangeval
+    bs_project <- create.bspline.basis(rb, n_basis)
+    xseq <- seq(rb[1], rb[2], l = 300)
+    Xeval <- eval.fd(xseq, X)
+    Xeval <- aperm(Xeval, c(2, 1, 3))
+    fdnames <- X$fdnames
+  }
+  if (is.array(X)) {
+    rb <- c(0, 1)
+    bs_project <- create.bspline.basis(rb, n_basis)
+    xseq <- seq(rb[1], rb[2], l = dim(X)[2])
+    Xeval <- X
+    Xeval <- aperm(Xeval, c(2, 1, 3))
+  }
+  if (is.list(X) & !is.mfd(X)) {
+    rb <- c(0, 1)
+    bs_project <- create.bspline.basis(rb, n_basis)
+    xseq <- seq(rb[1], rb[2], l = ncol(X[[1]]))
+    Xeval <- simplify2array(X)
+    Xeval <- aperm(Xeval, c(2, 1, 3))
+  }
+
+  coefList <- project.basis(Xeval, argvals = xseq, basisobj = bs_project)
+  X_mfd <- mfd(coefList, basisobj = bs_project, fdnames = fdnames)
+  X_mfd
+
+}

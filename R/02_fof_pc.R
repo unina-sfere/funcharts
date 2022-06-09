@@ -11,7 +11,7 @@
 #' covariate scores.
 #' Both functional covariates and response are standardized before
 #' the regression.
-#' See Centofanti et al. (2020) for additional details.
+#' See Centofanti et al. (2021) for additional details.
 #'
 #' @param mfdobj_y
 #' A multivariate functional data object of class
@@ -64,7 +64,7 @@
 #' If "studentized", the MFPCA on studentized version of
 #' the functional residuals is calculated on the
 #' non-standardized covariates and response.
-#' See Centofanti et al. (2020) for additional details.
+#' See Centofanti et al. (2021) for additional details.
 #'
 #' @return
 #' A list containing the following arguments:
@@ -134,9 +134,9 @@
 #' @export
 #'
 #' @references
-#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 #' Functional Regression Control Chart.
-#' \emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
+#' \emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
 #'
 #' @examples
 #' library(funcharts)
@@ -439,9 +439,9 @@ fof_pc <- function(mfdobj_y,
 #' @export
 #'
 #' @references
-#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 #' Functional Regression Control Chart.
-#' \emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
+#' \emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
 #'
 #' @examples
 #' library(funcharts)

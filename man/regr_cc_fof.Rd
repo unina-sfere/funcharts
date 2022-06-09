@@ -48,7 +48,7 @@ named \code{T2} and \code{spe}, respectively, each containing
 the desired Type I error probability of the corresponding control chart.
 Note that at the moment you have to take into account manually
 the family-wise error rate and adjust
-the two values accordingly. See Centofanti et al. (2020)
+the two values accordingly. See Centofanti et al. (2021)
 for additional details.
 Default value is \code{list(T2 = 0.025, spe = 0.025)}.}
 }
@@ -60,13 +60,16 @@ the prediction errors.
 \description{
 It builds a data frame needed to plot the
 Functional Regression Control Chart
-introduced in Centofanti et al. (2020), based on a fitted
+introduced in Centofanti et al. (2021),
+for monitoring a functional quality characteristic adjusted for
+by the effect of multivariate functional covariates,
+based on a fitted
 function-on-function linear regression model.
 The training data have already been used to fit the model.
-A tuning data set can be provided that is used to estimate
+An optional tuning data set can be provided that is used to estimate
 the control chart limits.
 A phase II data set contains the observations to be monitored
-with the built control charts.
+with the control charts.
 }
 \examples{
 library(funcharts)
@@ -95,9 +98,9 @@ plot_control_charts(cclist)
 
 }
 \references{
-Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 Functional Regression Control Chart.
-\emph{Technometrics}. <doi:10.1080/00401706.2020.1753581>
+\emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
 }
 \seealso{
 \code{\link{control_charts_pca}}
