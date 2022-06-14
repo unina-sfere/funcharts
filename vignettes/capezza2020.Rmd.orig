@@ -100,7 +100,7 @@ plot_bootstrap_sof_pc(mod, nboot = 10)
 ## Control charts
 
 We can build control charts to monitor both functional covariates and the scalar response.
-We can either monitor the functional covariates alone (unsupervised monitoring) or the functional covariates and the scalar response together (supervised monitoring), as performed in Capezza et al. (2020).
+We can either monitor the functional covariates alone or the functional covariates and the scalar response together, as performed in Capezza et al. (2020).
 
 ### Monitoring the multivariate functional covariates
 
@@ -140,7 +140,6 @@ one can obtain the contribution of the functional covariates to the monitoring s
 which variable was possibly responsible of the anomalous observation.
 
 We can get the out of control observations using `which_ooc`.
-In the following, we focus on the supervised monitoring.
 
 ```{r}
 ooc_index <- which_ooc(cclist_sof_pc)

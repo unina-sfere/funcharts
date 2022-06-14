@@ -88,7 +88,7 @@ A list with the following elements:
 * \code{y_scalar} is a vector of length 150 with the simulated observations of the scalar response
 
 * \code{beta_fof}, if \code{save_beta = TRUE}, is a list of three 500x500 matrices
-with the discretized functional coefficients of the funciton-on-function regression
+with the discretized functional coefficients of the function-on-function regression
 
 * \code{beta_sof}, if \code{save_beta = TRUE}, is a list of three vectors of length 500
 with the discretized functional coefficients of the scalar-on-function regression

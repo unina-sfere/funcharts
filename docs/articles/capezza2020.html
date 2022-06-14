@@ -192,9 +192,8 @@ quantification:</p>
 </h3>
 <p>We can build control charts to monitor both functional covariates and
 the scalar response. We can either monitor the functional covariates
-alone (unsupervised monitoring) or the functional covariates and the
-scalar response together (supervised monitoring), as performed in
-Capezza et al. (2020).</p>
+alone or the functional covariates and the scalar response together, as
+performed in Capezza et al. (2020).</p>
 <div class="section level4">
 <h4 id="monitoring-the-multivariate-functional-covariates">Monitoring the multivariate functional covariates<a class="anchor" aria-label="anchor" href="#monitoring-the-multivariate-functional-covariates"></a>
 </h4>
@@ -248,8 +247,7 @@ one can obtain the contribution of the functional covariates to the
 monitoring statistics to understand which variable was possibly
 responsible of the anomalous observation.</p>
 <p>We can get the out of control observations using
-<code>which_ooc</code>. In the following, we focus on the supervised
-monitoring.</p>
+<code>which_ooc</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ooc_index</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/which_ooc.html">which_ooc</a></span><span class="op">(</span><span class="va">cclist_sof_pc</span><span class="op">)</span>
 <span class="va">ooc_index</span>
