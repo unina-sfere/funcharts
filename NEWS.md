@@ -1,5 +1,10 @@
-# funcharts 1.1.0.9000
+# funcharts 1.2.0
 
+* improved backward compatibility, `funcharts` now depends on an older version of R, i.e., >3.6.0 instead of >4.0.0
+* `fof_pc()` now is much faster especially when the number of basis functions of the functional coefficient is large since the tensor product has been vectorized.
+* the argument `seed` has been deprecated in all functions, so that reproducibility is achieved by setting externally a seed with `set.seed()`, as it is commonly done in R.
+* `sim_funcharts()` simulates data sets automatically using the function `simulate_mfd()`. The only input required is the sample size for the Phase I, tuning and Phase II data sets.
+* `control_charts_pca()` allows automatic selection of components.
 * `get_mfd_list()` and `get_mfd_array()`, with the corresponding real time versions, are now much faster.
 * cross-validation in scalar-on-function regression is now much faster, since the for loop is avoided
 * inner products are more precise and much faster, because they rely on the pre-computed inner products of the B-spline basis functions, calculated via `inprod.bspline()`.
