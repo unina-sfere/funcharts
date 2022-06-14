@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -64,8 +64,16 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.1.0.9000" id="funcharts-1109000">funcharts 1.1.0.9000<a class="anchor" aria-label="anchor" href="#funcharts-1109000"></a></h2>
-<ul><li>
+<h2 class="page-header" data-toc-text="1.2.0" id="funcharts-120">funcharts 1.2.0<a class="anchor" aria-label="anchor" href="#funcharts-120"></a></h2>
+<ul><li>improved backward compatibility, <code>funcharts</code> now depends on an older version of R, i.e., &gt;3.6.0 instead of &gt;4.0.0</li>
+<li>
+<code><a href="../reference/fof_pc.html">fof_pc()</a></code> now is much faster especially when the number of basis functions of the functional coefficient is large since the tensor product has been vectorized.</li>
+<li>the argument <code>seed</code> has been deprecated in all functions, so that reproducibility is achieved by setting externally a seed with <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code>, as it is commonly done in R.</li>
+<li>
+<code><a href="../reference/sim_funcharts.html">sim_funcharts()</a></code> simulates data sets automatically using the function <code><a href="../reference/simulate_mfd.html">simulate_mfd()</a></code>. The only input required is the sample size for the Phase I, tuning and Phase II data sets.</li>
+<li>
+<code><a href="../reference/control_charts_pca.html">control_charts_pca()</a></code> allows automatic selection of components.</li>
+<li>
 <code><a href="../reference/get_mfd_list.html">get_mfd_list()</a></code> and <code><a href="../reference/get_mfd_array.html">get_mfd_array()</a></code>, with the corresponding real time versions, are now much faster.</li>
 <li>cross-validation in scalar-on-function regression is now much faster, since the for loop is avoided</li>
 <li>inner products are more precise and much faster, because they rely on the pre-computed inner products of the B-spline basis functions, calculated via <code><a href="https://rdrr.io/pkg/fda/man/inprod.Bspline.html" class="external-link">inprod.bspline()</a></code>.</li>
