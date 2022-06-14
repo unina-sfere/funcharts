@@ -1770,7 +1770,7 @@ geom_mfd <- function(mapping = NULL,
 #'
 plot_bifd <- function(bifd_obj) {
 
-  if (class(bifd_obj) != "bifd") {
+  if (is(bifd_obj, "bifd")) {
     stop("bifd_obj must be an object of class bifd")
   }
   if (length(dim(bifd_obj$coef)) != 4) {

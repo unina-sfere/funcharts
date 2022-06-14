@@ -15,3 +15,4 @@
 ^vignettes/mfd\.Rmd\.orig$
 ^vignettes/precompile.R$
 ^data-raw$
+^CRAN-SUBMISSION$
