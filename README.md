@@ -5,7 +5,6 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/funcharts)](https://CRAN.R-project.org/package=funcharts)
 [![R-CMD-check](https://github.com/unina-sfere/funcharts/workflows/R-CMD-check/badge.svg)](https://github.com/unina-sfere/funcharts/actions)
-[![R-CMD-check](https://github.com/unina-sfere/funcharts/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/unina-sfere/funcharts/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 # funcharts
