@@ -1,3 +1,5 @@
+# funcharts 1.2.0.9000
+
 # funcharts 1.2.0
 
 * improved backward compatibility, `funcharts` now depends on an older version of R, i.e., >3.6.0 instead of >4.0.0
