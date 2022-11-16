@@ -1317,6 +1317,8 @@ descale_mfd <- function (scaled_mfd, center = FALSE, scale = FALSE) {
     }
   }
 
+  dimnames(descaled_coef) <- dimnames(scaled_mfd$coefs)
+
   mfd(descaled_coef, scaled_mfd$basis, scaled_mfd$fdnames, B = scaled_mfd$basis$B)
 }
 
