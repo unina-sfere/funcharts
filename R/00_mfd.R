@@ -1607,6 +1607,15 @@ mfd_to_df <- function(mfdobj) {
   evalarg <- seq(range[1], range[2], l = 200)
   X <- eval.fd(evalarg, mfdobj)
   id <- mfdobj$fdnames[[2]]
+
+  id <- data.frame(id = id) %>%
+    mutate(pos = 1:n()) %>%
+    group_by(id) %>%
+    mutate(n = n()) %>%
+    mutate(id = ifelse(n == 1, id, paste0(id, " rep", 1:n()))) %>%
+    arrange(pos) %>%
+    pull(id)
+
   variables <- mfdobj$fdnames[[3]]
   lapply(seq_along(variables), function(jj) {
     variable <- variables[jj]
