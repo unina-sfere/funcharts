@@ -104,8 +104,8 @@ fof_pc_real_time <- function(mfdobj_y_list,
                       "tot_variance_explained_res",
                       "components_x",
                       "components_y",
-                      "type_residuals",
-                    envir = environment()))
+                      "type_residuals"),
+                    envir = environment())
       mod_list <- parLapply(cl, seq_along(mfdobj_y_list), single_k)
       stopCluster(cl)
     }

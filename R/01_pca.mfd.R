@@ -144,7 +144,7 @@ plot_pca_mfd <- function(pca, harm = 0, scaled = FALSE) {
 
   components <- which(cumsum(pca$varprop) < .99)
   # p_values <- data.frame(eigenvalues = pca$values[components]) %>%
-  #   mutate(n_comp = 1:n()) %>%
+  #   mutate(n_comp = seq_len(n())) %>%
   #   ggplot() +
   #   geom_col(aes(n_comp, eigenvalues)) +
   #   theme_bw() +
@@ -473,8 +473,8 @@ pca.fd_inprods_faster <- function (fdobj,
   if (ndim == 3) {
     nvar <- coefd[3]
     ctemp <- matrix(0, nvar * nbasis, nrep)
-    for (j in 1:nvar) {
-      index <- 1:nbasis + (j - 1) * nbasis
+    for (j in seq_len(nvar)) {
+      index <- seq_len(nbasis) + (j - 1) * nbasis
       ctemp[index, ] <- coef[, , j]
     }
   }
@@ -492,19 +492,54 @@ pca.fd_inprods_faster <- function (fdobj,
   Mmatinv <- solve(Mmat)
   Wmat <- crossprod(t(ctemp))/nrep
   if (identical(harmbasis, basisobj)) {
-    Jmat <- inprod.bspline(fd(diag(harmbasis$nbasis), harmbasis))
-  } else Jmat = inprod.bspline(fd(diag(harmbasis$nbasis), harmbasis),
-                               fd(diag(harmbasis$nbasis), basisobj))
+    if (!is.null(basisobj$B)) {
+      Jmat <- basisobj$B
+    } else {
+      if (basisobj$type == "bspline") {
+        Jmat <- inprod.bspline(fd(diag(basisobj$nbasis), basisobj))
+      }
+      if (basisobj$type == "fourier") {
+        Jmat <- diag(basisobj$nbasis)
+      }
+      if (basisobj$type == "const") {
+        Jmat <- matrix(diff(harmbasis$rangeval))
+      }
+      if (basisobj$type == "expon") {
+        out_mat <- outer(basisobj$params, basisobj$params, "+")
+        exp_out_mat <- exp(out_mat)
+        Jmat <- (exp_out_mat ^ basisobj$rangeval[2] - exp_out_mat ^ basisobj$rangeval[1]) / out_mat
+        Jmat[out_mat == 0] <- diff(basisobj$rangeval)
+      }
+      if (basisobj$type == "monom") {
+        out_mat <- outer(basisobj$params, basisobj$params, "+") + 1
+        Jmat <- (basisobj$rangeval[2] ^ out_mat - basisobj$rangeval[1] ^ out_mat) / out_mat
+        Jmat[out_mat == 0] <- diff(basisobj$rangeval)
+      }
+      if (basisobj$type == "polygonal") {
+        Jmat <- inprod_fd(fd(diag(basisobj$nbasis), basisobj),
+                          fd(diag(basisobj$nbasis), basisobj))
+      }
+      if (basisobj$type == "power") {
+        out_mat <- outer(basisobj$params, basisobj$params, "+") + 1
+        Jmat <- (basisobj$rangeval[2] ^ out_mat - basisobj$rangeval[1] ^ out_mat) / out_mat
+        Jmat[out_mat == 0] <- log(basisobj$rangeval[2]) - log(basisobj$rangeval[1])
+      }
+    }
+  } else {
+    Jmat <- inprod_fd(fd(diag(harmbasis$nbasis), harmbasis),
+                      fd(diag(basisobj$nbasis), basisobj))
+  }
+
   MIJW = crossprod(Mmatinv, Jmat)
   if (nvar == 1) {
     Cmat = MIJW %*% Wmat %*% t(MIJW)
   }
   else {
     Cmat = matrix(0, nvar * nhbasis, nvar * nhbasis)
-    for (i in 1:nvar) {
-      indexi <- 1:nbasis + (i - 1) * nbasis
-      for (j in 1:nvar) {
-        indexj <- 1:nbasis + (j - 1) * nbasis
+    for (i in seq_len(nvar)) {
+      indexi <- seq_len(nbasis) + (i - 1) * nbasis
+      for (j in seq_len(nvar)) {
+        indexj <- seq_len(nbasis) + (j - 1) * nbasis
         Cmat[indexi, indexj] <- MIJW %*% Wmat[indexi,
                                               indexj] %*% t(MIJW)
       }
@@ -513,30 +548,36 @@ pca.fd_inprods_faster <- function (fdobj,
   Cmat <- (Cmat + t(Cmat))/2
   result <- eigen(Cmat)
   eigvalc <- result$values
-  eigvecc <- as.matrix(result$vectors[, 1:nharm])
+  eigvecc <- as.matrix(result$vectors[, seq_len(nharm)])
   sumvecc <- apply(eigvecc, 2, sum)
   eigvecc[, sumvecc < 0] <- -eigvecc[, sumvecc < 0]
-  varprop <- eigvalc[1:nharm]/sum(eigvalc)
+  varprop <- eigvalc[seq_len(nharm)]/sum(eigvalc)
   if (nvar == 1) {
     harmcoef <- Mmatinv %*% eigvecc
   }
   else {
     harmcoef <- array(0, c(nbasis, nharm, nvar))
-    for (j in 1:nvar) {
-      index <- 1:nbasis + (j - 1) * nbasis
+    for (j in seq_len(nvar)) {
+      index <- seq_len(nbasis) + (j - 1) * nbasis
       temp <- eigvecc[index, ]
       harmcoef[, , j] <- Mmatinv %*% temp
     }
   }
   harmnames <- rep("", nharm)
-  for (i in 1:nharm) harmnames[i] <- paste("PC", i, sep = "")
+  for (i in seq_len(nharm)) harmnames[i] <- paste("PC", i, sep = "")
   if (length(coefd) == 2)
     harmnames <- list(coefnames[[1]], harmnames, "values")
   if (length(coefd) == 3)
     harmnames <- list(coefnames[[1]], harmnames, coefnames[[3]])
   harmfd <- fd(harmcoef, harmbasis, harmnames)
   if (is.null(fdobj$basis$B)) {
-    B <- inprod.bspline(fd(diag(fdobj$basis$nbasis), fdobj$basis))
+    if (fdobj$basis$type == "bspline") {
+      B <- inprod.bspline(fd(diag(fdobj$basis$nbasis), fdobj$basis))
+    }
+    if (fdobj$basis$type == "fourier") {
+      B <- diag(fdobj$basis$nbasis)
+    }
+
   } else {
     B <- fdobj$basis$B
   }
@@ -550,7 +591,7 @@ pca.fd_inprods_faster <- function (fdobj,
     harmscr <- array(0, c(nrep, nharm, nvar))
     coefarray <- fdobj$coefs
     harmcoefarray <- harmfd$coefs
-    for (j in 1:nvar) {
+    for (j in seq_len(nvar)) {
       fdobjj <- fd(as.matrix(coefarray[, , j]), basisobj)
       harmfdj <- fd(as.matrix(harmcoefarray[, , j]), basisobj)
       if (identical(fdobjj$basis, harmfdj$basis)) {

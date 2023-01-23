@@ -8,6 +8,9 @@ get_mfd_array(
   data_array,
   grid = NULL,
   n_basis = 30,
+  n_order = 4,
+  basisobj = NULL,
+  Lfdobj = 2,
   lambda = NULL,
   lambda_grid = 10^seq(-10, 1, length.out = 10),
   ncores = 1
@@ -22,6 +25,12 @@ and the third to variables within replications.}
 \item{grid}{See \code{\link{get_mfd_list}}.}
 
 \item{n_basis}{See \code{\link{get_mfd_list}}.}
+
+\item{n_order}{#' See \code{\link{get_mfd_list}}.}
+
+\item{basisobj}{#' See \code{\link{get_mfd_list}}.}
+
+\item{Lfdobj}{#' See \code{\link{get_mfd_list}}.}
 
 \item{lambda}{See \code{\link{get_mfd_list}}.}
 

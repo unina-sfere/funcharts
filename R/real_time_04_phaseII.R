@@ -578,7 +578,7 @@ plot_control_charts_real_time <- function(cclist, id_num) {
                rle() %>%
                unclass() %>%
                data.frame() %>%
-               mutate(values = 1:n()) %>%
+               mutate(values = seq_len(n())) %>%
                inverse.rle()) %>%
       ungroup()
 
@@ -633,7 +633,7 @@ plot_control_charts_real_time <- function(cclist, id_num) {
                rle() %>%
                unclass() %>%
                data.frame() %>%
-               mutate(values = 1:n()) %>%
+               mutate(values = seq_len(n())) %>%
                inverse.rle()) %>%
       ungroup()
 
@@ -702,7 +702,7 @@ plot_control_charts_real_time <- function(cclist, id_num) {
                  rle() %>%
                  unclass() %>%
                  data.frame() %>%
-                 mutate(values = 1:n()) %>%
+                 mutate(values = seq_len(n())) %>%
                  inverse.rle()) %>%
         ungroup()
     } else {

@@ -192,9 +192,9 @@ sof_pc <- function(y,
       if (sum(components_enough_var) == 0)
         ncomponents <- length(pca$varprop) else
           ncomponents <- which(cumsum(pca$varprop) > tot_variance_explained)[1]
-      components <- 1:ncomponents
+      components <- seq_len(ncomponents)
       components <-
-        which(pca$varprop[1:ncomponents] > single_min_variance_explained)
+        which(pca$varprop[components] > single_min_variance_explained)
     }
   }
 
@@ -382,21 +382,21 @@ plot_bootstrap_sof_pc <- function(mod, nboot = 25, ncores = 1) {
   components <- mod$components
 
   single_boot <- function(ii) {
-    rows_B <- sample(1:nn, nn, TRUE)
+    rows_B <- sample(seq_len(nn), nn, TRUE)
     mod <- sof_pc(mfdobj_x = mod$pca$data[rows_B],
                   y = mod$mod$model$y[rows_B],
                   components = mod$components)
     mod$beta_fd$coefs[, 1, ]
   }
   if (ncores == 1) {
-    B <- lapply(1:nboot, single_boot)
+    B <- lapply(seq_len(nboot), single_boot)
   } else {
     if (.Platform$OS.type == "unix") {
-      B <- mclapply(1:nboot, single_boot, mc.cores = ncores)
+      B <- mclapply(seq_len(nboot), single_boot, mc.cores = ncores)
     } else {
       cl <- makeCluster(ncores)
       clusterExport(cl, c("nn", "mod"), envir = environment())
-      B <- parLapply(cl, 1:nboot, single_boot)
+      B <- parLapply(cl, seq_len(nboot), single_boot)
       stopCluster(cl)
     }
   }
@@ -405,13 +405,13 @@ plot_bootstrap_sof_pc <- function(mod, nboot = 25, ncores = 1) {
     B <- array(B, dim = c(nrow(B), ncol(B), 1))
   } else B <- aperm(B, c(1, 3, 2))
 
-  dimnames(B)[[2]] <- 1:nboot
+  dimnames(B)[[2]] <- seq_len(nboot)
 
   B_mfd <- mfd(
     B,
     mod$beta_fd$basis,
     list(mod$beta_fd$fdnames[[1]],
-         1:nboot,
+         seq_len(nboot),
          variables),
     B = mod$beta_fd$basis$B)
   ggplot() +

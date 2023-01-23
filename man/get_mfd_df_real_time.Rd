@@ -12,6 +12,9 @@ get_mfd_df_real_time(
   id,
   variables,
   n_basis = 30,
+  n_order = 4,
+  basisobj = NULL,
+  Lfdobj = 2,
   lambda = NULL,
   lambda_grid = 10^seq(-10, 1, length.out = 10),
   k_seq = seq(from = 0.25, to = 1, length.out = 10),
@@ -30,6 +33,12 @@ get_mfd_df_real_time(
 \item{variables}{See \code{\link{get_mfd_df}}.}
 
 \item{n_basis}{See \code{\link{get_mfd_df}}.}
+
+\item{n_order}{See \code{\link{get_mfd_df}}.}
+
+\item{basisobj}{See \code{\link{get_mfd_df}}.}
+
+\item{Lfdobj}{See \code{\link{get_mfd_df}}.}
 
 \item{lambda}{See \code{\link{get_mfd_df}}.}
 

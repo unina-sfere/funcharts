@@ -9,6 +9,9 @@ get_mfd_list_real_time(
   data_list,
   grid = NULL,
   n_basis = 30,
+  n_order = 4,
+  basisobj = NULL,
+  Lfdobj = 2,
   lambda = NULL,
   lambda_grid = 10^seq(-10, 1, length.out = 10),
   k_seq = seq(from = 0.2, to = 1, by = 0.1),
@@ -21,6 +24,12 @@ get_mfd_list_real_time(
 \item{grid}{See \code{\link{get_mfd_list}}.}
 
 \item{n_basis}{See \code{\link{get_mfd_list}}.}
+
+\item{n_order}{See \code{\link{get_mfd_list}}.}
+
+\item{basisobj}{See \code{\link{get_mfd_list}}.}
+
+\item{Lfdobj}{See \code{\link{get_mfd_list}}.}
 
 \item{lambda}{See \code{\link{get_mfd_list}}.}
 

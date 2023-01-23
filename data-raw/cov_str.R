@@ -27,9 +27,9 @@ generate_cov_str <- function() {
   get_mat <- function(cov) {
     P <- length(cov)
     covmat <- matrix(0, nrow = P, ncol = P)
-    for (ii in 1:P) {
-      covmat[ii, ii:P] <- cov[1:(P - ii + 1)]
-      covmat[P - ii + 1, 1:(P - ii + 1)] <- rev(cov[1:(P - ii + 1)])
+    for (ii in seq_len(P)) {
+      covmat[ii, ii:P] <- cov[seq_len(P - ii + 1)]
+      covmat[P - ii + 1, seq_len(P - ii + 1)] <- rev(cov[seq_len(P - ii + 1)])
     }
     covmat
   }
@@ -73,11 +73,11 @@ generate_cov_str <- function() {
       if (jj == ii) {
         corr_mat[[ii]][[jj]] <- covmatList[[ii]]
       } else {
-        V <- eigList[[ii]]$vectors[, 1:n_comp_x]
-        lambdas <- eigenvalues[1:n_comp_x]
+        V <- eigList[[ii]]$vectors[, seq_len(n_comp_x)]
+        lambdas <- eigenvalues[seq_len(n_comp_x)]
         sum <- V %*% (t(V) * lambdas) / 3
         # sum <- 0
-        # for (kk in 1:n_comp_x) {
+        # for (kk in seq_len(n_comp_x)) {
         #   sum <- sum +
         #     eigenvalues[kk] *
         #     outer(eigList[[ii]]$vectors[, kk],

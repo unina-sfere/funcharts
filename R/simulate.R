@@ -229,10 +229,10 @@ simulate_mfd <- function(nobs = 1000,
   x_seq <- seq(0, 1, l = P)
   w <- 1 / P
   n_comp_x <- 50
-  meig1 <- e$vectors[1:500, 1:n_comp_x] / sqrt(w)
-  meig2 <- e$vectors[501:1000, 1:n_comp_x] / sqrt(w)
-  meig3 <- e$vectors[1001:1500, 1:n_comp_x] / sqrt(w)
-  meigenvalues <- e$values[1:n_comp_x] * w
+  meig1 <- e$vectors[1:500, seq_len(n_comp_x)] / sqrt(w)
+  meig2 <- e$vectors[501:1000, seq_len(n_comp_x)] / sqrt(w)
+  meig3 <- e$vectors[1001:1500, seq_len(n_comp_x)] / sqrt(w)
+  meigenvalues <- e$values[seq_len(n_comp_x)] * w
 
   b_perfect <- sqrt(eigy$values / meigenvalues[1:10])
   b_perfect_sof <- rep(1 / sqrt(sum(meigenvalues[1:10])), 10)
@@ -356,7 +356,7 @@ simulate_mfd <- function(nobs = 1000,
   beta_fof <- beta_sof <- NULL
   if (save_beta) {
     beta_fof <- 0
-    for (kk in 1:length(diag(B))) {
+    for (kk in seq_along(diag(B))) {
       beta_fof <- beta_fof + diag(B)[kk] * outer(e$vectors[, 1], eigy$vectors[, 1])
     }
     beta_fof <- list(beta_fof[1:500, ], beta_fof[500 + 1:500, ], beta_fof[1000 + 1:500, ])

@@ -191,9 +191,9 @@ control_charts_pca <- function(pca,
     if (sum(components_enough_var) == 0)
       ncomponents <- length(pca$varprop) else
         ncomponents <- which(cumsum(pca$varprop) > tot_variance_explained)[1]
-      components <- 1:ncomponents
+      components <- seq_len(ncomponents)
       components <-
-        which(pca$varprop[1:ncomponents] > single_min_variance_explained)
+        which(pca$varprop[components] > single_min_variance_explained)
   }
 
   if (limits == "standard") lim <- calculate_limits(
@@ -787,7 +787,7 @@ plot_control_charts <- function(cclist) {
     df_hot <- data.frame(statistic = cclist$T2,
                          lcl = 0,
                          ucl = cclist$T2_lim) %>%
-      mutate(id = 1:n(),
+      mutate(id = seq_len(n()),
              ooc = .data$statistic > .data$ucl,
              type = "HOTELLING~T^2~CONTROL~CHART")
 
@@ -809,7 +809,7 @@ plot_control_charts <- function(cclist) {
     df_spe <- data.frame(statistic = cclist$spe,
                          lcl = 0,
                          ucl = cclist$spe_lim) %>%
-      mutate(id = 1:n(),
+      mutate(id = seq_len(n()),
              ooc = .data$statistic > .data$ucl,
              type = "SPE~CONTROL~CHART")
 
@@ -845,7 +845,7 @@ plot_control_charts <- function(cclist) {
       ))
 
     df_y <- df_y %>%
-      mutate(id = 1:n(),
+      mutate(id = seq_len(n()),
              ooc = .data$statistic > .data$ucl | .data$statistic < .data$lcl,
              type = "REGRESSION~CONTROL~CHART")
 

@@ -63,8 +63,8 @@ pca_mfd_real_time <- function(mfdobj_list,
       clusterExport(cl,
                     c("mfdobj_list",
                       "scale",
-                      "nharm",
-                      envir = environment()))
+                      "nharm"),
+                      envir = environment())
       mod_list <- parLapply(cl, seq_along(mfdobj_list), single_k)
       stopCluster(cl)
     }

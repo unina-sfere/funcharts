@@ -69,6 +69,9 @@ a three-dimensional array of coefficients even if
 the functional data is univariate.
 Moreover, it allows to include the original raw data from which
 you get the smooth functional data.
+Finally, it also includes the matrix of precomputed inner products
+of the basis functions, which can be useful to speed up computations
+when calculating inner products between functional observations
 }
 \details{
 To check that an object is of this class, use function is.mfd.

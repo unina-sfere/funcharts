@@ -230,8 +230,8 @@ cont_plot <- function(cclist,
         as.numeric()) %>%
       mutate(ooc = .data$contribution > .data$limit) %>%
       mutate(type = "Contribution to T2") %>%
-      mutate(x = 1:length(.data$variables) - 0.35,
-             xend = 1:length(.data$variables) + 0.35)
+      mutate(x = seq_along(.data$variables) - 0.35,
+             xend = seq_along(.data$variables) + 0.35)
   }
 
   if ("spe" %in% which_plot) {
@@ -249,8 +249,8 @@ cont_plot <- function(cclist,
         as.numeric()) %>%
       mutate(ooc = .data$contribution > .data$limit) %>%
       mutate(type = "Contribution to SPE") %>%
-      mutate(x = 1:length(.data$variables) - 0.35,
-             xend = 1:length(.data$variables) + 0.35)
+      mutate(x = seq_along(.data$variables) - 0.35,
+             xend = seq_along(.data$variables) + 0.35)
   }
 
   df <- bind_rows(df_hot, df_spe) %>%

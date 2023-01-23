@@ -214,7 +214,7 @@ calculate_cv_limits <- function(pca,
   mfdobj <- pca$data
   nobs <- dim(mfdobj$coefs)[2]
   nvar <- dim(mfdobj$coefs)[3]
-  folds <- split(1:nobs, sample(cut(1:nobs, nfold, labels = FALSE)))
+  folds <- split(seq_len(nobs), sample(cut(seq_len(nobs), nfold, labels = FALSE)))
 
   single_cv <- function(ii) {
     fd_train <- mfdobj[- folds[[ii]]]
@@ -231,10 +231,10 @@ calculate_cv_limits <- function(pca,
     # list(id = fd_test$fdnames[[2]], T2 = T2, spe = spe)
   }
   if (ncores == 1) {
-    statistics_cv <- lapply(1:nfold, single_cv)
+    statistics_cv <- lapply(seq_len(nfold), single_cv)
   } else {
     if (.Platform$OS.type == "unix") {
-      statistics_cv <- mclapply(1:nfold, single_cv, mc.cores = ncores)
+      statistics_cv <- mclapply(seq_len(nfold), single_cv, mc.cores = ncores)
     } else {
       cl <- makeCluster(ncores)
       clusterExport(cl,
@@ -243,7 +243,7 @@ calculate_cv_limits <- function(pca,
                       "pca",
                       "components"),
                     envir = environment())
-      statistics_cv <- parLapply(cl, 1:nfold, single_cv)
+      statistics_cv <- parLapply(cl, seq_len(nfold), single_cv)
       stopCluster(cl)
     }
   }
@@ -326,31 +326,62 @@ get_sof_pc_outliers <- function(y, mfdobj) {
 
 }
 
-#' #' Title
-#' #'
-#' #' @param mfdobj
-#' #' @param ncores
-#' #'
-#' #' @return
-#' #' @export
-#' #'
-#' get_outliers_depth <- function(mfdobj, ncores = 1) {
-#'
-#'   if (!is.mfd(mfdobj)) {
-#'     stop("First argument must be a mfd object.")
-#'   }
-#'
-#'   variables <- mfdobj$fdnames[[3]]
-#'   nvar <- length(variables)
-#'   domain <- mfdobj$basis$rangeval
-#'   evalarg <- seq(domain[1], domain[2], length.out = 100)
-#'   X <- eval.fd(evalarg, mfdobj)
-#'   outliers <- mclapply(1:nvar, function(jj) {
-#'     fdo_jj <- fdata(t(X[, , 1]), evalarg)
-#'     rownames(fdo_jj$data) <- mfdobj$fdnames[[2]]
-#'     outliers.depth.pond(fdo_jj, nb = 50)$outliers
-#'   }, mc.cores = ncores)
-#'   sort(unique(unlist(outliers)))
-#'
-#' }
 
+#' Get outliers from multivariate functional data
+#'
+#' Get outliers from multivariate functional data
+#' using the functional boxplot with the
+#' modified band depth of Sun et al. (2011, 2012).
+#' This function relies on the \code{fbplot} function
+#' of the \code{roahd} package.
+#'
+#' @param mfdobj A multivariate functional data object of class mfd
+#'
+#' @return
+#' A numeric vector with the indexes of the functional observations
+#' signaled as outliers.
+#' @export
+#'
+#' @examples
+#' library(funcharts)
+#' data("air")
+#' air <- lapply(air, function(x) x[1:20, , drop = FALSE])
+#' fun_covariates <- c("CO", "temperature")
+#' mfdobj_x <- get_mfd_list(air[fun_covariates], lambda = 1e-2)
+#' get_outliers_mfd(mfdobj_x)
+#'
+#' @references
+#' * Sun, Y., & Genton, M. G. (2011). Functional boxplots.
+#' \emph{Journal of Computational and Graphical Statistics}, 20(2), 316-334.
+#' * Sun, Y., & Genton, M. G. (2012).
+#' Adjusted functional boxplots for spatio‐temporal data visualization
+#' and outlier detection. \emph{Environmetrics}, 23(1), 54-64.
+#'
+get_outliers_mfd <- function(mfdobj) {
+
+  xseq <- seq(0, 1, l = 200)
+  nvar <- dim(mfdobj$coefs)[3]
+  nobs <- dim(mfdobj$coefs)[2]
+  if (nvar == 1) {
+    fd_obj <- fd(mfdobj$coefs[, , 1], mfdobj$basis)
+    fd_eval <- eval.fd(xseq, fd_obj)
+    fData_obj <- roahd::fData(xseq, t(fd_eval))
+  } else {
+    fd_obj <- fd(mfdobj$coefs, mfdobj$basis)
+    fd_eval <- eval.fd(xseq, fd_obj)
+    fd_eval_list <- lapply(seq_len(nvar), function(ii) t(fd_eval[, , ii]))
+    fData_obj <- roahd::mfData(xseq, fd_eval_list)
+  }
+  is_outlier <- rep(FALSE, nobs)
+  new_outliers <- 100
+  while (length(new_outliers) > 0) {
+    fbplot_obj <- roahd::fbplot(fData_obj[!is_outlier], display = FALSE)
+    new_outliers <- fbplot_obj$ID_outliers
+    is_outlier[!is_outlier][new_outliers] <- TRUE
+  }
+  fbplot_obj <- roahd::fbplot(fData_obj[!is_outlier], display = TRUE)
+  outliers <- which(is_outlier)
+  names(outliers) <- mfdobj$fdnames[[2]][outliers]
+  return(outliers)
+
+}

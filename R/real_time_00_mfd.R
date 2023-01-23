@@ -21,6 +21,12 @@
 #' See \code{\link{get_mfd_df}}.
 #' @param n_basis
 #' See \code{\link{get_mfd_df}}.
+#' @param n_order
+#' See \code{\link{get_mfd_df}}.
+#' @param basisobj
+#' See \code{\link{get_mfd_df}}.
+#' @param Lfdobj
+#' See \code{\link{get_mfd_df}}.
 #' @param lambda
 #' See \code{\link{get_mfd_df}}.
 #' @param lambda_grid
@@ -68,8 +74,11 @@ get_mfd_df_real_time <- function(
   id,
   variables,
   n_basis = 30,
+  n_order = 4,
+  basisobj = NULL,
+  Lfdobj = 2,
   lambda = NULL,
-  lambda_grid = 10 ^ seq(-10, 1, length.out = 10),
+  lambda_grid = 10^seq(-10, 1, length.out = 10),
   k_seq = seq(from = 0.25,
               to = 1,
               length.out = 10),
@@ -87,13 +96,17 @@ get_mfd_df_real_time <- function(
     domain_ii <- c(domain[1], kk)
     dt_ii <- filter(dt, get(arg) <= kk)
     nbasis <- max(15, round(n_basis * diff(domain_ii) / diff(domain)))
-    get_mfd_df(dt_ii,
-               domain_ii,
-               arg,
-               id,
-               variables,
-               nbasis,
-               lambda,
+    get_mfd_df(dt = dt_ii,
+               domain = domain_ii,
+               arg = arg,
+               id = id,
+               variables = variables,
+               n_basis = nbasis,
+               n_order = n_order,
+               basisobj = basisobj,
+               Lfdobj = Lfdobj,
+               lambda = lambda,
+               lambda_grid = lambda_grid,
                ncores = 1)
   }
   if (ncores == 1) {
@@ -103,15 +116,18 @@ get_mfd_df_real_time <- function(
       mfd_list <- mclapply(seq_along(kk_seq), single_k, mc.cores = ncores)
     } else {
       cl <- makeCluster(ncores)
-      clusterExport(cl,
-                    c("kk_seq",
-                      "domain",
-                      "dt",
-                      "arg",
-                      "n_basis",
-                      "id",
-                      "variables",
-                      "lambda"),
+      clusterExport(cl, c("kk_seq",
+                          "domain",
+                          "dt",
+                          "arg",
+                          "id",
+                          "variables",
+                          "n_basis",
+                          "n_order",
+                          "basisobj",
+                          "Lfdobj",
+                          "lambda",
+                          "lambda_grid"),
                     envir = environment())
       mfd_list <- parLapply(cl, seq_along(kk_seq), single_k)
       stopCluster(cl)
@@ -141,6 +157,12 @@ get_mfd_df_real_time <- function(
 #' @param grid
 #' See \code{\link{get_mfd_list}}.
 #' @param n_basis
+#' See \code{\link{get_mfd_list}}.
+#' @param n_order
+#' See \code{\link{get_mfd_list}}.
+#' @param basisobj
+#' See \code{\link{get_mfd_list}}.
+#' @param Lfdobj
 #' See \code{\link{get_mfd_list}}.
 #' @param lambda
 #' See \code{\link{get_mfd_list}}.
@@ -175,8 +197,11 @@ get_mfd_list_real_time <- function(
   data_list,
   grid = NULL,
   n_basis = 30,
+  n_order = 4,
+  basisobj = NULL,
+  Lfdobj = 2,
   lambda = NULL,
-  lambda_grid = 10 ^ seq(-10, 1, length.out = 10),
+  lambda_grid = 10^seq(-10, 1, length.out = 10),
   k_seq = seq(from = 0.2, to = 1, by = 0.1),
   ncores = 1) {
 
@@ -215,7 +240,12 @@ get_mfd_list_real_time <- function(
     get_mfd_list(data_list_ii,
                  grid = grid[grid <= kk],
                  n_basis = nbasis,
-                 lambda = lambda)
+                 n_order = n_order,
+                 basisobj = basisobj,
+                 Lfdobj = Lfdobj,
+                 lambda = lambda,
+                 lambda_grid = lambda_grid,
+                 ncores = 1)
   }
 
   if (ncores == 1) {
@@ -225,13 +255,16 @@ get_mfd_list_real_time <- function(
       mfd_list <- mclapply(seq_along(kk_seq), single_k, mc.cores = ncores)
     } else {
       cl <- makeCluster(ncores)
-      clusterExport(cl,
-                    c("kk_seq",
-                      "domain",
-                      "data_list",
-                      "n_basis",
-                      "lambda",
-                      "grid"),
+      clusterExport(cl, c("kk_seq",
+                          "domain",
+                          "data_list",
+                          "n_basis",
+                          "n_order",
+                          "basisobj",
+                          "Lfdobj",
+                          "lambda",
+                          "lambda_grid",
+                          "grid"),
                     envir = environment())
       mfd_list <- parLapply(cl, seq_along(kk_seq), single_k)
       stopCluster(cl)
@@ -264,6 +297,12 @@ get_mfd_list_real_time <- function(
 #' See \code{\link{get_mfd_array}}.
 #' @param n_basis
 #' See \code{\link{get_mfd_array}}.
+#' @param n_order
+#' See \code{\link{get_mfd_array}}.
+#' @param basisobj
+#' See \code{\link{get_mfd_array}}.
+#' @param Lfdobj
+#' See \code{\link{get_mfd_array}}.
 #' @param lambda
 #' See \code{\link{get_mfd_array}}.
 #' @param lambda_grid
@@ -293,8 +332,11 @@ get_mfd_array_real_time <- function(
   data_array,
   grid = NULL,
   n_basis = 30,
+  n_order = 4,
+  basisobj = NULL,
+  Lfdobj = 2,
   lambda = NULL,
-  lambda_grid = 10 ^ seq(-10, 1, length.out = 10),
+  lambda_grid = 10^seq(-10, 1, length.out = 10),
   k_seq = seq(from = 0.25,
               to = 1,
               length.out = 10),
@@ -331,8 +373,12 @@ get_mfd_array_real_time <- function(
     get_mfd_array(data_array_ii,
                   grid = grid[grid <= kk],
                   n_basis = nbasis,
+                  n_order = n_order,
+                  basisobj = basisobj,
+                  Lfdobj = Lfdobj,
                   lambda = lambda,
-                  lambda_grid = lambda_grid)
+                  lambda_grid = lambda_grid,
+                  ncores = 1)
   }
 
   if (ncores == 1) {
@@ -342,13 +388,16 @@ get_mfd_array_real_time <- function(
       mfd_list <- mclapply(seq_along(kk_seq), single_k, mc.cores = ncores)
     } else {
       cl <- makeCluster(ncores)
-      clusterExport(cl,
-                    c("kk_seq",
-                      "domain",
-                      "data_list",
-                      "n_basis",
-                      "lambda",
-                      "grid"),
+      clusterExport(cl, c("kk_seq",
+                          "domain",
+                          "data_array",
+                          "n_basis",
+                          "n_order",
+                          "basisobj",
+                          "Lfdobj",
+                          "lambda",
+                          "lambda_grid",
+                          "grid"),
                     envir = environment())
       mfd_list <- parLapply(cl, seq_along(kk_seq), single_k)
       stopCluster(cl)

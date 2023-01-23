@@ -1,5 +1,8 @@
 # funcharts 1.2.0.9000
 
+* all basis function systems that can be used in the `fda` package now can be used also with `funcharts`, which previously it could be used only with B-spline basis.
+* `get_outliers_mfd()` allows to find outliers among multivariate functional data using the functional boxplot through the `fbplot()` function of the `roahd` package.
+
 # funcharts 1.2.0
 
 * improved backward compatibility, `funcharts` now depends on an older version of R, i.e., >3.6.0 instead of >4.0.0

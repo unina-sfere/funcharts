@@ -231,7 +231,7 @@ fof_pc <- function(mfdobj_y,
       ncomponents_x <-
         which(cumsum(x_pca$varprop) > tot_variance_explained_x)[1]
     }
-    components_x <- 1:ncomponents_x
+    components_x <- seq_len(ncomponents_x)
   }
 
   if (is.null(components_y)) {
@@ -244,7 +244,7 @@ fof_pc <- function(mfdobj_y,
         ncomponents_y <-
           which(cumsum(y_pca$varprop) > tot_variance_explained_y)[1]
       }
-    components_y <- 1:ncomponents_y
+    components_y <- seq_len(ncomponents_y)
   }
 
   df_y <- data.frame(y_pca$pcscores[, components_y, drop = FALSE])
@@ -262,9 +262,9 @@ fof_pc <- function(mfdobj_y,
   B <- as.matrix(B)
 
   Gx <- x_pca$harmonics$coefs[, components_x, , drop = FALSE]
-  Gx <- do.call(rbind, lapply(1:n_var_x, function(jj) matrix(Gx[, , jj], nrow = dim(Gx)[1])))
+  Gx <- do.call(rbind, lapply(seq_len(n_var_x), function(jj) matrix(Gx[, , jj], nrow = dim(Gx)[1])))
   Gy <- y_pca$harmonics$coefs[, components_y, , drop = FALSE]
-  Gy <- do.call(rbind, lapply(1:n_var_y, function(jj) matrix(Gy[, , jj], nrow = dim(Gy)[1])))
+  Gy <- do.call(rbind, lapply(seq_len(n_var_y), function(jj) matrix(Gy[, , jj], nrow = dim(Gy)[1])))
   beta_coefs <- Gx %*% B %*% t(Gy)
   kx <- x_pca$harmonics$basis$nbasis
   ky <- y_pca$harmonics$basis$nbasis
@@ -330,7 +330,7 @@ fof_pc <- function(mfdobj_y,
     xseq <- seq(bs$rangeval[1], bs$rangeval[2], length.out = 1000)
     y_pca_eval <- eval.fd(xseq, y_pca$harmonics)
     y_pca_coef <- project.basis(y_pca_eval, xseq, bs)
-    G <- as.numeric(y_pca_coef[, 1:ncomponents_y, 1])
+    G <- as.numeric(y_pca_coef[, seq_len(ncomponents_y), 1])
     G <- matrix(G, ncol = ncomponents_y)
     psp_coef <- G %*% sigma_M %*% t(G)
     bifd_obj <- bifd(psp_coef, sbasisobj = bs, tbasisobj = bs)
@@ -375,7 +375,7 @@ fof_pc <- function(mfdobj_y,
     ncomponents_res <-
       which(cumsum(res_pca$varprop) > tot_variance_explained_res)[1]
   }
-  components_res <- 1:ncomponents_res
+  components_res <- seq_len(ncomponents_res)
 
   list(mod = mod,
        beta_fd = beta_fd,
@@ -604,8 +604,8 @@ predict_fof_pc <- function(object,
 #'   X_max_abs <- max(abs(X_eval))
 #'
 #'   set.seed(0)
-#'   mclapply(1:nboot, function(ii) {
-#'     rows_B <- sample(1:nn, nn, TRUE)
+#'   mclapply(seq_len(nboot), function(ii) {
+#'     rows_B <- sample(seq_len(nn), nn, TRUE)
 #'     mod <- fof_pc(mfdobj_y = mod$pca_y$data[rows_B],
 #'                   mfdobj_x = mod$pca_x$data[rows_B],
 #'                   type_residuals = mod$type_residuals)
