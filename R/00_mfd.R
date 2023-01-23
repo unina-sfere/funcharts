@@ -158,7 +158,7 @@ mfd <- function(coef, basisobj, fdnames = NULL, raw = NULL, id_var = NULL, B = N
     }
     if (basisobj$type == "monom") {
       out_mat <- outer(basisobj$params, basisobj$params, "+") + 1
-      B <- (bs$rangeval[2] ^ out_mat - bs$rangeval[1] ^ out_mat) / out_mat
+      B <- (basisobj$rangeval[2] ^ out_mat - basisobj$rangeval[1] ^ out_mat) / out_mat
     }
     if (basisobj$type == "polygonal") {
       B <- inprod_fd(fd(diag(basisobj$nbasis), basisobj),
@@ -166,7 +166,7 @@ mfd <- function(coef, basisobj, fdnames = NULL, raw = NULL, id_var = NULL, B = N
     }
     if (basisobj$type == "power") {
       out_mat <- outer(basisobj$params, basisobj$params, "+") + 1
-      B <- (bs$rangeval[2] ^ out_mat - bs$rangeval[1] ^ out_mat) / out_mat
+      B <- (basisobj$rangeval[2] ^ out_mat - basisobj$rangeval[1] ^ out_mat) / out_mat
       B[out_mat == 0] <- log(basisobj$rangeval[2]) - log(basisobj$rangeval[1])
     }
   }
@@ -398,7 +398,9 @@ inprod_mfd <- function(mfdobj1, mfdobj2 = NULL) {
         out <- t(C1jj) %*% C2jj * diff(bs1$rangeval)
       }
     } else {
-      out <- inprod_fd(mfdobj1_jj, mfdobj2_jj)
+      fdobj1_jj <- fd(C1jj, bs1)
+      fdobj2_jj <- fd(C2jj, bs2)
+      out <- inprod_fd(fdobj1_jj, fdobj2_jj)
     }
     out
   })
@@ -684,7 +686,7 @@ inprod_fd_diag_single <- function(fdobj1, fdobj2 = NULL) {
 #'
 inprod_fd <- function (fdobj1, fdobj2 = NULL, Lfdobj1 = int2Lfd(0), Lfdobj2 = int2Lfd(0),
                        rng = range1, wtfd = 0) {
-  result1 <- fda:::fdchk(fdobj1)
+  result1 <- fdchk(fdobj1)
   nrep1 <- result1[[1]]
   fdobj1 <- result1[[2]]
   coef1 <- fdobj1$coefs
@@ -706,7 +708,7 @@ inprod_fd <- function (fdobj1, fdobj2 = NULL, Lfdobj1 = int2Lfd(0), Lfdobj2 = in
     }
     fdobj2 <- fd(1, basis2)
   }
-  result2 <- fda:::fdchk(fdobj2)
+  result2 <- fdchk(fdobj2)
   nrep2 <- result2[[1]]
   fdobj2 <- result2[[2]]
   coef2 <- fdobj2$coefs
@@ -716,7 +718,7 @@ inprod_fd <- function (fdobj1, fdobj2 = NULL, Lfdobj1 = int2Lfd(0), Lfdobj2 = in
   if (rng[1] < range1[1] || rng[2] > range1[2])
     stop("Limits of integration are inadmissible.")
   if (is.fd(fdobj1) && is.fd(fdobj2) && type1 == "bspline" &&
-      type2 == "bspline" && fda:::is.eqbasis(basisobj1, basisobj2) &&
+      type2 == "bspline" && is.eqbasis(basisobj1, basisobj2) &&
       is.integer(Lfdobj1) && is.integer(Lfdobj2) && length(basisobj1$dropind) ==
       0 && length(basisobj1$dropind) == 0 && wtfd == 0 &&
       all(rng == range1)) {
@@ -730,9 +732,9 @@ inprod_fd <- function (fdobj1, fdobj2 = NULL, Lfdobj1 = int2Lfd(0), Lfdobj2 = in
   rngvec <- rng
   knotmult <- numeric(0)
   if (type1 == "bspline")
-    knotmult <- fda:::knotmultchk(basisobj1, knotmult)
+    knotmult <- knotmultchk(basisobj1, knotmult)
   if (type2 == "bspline")
-    knotmult <- fda:::knotmultchk(basisobj2, knotmult)
+    knotmult <- knotmultchk(basisobj2, knotmult)
   if (length(knotmult) > 0) {
     knotmult <- sort(unique(knotmult))
     knotmult <- knotmult[knotmult > rng[1] && knotmult <
@@ -841,6 +843,78 @@ inprod_fd <- function (fdobj1, fdobj2 = NULL, Lfdobj1 = int2Lfd(0), Lfdobj2 = in
   else {
     return(inprodmat)
   }
+}
+
+#' @noRd
+#'
+fdchk <- function (fdobj) {
+  if (inherits(fdobj, "fd")) {
+    coef <- fdobj$coefs
+  }
+  else {
+    if (inherits(fdobj, "basisfd")) {
+      coef <- diag(rep(1, fdobj$nbasis - length(fdobj$dropind)))
+      fdobj <- fd(coef, fdobj)
+    }
+    else {
+      stop("FDOBJ is not an FD object.")
+    }
+  }
+  coefd <- dim(as.matrix(coef))
+  if (length(coefd) > 2)
+    stop("Functional data object must be univariate")
+  nrep <- coefd[2]
+  basisobj <- fdobj$basis
+  return(list(nrep, fdobj))
+}
+
+#' @noRd
+#'
+knotmultchk <- function (basisobj, knotmult) {
+  type <- basisobj$type
+  if (type == "bspline") {
+    params <- basisobj$params
+    nparams <- length(params)
+    norder <- basisobj$nbasis - nparams
+    if (norder == 1) {
+      knotmult <- c(knotmult, params)
+    }
+    else {
+      if (nparams > 1) {
+        for (i in 2:nparams) if (params[i] == params[i -
+                                                     1])
+          knotmult <- c(knotmult, params[i])
+      }
+    }
+  }
+  return(knotmult)
+}
+
+#' @noRd
+#'
+is.eqbasis <- function (basisobj1, basisobj2) {
+  eqwrd <- TRUE
+  if (basisobj1$type != basisobj2$type) {
+    eqwrd <- FALSE
+    return(eqwrd)
+  }
+  if (any(basisobj1$rangeval != basisobj2$rangeval)) {
+    eqwrd <- FALSE
+    return(eqwrd)
+  }
+  if (basisobj1$nbasis != basisobj2$nbasis) {
+    eqwrd <- FALSE
+    return(eqwrd)
+  }
+  if (any(basisobj1$params != basisobj2$params)) {
+    eqwrd <- FALSE
+    return(eqwrd)
+  }
+  if (any(basisobj1$dropind != basisobj2$dropind)) {
+    eqwrd <- FALSE
+    return(eqwrd)
+  }
+  return(eqwrd)
 }
 
 
@@ -1953,7 +2027,7 @@ mfd_to_df <- function(mfdobj) {
     group_by(id) %>%
     mutate(n = n()) %>%
     mutate(id = ifelse(n == 1, id, paste0(id, " rep", seq_len(n())))) %>%
-    arrange(pos) %>%
+    arrange(.data$pos) %>%
     pull(id)
 
   variables <- mfdobj$fdnames[[3]]

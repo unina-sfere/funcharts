@@ -244,8 +244,7 @@ get_mfd_list_real_time <- function(
                  basisobj = basisobj,
                  Lfdobj = Lfdobj,
                  lambda = lambda,
-                 lambda_grid = lambda_grid,
-                 ncores = 1)
+                 lambda_grid = lambda_grid)
   }
 
   if (ncores == 1) {
@@ -377,8 +376,7 @@ get_mfd_array_real_time <- function(
                   basisobj = basisobj,
                   Lfdobj = Lfdobj,
                   lambda = lambda,
-                  lambda_grid = lambda_grid,
-                  ncores = 1)
+                  lambda_grid = lambda_grid)
   }
 
   if (ncores == 1) {
