@@ -55,13 +55,15 @@ as you would normally do when using
 }
 \examples{
 library(funcharts)
+library(fda)
 
 # In the following, we extract the first one/two observations/variables
 # to see the difference with `[.fd`.
 mfdobj <- data_sim_mfd()
 fdobj <- fd(mfdobj$coefs, mfdobj$basis, mfdobj$fdnames)
 
-# The argument `coef` in `fd` objects is converted to a matrix when possible.
+# The argument `coef` in `fd`
+# objects is converted to a matrix when possible.
 dim(fdobj[1, 1]$coef)
 # Not clear what is the second dimension:
 # the number of replications or the number of variables?

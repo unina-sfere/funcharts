@@ -22,6 +22,8 @@ A simulated object of class `mfd`.
 \description{
 Simulate random coefficients and create a multivariate functional data
 object of class `mfd`.
+It is mainly for internal use, to check that the package functions
+work.
 }
 \examples{
 library(funcharts)

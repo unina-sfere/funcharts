@@ -40,16 +40,18 @@
 #' An object of class \code{mfd} containing
 #' the phase II set of the multivariate functional data to be monitored.
 #' @param alpha
-#' A named list with two elements, named \code{T2} and \code{spe},
+#' If it is a number between 0 and 1,
+#' it defines the overall type-I error probability and the Bonferroni
+#' correction is applied by setting the type-I error probability
+#' in the two control charts equal to \code{alpha/2}.
+#' If you want to set manually the Type-I error probabilities in the
+#' two control charts, then the argument \code{alpha} must be
+#' a named list
+#' with two elements, named \code{T2} and \code{spe},
 #' respectively, each containing
 #' the desired Type I error probability of
 #' the corresponding control chart.
-#' Note that at the moment you have to take into account manually
-#' the family-wise error rate and adjust
-#' the two values accordingly. See Capezza et al. (2020) and
-#' Centofanti et al. (2021)
-#' for additional details. Default value is
-#' \code{list(T2 = 0.025, spe = 0.025)}.
+#' Default value is 0.05.
 #' @param limits
 #' A character value.
 #' If "standard", it estimates the control limits on the tuning
@@ -161,7 +163,7 @@ control_charts_pca <- function(pca,
                                components = NULL,
                                tuning_data = NULL,
                                newdata,
-                               alpha = list(T2 = .025, spe = .025),
+                               alpha = 0.05,
                                limits = "standard",
                                seed,
                                nfold = 5,
@@ -171,8 +173,25 @@ control_charts_pca <- function(pca,
 
   if (!missing(seed)) {
     warning(paste0("argument seed is deprecated; ",
-                   "please use set.seed() before calling the function instead."),
+                   "please use set.seed()
+                   before calling the function instead."),
             call. = FALSE)
+  }
+
+  if (!(is.numeric(alpha) | is.list(alpha))) {
+    stop("alpha must be either a number or a list")
+  }
+
+  if (is.numeric(alpha) & length(alpha) > 1) {
+    stop("alpha must be a single number, between 0 and 1, or a list.")
+  }
+
+  if (is.numeric(alpha) & !all(alpha > 0 & alpha < 1)) {
+    stop("alpha must be a single number, between 0 and 1, or a list.")
+  }
+
+  if (is.list(alpha) & !all((names(alpha) %in% c("T2", "spe")))) {
+    stop("if alpha is a list, it must be named with names T2 and spe.")
   }
 
   if (!is.list(pca)) {
@@ -196,6 +215,8 @@ control_charts_pca <- function(pca,
         which(pca$varprop[components] > single_min_variance_explained)
   }
 
+  if (is.numeric(alpha)) alpha <- list(T2 = alpha / 2, spe = alpha / 2)
+
   if (limits == "standard") lim <- calculate_limits(
     pca = pca,
     tuning_data = tuning_data,
@@ -218,142 +239,6 @@ control_charts_pca <- function(pca,
   cbind(id, T2_spe, lim)
 }
 
-
-#' Scalar-on-Function Regression Control Chart
-#'
-#' This function builds a data frame needed
-#' to plot the scalar-on-function regression control chart,
-#' based on a fitted function-on-function linear regression model and
-#' proposed in Capezza et al. (2020) together with the Hotelling's T^2 and
-#' squared prediction error control charts.
-#' The training data have already been used to fit the model.
-#' A tuning data set can be provided that is used to estimate
-#' the control chart limits.
-#' A phase II data set contains the observations to be monitored
-#' with the built control charts.
-#'
-#' @param object
-#' A list obtained as output from \code{sof_pc},
-#' i.e. a fitted scalar-on-function linear regression model.
-#' @param mfdobj_x_new
-#' An object of class \code{mfd} containing
-#' the phase II data set of the functional covariates observations.
-#' @param y_new
-#' A numeric vector containing the observations of
-#' the scalar response variable
-#' in the phase II data set.
-#' @param alpha
-#' A numeric value indicating the Type I error for
-#' the regression control chart
-#' and such that this function returns the \code{1-alpha} prediction interval
-#' on the response.
-#' Default is 0.05.
-#'
-#' @return
-#' A \code{data.frame} with as many rows as the
-#' number of functional replications in \code{mfdobj_x_new},
-#' with the following columns:
-#'
-#' * \code{y_hat}: the predictions of the response variable
-#' corresponding to \code{mfdobj_x_new},
-#'
-#' * \code{y}: the same as the argument \code{y_new} given as input
-#' to this function,
-#'
-#' * \code{lwr}: lower limit of the \code{1-alpha} prediction interval
-#' on the response,
-#'
-#' * \code{pred_err}: prediction error calculated as \code{y-y_hat},
-#'
-#' * \code{pred_err_sup}: upper limit of the \code{1-alpha} prediction interval
-#' on the prediction error,
-#'
-#' * \code{pred_err_inf}: lower limit of the \code{1-alpha} prediction interval
-#' on the prediction error.
-#'
-#' @export
-#'
-#' @references
-#' Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
-#' Control charts for
-#' monitoring ship operating conditions and CO2 emissions
-#' based on scalar-on-function regression.
-#' \emph{Applied Stochastic Models in Business and Industry},
-#' 36(3):477--500.
-#' <doi:10.1002/asmb.2507>
-#'
-#' @examples
-#' library(funcharts)
-#' air <- lapply(air, function(x) x[1:100, , drop = FALSE])
-#' fun_covariates <- c("CO", "temperature")
-#' mfdobj_x <- get_mfd_list(air[fun_covariates],
-#'                          n_basis = 15,
-#'                          lambda = 1e-2)
-#' y <- rowMeans(air$NO2)
-#' y1 <- y[1:80]
-#' y2 <- y[81:100]
-#' mfdobj_x1 <- mfdobj_x[1:80]
-#' mfdobj_x2 <- mfdobj_x[81:100]
-#' mod <- sof_pc(y1, mfdobj_x1)
-#' cclist <- regr_cc_sof(object = mod,
-#'                       y_new = y2,
-#'                       mfdobj_x_new = mfdobj_x2)
-#' plot_control_charts(cclist)
-#'
-regr_cc_sof <- function(object,
-                        y_new,
-                        mfdobj_x_new,
-                        alpha = .05) {
-
-  if (!is.list(object)) {
-    stop("object must be a list produced by sof_pc.")
-  }
-
-  if (!identical(names(object), c(
-    "mod",
-    "pca",
-    "beta_fd",
-    "components",
-    "selection",
-    "single_min_variance_explained",
-    "tot_variance_explained",
-    "gcv",
-    "PRESS"
-  ))) {
-    stop("object must be a list produced by sof_pc.")
-  }
-
-  if (!is.numeric(y_new)) {
-    stop("y_new must be numeric.")
-  }
-  if (!is.null(mfdobj_x_new)) {
-    if (!is.mfd(mfdobj_x_new)) {
-      stop("mfdobj_x_new must be an object from mfd class.")
-    }
-    if (dim(mfdobj_x_new$coefs)[3] != dim(object$pca$data$coefs)[3]) {
-      stop(paste0("mfdobj_x_new must have the same number of variables ",
-      "as training data."))
-    }
-  }
-  nobsx <- dim(mfdobj_x_new$coefs)[2]
-  nobsy <- length(y_new)
-  if (nobsx != nobsy) {
-    stop(paste0("y_new and mfdobj_x_new must have ",
-                "the same number of observations."))
-  }
-
-  y_hat <- predict_sof_pc(object = object,
-                          newdata = mfdobj_x_new,
-                          alpha = alpha)
-
-  data.frame(
-    y_hat,
-    y = y_new,
-    pred_err = y_new - y_hat$fit,
-    pred_err_sup = y_hat$upr - y_hat$fit,
-    pred_err_inf = y_hat$lwr - y_hat$fit)
-
-}
 
 
 #' Control charts for monitoring a scalar quality characteristic adjusted for
@@ -497,7 +382,8 @@ regr_cc_sof <- function(object,
 #' @seealso \code{\link{control_charts_pca}}, \code{\link{regr_cc_sof}}
 #'
 #' @examples
-#' library(funcharts)
+#' \dontrun{
+#' #' library(funcharts)
 #' data("air")
 #' air <- lapply(air, function(x) x[201:300, , drop = FALSE])
 #' fun_covariates <- c("CO", "temperature")
@@ -516,6 +402,7 @@ regr_cc_sof <- function(object,
 #'                                 mfdobj_x_test = mfdobj_x2,
 #'                                 mfdobj_x_tuning = mfdobj_x_tuning)
 #' plot_control_charts(cclist)
+#' }
 #'
 control_charts_sof_pc <- function(mod,
                                   y_test,
@@ -530,203 +417,19 @@ control_charts_sof_pc <- function(mod,
                                   nfold = NULL,
                                   ncores = 1) {
 
-  if (!missing(seed)) {
-    warning(paste0("argument seed is deprecated; ",
-                   "please use set.seed() before calling the function instead."),
-            call. = FALSE)
-  }
+  .Deprecated("regr_cc_sof")
 
-  if (!is.list(mod)) {
-    stop("object must be a list produced by sof_pc.")
-  }
-
-  if (!identical(names(mod), c(
-    "mod",
-    "pca",
-    "beta_fd",
-    "components",
-    "selection",
-    "single_min_variance_explained",
-    "tot_variance_explained",
-    "gcv",
-    "PRESS"
-  ))) {
-    stop("object must be a list produced by sof_pc.")
-  }
-
-  if (is.null(mfdobj_x_tuning)) mfdobj_x_tuning <- mod$pca$data
-
-  pca <- mod$pca
-  components <- which(colnames(pca$pcscores) %in% names(mod$mod$coefficients))
-  if (is.null(nfold)) nfold <- length(mod$pca$data$fdnames[[2]])
-  out <- control_charts_pca(pca = pca,
-                            components = components,
-                            newdata = mfdobj_x_test,
-                            tuning_data = mfdobj_x_tuning,
-                            alpha = alpha,
-                            limits = limits,
-                            nfold = nfold,
-                            ncores = ncores)
-  y <- regr_cc_sof(object = mod,
-                   y_new = y_test,
-                   mfdobj_x_new = mfdobj_x_test,
-                   alpha = alpha$y)
-  cbind(out, y)
+  regr_cc_sof(object = mod,
+              y_new = y_test,
+              mfdobj_x_new = mfdobj_x_test,
+              mfdobj_x_tuning = mfdobj_x_tuning,
+              y_tuning = NULL,
+              alpha = alpha,
+              parametric_limits = TRUE,
+              include_covariates = TRUE)
 
 }
 
-
-
-#' Functional Regression Control Chart
-#'
-#' It builds a data frame needed to plot the
-#' Functional Regression Control Chart
-#' introduced in Centofanti et al. (2021),
-#' for monitoring a functional quality characteristic adjusted for
-#' by the effect of multivariate functional covariates,
-#' based on a fitted
-#' function-on-function linear regression model.
-#' The training data have already been used to fit the model.
-#' An optional tuning data set can be provided that is used to estimate
-#' the control chart limits.
-#' A phase II data set contains the observations to be monitored
-#' with the control charts.
-#'
-#' @param object
-#' A list obtained as output from \code{fof_pc},
-#' i.e. a fitted function-on-function linear regression model.
-#' @param mfdobj_y_new
-#' An object of class \code{mfd} containing
-#' the phase II data set of the functional response
-#' observations to be monitored.
-#' @param mfdobj_x_new
-#' An object of class \code{mfd} containing
-#' the phase II data set of the functional covariates
-#' observations to be monitored.
-#' @param mfdobj_y_tuning
-#' An object of class \code{mfd} containing
-#' the tuning data set of the functional response observations,
-#' used to estimate the control chart limits.
-#' If NULL, the training data, i.e. the data used to fit the
-#' function-on-function linear regression model,
-#' are also used as the tuning data set, i.e.
-#' \code{mfdobj_y_tuning=object$pca_y$data}.
-#' Default is NULL.
-#' @param mfdobj_x_tuning
-#' An object of class \code{mfd} containing
-#' the tuning data set of the functional covariates observations,
-#' used to estimate the control chart limits.
-#' If NULL, the training data, i.e. the data used to fit the
-#' function-on-function linear regression model,
-#' are also used as the tuning data set, i.e.
-#' \code{mfdobj_x_tuning=object$pca_x$data}.
-#' Default is NULL.
-#' @param alpha
-#' A named list with two elements,
-#' named \code{T2} and \code{spe}, respectively, each containing
-#' the desired Type I error probability of the corresponding control chart.
-#' Note that at the moment you have to take into account manually
-#' the family-wise error rate and adjust
-#' the two values accordingly. See Centofanti et al. (2021)
-#' for additional details.
-#' Default value is \code{list(T2 = 0.025, spe = 0.025)}.
-#'
-#' @return
-#' A \code{data.frame} containing the output of the
-#' function \code{control_charts_pca} applied to
-#' the prediction errors.
-#' @export
-#'
-#' @seealso \code{\link{control_charts_pca}}
-#'
-#' @references
-#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
-#' Functional Regression Control Chart.
-#' \emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
-#'
-#' @examples
-#' library(funcharts)
-#' data("air")
-#' air <- lapply(air, function(x) x[1:100, , drop = FALSE])
-#' fun_covariates <- c("CO", "temperature")
-#' mfdobj_x <- get_mfd_list(air[fun_covariates],
-#'                          n_basis = 15,
-#'                          lambda = 1e-2)
-#' mfdobj_y <- get_mfd_list(air["NO2"],
-#'                          n_basis = 15,
-#'                          lambda = 1e-2)
-#' mfdobj_y1 <- mfdobj_y[1:60]
-#' mfdobj_y_tuning <- mfdobj_y[61:90]
-#' mfdobj_y2 <- mfdobj_y[91:100]
-#' mfdobj_x1 <- mfdobj_x[1:60]
-#' mfdobj_x_tuning <- mfdobj_x[61:90]
-#' mfdobj_x2 <- mfdobj_x[91:100]
-#' mod_fof <- fof_pc(mfdobj_y1, mfdobj_x1)
-#' cclist <- regr_cc_fof(mod_fof,
-#'                       mfdobj_y_new = mfdobj_y2,
-#'                       mfdobj_x_new = mfdobj_x2,
-#'                       mfdobj_y_tuning = NULL,
-#'                       mfdobj_x_tuning = NULL)
-#' plot_control_charts(cclist)
-#'
-regr_cc_fof <- function(object,
-                        mfdobj_y_new,
-                        mfdobj_x_new,
-                        mfdobj_y_tuning = NULL,
-                        mfdobj_x_tuning = NULL,
-                        alpha = list(T2 = 0.025, spe = 0.025)) {
-
-  if (!is.list(object)) {
-    stop("object must be a list produced by fof_pc.")
-  }
-
-  if (!identical(names(object), c(
-    "mod",
-    "beta_fd",
-    "fitted.values",
-    "residuals_original_scale",
-    "residuals",
-    "type_residuals",
-    "pca_x",
-    "pca_y",
-    "pca_res",
-    "components_x",
-    "components_y",
-    "components_res",
-    "y_standardized",
-    "tot_variance_explained_x",
-    "tot_variance_explained_y",
-    "tot_variance_explained_res",
-    "get_studentized_residuals"
-  ))) {
-    stop("object must be a list produced by fof_pc.")
-  }
-
-  if (is.null(mfdobj_y_tuning) | is.null(mfdobj_x_tuning)) {
-    mfdobj_y_tuning <- object$pca_y$data
-    mfdobj_x_tuning <- object$pca_x$data
-  }
-  tuning <- predict_fof_pc(
-    object = object,
-    mfdobj_y_new = mfdobj_y_tuning,
-    mfdobj_x_new = mfdobj_x_tuning)
-
-  phase_II <- predict_fof_pc(
-    object = object,
-    mfdobj_y_new = mfdobj_y_new,
-    mfdobj_x_new = mfdobj_x_new)
-
-  out <- control_charts_pca(
-    pca = object$pca_res,
-    components = object$components_res,
-    tuning_data = tuning$pred_error,
-    newdata = phase_II$pred_error,
-    alpha = alpha,
-    limits = "standard"
-  )
-  select(out, -contains("contribution_"))
-
-}
 
 
 
@@ -851,6 +554,50 @@ plot_control_charts <- function(cclist) {
 
   }
 
+  df_hot_x <- NULL
+  if (!is.null(cclist$T2_x)) {
+    df_hot_x <- data.frame(statistic = cclist$T2_x,
+                           lcl = 0,
+                           ucl = cclist$T2_lim_x) %>%
+      mutate(id = seq_len(n()),
+             ooc = .data$statistic > .data$ucl,
+             type = "HOTELLING~T^2~CONTROL~CHART~(COVARIATES)")
+
+    hot_range <- df_hot_x %>%
+      select(.data$statistic, .data$ucl, .data$lcl) %>%
+      range() %>%
+      diff()
+
+    df_hot_x <- df_hot_x %>%
+      mutate(ytext = case_when(
+        statistic < lcl ~ statistic - hot_range * 0.2,
+        statistic > ucl ~ statistic + hot_range * 0.2,
+        TRUE ~ statistic,
+      ))
+  }
+
+  df_spe_x <- NULL
+  if (!is.null(cclist$spe_x)) {
+    df_spe_x <- data.frame(statistic = cclist$spe_x,
+                           lcl = 0,
+                           ucl = cclist$spe_lim_x) %>%
+      mutate(id = seq_len(n()),
+             ooc = .data$statistic > .data$ucl,
+             type = "SPE~CONTROL~CHART~(COVARIATES)")
+
+    spe_range <- df_spe_x %>%
+      select(.data$statistic, .data$ucl, .data$lcl) %>%
+      range() %>%
+      diff()
+
+    df_spe_x <- df_spe_x %>%
+      mutate(ytext = case_when(
+        statistic < lcl ~ statistic - spe_range * 0.2,
+        statistic > ucl ~ statistic + spe_range * 0.2,
+        TRUE ~ statistic,
+      ))
+  }
+
   plot_list <- list()
 
   if (!is.null(cclist$T2)) {
@@ -921,10 +668,561 @@ plot_control_charts <- function(cclist) {
                 data = filter(df_y, .data$ooc),
                 size = 3) +
       xlab("Observation") +
-      ylab(expression("Prediction error [t]")) +
+      ylab(expression("Regression residuals")) +
       ggtitle(expression(REGRESSION~CONTROL~CHART))
+  }
+
+  if (!is.null(cclist$T2_x)) {
+    plot_list$p_hot_x <- ggplot(df_hot_x, aes(x = .data$id, y = .data$statistic)) +
+      geom_line() +
+      geom_point(aes(colour = .data$ooc)) +
+      geom_blank(aes(y = 0)) +
+      geom_point(aes(y = .data$ucl),
+                 pch = "-", size = 5) +
+      scale_x_continuous(
+        limits = c(0, max(df_hot_x$id) + 1),
+        breaks = seq(1, max(df_hot_x$id), by = round(max(df_hot_x$id) / 50) + 1),
+        expand = c(0, 0)) +
+      scale_color_manual(values = c("black", "red")) +
+      theme_bw() +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+      theme(legend.position = "none",
+            plot.title = element_text(hjust = 0.5)) +
+      geom_text(aes(y = .data$ytext, label = .data$id),
+                data = filter(df_hot_x, .data$ooc),
+                size = 3) +
+      xlab("Observation") +
+      ylab(expression(T^2~statistic)) +
+      ggtitle(expression(HOTELLING~T^2~CONTROL~CHART~(COVARIATES)))
+
+    plot_list$p_hot <- plot_list$p_hot +
+      ggtitle(expression(HOTELLING~T^2~CONTROL~CHART~(RESPONSE)))
+  }
+
+  if (!is.null(cclist$spe_x)) {
+    plot_list$p_spe_x <- ggplot(df_spe_x, aes(x = .data$id, y = .data$statistic)) +
+      geom_line() +
+      geom_point(aes(colour = .data$ooc)) +
+      geom_blank(aes(y = 0)) +
+      geom_point(aes(y = .data$ucl),
+                 pch = "-", size = 5) +
+      scale_x_continuous(
+        limits = c(0, max(df_spe_x$id) + 1),
+        breaks = seq(1, max(df_spe_x$id), by = round(max(df_spe_x$id) / 50) + 1),
+        expand = c(0, 0)) +
+      scale_color_manual(values = c("black", "red")) +
+      theme_bw() +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+      theme(legend.position = "none",
+            plot.title = element_text(hjust = 0.5)) +
+      geom_text(aes(y = .data$ytext, label = .data$id),
+                data = filter(df_spe_x, .data$ooc),
+                size = 3) +
+      xlab("Observation") +
+      ylab(expression(SPE~statistic)) +
+      ggtitle(expression(SPE~CONTROL~CHART~(COVARIATES)))
+
+    plot_list$p_spe <- plot_list$p_spe +
+      ggtitle(expression(SPE~CONTROL~CHART~(RESPONSE)))
   }
 
   patchwork::wrap_plots(plot_list, ncol = 1)
 
 }
+
+
+
+
+
+
+#' Scalar-on-Function Regression Control Chart
+#'
+#' This function is deprecated. Use \code{\link{regr_cc_sof}}.
+#' This function builds a data frame needed
+#' to plot the scalar-on-function regression control chart,
+#' based on a fitted function-on-function linear regression model and
+#' proposed in Capezza et al. (2020).
+#' If \code{include_covariates} is \code{TRUE},
+#' it also plots the Hotelling's T^2 and
+#' squared prediction error control charts built on the
+#' multivariate functional covariates.
+#'
+#' The training data have already been used to fit the model.
+#' An additional tuning data set can be provided that is used to estimate
+#' the control chart limits.
+#' A phase II data set contains the observations to be monitored
+#' with the built control charts.
+#'
+#' @param object
+#' A list obtained as output from \code{sof_pc},
+#' i.e. a fitted scalar-on-function linear regression model.
+#' @param mfdobj_x_new
+#' An object of class \code{mfd} containing
+#' the phase II data set of the functional covariates observations.
+#' @param y_new
+#' A numeric vector containing the observations of
+#' the scalar response variable
+#' in the phase II data set.
+#' @param y_tuning
+#' A numeric vector containing the observations of the scalar response
+#' variable in the tuning data set.
+#' If NULL, the training data, i.e. the data used to
+#' fit the scalar-on-function regression model,
+#' are also used as the tuning data set.
+#' Default is NULL.
+#' @param mfdobj_x_tuning
+#' An object of class \code{mfd} containing
+#' the tuning set of the multivariate functional data, used to estimate the
+#' control chart limits.
+#' If NULL, the training data, i.e. the data used to
+#' fit the scalar-on-function regression model,
+#' are also used as the tuning data set.
+#' Default is NULL.
+#' @param alpha
+#' If it is a number between 0 and 1,
+#' it defines the overall type-I error probability.
+#' If \code{include_covariates} is \code{TRUE}, i.e.,
+#' also the Hotelling's T2 and SPE control charts are built
+#' on the functional covariates, then the Bonferroni
+#' correction is applied by setting the type-I error probability
+#' in the three control charts equal to \code{alpha/3}.
+#' In this last case,
+#' if you want to set manually the Type-I error probabilities,
+#' then the argument \code{alpha} must be a named list
+#' with three elements, named \code{T2}, \code{spe} and \code{y},
+#' respectively, each containing
+#' the desired Type I error probability of
+#' the corresponding control chart, where \code{y} refers to the
+#' regression control chart.
+#' Default value is 0.05.
+#' @param parametric_limits
+#' If TRUE, the limits are calculated based on the normal distribution
+#' assumption on the response variable, as in Capezza et al. (2020).
+#' If FALSE, the limits are calculated nonparametrically as
+#' empirical quantiles of the distribution of the residuals calculated
+#' on the tuning data set.
+#' @param include_covariates
+#' If TRUE, also functional covariates are monitored through
+#'  \code{control_charts_pca},.
+#' If FALSE, only the scalar response, conditionally on the covariates,
+#' is monitored.
+#'
+#' @return
+#' A \code{data.frame} with as many rows as the
+#' number of functional replications in \code{mfdobj_x_new},
+#' with the following columns:
+#'
+#' * \code{y_hat}: the predictions of the response variable
+#' corresponding to \code{mfdobj_x_new},
+#'
+#' * \code{y}: the same as the argument \code{y_new} given as input
+#' to this function,
+#'
+#' * \code{lwr}: lower limit of the \code{1-alpha} prediction interval
+#' on the response,
+#'
+#' * \code{pred_err}: prediction error calculated as \code{y-y_hat},
+#'
+#' * \code{pred_err_sup}: upper limit of the \code{1-alpha} prediction interval
+#' on the prediction error,
+#'
+#' * \code{pred_err_inf}: lower limit of the \code{1-alpha} prediction interval
+#' on the prediction error.
+#'
+#' @export
+#'
+#' @references
+#' Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+#' Control charts for
+#' monitoring ship operating conditions and CO2 emissions
+#' based on scalar-on-function regression.
+#' \emph{Applied Stochastic Models in Business and Industry},
+#' 36(3):477--500.
+#' <doi:10.1002/asmb.2507>
+#'
+#' @examples
+#' library(funcharts)
+#' air <- lapply(air, function(x) x[1:100, , drop = FALSE])
+#' fun_covariates <- c("CO", "temperature")
+#' mfdobj_x <- get_mfd_list(air[fun_covariates],
+#'                          n_basis = 15,
+#'                          lambda = 1e-2)
+#' y <- rowMeans(air$NO2)
+#' y1 <- y[1:80]
+#' y2 <- y[81:100]
+#' mfdobj_x1 <- mfdobj_x[1:80]
+#' mfdobj_x2 <- mfdobj_x[81:100]
+#' mod <- sof_pc(y1, mfdobj_x1)
+#' cclist <- regr_cc_sof(object = mod,
+#'                       y_new = y2,
+#'                       mfdobj_x_new = mfdobj_x2)
+#' plot_control_charts(cclist)
+#'
+regr_cc_sof <- function(object,
+                        y_new,
+                        mfdobj_x_new,
+                        y_tuning = NULL,
+                        mfdobj_x_tuning = NULL,
+                        alpha = 0.05,
+                        parametric_limits = TRUE,
+                        include_covariates = FALSE) {
+
+  if (!is.list(object)) {
+    stop("object must be a list produced by sof_pc.")
+  }
+
+  if (!identical(names(object), c(
+    "mod",
+    "pca",
+    "beta_fd",
+    "residuals",
+    "components",
+    "selection",
+    "single_min_variance_explained",
+    "tot_variance_explained",
+    "gcv",
+    "PRESS"
+  ))) {
+    stop("object must be a list produced by sof_pc.")
+  }
+
+
+  if (!is.numeric(y_new)) {
+    stop("y_new must be numeric.")
+  }
+  if (!is.null(mfdobj_x_new)) {
+    if (!is.mfd(mfdobj_x_new)) {
+      stop("mfdobj_x_new must be an object from mfd class.")
+    }
+    if (dim(mfdobj_x_new$coefs)[3] != dim(object$pca$data$coefs)[3]) {
+      stop(paste0("mfdobj_x_new must have the same number of variables ",
+      "as training data."))
+    }
+  }
+  nobsx <- dim(mfdobj_x_new$coefs)[2]
+  nobsy <- length(y_new)
+  if (nobsx != nobsy) {
+    stop(paste0("y_new and mfdobj_x_new must have ",
+                "the same number of observations."))
+  }
+
+  if (!(is.numeric(alpha) | is.list(alpha))) {
+    stop("alpha must be either a number or a list")
+  }
+
+  if (is.numeric(alpha) & length(alpha) > 1) {
+    stop("alpha must be a single number, between 0 and 1, or a list.")
+  }
+
+  if (is.numeric(alpha) & !all(alpha > 0 & alpha < 1)) {
+    stop("alpha must be a single number, between 0 and 1, or a list.")
+  }
+
+  if (is.numeric(alpha)) {
+    if (include_covariates) {
+      alpha <- list(T2 = alpha / 3, spe = alpha / 3, y = alpha / 3)
+    } else {
+      alpha <- list(y = alpha)
+    }
+  }
+
+  if (is.list(alpha)) {
+    if (include_covariates) {
+      if (!all(names(alpha) %in% c("T2", "spe", "y")) |
+          !all(c("T2", "spe", "y") %in% names(alpha))) {
+        stop("if alpha is a list and include_covariates is TRUE,
+             it must be named with names T2, spe, y.")
+      }
+    }
+    if (!include_covariates) {
+      if (!all(names(alpha) %in% "y") |
+          !all("y" %in% names(alpha))) {
+        stop("if alpha is a list and include_covariates is FALSE,
+             it must be named with name y.")
+      }
+    }
+  }
+
+  y_hat <- predict_sof_pc(object = object,
+                          y_new = y_new,
+                          mfdobj_x_new = mfdobj_x_new,
+                          alpha = alpha$y)
+
+  ret <- data.frame(
+    y_hat,
+    pred_err_sup = y_hat$upr - y_hat$fit,
+    pred_err_inf = y_hat$lwr - y_hat$fit)
+
+  if (!parametric_limits) {
+
+    if (is.null(y_tuning) | is.null(mfdobj_x_tuning)) {
+
+      fml <- formula(object$mod)
+      response_name <- all.vars(fml)[1]
+      y_tuning <- object$mod$model[, response_name]
+      mfdobj_x_tuning <- object$pca$data
+
+    }
+
+    y_hat_tuning <- predict_sof_pc(object = object,
+                                   y_new = y_tuning,
+                                   mfdobj_x_new = mfdobj_x_tuning,
+                                   alpha = alpha$y)
+    upr_lim <- as.numeric(quantile(y_hat_tuning$pred_err, 1 - alpha$y/2))
+    lwr_lim <- as.numeric(quantile(y_hat_tuning$pred_err, alpha$y/2))
+
+    ret$pred_err_sup <- upr_lim
+    ret$pred_err_inf <- lwr_lim
+
+  }
+
+
+  if (include_covariates) {
+    alpha_x <- alpha[c("T2", "spe")]
+    ccpca <- control_charts_pca(pca = object$pca,
+                                 components = object$components,
+                                 tuning_data = mfdobj_x_tuning,
+                                 newdata = mfdobj_x_new,
+                                 alpha = alpha_x,
+                                 limits = "standard")
+
+    ret <- cbind(ccpca, ret)
+
+  } else {
+    ret <- cbind(data.frame(id = mfdobj_x_new$fdnames[[2]]), ret)
+  }
+
+  return(ret)
+
+}
+
+
+
+#' Functional Regression Control Chart
+#'
+#' It builds a data frame needed to plot the
+#' Functional Regression Control Chart
+#' introduced in Centofanti et al. (2021),
+#' for monitoring a functional quality characteristic adjusted for
+#' by the effect of multivariate functional covariates,
+#' based on a fitted
+#' function-on-function linear regression model.
+#' The training data have already been used to fit the model.
+#' An optional tuning data set can be provided that is used to estimate
+#' the control chart limits.
+#' A phase II data set contains the observations to be monitored
+#' with the control charts.
+#' It also allows to jointly monitor the multivariate functional covariates.
+#'
+#' @param object
+#' A list obtained as output from \code{fof_pc},
+#' i.e. a fitted function-on-function linear regression model.
+#' @param mfdobj_y_new
+#' An object of class \code{mfd} containing
+#' the phase II data set of the functional response
+#' observations to be monitored.
+#' @param mfdobj_x_new
+#' An object of class \code{mfd} containing
+#' the phase II data set of the functional covariates
+#' observations to be monitored.
+#' @param mfdobj_y_tuning
+#' An object of class \code{mfd} containing
+#' the tuning data set of the functional response observations,
+#' used to estimate the control chart limits.
+#' If NULL, the training data, i.e. the data used to fit the
+#' function-on-function linear regression model,
+#' are also used as the tuning data set, i.e.
+#' \code{mfdobj_y_tuning=object$pca_y$data}.
+#' Default is NULL.
+#' @param mfdobj_x_tuning
+#' An object of class \code{mfd} containing
+#' the tuning data set of the functional covariates observations,
+#' used to estimate the control chart limits.
+#' If NULL, the training data, i.e. the data used to fit the
+#' function-on-function linear regression model,
+#' are also used as the tuning data set, i.e.
+#' \code{mfdobj_x_tuning=object$pca_x$data}.
+#' Default is NULL.
+#' @param alpha
+#' If it is a number between 0 and 1,
+#' it defines the overall type-I error probability.
+#' By default, it is equal to 0.05 and the Bonferroni correction
+#' is applied by setting the type-I error probabilities equal to
+#' \code{alpha/2} in the Hotelling's T2 and SPE control charts.
+#' If \code{include_covariates} is \code{TRUE}, i.e.,
+#' the Hotelling's T2 and SPE control charts are built
+#' also on the multivariate functional covariates, then the Bonferroni
+#' correction is applied by setting the type-I error probability
+#' in the four control charts equal to \code{alpha/4}.
+#' If you want to set manually the Type-I error probabilities,
+#' then the argument \code{alpha} must be a named list
+#' with elements named as \code{T2}, \code{spe},
+#' \code{T2_x} and, \code{spe_x}, respectively, containing
+#' the desired Type I error probability of
+#' the T2 and SPE control charts for the functional response and
+#' the multivariate functional covariates, respectively.
+#' @param include_covariates
+#' If TRUE, also functional covariates are monitored through
+#'  \code{control_charts_pca},.
+#' If FALSE, only the functional response, conditionally on the covariates,
+#' is monitored.
+#'
+#' @return
+#' A \code{data.frame} containing the output of the
+#' function \code{control_charts_pca} applied to
+#' the prediction errors.
+#' @export
+#'
+#' @seealso \code{\link{control_charts_pca}}
+#'
+#' @references
+#' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
+#' Functional Regression Control Chart.
+#' \emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
+#'
+#' @examples
+#' library(funcharts)
+#' data("air")
+#' air <- lapply(air, function(x) x[1:100, , drop = FALSE])
+#' fun_covariates <- c("CO", "temperature")
+#' mfdobj_x <- get_mfd_list(air[fun_covariates],
+#'                          n_basis = 15,
+#'                          lambda = 1e-2)
+#' mfdobj_y <- get_mfd_list(air["NO2"],
+#'                          n_basis = 15,
+#'                          lambda = 1e-2)
+#' mfdobj_y1 <- mfdobj_y[1:60]
+#' mfdobj_y_tuning <- mfdobj_y[61:90]
+#' mfdobj_y2 <- mfdobj_y[91:100]
+#' mfdobj_x1 <- mfdobj_x[1:60]
+#' mfdobj_x_tuning <- mfdobj_x[61:90]
+#' mfdobj_x2 <- mfdobj_x[91:100]
+#' mod_fof <- fof_pc(mfdobj_y1, mfdobj_x1)
+#' cclist <- regr_cc_fof(mod_fof,
+#'                       mfdobj_y_new = mfdobj_y2,
+#'                       mfdobj_x_new = mfdobj_x2,
+#'                       mfdobj_y_tuning = NULL,
+#'                       mfdobj_x_tuning = NULL)
+#' plot_control_charts(cclist)
+#'
+regr_cc_fof <- function(object,
+                        mfdobj_y_new,
+                        mfdobj_x_new,
+                        mfdobj_y_tuning = NULL,
+                        mfdobj_x_tuning = NULL,
+                        alpha = 0.05,
+                        include_covariates = FALSE) {
+
+  if (!is.list(object)) {
+    stop("object must be a list produced by fof_pc.")
+  }
+
+  if (!identical(names(object), c(
+    "mod",
+    "beta_fd",
+    "fitted.values",
+    "residuals_original_scale",
+    "residuals",
+    "type_residuals",
+    "pca_x",
+    "pca_y",
+    "pca_res",
+    "components_x",
+    "components_y",
+    "components_res",
+    "y_standardized",
+    "tot_variance_explained_x",
+    "tot_variance_explained_y",
+    "tot_variance_explained_res",
+    "get_studentized_residuals"
+  ))) {
+    stop("object must be a list produced by fof_pc.")
+  }
+
+  if (!(is.numeric(alpha) | is.list(alpha))) {
+    stop("alpha must be either a number or a list")
+  }
+
+  if (is.numeric(alpha) & length(alpha) > 1) {
+    stop("alpha must be a single number, between 0 and 1, or a list.")
+  }
+
+  if (is.numeric(alpha) & !all(alpha > 0 & alpha < 1)) {
+    stop("alpha must be a single number, between 0 and 1, or a list.")
+  }
+
+  if (is.list(alpha)) {
+    if (include_covariates) {
+      if (!all(names(alpha) %in% c("T2_x", "spe_x", "T2", "spe")) |
+          !all(c("T2_x", "spe_x", "T2", "spe") %in% names(alpha))) {
+        stop("if alpha is a list and include_covariates is TRUE,
+             it must be named with names T2_x spe_x, T2, spe.")
+      }
+    }
+    if (!include_covariates) {
+      if (!all(names(alpha) %in% c("T2", "spe")) |
+          !all(c("T2", "spe") %in% names(alpha))) {
+        stop("if alpha is a list and include_covariates is FALSE,
+             it must be named with names T2 and spe.")
+      }
+    }
+
+    alpha_x <- alpha[c("T2_x", "spe_x")]
+    alpha_y <- alpha[c("T2", "spe")]
+
+  }
+
+  if (is.numeric(alpha)) {
+      alpha_y <- list(T2 = alpha / 4, spe = alpha / 4)
+    if (include_covariates) {
+      alpha_x <- list(T2_x = alpha / 4, spe_x = alpha / 4)
+    }
+  }
+
+  if (is.null(mfdobj_y_tuning) | is.null(mfdobj_x_tuning)) {
+    mfdobj_y_tuning <- object$pca_y$data
+    mfdobj_x_tuning <- object$pca_x$data
+  }
+  tuning <- predict_fof_pc(
+    object = object,
+    mfdobj_y_new = mfdobj_y_tuning,
+    mfdobj_x_new = mfdobj_x_tuning)
+
+  phase_II <- predict_fof_pc(
+    object = object,
+    mfdobj_y_new = mfdobj_y_new,
+    mfdobj_x_new = mfdobj_x_new)
+
+  out <- control_charts_pca(
+    pca = object$pca_res,
+    components = object$components_res,
+    tuning_data = tuning$pred_error,
+    newdata = phase_II$pred_error,
+    alpha = alpha_y,
+    limits = "standard"
+  )
+  ret <- out %>%
+    select(-contains("contribution_"))
+
+  if (include_covariates) {
+    alpha_x <- list(T2 = alpha_x$T2, spe = alpha_x$spe)
+    ret_covariates <- control_charts_pca(
+      pca = object$pca_x,
+      components = object$components_x,
+      tuning_data = mfdobj_x_tuning,
+      newdata = mfdobj_x_new,
+      alpha = alpha_x,
+      limits = "standard"
+    ) %>%
+      rename("T2_x" = "T2",
+             "spe_x" = "spe",
+             "T2_lim_x" = "T2_lim",
+             "spe_lim_x" = "spe_lim")
+    ret <- cbind(ret, select(ret_covariates, -id))
+  }
+
+  return(ret)
+
+}
+
+

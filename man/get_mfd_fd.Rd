@@ -19,6 +19,7 @@ Convert a \code{fd} object into a Multivariate Functional Data object.
 }
 \examples{
 library(funcharts)
+library(fda)
 bs <- create.bspline.basis(nbasis = 10)
 fdobj <- fd(coef = 1:10, basisobj = bs)
 mfdobj <- get_mfd_fd(fdobj)

@@ -1,10 +1,13 @@
 #' Simulate example data for funcharts
 #'
-#' Function used to simulate three data sets to illustrate the use of \code{funcharts}.
+#' Function used to simulate three data sets to illustrate the use
+#' of \code{funcharts}.
 #' It uses the function \code{\link[funcharts]{simulate_mfd}},
 #' which creates a data set with three functional covariates,
-#' a functional response generated as a function of the three functional covariates,
-#' and a scalar response generated as a function of the three functional covariates.
+#' a functional response generated as a function of the
+#' three functional covariates,
+#' and a scalar response generated as a function of the
+#' three functional covariates.
 #' This function generates three data sets, one for phase I,
 #' one for tuning, i.e.,
 #' to estimate the control chart limits, and one for phase II monitoring.
@@ -65,25 +68,32 @@ sim_funcharts <- function(nobs1 = 1000, nobs_tun = 1000, nobs2 = 60) {
 
 #' Simulate a data set for funcharts
 #'
-#' Function used to simulate a data set to illustrate the use of \code{funcharts}.
+#' Function used to simulate a data set to illustrate
+#' the use of \code{funcharts}.
 #' It creates a data set with three functional covariates,
-#' a functional response generated as a function of the three functional covariates
+#' a functional response generated as a function of the
+#' three functional covariates
 #' through a function-on-function linear model,
-#' and a scalar response generated as a function of the three functional covariates
+#' and a scalar response generated as a function of the
+#' three functional covariates
 #' through a scalar-on-function linear model.
 #' This function covers the simulation study in Centofanti et al. (2021)
 #' for the function-on-function case and also simulates data in a similar way
 #' for the scalar response case.
 #' In the default case, the function generates in-control data.
-#' Additional arguments can be used to generate additional data that are out of control,
-#' with mean shifts according to the scenarios proposed by Centofanti et al. (2021).
+#' Additional arguments can be used to generate additional
+#' data that are out of control,
+#' with mean shifts according to the scenarios proposed
+#' by Centofanti et al. (2021).
 #' Each simulated observation of a functional variable consists of
-#' a vector of 150 discrete points, equally spaced between 0 and 1, generated with noise.
+#' a vector of 150 discrete points, equally spaced between 0 and 1,
+#' generated with noise.
 #' @param nobs
 #' The number of observation to simulate
 #' @param R2
 #' The desired coefficient of determination in the regression.
-#' In both the scalar and functional response cases, only three values are allowed,
+#' In both the scalar and functional response cases,
+#'  only three values are allowed,
 #' i.e. 0.97, 0.86, 0.74.
 #' Default is 0.97.
 #' @param seed Deprecated: use \code{set.seed()} before calling
@@ -113,19 +123,24 @@ sim_funcharts <- function(nobs1 = 1000, nobs_tun = 1000, nobs2 = 60) {
 #' shown in Centofanti et al. (2021).
 #' Default is "0".
 #' @param d_y
-#' A number indicating the severity of the shift type for the functional response.
+#' A number indicating the severity of the shift type for
+#' the functional response.
 #' Default is 0.
 #' @param d_x1
-#' A number indicating the severity of the shift type for the first functional covariate.
+#' A number indicating the severity of the shift type for
+#' the first functional covariate.
 #' Default is 0.
 #' @param d_x2
-#' A number indicating the severity of the shift type for the second functional covariate.
+#' A number indicating the severity of the shift type for
+#' the second functional covariate.
 #' Default is 0.
 #' @param d_x3
-#' A number indicating the severity of the shift type for the third functional covariate.
+#' A number indicating the severity of the shift type for
+#' the third functional covariate.
 #' Default is 0.
 #' @param d_y_scalar
-#' A number indicating the severity of the shift type for the scalar response.
+#' A number indicating the severity of the shift type for
+#' the scalar response.
 #' Default is 0.
 #' @param save_beta
 #' If TRUE, the true regression coefficients of both the function-on-function
@@ -135,21 +150,30 @@ sim_funcharts <- function(nobs1 = 1000, nobs_tun = 1000, nobs2 = 60) {
 #' @return
 #' A list with the following elements:
 #'
-#' * \code{X1} is a \code{nobs}x150 matrix with the simulated observations of the first functional covariate
+#' * \code{X1} is a \code{nobs}x150 matrix with the simulated
+#' observations of the first functional covariate
 #'
-#' * \code{X2} is a \code{nobs}x150 matrix with the simulated observations of the second functional covariate
+#' * \code{X2} is a \code{nobs}x150 matrix with the simulated
+#' observations of the second functional covariate
 #'
-#' * \code{X3} is a \code{nobs}x150 matrix with the simulated observations of the third functional covariate
+#' * \code{X3} is a \code{nobs}x150 matrix with the simulated
+#' observations of the third functional covariate
 #'
-#' * \code{Y} is a \code{nobs}x150 matrix with the simulated observations of the functional response
+#' * \code{Y} is a \code{nobs}x150 matrix with the simulated
+#' observations of the functional response
 #'
-#' * \code{y_scalar} is a vector of length 150 with the simulated observations of the scalar response
+#' * \code{y_scalar} is a vector of length 150 with the simulated
+#' observations of the scalar response
 #'
-#' * \code{beta_fof}, if \code{save_beta = TRUE}, is a list of three 500x500 matrices
-#' with the discretized functional coefficients of the function-on-function regression
+#' * \code{beta_fof}, if \code{save_beta = TRUE}, is a
+#' list of three 500x500 matrices
+#' with the discretized functional coefficients of the
+#' function-on-function regression
 #'
-#' * \code{beta_sof}, if \code{save_beta = TRUE}, is a list of three vectors of length 500
-#' with the discretized functional coefficients of the scalar-on-function regression
+#' * \code{beta_sof}, if \code{save_beta = TRUE}, is a
+#' list of three vectors of length 500
+#' with the discretized functional coefficients of the
+#' scalar-on-function regression
 #'
 #'
 #' @export
@@ -187,17 +211,20 @@ simulate_mfd <- function(nobs = 1000,
     stop("only shift types A, B, C, D and 0 are allowed.")
   }
   if ((toupper(shift_type_y) %in% c("A", "B", "C", "D")) & d_y == 0) {
-    stop("If there is a shift, the corresponding severity d must be greater than zero.")
+    stop("If there is a shift, the corresponding
+         severity d must be greater than zero.")
   }
   if (toupper(shift_type_y) == "0" & d_y != 0) {
-    stop("If there is no shift, the corresponding severity d must be zero.")
+    stop("If there is no shift, the corresponding
+         severity d must be zero.")
   }
 
   if (!(toupper(shift_type_x1) %in% c("A", "B", "C", "D", "0"))) {
     stop("only shift types A, B, C, D and 0 are allowed.")
   }
   if (toupper(shift_type_x1) %in% c("A", "B", "C", "D") & d_x1 == 0) {
-    stop("If there is a shift, the corresponding severity d must be greater than zero.")
+    stop("If there is a shift, the corresponding
+         severity d must be greater than zero.")
   }
   if (toupper(shift_type_x1) == "0" & d_x1 != 0) {
     stop("If there is no shift, the corresponding severity d must be zero.")
@@ -207,7 +234,8 @@ simulate_mfd <- function(nobs = 1000,
     stop("only shift types A, B, C, D and 0 are allowed.")
   }
   if (toupper(shift_type_x2) %in% c("A", "B", "C", "D") & d_x2 == 0) {
-    stop("If there is a shift, the corresponding severity d must be greater than zero.")
+    stop("If there is a shift, the corresponding
+         severity d must be greater than zero.")
   }
   if (toupper(shift_type_x2) == "0" & d_x2 != 0) {
     stop("If there is no shift, the corresponding severity d must be zero.")
@@ -217,7 +245,8 @@ simulate_mfd <- function(nobs = 1000,
     stop("only shift types A, B, C, D and 0 are allowed.")
   }
   if (toupper(shift_type_x3) %in% c("A", "B", "C", "D") & d_x3 == 0) {
-    stop("If there is a shift, the corresponding severity d must be greater than zero.")
+    stop("If there is a shift, the corresponding
+         severity d must be greater than zero.")
   }
   if (toupper(shift_type_x3) == "0" & d_x3 != 0) {
     stop("If there is no shift, the corresponding severity d must be zero.")
@@ -296,8 +325,10 @@ simulate_mfd <- function(nobs = 1000,
   if (shift_type_y == "D") pary <- pary + d_y * c(1, 1, 0, 0)
 
   f1_m <- fun(par = par1,
-              m = c(0.075, 0.100, 0.250, 0.350, 0.500, 0.650, 0.850, 0.900, 0.950),
-              s = c(0.050, 0.030, 0.050, 0.050, 0.100, 0.050, 0.100, 0.040, 0.035))
+              m = c(0.075, 0.100, 0.250, 0.350, 0.500,
+                    0.650, 0.850, 0.900, 0.950),
+              s = c(0.050, 0.030, 0.050, 0.050, 0.100,
+                    0.050, 0.100, 0.040, 0.035))
   f2_m <- fun(par = par2, m = 0, s = 0)
   f3_m <- fun(par = par3,
               m = c(0.075, 0.100, 0.150, 0.225, 0.400, 0.525, 0.550,
@@ -307,8 +338,10 @@ simulate_mfd <- function(nobs = 1000,
   fy_m <- fun(par = pary, m = 0, s = 0)
 
   f1_v <- fun(par = c(0, 0, 1, 0.1),
-              m = c(0.075, 0.100, 0.125, 0.150, 0.400, 0.650, 0.850, 0.900, 0.925),
-              s = c(0.050, 0.060, 0.075, 0.075, 0.075, 0.075, 0.045, 0.045, 0.040))
+              m = c(0.075, 0.100, 0.125, 0.150, 0.400,
+                    0.650, 0.850, 0.900, 0.925),
+              s = c(0.050, 0.060, 0.075, 0.075, 0.075,
+                    0.075, 0.045, 0.045, 0.040))
   f2_v <- fun(par = c(0, 0.02, 1, 0),
               m = 0,
               s = 0)
@@ -336,7 +369,9 @@ simulate_mfd <- function(nobs = 1000,
   X3_scaled <- csi_X %*% t(meig3_interpolate)
   X3 <- t(f3_m(grid) + t(X3_scaled) * sqrt(f3_v(grid)))
 
-  eigy_interpolate <- apply(t(eigy$vectors), 1, function(y) approx(x_seq, y, grid)$y)
+  eigy_interpolate <- apply(t(eigy$vectors),
+                            1,
+                            function(y) approx(x_seq, y, grid)$y)
   Y_scaled <- csi_Y %*% t(eigy_interpolate)
   Y <- t(fy_m(grid) + t(Y_scaled) * sqrt(fy_v(grid)))
 
@@ -357,12 +392,17 @@ simulate_mfd <- function(nobs = 1000,
   if (save_beta) {
     beta_fof <- 0
     for (kk in seq_along(diag(B))) {
-      beta_fof <- beta_fof + diag(B)[kk] * outer(e$vectors[, 1], eigy$vectors[, 1])
+      beta_fof <- beta_fof + diag(B)[kk] *
+        outer(e$vectors[, 1], eigy$vectors[, 1])
     }
-    beta_fof <- list(beta_fof[1:500, ], beta_fof[500 + 1:500, ], beta_fof[1000 + 1:500, ])
+    beta_fof <- list(beta_fof[1:500, ],
+                     beta_fof[500 + 1:500, ],
+                     beta_fof[1000 + 1:500, ])
 
     beta_sof <- as.numeric(e$vectors[, 1:10] %*% b_sof)
-    beta_sof <- list(beta_sof[1:500], beta_sof[500 + 1:500], beta_sof[1000 + 1:500])
+    beta_sof <- list(beta_sof[1:500],
+                     beta_sof[500 + 1:500],
+                     beta_sof[1000 + 1:500])
   }
 
   out <- list(X1 = X1,
@@ -371,8 +411,8 @@ simulate_mfd <- function(nobs = 1000,
        Y = Y,
        y_scalar = y_scalar)
   if (save_beta) {
-    out$beta_fof = beta_fof
-    out$beta_sof = beta_sof
+    out$beta_fof <- beta_fof
+    out$beta_sof <- beta_sof
   }
   out
 

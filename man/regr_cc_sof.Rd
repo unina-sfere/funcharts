@@ -4,7 +4,16 @@
 \alias{regr_cc_sof}
 \title{Scalar-on-Function Regression Control Chart}
 \usage{
-regr_cc_sof(object, y_new, mfdobj_x_new, alpha = 0.05)
+regr_cc_sof(
+  object,
+  y_new,
+  mfdobj_x_new,
+  y_tuning = NULL,
+  mfdobj_x_tuning = NULL,
+  alpha = 0.05,
+  parametric_limits = TRUE,
+  include_covariates = FALSE
+)
 }
 \arguments{
 \item{object}{A list obtained as output from \code{sof_pc},
@@ -17,11 +26,48 @@ in the phase II data set.}
 \item{mfdobj_x_new}{An object of class \code{mfd} containing
 the phase II data set of the functional covariates observations.}
 
-\item{alpha}{A numeric value indicating the Type I error for
-the regression control chart
-and such that this function returns the \code{1-alpha} prediction interval
-on the response.
-Default is 0.05.}
+\item{y_tuning}{A numeric vector containing the observations of the scalar response
+variable in the tuning data set.
+If NULL, the training data, i.e. the data used to
+fit the scalar-on-function regression model,
+are also used as the tuning data set.
+Default is NULL.}
+
+\item{mfdobj_x_tuning}{An object of class \code{mfd} containing
+the tuning set of the multivariate functional data, used to estimate the
+control chart limits.
+If NULL, the training data, i.e. the data used to
+fit the scalar-on-function regression model,
+are also used as the tuning data set.
+Default is NULL.}
+
+\item{alpha}{If it is a number between 0 and 1,
+it defines the overall type-I error probability.
+If \code{include_covariates} is \code{TRUE}, i.e.,
+also the Hotelling's T2 and SPE control charts are built
+on the functional covariates, then the Bonferroni
+correction is applied by setting the type-I error probability
+in the three control charts equal to \code{alpha/3}.
+In this last case,
+if you want to set manually the Type-I error probabilities,
+then the argument \code{alpha} must be a named list
+with three elements, named \code{T2}, \code{spe} and \code{y},
+respectively, each containing
+the desired Type I error probability of
+the corresponding control chart, where \code{y} refers to the
+regression control chart.
+Default value is 0.05.}
+
+\item{parametric_limits}{If TRUE, the limits are calculated based on the normal distribution
+assumption on the response variable, as in Capezza et al. (2020).
+If FALSE, the limits are calculated nonparametrically as
+empirical quantiles of the distribution of the residuals calculated
+on the tuning data set.}
+
+\item{include_covariates}{If TRUE, also functional covariates are monitored through
+ \code{control_charts_pca},.
+If FALSE, only the scalar response, conditionally on the covariates,
+is monitored.}
 }
 \value{
 A \code{data.frame} with as many rows as the
@@ -46,13 +92,19 @@ on the prediction error,
 on the prediction error.
 }
 \description{
+This function is deprecated. Use \code{\link{regr_cc_sof}}.
 This function builds a data frame needed
 to plot the scalar-on-function regression control chart,
 based on a fitted function-on-function linear regression model and
-proposed in Capezza et al. (2020) together with the Hotelling's T^2 and
-squared prediction error control charts.
+proposed in Capezza et al. (2020).
+If \code{include_covariates} is \code{TRUE},
+it also plots the Hotelling's T^2 and
+squared prediction error control charts built on the
+multivariate functional covariates.
+}
+\details{
 The training data have already been used to fit the model.
-A tuning data set can be provided that is used to estimate
+An additional tuning data set can be provided that is used to estimate
 the control chart limits.
 A phase II data set contains the observations to be monitored
 with the built control charts.

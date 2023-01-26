@@ -31,3 +31,62 @@ test_that("regr_sof_pc works", {
                            mfdobj_x_new = mfdobj_x2),
                "data.frame")
 })
+
+test_that("control_charts functions works", {
+  pca <- pca_mfd(mfdobj_x)
+  cc <- control_charts_pca(pca, newdata = mfdobj_x)
+  expect_is(cc, "data.frame")
+  expect_is(get_ooc(cc), "data.frame")
+  expect_is(which_ooc(cc), "list")
+  p <- cont_plot(cc, 1)
+  expect_is(p, "ggplot")
+  p <- plot_mon(cc, mfdobj_x, mfdobj_x[1])
+  expect_is(p, "ggplot")
+  cc_cv <- control_charts_pca(pca, newdata = mfdobj_x,
+                              limits = "cv",
+                              nfold = 2)
+  expect_is(cc_cv, "data.frame")
+
+  cc <- regr_cc_sof(mod_sof,
+                    y_new = y2_scalar,
+                    mfdobj_x_new = mfdobj_x2)
+  expect_is(cc, "data.frame")
+
+
+  cc <- regr_cc_fof(mod_fof,
+                    mfdobj_y_new = mfdobj_y2,
+                    mfdobj_x_new = mfdobj_x2)
+  # expect_is(cc, "data.frame")
+  p <- plot_control_charts(cc)
+  expect_is(p, "ggplot")
+
+
+
+
+})
+
+test_that("control_charts_sof gives warning", {
+
+  expect_warning(cc <- control_charts_sof_pc(mod_sof,
+                                             y_test = y2_scalar,
+                                             mfdobj_x_test = mfdobj_x2))
+
+  air1 <- lapply(air, function(x) x[1:8, , drop = FALSE])
+  air2 <- lapply(air, function(x) x[9:10, , drop = FALSE])
+  mfdobj_x1_list <- get_mfd_list_real_time(air1[c("CO", "temperature")],
+                                           n_basis = 15,
+                                           lambda = 1e-2,
+                                           k_seq = c(0.5, 1))
+  mfdobj_x2_list <- get_mfd_list_real_time(air2[c("CO", "temperature")],
+                                           n_basis = 15,
+                                           lambda = 1e-2,
+                                           k_seq = c(0.5, 1))
+  y1 <- rowMeans(air1$NO2)
+  y2 <- rowMeans(air2$NO2)
+  mod_list <- sof_pc_real_time(y1, mfdobj_x1_list)
+  expect_warning(cclist <- control_charts_sof_pc_real_time(
+    mod_list = mod_list,
+    y_test = y2,
+    mfdobj_x_test = mfdobj_x2_list))
+})
+

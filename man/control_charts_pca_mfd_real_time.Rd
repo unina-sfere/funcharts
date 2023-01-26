@@ -9,7 +9,7 @@ control_charts_pca_mfd_real_time(
   components_list = NULL,
   mfdobj_x_test,
   mfdobj_x_tuning = NULL,
-  alpha = list(T2 = 0.0125, spe = 0.0125),
+  alpha = 0.05,
   limits = "standard",
   seed,
   nfold = NULL,

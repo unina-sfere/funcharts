@@ -23,22 +23,86 @@ test_that("domain must be a vector of 2 numbers", {
                "domain must be a vector with two numbers.")
 })
 
+test_that("check parallel", {
+  expect_no_error(get_mfd_df(dt = df,
+                          domain = c(1, 10),
+                          arg = "x",
+                          id = "id",
+                          variables = c("y1", "y2"),
+                          ncores = 2))
+})
+
+test_that("get_mfd functions work", {
+  expect_is(get_mfd_df(dt = df,
+                       domain = c(0, 1),
+                       arg = "x",
+                       id = "id",
+                       variables = c("y1", "y2"),
+                       lambda = 1e-2), "mfd")
+  expect_is(get_mfd_df_real_time(dt = df,
+                       domain = c(1, 10),
+                       arg = "x",
+                       id = "id",
+                       variables = c("y1", "y2"),
+                       lambda = 1e-2,
+                       k_seq = seq(0.5, 1)), "list")
+
+  expect_is(get_mfd_list(data_list = data_list), "mfd")
+  expect_is(get_mfd_list_real_time(data_list = data_list,
+                                   lambda = 1e-2,
+                                   k_seq = seq(0.5, 1)), "list")
+
+  expect_is(get_mfd_array(data_array  = data_array), "mfd")
+  expect_is(get_mfd_array_real_time(data_array = data_array,
+                                   lambda = 1e-2,
+                                   k_seq = seq(0.5, 1)), "list")
+
+
+})
+
+test_that("plot mfd functions work", {
+  mfdobj <- data_sim_mfd()
+  p <- plot_mfd(mfdobj)
+  expect_is(p, "ggplot")
+
+  mfdobj_y <- data_sim_mfd(nbasis = 15)
+  mfdobj_x <- data_sim_mfd(nbasis = 15)
+  mod <- fof_pc(mfdobj_y, mfdobj_x)
+  p <- plot_bifd(mod$beta_fd)
+  expect_is(p, "ggplot")
+
+  library(ggplot2)
+  data("air")
+  xlist <- list(NO2 = air$NO2[1:2, ])
+  mfdobj <- get_mfd_list(xlist)
+  p <- ggplot() +
+    geom_mfd(mfdobj = mfdobj, type_mfd = "raw")
+  expect_is(p, "ggplot")
+})
+
+test_that("cbind rbind mfd work", {
+  mfdobj1 <- data_sim_mfd()
+  mfdobj2 <- data_sim_mfd()
+  expect_is(cbind_mfd(mfdobj1, mfdobj2), "mfd")
+  expect_is(rbind_mfd(mfdobj1, mfdobj2), "mfd")
+})
+
 test_that("get_mfd_fd correctly converts fd objects", {
-  bs <- create.bspline.basis(nbasis = 10)
-  fdobj <- fd(basisobj = bs)
+  bs <- fda::create.bspline.basis(nbasis = 10)
+  fdobj <- fda::fd(basisobj = bs)
   expect_equal(get_mfd_fd(fdobj),
                mfd(coef = array(0, dim = c(10, 1, 1)),
                    basisobj = fdobj$basis,
                    fdnames = fdobj$fdnames))
   expect_equal({
     mfdobj <- data_sim_mfd()
-    fdobj <- fd(mfdobj$coefs, mfdobj$basis, mfdobj$fdnames)
+    fdobj <- fda::fd(mfdobj$coefs, mfdobj$basis, mfdobj$fdnames)
     get_mfd_fd(fdobj[1, 1:2])
   },
   mfdobj[1, 1:2])
   expect_equal({
     mfdobj <- data_sim_mfd()
-    fdobj <- fd(mfdobj$coefs, mfdobj$basis, mfdobj$fdnames)
+    fdobj <- fda::fd(mfdobj$coefs, mfdobj$basis, mfdobj$fdnames)
     get_mfd_fd(fdobj[1:2, 1])
   },
   mfdobj[1:2, 1])
@@ -130,6 +194,15 @@ test_that("scale_mfd requires center to be fd object", {
   expect_null(attr(mfdobj2_scaled, "scaled:center"))
   expect_is(attr(mfdobj2_scaled, "scaled:scale"), "fd")
 
+})
+
+test_that("inprod functions work", {
+  mfdobj1 <- data_sim_mfd()
+  mfdobj2 <- data_sim_mfd()
+  expect_is(inprod_mfd_diag(mfdobj1, mfdobj2), "matrix")
+  mfdobj3 <- data_sim_mfd(nbasis = 10)
+  expect_is(inprod_mfd_diag(mfdobj1, mfdobj3), "matrix")
+  expect_is(inprod_mfd(mfdobj1, mfdobj3), "array")
 })
 
 

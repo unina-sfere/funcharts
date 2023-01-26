@@ -10,7 +10,8 @@ regr_cc_fof(
   mfdobj_x_new,
   mfdobj_y_tuning = NULL,
   mfdobj_x_tuning = NULL,
-  alpha = list(T2 = 0.025, spe = 0.025)
+  alpha = 0.05,
+  include_covariates = FALSE
 )
 }
 \arguments{
@@ -43,14 +44,28 @@ are also used as the tuning data set, i.e.
 \code{mfdobj_x_tuning=object$pca_x$data}.
 Default is NULL.}
 
-\item{alpha}{A named list with two elements,
-named \code{T2} and \code{spe}, respectively, each containing
-the desired Type I error probability of the corresponding control chart.
-Note that at the moment you have to take into account manually
-the family-wise error rate and adjust
-the two values accordingly. See Centofanti et al. (2021)
-for additional details.
-Default value is \code{list(T2 = 0.025, spe = 0.025)}.}
+\item{alpha}{If it is a number between 0 and 1,
+it defines the overall type-I error probability.
+By default, it is equal to 0.05 and the Bonferroni correction
+is applied by setting the type-I error probabilities equal to
+\code{alpha/2} in the Hotelling's T2 and SPE control charts.
+If \code{include_covariates} is \code{TRUE}, i.e.,
+the Hotelling's T2 and SPE control charts are built
+also on the multivariate functional covariates, then the Bonferroni
+correction is applied by setting the type-I error probability
+in the four control charts equal to \code{alpha/4}.
+If you want to set manually the Type-I error probabilities,
+then the argument \code{alpha} must be a named list
+with elements named as \code{T2}, \code{spe},
+\code{T2_x} and, \code{spe_x}, respectively, containing
+the desired Type I error probability of
+the T2 and SPE control charts for the functional response and
+the multivariate functional covariates, respectively.}
+
+\item{include_covariates}{If TRUE, also functional covariates are monitored through
+ \code{control_charts_pca},.
+If FALSE, only the functional response, conditionally on the covariates,
+is monitored.}
 }
 \value{
 A \code{data.frame} containing the output of the
@@ -70,6 +85,7 @@ An optional tuning data set can be provided that is used to estimate
 the control chart limits.
 A phase II data set contains the observations to be monitored
 with the control charts.
+It also allows to jointly monitor the multivariate functional covariates.
 }
 \examples{
 library(funcharts)

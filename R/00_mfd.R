@@ -28,7 +28,8 @@
 #' containing labels for the levels of the corresponding dimension
 #' of the discrete data.
 #'
-#' The first dimension is for a single character indicating the argument values,
+#' The first dimension is for a single character indicating the argument
+#' values,
 #' i.e. the variable on the functional domain.
 #'
 #' The second is for replications, i.e. it denotes the functional observations.
@@ -80,6 +81,7 @@
 #'
 #' @examples
 #' library(funcharts)
+#' library(fda)
 #' set.seed(0)
 #' nobs <- 5
 #' nbasis <- 10
@@ -89,7 +91,12 @@
 #' mfdobj <- mfd(coef = coef, basisobj = bs)
 #' plot_mfd(mfdobj)
 #'
-mfd <- function(coef, basisobj, fdnames = NULL, raw = NULL, id_var = NULL, B = NULL) {
+mfd <- function(coef,
+                basisobj,
+                fdnames = NULL,
+                raw = NULL,
+                id_var = NULL,
+                B = NULL) {
 
   if (is.null(fdnames)) {
     fdnames <- list(
@@ -119,8 +126,10 @@ mfd <- function(coef, basisobj, fdnames = NULL, raw = NULL, id_var = NULL, B = N
                   "the same values as fdnames[[2]]."))
     }
   }
-  if (!(basisobj$type %in% c("bspline", "fourier", "const", "expon", "monom", "polygonal", "power"))) {
-    stop("supported basis systems are bspline, fourier, constant, exponential, monomial, polygonal, power")
+  if (!(basisobj$type %in% c("bspline", "fourier", "const", "expon",
+                             "monom", "polygonal", "power"))) {
+    stop("supported basis systems are bspline, fourier, constant,
+         exponential, monomial, polygonal, power")
   }
   if (!is.array(coef)) {
     stop("'coef' is not array")
@@ -153,12 +162,14 @@ mfd <- function(coef, basisobj, fdnames = NULL, raw = NULL, id_var = NULL, B = N
     if (basisobj$type == "expon") {
       out_mat <- outer(basisobj$params, basisobj$params, "+")
       exp_out_mat <- exp(out_mat)
-      B <- (exp_out_mat ^ basisobj$rangeval[2] - exp_out_mat ^ basisobj$rangeval[1]) / out_mat
+      B <- (exp_out_mat ^ basisobj$rangeval[2] -
+              exp_out_mat ^ basisobj$rangeval[1]) / out_mat
       B[out_mat == 0] <- diff(basisobj$rangeval)
     }
     if (basisobj$type == "monom") {
       out_mat <- outer(basisobj$params, basisobj$params, "+") + 1
-      B <- (basisobj$rangeval[2] ^ out_mat - basisobj$rangeval[1] ^ out_mat) / out_mat
+      B <- (basisobj$rangeval[2] ^ out_mat -
+              basisobj$rangeval[1] ^ out_mat) / out_mat
     }
     if (basisobj$type == "polygonal") {
       B <- inprod_fd(fd(diag(basisobj$nbasis), basisobj),
@@ -166,12 +177,15 @@ mfd <- function(coef, basisobj, fdnames = NULL, raw = NULL, id_var = NULL, B = N
     }
     if (basisobj$type == "power") {
       out_mat <- outer(basisobj$params, basisobj$params, "+") + 1
-      B <- (basisobj$rangeval[2] ^ out_mat - basisobj$rangeval[1] ^ out_mat) / out_mat
-      B[out_mat == 0] <- log(basisobj$rangeval[2]) - log(basisobj$rangeval[1])
+      B <- (basisobj$rangeval[2] ^ out_mat -
+              basisobj$rangeval[1] ^ out_mat) / out_mat
+      B[out_mat == 0] <- log(basisobj$rangeval[2]) -
+        log(basisobj$rangeval[1])
     }
   }
   if (!is.matrix(B)) stop("B must be a matrix")
-  if (nrow(B) != nb | ncol(B) != nb) stop("B must have the right number of rows and columns")
+  if (nrow(B) != nb | ncol(B) != nb)
+    stop("B must have the right number of rows and columns")
   fdobj$basis$B <- B
   class(fdobj) <- c("mfd", "fd")
   fdobj
@@ -195,6 +209,8 @@ is.mfd <- function(mfdobj) if (inherits(mfdobj, "mfd")) TRUE else FALSE
 #'
 #' Simulate random coefficients and create a multivariate functional data
 #' object of class `mfd`.
+#' It is mainly for internal use, to check that the package functions
+#' work.
 #'
 #' @param nobs Number of functional observations to be simulated.
 #' @param nbasis Number of basis functions.
@@ -215,7 +231,8 @@ data_sim_mfd <- function(nobs = 5,
                          seed) {
   if (!missing(seed)) {
     warning(paste0("argument seed is deprecated; ",
-                   "please use set.seed() before calling the function instead."),
+                   "please use set.seed()
+                   before calling the function instead."),
             call. = FALSE)
   }
   coef <- array(stats::rnorm(nobs * nbasis * nvar),
@@ -273,13 +290,15 @@ data_sim_mfd <- function(nobs = 5,
 #' @export
 #' @examples
 #' library(funcharts)
+#' library(fda)
 #'
 #' # In the following, we extract the first one/two observations/variables
 #' # to see the difference with `[.fd`.
 #' mfdobj <- data_sim_mfd()
 #' fdobj <- fd(mfdobj$coefs, mfdobj$basis, mfdobj$fdnames)
 #'
-#' # The argument `coef` in `fd` objects is converted to a matrix when possible.
+#' # The argument `coef` in `fd`
+#' # objects is converted to a matrix when possible.
 #' dim(fdobj[1, 1]$coef)
 #' # Not clear what is the second dimension:
 #' # the number of replications or the number of variables?
@@ -381,7 +400,7 @@ inprod_mfd <- function(mfdobj1, mfdobj2 = NULL) {
                    dimnames = list(ids1, ids2, variables))
   C1 <- mfdobj1$coefs
   C2 <- mfdobj2$coefs
-  inprods[] <- sapply(seq_len(n_var), function(jj) {
+  inprods[] <- vapply(seq_len(n_var), function(jj) {
     C1jj <- matrix(C1[, , jj], nrow = dim(C1)[1], ncol = dim(C1)[2])
     C2jj <- matrix(C2[, , jj], nrow = dim(C2)[1], ncol = dim(C2)[2])
 
@@ -403,7 +422,7 @@ inprod_mfd <- function(mfdobj1, mfdobj2 = NULL) {
       out <- inprod_fd(fdobj1_jj, fdobj2_jj)
     }
     out
-  })
+  }, numeric(dim(mfdobj1$coefs)[2] * dim(mfdobj2$coefs)[2]))
 
   inprods
 
@@ -441,25 +460,34 @@ norm.mfd <- function(mfdobj) {
 
 
 
-#' Inner product of two multivariate functional data objects, for each observation
+#' Inner product of two multivariate functional data objects,
+#' for each observation
 #'
 #' @param mfdobj1 A multivariate functional data object of class \code{mfd}.
 #' @param mfdobj2 A multivariate functional data object of class \code{mfd},
-#' with the same number of functional variables and observations as \code{mfdobj1}.
+#' with the same number of functional variables and observations
+#' as \code{mfdobj1}.
 #' If NULL, then \code{mfdobj2=mfdobj1}. Default is NULL.
 #'
-#' @return It calculates the inner product of two multivariate functional data objects.
-#' The main function \code{inprod} of the package \code{fda} calculates inner products among
+#' @return It calculates the inner product of two
+#'  multivariate functional data objects.
+#' The main function \code{inprod} of the package \code{fda}
+#' calculates inner products among
 #' all possible couples of observations.
 #' This means that, if \code{mfdobj1} has \code{n1} observations
 #' and \code{mfdobj2} has \code{n2} observations,
 #' then for each variable \code{n1 X n2} inner products are calculated.
-#' However, often one is interested only in calculating the \code{n} inner products
-#' between the \code{n} observations of \code{mfdobj1} and the corresponding \code{n}
-#' observations of \code{mfdobj2}. This function provides this "diagonal" inner products only,
-#' saving a lot of computation with respect to using \code{fda::inprod} and then extracting the
+#' However, often one is interested only in calculating
+#' the \code{n} inner products
+#' between the \code{n} observations of \code{mfdobj1} and
+#' the corresponding \code{n}
+#' observations of \code{mfdobj2}. This function provides
+#' this "diagonal" inner products only,
+#' saving a lot of computation with respect to using
+#' \code{fda::inprod} and then extracting the
 #' diagonal elements.
-#' Note that the code of this function calls a modified version of \code{fda::inprod()}.
+#' Note that the code of this function calls a modified version
+#' of \code{fda::inprod()}.
 #' @export
 #'
 #' @examples
@@ -497,29 +525,29 @@ inprod_mfd_diag <- function(mfdobj1, mfdobj2 = NULL) {
 
   if (identical(bs1, bs2)) {
     if (bs1$type == "fourier") {
-      inprods <- sapply(seq_len(nvar1), function(jj) {
+      inprods <- vapply(seq_len(nvar1), function(jj) {
         C1jj <- mfdobj1$coefs[, , jj]
         C2jj <- mfdobj2$coefs[, , jj]
         colSums(as.matrix(C1jj * C2jj))
-      })
+      }, numeric(dim(mfdobj1$coefs)[2]))
     }
     if (bs1$type %in% c("bspline", "expon", "monom", "polygonal", "power")) {
-      inprods <- sapply(seq_len(nvar1), function(jj) {
+      inprods <- vapply(seq_len(nvar1), function(jj) {
         C1jj <- mfdobj1$coefs[, , jj]
         C2jj <- mfdobj2$coefs[, , jj]
         rowSums(as.matrix(t(C1jj) %*% bs1$B * t(C2jj)))
-      })
+      }, numeric(dim(mfdobj1$coefs)[2]))
     }
     if (bs1$type == "const") {
-      inprods <- sapply(seq_len(nvar1), function(jj) {
+      inprods <- vapply(seq_len(nvar1), function(jj) {
         C1jj <- mfdobj1$coefs[, , jj]
         C2jj <- mfdobj2$coefs[, , jj]
         t(C1jj) %*% C2jj * diff(bs1$rangeval)
         as.numeric(C1jj * C2jj * diff(bs1$rangeval))
-      })
+      }, numeric(dim(mfdobj1$coefs)[2]))
     }
   } else {
-    inprods <- sapply(seq_len(nvar1), function(jj) {
+    inprods <- vapply(seq_len(nvar1), function(jj) {
 
       fdobj1_jj <- fd(matrix(mfdobj1$coefs[, , jj],
                              nrow = dim(mfdobj1$coefs)[1],
@@ -531,7 +559,7 @@ inprod_mfd_diag <- function(mfdobj1, mfdobj2 = NULL) {
                              ncol = dim(mfdobj2$coefs)[2]),
                       bs2)
       out <- inprod_fd_diag_single(fdobj1_jj, fdobj2_jj)
-    })
+    }, numeric(dim(mfdobj1$coefs)[2]))
   }
 
   if (nobs1 == 1) inprods <- matrix(inprods, nrow = 1)
@@ -684,7 +712,10 @@ inprod_fd_diag_single <- function(fdobj1, fdobj2 = NULL) {
 
 #' @noRd
 #'
-inprod_fd <- function (fdobj1, fdobj2 = NULL, Lfdobj1 = int2Lfd(0), Lfdobj2 = int2Lfd(0),
+inprod_fd <- function (fdobj1,
+                       fdobj2 = NULL,
+                       Lfdobj1 = int2Lfd(0),
+                       Lfdobj2 = int2Lfd(0),
                        rng = range1, wtfd = 0) {
   result1 <- fdchk(fdobj1)
   nrep1 <- result1[[1]]
@@ -719,7 +750,8 @@ inprod_fd <- function (fdobj1, fdobj2 = NULL, Lfdobj1 = int2Lfd(0), Lfdobj2 = in
     stop("Limits of integration are inadmissible.")
   if (is.fd(fdobj1) && is.fd(fdobj2) && type1 == "bspline" &&
       type2 == "bspline" && is.eqbasis(basisobj1, basisobj2) &&
-      is.integer(Lfdobj1) && is.integer(Lfdobj2) && length(basisobj1$dropind) ==
+      is.integer(Lfdobj1) && is.integer(Lfdobj2) &&
+      length(basisobj1$dropind) ==
       0 && length(basisobj1$dropind) == 0 && wtfd == 0 &&
       all(rng == range1)) {
     inprodmat <- inprod.bspline(fdobj1, fdobj2, Lfdobj1$nderiv,
@@ -957,16 +989,22 @@ is.eqbasis <- function (basisobj1, basisobj2) {
 #' which is one higher than their degree.
 #' The default of 4 gives cubic splines.
 #' @param basisobj
-#' An object of class \code{basisfd} defining the B-spline basis function expansion.
-#' Deafult is \code{NULL}, which means that a \code{basisfd} object is created by doing
-#' \code{create.bspline.basis(rangeval = domain, nbasis = n_basis,  norder = n_order)}
+#' An object of class \code{basisfd} defining
+#' the B-spline basis function expansion.
+#' Deafult is \code{NULL}, which means that
+#' a \code{basisfd} object is created by doing
+#' \code{create.bspline.basis(rangeval = domain,
+#' nbasis = n_basis,  norder = n_order)}
 #' @param Lfdobj
-#' An object of class \code{Lfd} defining a linear differential operator of order m.
+#' An object of class \code{Lfd} defining a
+#' linear differential operator of order m.
 #' It is used to specify a roughness penalty through \code{fdPar}.
-#' Alternatively, a nonnegative integer specifying the order m can be given and is
+#' Alternatively, a nonnegative integer
+#' specifying the order m can be given and is
 #' passed as \code{Lfdobj} argument to the function \code{fdPar},
 #' which indicates that the derivative of order m is penalized.
-#' Deafult value is 2, which means that the integrated squared second derivative is penalized.
+#' Deafult value is 2, which means that the
+#' integrated squared second derivative is penalized.
 #' @param lambda
 #' A non-negative real number.
 #' If you want to use a single specified smoothing parameter
@@ -1124,7 +1162,9 @@ get_mfd_df <- function(dt,
     opt_lam <- lambda_search[gcvmin]
     names(opt_lam) <- variables
 
-    coefs <- sapply(seq_len(n_var), function(jj) coefList[[gcvmin[jj]]][, jj])
+    coefs <- vapply(seq_len(n_var),
+                    function(jj) coefList[[gcvmin[jj]]][, jj],
+                    numeric(n_basis))
     if (basisobj$nbasis == 1) coefs <- matrix(as.numeric(coefs), nrow = 1)
     colnames(coefs) <- variables
 
@@ -1192,16 +1232,22 @@ get_mfd_df <- function(dt,
 #' which is one higher than their degree.
 #' The default of 4 gives cubic splines.
 #' @param basisobj
-#' An object of class \code{basisfd} defining the B-spline basis function expansion.
-#' Deafult is \code{NULL}, which means that a \code{basisfd} object is created by doing
-#' \code{create.bspline.basis(rangeval = domain, nbasis = n_basis,  norder = n_order)}
+#' An object of class \code{basisfd} defining the
+#' B-spline basis function expansion.
+#' Deafult is \code{NULL}, which means that
+#' a \code{basisfd} object is created by doing
+#' \code{create.bspline.basis(rangeval = domain,
+#' nbasis = n_basis,  norder = n_order)}
 #' @param Lfdobj
-#' An object of class \code{Lfd} defining a linear differential operator of order m.
+#' An object of class \code{Lfd} defining a linear
+#' differential operator of order m.
 #' It is used to specify a roughness penalty through \code{fdPar}.
-#' Alternatively, a nonnegative integer specifying the order m can be given and is
+#' Alternatively, a nonnegative integer specifying
+#' the order m can be given and is
 #' passed as \code{Lfdobj} argument to the function \code{fdPar},
 #' which indicates that the derivative of order m is penalized.
-#' Deafult value is 2, which means that the integrated squared second derivative is penalized.
+#' Deafult value is 2, which means that the integrated
+#' squared second derivative is penalized.
 #' @param lambda
 #' A non-negative real number.
 #' If you want to use a single specified smoothing parameter
@@ -1338,6 +1384,7 @@ get_mfd_list <- function(data_list,
 #'
 #' @examples
 #' library(funcharts)
+#' library(fda)
 #' data("CanadianWeather")
 #' mfdobj <- get_mfd_array(CanadianWeather$dailyAv[, 1:10, ],
 #'                         lambda = 1e-5)
@@ -1463,7 +1510,9 @@ get_mfd_array <- function(data_array,
 
   fdObj <- mfd(coef = coef,
                basisobj = basisobj,
-               fdnames = list("arg", as.character(ids), as.character(variables)),
+               fdnames = list("arg",
+                              as.character(ids),
+                              as.character(variables)),
                raw = df_raw,
                id_var = "id")
   fdObj
@@ -1488,6 +1537,7 @@ get_mfd_array <- function(data_array,
 #'
 #' @examples
 #' library(funcharts)
+#' library(fda)
 #' bs <- create.bspline.basis(nbasis = 10)
 #' fdobj <- fd(coef = 1:10, basisobj = bs)
 #' mfdobj <- get_mfd_fd(fdobj)
@@ -1733,7 +1783,10 @@ descale_mfd <- function (scaled_mfd, center = FALSE, scale = FALSE) {
 
   dimnames(descaled_coef) <- dimnames(scaled_mfd$coefs)
 
-  mfd(descaled_coef, scaled_mfd$basis, scaled_mfd$fdnames, B = scaled_mfd$basis$B)
+  mfd(descaled_coef,
+      scaled_mfd$basis,
+      scaled_mfd$fdnames,
+      B = scaled_mfd$basis$B)
 }
 
 
@@ -2080,7 +2133,8 @@ plot_mfd <- function(mfdobj) {
 #' the functional variables as in \code{mfdobj$fdnames[[3]]}.
 #' @param mapping
 #' Set of aesthetic mappings additional
-#' to \code{x} and \code{y} as passed to the function \code{ggplot2::geom:line}.
+#' to \code{x} and \code{y} as passed to the function
+#' \code{ggplot2::geom:line}.
 #' @param stat
 #' See \code{ggplot2::\link[ggplot2]{geom_line}}.
 #' @param position
@@ -2107,6 +2161,7 @@ plot_mfd <- function(mfdobj) {
 #' @export
 #' @examples
 #' library(funcharts)
+#' library(ggplot2)
 #' mfdobj <- data_sim_mfd()
 #' ids <- mfdobj$fdnames[[2]]
 #' df <- data.frame(id = ids, first_two_obs = ids %in% c("rep1", "rep2"))
@@ -2225,7 +2280,8 @@ plot_bifd <- function(bifd_obj) {
                variable = bifd_obj$bifdnames[[4]][ii])
     }) %>%
     bind_rows() %>%
-    mutate(variable = factor(.data$variable, levels = bifd_obj$bifdnames[[4]])) %>%
+    mutate(variable = factor(.data$variable,
+                             levels = bifd_obj$bifdnames[[4]])) %>%
     ggplot() +
     geom_tile(aes(.data$s, .data$t, fill = .data$value)) +
     facet_wrap(~variable) +
@@ -2243,33 +2299,33 @@ plot_bifd <- function(bifd_obj) {
 
 #' @noRd
 #'
-project_mfd <- function(X, basisobj) {
-
-  fdnames <- NULL
-  if (is.mfd(X)) {
-    p <- dim(X$coef)[3]
-    bs <- X$basis
-    rb <- bs$rangeval
-    xseq <- seq(rb[1], rb[2], l = 300)
-    Xeval <- eval.fd(xseq, X)
-    Xeval <- aperm(Xeval, c(2, 1, 3))
-    fdnames <- X$fdnames
-  }
-  if (is.array(X)) {
-    rb <- c(0, 1)
-    xseq <- seq(rb[1], rb[2], l = dim(X)[2])
-    Xeval <- X
-    Xeval <- aperm(Xeval, c(2, 1, 3))
-  }
-  if (is.list(X) & !is.mfd(X)) {
-    rb <- c(0, 1)
-    xseq <- seq(rb[1], rb[2], l = ncol(X[[1]]))
-    Xeval <- simplify2array(X)
-    Xeval <- aperm(Xeval, c(2, 1, 3))
-  }
-
-  coefList <- project.basis(Xeval, argvals = xseq, basisobj = basisobj)
-  X_mfd <- mfd(coefList, basisobj = basisobj, fdnames = fdnames)
-  X_mfd
-
-}
+# project_mfd <- function(X, basisobj) {
+#
+#   fdnames <- NULL
+#   if (is.mfd(X)) {
+#     p <- dim(X$coef)[3]
+#     bs <- X$basis
+#     rb <- bs$rangeval
+#     xseq <- seq(rb[1], rb[2], l = 300)
+#     Xeval <- eval.fd(xseq, X)
+#     Xeval <- aperm(Xeval, c(2, 1, 3))
+#     fdnames <- X$fdnames
+#   }
+#   if (is.array(X)) {
+#     rb <- c(0, 1)
+#     xseq <- seq(rb[1], rb[2], l = dim(X)[2])
+#     Xeval <- X
+#     Xeval <- aperm(Xeval, c(2, 1, 3))
+#   }
+#   if (is.list(X) & !is.mfd(X)) {
+#     rb <- c(0, 1)
+#     xseq <- seq(rb[1], rb[2], l = ncol(X[[1]]))
+#     Xeval <- simplify2array(X)
+#     Xeval <- aperm(Xeval, c(2, 1, 3))
+#   }
+#
+#   coefList <- project.basis(Xeval, argvals = xseq, basisobj = basisobj)
+#   X_mfd <- mfd(coefList, basisobj = basisobj, fdnames = fdnames)
+#   X_mfd
+#
+# }

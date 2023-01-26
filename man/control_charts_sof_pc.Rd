@@ -150,7 +150,8 @@ A phase II data set contains the observations to be monitored
 with the control charts.
 }
 \examples{
-library(funcharts)
+\dontrun{
+#' library(funcharts)
 data("air")
 air <- lapply(air, function(x) x[201:300, , drop = FALSE])
 fun_covariates <- c("CO", "temperature")
@@ -169,6 +170,7 @@ cclist <- control_charts_sof_pc(mod = mod,
                                 mfdobj_x_test = mfdobj_x2,
                                 mfdobj_x_tuning = mfdobj_x_tuning)
 plot_control_charts(cclist)
+}
 
 }
 \seealso{

@@ -134,7 +134,8 @@ plot_pca_mfd <- function(pca, harm = 0, scaled = FALSE) {
     nharm <- length(harm)
     nvar <- length(pca$harmonics$fdnames[[3]])
     scaled_coefs <- array(scaled_coefs, dim = c(nbasis, nharm, nvar))
-    dimnames(scaled_coefs) <- dimnames(pca$harmonics$coefs[, harm, , drop = FALSE])
+    dimnames(scaled_coefs) <-
+      dimnames(pca$harmonics$coefs[, harm, , drop = FALSE])
     pca$harmonics$coefs <- scaled_coefs
   }
 
@@ -396,10 +397,14 @@ get_T2_spe <- function(pca, components, newdata_scaled = NULL) {
   values <- pca$values[components]
   T2 <- colSums(t(scores^2) / values)
   variables <- dimnames(inprods)[[3]]
-  obs <- if (is.null(newdata_scaled)) pca$data$fdnames[[2]] else newdata_scaled$fdnames[[2]]
-  contribution <- sapply(variables, function(variable) {
+  obs <- if (is.null(newdata_scaled)) {
+    pca$data$fdnames[[2]]
+    } else {
+      newdata_scaled$fdnames[[2]]
+    }
+  contribution <- vapply(variables, function(variable) {
     rowSums(t(t(inprods[, , variable] * scores) / values))
-  })
+  }, numeric(length(obs)))
   contribution <- matrix(contribution,
                          nrow = length(obs),
                          ncol = length(variables))
@@ -441,7 +446,8 @@ pca.fd_inprods_faster <- function (fdobj,
                                    harmfdPar = fdPar(fdobj),
                                    centerfns = TRUE) {
   if (!(is.fd(fdobj) || is.fdPar(fdobj)))
-    stop("First argument is neither a functional data or a functional parameter object.")
+    stop("First argument is neither a functional data
+         or a functional parameter object.")
   if (is.fdPar(fdobj))
     fdobj <- fdobj$fd
 
@@ -507,12 +513,14 @@ pca.fd_inprods_faster <- function (fdobj,
       if (basisobj$type == "expon") {
         out_mat <- outer(basisobj$params, basisobj$params, "+")
         exp_out_mat <- exp(out_mat)
-        Jmat <- (exp_out_mat ^ basisobj$rangeval[2] - exp_out_mat ^ basisobj$rangeval[1]) / out_mat
+        Jmat <- (exp_out_mat ^ basisobj$rangeval[2] -
+                   exp_out_mat ^ basisobj$rangeval[1]) / out_mat
         Jmat[out_mat == 0] <- diff(basisobj$rangeval)
       }
       if (basisobj$type == "monom") {
         out_mat <- outer(basisobj$params, basisobj$params, "+") + 1
-        Jmat <- (basisobj$rangeval[2] ^ out_mat - basisobj$rangeval[1] ^ out_mat) / out_mat
+        Jmat <- (basisobj$rangeval[2] ^ out_mat -
+                   basisobj$rangeval[1] ^ out_mat) / out_mat
         Jmat[out_mat == 0] <- diff(basisobj$rangeval)
       }
       if (basisobj$type == "polygonal") {
@@ -521,8 +529,10 @@ pca.fd_inprods_faster <- function (fdobj,
       }
       if (basisobj$type == "power") {
         out_mat <- outer(basisobj$params, basisobj$params, "+") + 1
-        Jmat <- (basisobj$rangeval[2] ^ out_mat - basisobj$rangeval[1] ^ out_mat) / out_mat
-        Jmat[out_mat == 0] <- log(basisobj$rangeval[2]) - log(basisobj$rangeval[1])
+        Jmat <- (basisobj$rangeval[2] ^ out_mat -
+                   basisobj$rangeval[1] ^ out_mat) / out_mat
+        Jmat[out_mat == 0] <-
+          log(basisobj$rangeval[2]) - log(basisobj$rangeval[1])
       }
     }
   } else {
@@ -530,12 +540,12 @@ pca.fd_inprods_faster <- function (fdobj,
                       fd(diag(basisobj$nbasis), basisobj))
   }
 
-  MIJW = crossprod(Mmatinv, Jmat)
+  MIJW <- crossprod(Mmatinv, Jmat)
   if (nvar == 1) {
-    Cmat = MIJW %*% Wmat %*% t(MIJW)
+    Cmat <- MIJW %*% Wmat %*% t(MIJW)
   }
   else {
-    Cmat = matrix(0, nvar * nhbasis, nvar * nhbasis)
+    Cmat <- matrix(0, nvar * nhbasis, nvar * nhbasis)
     for (i in seq_len(nvar)) {
       indexi <- seq_len(nbasis) + (i - 1) * nbasis
       for (j in seq_len(nvar)) {

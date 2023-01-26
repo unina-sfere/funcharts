@@ -15,7 +15,8 @@ devtools::build_vignettes()
 ## Build website
 pkgdown::build_site()
 
-## After building the website with pkgdown, rename files to get the right image paths
+## After building the website with pkgdown,
+## rename files to get the right image paths
 files <- list.files("docs/articles", full.names = TRUE)
 files_html <- files[grepl(".html", files)]
 

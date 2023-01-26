@@ -31,15 +31,18 @@ mfdobj_x <- get_mfd_list(air[fun_covariates],
                          lambda = 1e-2)
 y <- rowMeans(air$NO2)
 y1 <- y[1:60]
+ytuning <- y[61:90]
 y2 <- y[91:100]
 mfdobj_x1 <- mfdobj_x[1:60]
 mfdobj_x_tuning <- mfdobj_x[61:90]
 mfdobj_x2 <- mfdobj_x[91:100]
 mod <- sof_pc(y1, mfdobj_x1)
-cclist <- control_charts_sof_pc(mod = mod,
-                                y_test = y2,
-                                mfdobj_x_test = mfdobj_x2,
-                                mfdobj_x_tuning = mfdobj_x_tuning)
+cclist <- regr_cc_sof(object = mod,
+                      y_new = y2,
+                      mfdobj_x_new = mfdobj_x2,
+                      y_tuning = y_tuning,
+                      mfdobj_x_tuning = mfdobj_x_tuning,
+                      include_covariates = TRUE)
 get_ooc(cclist)
 
 

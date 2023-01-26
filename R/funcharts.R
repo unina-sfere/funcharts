@@ -12,9 +12,13 @@
 #' @import parallel
 #' @import dplyr
 #' @import ggplot2
-#' @importFrom tidyr pivot_longer drop_na
 #' @importFrom stats
-#' approxfun as.formula hatvalues lm predict quantile setNames var rnorm dnorm approx
+#' approxfun as.formula hatvalues lm predict quantile
+#' @importFrom stats
+#' setNames var rnorm dnorm approx
+#' @importFrom stats
+#' model.matrix rstandard formula
+#' @importFrom tidyr pivot_longer drop_na
 #' @importFrom rlang .data
 #' @importFrom RSpectra eigs_sym
 #' @importFrom matrixStats rowCumsums

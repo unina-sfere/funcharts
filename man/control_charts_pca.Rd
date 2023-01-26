@@ -9,7 +9,7 @@ control_charts_pca(
   components = NULL,
   tuning_data = NULL,
   newdata,
-  alpha = list(T2 = 0.025, spe = 0.025),
+  alpha = 0.05,
   limits = "standard",
   seed,
   nfold = 5,
@@ -45,16 +45,18 @@ Default is NULL.}
 \item{newdata}{An object of class \code{mfd} containing
 the phase II set of the multivariate functional data to be monitored.}
 
-\item{alpha}{A named list with two elements, named \code{T2} and \code{spe},
+\item{alpha}{If it is a number between 0 and 1,
+it defines the overall type-I error probability and the Bonferroni
+correction is applied by setting the type-I error probability
+in the two control charts equal to \code{alpha/2}.
+If you want to set manually the Type-I error probabilities in the
+two control charts, then the argument \code{alpha} must be
+a named list
+with two elements, named \code{T2} and \code{spe},
 respectively, each containing
 the desired Type I error probability of
 the corresponding control chart.
-Note that at the moment you have to take into account manually
-the family-wise error rate and adjust
-the two values accordingly. See Capezza et al. (2020) and
-Centofanti et al. (2021)
-for additional details. Default value is
-\code{list(T2 = 0.025, spe = 0.025)}.}
+Default value is 0.05.}
 
 \item{limits}{A character value.
 If "standard", it estimates the control limits on the tuning

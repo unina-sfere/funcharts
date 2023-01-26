@@ -23,15 +23,18 @@
 #'                          lambda = 1e-2)
 #' y <- rowMeans(air$NO2)
 #' y1 <- y[1:60]
+#' ytuning <- y[61:90]
 #' y2 <- y[91:100]
 #' mfdobj_x1 <- mfdobj_x[1:60]
 #' mfdobj_x_tuning <- mfdobj_x[61:90]
 #' mfdobj_x2 <- mfdobj_x[91:100]
 #' mod <- sof_pc(y1, mfdobj_x1)
-#' cclist <- control_charts_sof_pc(mod = mod,
-#'                                 y_test = y2,
-#'                                 mfdobj_x_test = mfdobj_x2,
-#'                                 mfdobj_x_tuning = mfdobj_x_tuning)
+#' cclist <- regr_cc_sof(object = mod,
+#'                       y_new = y2,
+#'                       mfdobj_x_new = mfdobj_x2,
+#'                       y_tuning = y_tuning,
+#'                       mfdobj_x_tuning = mfdobj_x_tuning,
+#'                       include_covariates = TRUE)
 #' get_ooc(cclist)
 #'
 #'
@@ -103,16 +106,20 @@ get_ooc <- function(cclist) {
 #'                          lambda = 1e-2)
 #' y <- rowMeans(air$NO2)
 #' y1 <- y[1:60]
+#' ytuning <- y[61:90]
 #' y2 <- y[91:100]
 #' mfdobj_x1 <- mfdobj_x[1:60]
 #' mfdobj_x_tuning <- mfdobj_x[61:90]
 #' mfdobj_x2 <- mfdobj_x[91:100]
 #' mod <- sof_pc(y1, mfdobj_x1)
-#' cclist <- control_charts_sof_pc(mod = mod,
-#'                                 y_test = y2,
-#'                                 mfdobj_x_test = mfdobj_x2,
-#'                                 mfdobj_x_tuning = mfdobj_x_tuning)
+#' cclist <- regr_cc_sof(object = mod,
+#'                       y_new = y2,
+#'                       mfdobj_x_new = mfdobj_x2,
+#'                       y_tuning = y_tuning,
+#'                       mfdobj_x_tuning = mfdobj_x_tuning,
+#'                       include_covariates = TRUE)
 #' which_ooc(cclist)
+#'
 #'
 which_ooc <- function(cclist) {
 
@@ -185,17 +192,21 @@ which_ooc <- function(cclist) {
 #'                          lambda = 1e-2)
 #' y <- rowMeans(air$NO2)
 #' y1 <- y[1:60]
+#' ytuning <- y[61:90]
 #' y2 <- y[91:100]
 #' mfdobj_x1 <- mfdobj_x[1:60]
 #' mfdobj_x_tuning <- mfdobj_x[61:90]
 #' mfdobj_x2 <- mfdobj_x[91:100]
 #' mod <- sof_pc(y1, mfdobj_x1)
-#' cclist <- control_charts_sof_pc(mod = mod,
-#'                                 y_test = y2,
-#'                                 mfdobj_x_test = mfdobj_x2,
-#'                                 mfdobj_x_tuning = mfdobj_x_tuning)
+#' cclist <- regr_cc_sof(object = mod,
+#'                       y_new = y2,
+#'                       mfdobj_x_new = mfdobj_x2,
+#'                       y_tuning = y_tuning,
+#'                       mfdobj_x_tuning = mfdobj_x_tuning,
+#'                       include_covariates = TRUE)
 #' get_ooc(cclist)
 #' cont_plot(cclist, 3)
+#'
 #'
 cont_plot <- function(cclist,
                       id_num,
@@ -321,16 +332,19 @@ cont_plot <- function(cclist,
 #'                          lambda = 1e-2)
 #' y <- rowMeans(air$NO2)
 #' y1 <- y[1:60]
+#' ytuning <- y[61:90]
 #' y2 <- y[91:100]
 #' mfdobj_x1 <- mfdobj_x[1:60]
 #' mfdobj_x_tuning <- mfdobj_x[61:90]
 #' mfdobj_x2 <- mfdobj_x[91:100]
 #' mod <- sof_pc(y1, mfdobj_x1)
-#' cclist <- control_charts_sof_pc(mod = mod,
-#'                                 y_test = y2,
-#'                                 mfdobj_x_test = mfdobj_x2,
-#'                                 mfdobj_x_tuning = mfdobj_x_tuning)
-#' plot_control_charts(cclist)
+#' cclist <- regr_cc_sof(object = mod,
+#'                       y_new = y2,
+#'                       mfdobj_x_new = mfdobj_x2,
+#'                       y_tuning = y_tuning,
+#'                       mfdobj_x_tuning = mfdobj_x_tuning,
+#'                       include_covariates = TRUE)
+#' get_ooc(cclist)
 #' cont_plot(cclist, 3)
 #' plot_mon(cclist, fd_train = mfdobj_x1, fd_test = mfdobj_x2[3])
 #'
@@ -360,7 +374,9 @@ plot_mon <- function(cclist, fd_train, fd_test, print_id = FALSE) {
     cont_out <- data.frame(cont_T2 | cont_spe)
     names(cont_out) <- gsub("contribution_T2_", "", names(cont_T2))
     df <- bind_cols(df, cont_out) %>%
-      tidyr::pivot_longer(- id, values_to = "contribution ooc", names_to = "var")
+      tidyr::pivot_longer(- id,
+                          values_to = "contribution ooc",
+                          names_to = "var")
   } else {
     df <- df %>%
       mutate(`contribution ooc` =

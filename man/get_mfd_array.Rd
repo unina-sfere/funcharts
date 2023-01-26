@@ -48,6 +48,7 @@ Get Multivariate Functional Data from a three-dimensional array
 }
 \examples{
 library(funcharts)
+library(fda)
 data("CanadianWeather")
 mfdobj <- get_mfd_array(CanadianWeather$dailyAv[, 1:10, ],
                         lambda = 1e-5)

@@ -1,6 +1,7 @@
 #' Generate covariance functions
 #'
-#' This function generates the covariance structure from which data are simulated
+#' This function generates the covariance structure from which data are
+#' simulated
 #' and precomputes the eigendecomposition of the covariance operators.
 #' The output of this function is saved in the file \code{cov_str.Rdata},
 #' so that \code{simulate_mfd()} can load the data

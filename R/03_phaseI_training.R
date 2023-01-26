@@ -90,14 +90,17 @@ calculate_limits <- function(pca,
   }
 
   if (!is.null(tuning_data)) {
-    tuning_data <- scale_mfd(tuning_data,
-                                    center = pca$center_fd,
-                                    scale = if (pca$scale) pca$scale_fd else FALSE)
+    tuning_data <-
+      scale_mfd(tuning_data,
+                center = pca$center_fd,
+                scale = if (pca$scale) pca$scale_fd else FALSE)
   }
 
   T2_spe <- get_T2_spe(pca, components, newdata_scaled = tuning_data)
-  T2 <- select(T2_spe, "T2", contains("contribution_T2", ignore.case = FALSE))
-  spe <- select(T2_spe, "spe", contains("contribution_spe", ignore.case = FALSE))
+  T2 <- select(T2_spe, "T2", contains("contribution_T2",
+                                      ignore.case = FALSE))
+  spe <- select(T2_spe, "spe", contains("contribution_spe",
+                                        ignore.case = FALSE))
 
   obs <- if (!is.null(tuning_data)) {
     tuning_data$fdnames[[2]]
@@ -203,7 +206,8 @@ calculate_cv_limits <- function(pca,
 
   if (!missing(seed)) {
     warning(paste0("argument seed is deprecated; ",
-                   "please use set.seed() before calling the function instead."),
+                   "please use set.seed()
+                   before calling the function instead."),
             call. = FALSE)
   }
 
@@ -214,7 +218,9 @@ calculate_cv_limits <- function(pca,
   mfdobj <- pca$data
   nobs <- dim(mfdobj$coefs)[2]
   nvar <- dim(mfdobj$coefs)[3]
-  folds <- split(seq_len(nobs), sample(cut(seq_len(nobs), nfold, labels = FALSE)))
+  folds <- split(seq_len(nobs), sample(cut(seq_len(nobs),
+                                           nfold,
+                                           labels = FALSE)))
 
   single_cv <- function(ii) {
     fd_train <- mfdobj[- folds[[ii]]]
@@ -263,8 +269,12 @@ calculate_cv_limits <- function(pca,
   T2_lim <- data.frame(T2 = quantile(statistics_cv$T2, 1 - alpha$T2))
   spe_lim <- data.frame(spe = quantile(statistics_cv$spe, 1 - alpha$T2))
 
-  cont_T2_lim  <- apply(cont_T2, 2, function(x) quantile(x, 1 - alpha$T2 / nvar))
-  cont_spe_lim <-  apply(cont_spe, 2, function(x) quantile(x, 1 - alpha$spe / nvar))
+  cont_T2_lim  <- apply(cont_T2, 2, function(x) {
+    quantile(x, 1 - alpha$T2 / nvar)
+    })
+  cont_spe_lim <-  apply(cont_spe, 2, function(x) {
+    quantile(x, 1 - alpha$spe / nvar)
+    })
 
   cont_T2_lim <- as.data.frame(t(cont_T2_lim))
   cont_spe_lim <- as.data.frame(t(cont_spe_lim))
@@ -303,6 +313,7 @@ calculate_cv_limits <- function(pca,
 #' signaled as possibly anomalous.
 #' @export
 #' @examples
+#' \dontrun{
 #' library(funcharts)
 #' data("air")
 #' air <- lapply(air, function(x) x[1:10, , drop = FALSE])
@@ -310,6 +321,7 @@ calculate_cv_limits <- function(pca,
 #' mfdobj_x <- get_mfd_list(air[fun_covariates], lambda = 1e-2)
 #' y <- rowMeans(air$NO2)
 #' get_sof_pc_outliers(y, mfdobj_x)
+#' }
 #'
 get_sof_pc_outliers <- function(y, mfdobj) {
 
@@ -379,7 +391,7 @@ get_outliers_mfd <- function(mfdobj) {
     new_outliers <- fbplot_obj$ID_outliers
     is_outlier[!is_outlier][new_outliers] <- TRUE
   }
-  fbplot_obj <- roahd::fbplot(fData_obj[!is_outlier], display = TRUE)
+  # fbplot_obj <- roahd::fbplot(fData_obj[!is_outlier], display = TRUE)
   outliers <- which(is_outlier)
   names(outliers) <- mfdobj$fdnames[[2]][outliers]
   return(outliers)

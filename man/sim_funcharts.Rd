@@ -23,11 +23,14 @@ while the third group of observations contains a severe mean shift.
 The shift types are described in the paper from Centofanti et al. (2021),
 }
 \description{
-Function used to simulate three data sets to illustrate the use of \code{funcharts}.
+Function used to simulate three data sets to illustrate the use
+of \code{funcharts}.
 It uses the function \code{\link[funcharts]{simulate_mfd}},
 which creates a data set with three functional covariates,
-a functional response generated as a function of the three functional covariates,
-and a scalar response generated as a function of the three functional covariates.
+a functional response generated as a function of the
+three functional covariates,
+and a scalar response generated as a function of the
+three functional covariates.
 This function generates three data sets, one for phase I,
 one for tuning, i.e.,
 to estimate the control chart limits, and one for phase II monitoring.

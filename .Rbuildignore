@@ -16,3 +16,4 @@
 ^vignettes/precompile.R$
 ^data-raw$
 ^CRAN-SUBMISSION$
+^codecov\.yml$

@@ -4,13 +4,23 @@
 \alias{predict_sof_pc}
 \title{Use a scalar-on-function linear regression model for prediction}
 \usage{
-predict_sof_pc(object, newdata = NULL, alpha = 0.05)
+predict_sof_pc(
+  object,
+  y_new = NULL,
+  mfdobj_x_new = NULL,
+  alpha = 0.05,
+  newdata
+)
 }
 \arguments{
 \item{object}{A list obtained as output from \code{sof_pc},
 i.e. a fitted scalar-on-function linear regression model.}
 
-\item{newdata}{An object of class \code{mfd} containing
+\item{y_new}{A numeric vector containing the new observations of
+the scalar response variable
+to be predicted.}
+
+\item{mfdobj_x_new}{An object of class \code{mfd} containing
 new observations of the functional covariates.
 If NULL, it is set as the functional covariates data used for model fitting.}
 
@@ -19,6 +29,8 @@ for the regression control chart
 and such that this function returns the \code{1-alpha}
 prediction interval on the response.
 Default is 0.05.}
+
+\item{newdata}{Deprecated, use \code{mfdobj_x_new} argument.}
 }
 \value{
 A \code{data.frame} with as many rows as the
@@ -30,11 +42,17 @@ corresponding to \code{new_data},
 
 * \code{lwr}:
 lower limit of the \code{1-alpha} prediction interval
-on the response,
+on the response, based on the assumption that it is normally distributed.
 
 * \code{upr}:
 upper limit of the \code{1-alpha} prediction interval
-on the response.
+on the response, based on the assumption that it is normally distributed.
+
+* \code{res}:
+the residuals obtained as the values of \code{y_new} minus their
+fitted values. If the scalar-on-function model has been fitted with
+\code{type_residual == "studentized"}, then the studentized residuals
+are calculated.
 }
 \description{
 Predict new observations of the scalar response variable

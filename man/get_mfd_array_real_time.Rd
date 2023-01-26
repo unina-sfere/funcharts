@@ -58,6 +58,7 @@ It calls the function \code{\link{get_mfd_array}} for each domain point.
 }
 \examples{
 library(funcharts)
+library(fda)
 data("CanadianWeather")
 fdobj <- get_mfd_array_real_time(CanadianWeather$dailyAv[, 1:5, 1:2],
                                  lambda = 1e-2)

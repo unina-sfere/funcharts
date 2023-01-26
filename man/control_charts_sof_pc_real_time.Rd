@@ -65,6 +65,7 @@ produced by \code{\link{control_charts_sof_pc}},
 corresponding to a given instant.
 }
 \description{
+This function is deprecated. Use \code{\link{regr_cc_sof_real_time}}.
 This function produces a list of data frames,
 each of them is produced by \code{\link{control_charts_sof_pc}}
 and is needed to plot control charts for monitoring in real time
@@ -72,6 +73,7 @@ a scalar quality characteristic adjusted for
 by the effect of multivariate functional covariates.
 }
 \examples{
+\dontrun{
 library(funcharts)
 data("air")
 air1 <- lapply(air, function(x) x[1:8, , drop = FALSE])
@@ -92,6 +94,7 @@ cclist <- control_charts_sof_pc_real_time(
   y_test = y2,
   mfdobj_x_test = mfdobj_x2_list)
 plot_control_charts_real_time(cclist, 1)
+}
 
 }
 \seealso{

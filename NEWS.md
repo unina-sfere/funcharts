@@ -1,7 +1,13 @@
 # funcharts 1.2.0.9000
 
 * all basis function systems that can be used in the `fda` package now can be used also with `funcharts`, which previously it could be used only with B-spline basis.
+In particular, Fourier, exponential, monomial, polygonal, power and constant basis function systems are available.
 * `get_outliers_mfd()` allows to find outliers among multivariate functional data using the functional boxplot through the `fbplot()` function of the `roahd` package.
+* test coverage has been increased
+* `control_charts_sof()` and `control_charts_sof_real_time()` have been deprecated.
+Instead, use `regr_cc_sof()` and `regr_cc_sof_real_time()`, respectively, with argument `include_covariates = TRUE`. 
+This has been done to make more consistent the regression control chart functions for the scalar (`regr_cc_sof()` and `regr_cc_sof_real_time()`) and functional (`regr_cc_fof()` and `regr_cc_fof_real_time()`) response cases.
+* `alpha` parameter in all control charting functions, which previously could only be a list with manually specified values of the type-I error probability in each control chart, now can also be a single number between 0 and 1. In this case, Bonferroni correction is automatically applied to take into account the multiplicity problem when more than one control chart is applied.
 
 # funcharts 1.2.0
 

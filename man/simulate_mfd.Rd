@@ -24,7 +24,8 @@ simulate_mfd(
 \item{nobs}{The number of observation to simulate}
 
 \item{R2}{The desired coefficient of determination in the regression.
-In both the scalar and functional response cases, only three values are allowed,
+In both the scalar and functional response cases,
+ only three values are allowed,
 i.e. 0.97, 0.86, 0.74.
 Default is 0.97.}
 
@@ -55,19 +56,24 @@ Default is "0".}
 shown in Centofanti et al. (2021).
 Default is "0".}
 
-\item{d_y}{A number indicating the severity of the shift type for the functional response.
+\item{d_y}{A number indicating the severity of the shift type for
+the functional response.
 Default is 0.}
 
-\item{d_x1}{A number indicating the severity of the shift type for the first functional covariate.
+\item{d_x1}{A number indicating the severity of the shift type for
+the first functional covariate.
 Default is 0.}
 
-\item{d_x2}{A number indicating the severity of the shift type for the second functional covariate.
+\item{d_x2}{A number indicating the severity of the shift type for
+the second functional covariate.
 Default is 0.}
 
-\item{d_x3}{A number indicating the severity of the shift type for the third functional covariate.
+\item{d_x3}{A number indicating the severity of the shift type for
+the third functional covariate.
 Default is 0.}
 
-\item{d_y_scalar}{A number indicating the severity of the shift type for the scalar response.
+\item{d_y_scalar}{A number indicating the severity of the shift type for
+the scalar response.
 Default is 0.}
 
 \item{save_beta}{If TRUE, the true regression coefficients of both the function-on-function
@@ -77,37 +83,52 @@ Default is FALSE.}
 \value{
 A list with the following elements:
 
-* \code{X1} is a \code{nobs}x150 matrix with the simulated observations of the first functional covariate
+* \code{X1} is a \code{nobs}x150 matrix with the simulated
+observations of the first functional covariate
 
-* \code{X2} is a \code{nobs}x150 matrix with the simulated observations of the second functional covariate
+* \code{X2} is a \code{nobs}x150 matrix with the simulated
+observations of the second functional covariate
 
-* \code{X3} is a \code{nobs}x150 matrix with the simulated observations of the third functional covariate
+* \code{X3} is a \code{nobs}x150 matrix with the simulated
+observations of the third functional covariate
 
-* \code{Y} is a \code{nobs}x150 matrix with the simulated observations of the functional response
+* \code{Y} is a \code{nobs}x150 matrix with the simulated
+observations of the functional response
 
-* \code{y_scalar} is a vector of length 150 with the simulated observations of the scalar response
+* \code{y_scalar} is a vector of length 150 with the simulated
+observations of the scalar response
 
-* \code{beta_fof}, if \code{save_beta = TRUE}, is a list of three 500x500 matrices
-with the discretized functional coefficients of the function-on-function regression
+* \code{beta_fof}, if \code{save_beta = TRUE}, is a
+list of three 500x500 matrices
+with the discretized functional coefficients of the
+function-on-function regression
 
-* \code{beta_sof}, if \code{save_beta = TRUE}, is a list of three vectors of length 500
-with the discretized functional coefficients of the scalar-on-function regression
+* \code{beta_sof}, if \code{save_beta = TRUE}, is a
+list of three vectors of length 500
+with the discretized functional coefficients of the
+scalar-on-function regression
 }
 \description{
-Function used to simulate a data set to illustrate the use of \code{funcharts}.
+Function used to simulate a data set to illustrate
+the use of \code{funcharts}.
 It creates a data set with three functional covariates,
-a functional response generated as a function of the three functional covariates
+a functional response generated as a function of the
+three functional covariates
 through a function-on-function linear model,
-and a scalar response generated as a function of the three functional covariates
+and a scalar response generated as a function of the
+three functional covariates
 through a scalar-on-function linear model.
 This function covers the simulation study in Centofanti et al. (2021)
 for the function-on-function case and also simulates data in a similar way
 for the scalar response case.
 In the default case, the function generates in-control data.
-Additional arguments can be used to generate additional data that are out of control,
-with mean shifts according to the scenarios proposed by Centofanti et al. (2021).
+Additional arguments can be used to generate additional
+data that are out of control,
+with mean shifts according to the scenarios proposed
+by Centofanti et al. (2021).
 Each simulated observation of a functional variable consists of
-a vector of 150 discrete points, equally spaced between 0 and 1, generated with noise.
+a vector of 150 discrete points, equally spaced between 0 and 1,
+generated with noise.
 }
 \references{
 Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)

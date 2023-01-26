@@ -54,10 +54,11 @@ mfdobj_x2_list <- get_mfd_list_real_time(air2[c("CO", "temperature")],
 y1 <- rowMeans(air1$NO2)
 y2 <- rowMeans(air2$NO2)
 mod_list <- sof_pc_real_time(y1, mfdobj_x1_list)
-cclist <- control_charts_sof_pc_real_time(
+cclist <- regr_cc_sof_real_time(
   mod_list = mod_list,
-  y_test = y2,
-  mfdobj_x_test = mfdobj_x2_list)
+  y_new = y2,
+  mfdobj_x_new = mfdobj_x2_list,
+  include_covariates = TRUE)
 plot_control_charts_real_time(cclist, 1)
 }
 \seealso{

@@ -21,7 +21,8 @@ geom_mfd(
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings additional
-to \code{x} and \code{y} as passed to the function \code{ggplot2::geom:line}.}
+to \code{x} and \code{y} as passed to the function
+\code{ggplot2::geom:line}.}
 
 \item{data}{A \code{data.frame} providing columns
 to create additional aesthetic mappings.
@@ -61,6 +62,7 @@ with \code{ggplot}
 }
 \examples{
 library(funcharts)
+library(ggplot2)
 mfdobj <- data_sim_mfd()
 ids <- mfdobj$fdnames[[2]]
 df <- data.frame(id = ids, first_two_obs = ids \%in\% c("rep1", "rep2"))
