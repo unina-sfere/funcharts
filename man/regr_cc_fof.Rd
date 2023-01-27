@@ -11,7 +11,8 @@ regr_cc_fof(
   mfdobj_y_tuning = NULL,
   mfdobj_x_tuning = NULL,
   alpha = 0.05,
-  include_covariates = FALSE
+  include_covariates = FALSE,
+  absolute_error = FALSE
 )
 }
 \arguments{
@@ -66,6 +67,9 @@ the multivariate functional covariates, respectively.}
  \code{control_charts_pca},.
 If FALSE, only the functional response, conditionally on the covariates,
 is monitored.}
+
+\item{absolute_error}{A logical value that, if \code{include_covariates} is TRUE, is passed
+to \code{\link{control_charts_pca}}.}
 }
 \value{
 A \code{data.frame} containing the output of the

@@ -13,6 +13,7 @@ regr_cc_sof_real_time(
   alpha = 0.05,
   parametric_limits = TRUE,
   include_covariates = FALSE,
+  absolute_error = FALSE,
   ncores = 1
 )
 }
@@ -60,6 +61,8 @@ Default is NULL.}
 \item{parametric_limits}{See \code{\link{regr_cc_sof}}.}
 
 \item{include_covariates}{See \code{\link{regr_cc_sof}}.}
+
+\item{absolute_error}{See \code{\link{regr_cc_sof}}.}
 
 \item{ncores}{If you want parallelization, give the number of cores/threads
 to be used when creating objects separately for different instants.}

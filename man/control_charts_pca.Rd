@@ -15,7 +15,8 @@ control_charts_pca(
   nfold = 5,
   ncores = 1,
   tot_variance_explained = 0.9,
-  single_min_variance_explained = 0
+  single_min_variance_explained = 0,
+  absolute_error = FALSE
 )
 }
 \arguments{
@@ -94,6 +95,16 @@ that has to be explained
 by each multivariate functional principal component
 such that it is retained into the MFPCA model.
 Default is 0.}
+
+\item{absolute_error}{If FALSE, the SPE statistic, which monitors the principal components
+not retained in the MFPCA model, is calculated as the sum
+of the integrals of the squared prediction error functions, obtained
+as the difference between the actual functions and their approximation
+after projection over the selected principal components.
+If TRUE, the SPE statistic is calculated by replacing the square of
+the prediction errors with the absolute value, as proposed by
+Capizzi and Masarotto (2018).
+Default value is FALSE.}
 }
 \value{
 A \code{data.frame} with as many rows as the number of
@@ -173,6 +184,11 @@ based on scalar-on-function regression.
 \emph{Applied Stochastic Models in Business and Industry},
 36(3):477--500.
 <doi:10.1002/asmb.2507>
+
+Capizzi, G., & Masarotto, G. (2018).
+Phase I distribution-free analysis with the R package dfphase1.
+In \emph{Frontiers in Statistical Quality Control 12 (pp. 3-19)}.
+Springer International Publishing.
 }
 \seealso{
 \code{\link{regr_cc_fof}}

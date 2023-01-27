@@ -391,7 +391,10 @@ get_fit_pca_given_scores <- function(scores, harmonics) {
 #' \emph{Applied Stochastic Models in Business and Industry},
 #' 36(3):477--500. <doi:10.1002/asmb.2507>
 #'
-get_T2_spe <- function(pca, components, newdata_scaled = NULL) {
+get_T2_spe <- function(pca,
+                       components,
+                       newdata_scaled = NULL,
+                       absolute_error = FALSE) {
   inprods <- get_pre_scores(pca, components, newdata_scaled)
   scores <- apply(inprods, 1:2, sum)
   values <- pca$values[components]
@@ -426,7 +429,16 @@ get_T2_spe <- function(pca, components, newdata_scaled = NULL) {
 
   res_fd <- mfd(res_fd$coefs, res_fd$basis, res_fd$fdnames, B = res_fd$basis$B)
 
-  cont_spe <- inprod_mfd_diag(res_fd)
+  if (!absolute_error) {
+    cont_spe <- inprod_mfd_diag(res_fd)
+  } else {
+    rg <- pca$data$basis$rangeval
+    PP <- 200
+    xseq <- seq(rg[1], rg[2], l = PP)
+    yy <- eval.fd(xseq, res_fd)
+    cont_spe <- apply(abs(yy), 2:3, sum) / PP
+  }
+
   rownames(cont_spe) <- obs
   colnames_cont_spe <- paste0("contribution_spe_", variables)
   spe <- rowSums(cont_spe)

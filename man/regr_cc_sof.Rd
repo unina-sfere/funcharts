@@ -12,7 +12,8 @@ regr_cc_sof(
   mfdobj_x_tuning = NULL,
   alpha = 0.05,
   parametric_limits = TRUE,
-  include_covariates = FALSE
+  include_covariates = FALSE,
+  absolute_error = FALSE
 )
 }
 \arguments{
@@ -68,6 +69,9 @@ on the tuning data set.}
  \code{control_charts_pca},.
 If FALSE, only the scalar response, conditionally on the covariates,
 is monitored.}
+
+\item{absolute_error}{A logical value that, if \code{include_covariates} is TRUE, is passed
+to \code{\link{control_charts_pca}}.}
 }
 \value{
 A \code{data.frame} with as many rows as the

@@ -89,6 +89,16 @@
 #' retained into the MFPCA model
 #' fitted on the functional covariates.
 #' Default is 0.9.
+#' @param absolute_error
+#' If FALSE, the SPE statistic, which monitors the principal components
+#' not retained in the MFPCA model, is calculated as the sum
+#' of the integrals of the squared prediction error functions, obtained
+#' as the difference between the actual functions and their approximation
+#' after projection over the selected principal components.
+#' If TRUE, the SPE statistic is calculated by replacing the square of
+#' the prediction errors with the absolute value, as proposed by
+#' Capizzi and Masarotto (2018).
+#' Default value is FALSE.
 #'
 #' @return
 #' A \code{data.frame} with as many rows as the number of
@@ -138,6 +148,12 @@
 #' 36(3):477--500.
 #' <doi:10.1002/asmb.2507>
 #'
+#' Capizzi, G., & Masarotto, G. (2018).
+#' Phase I distribution-free analysis with the R package dfphase1.
+#' In \emph{Frontiers in Statistical Quality Control 12 (pp. 3-19)}.
+#' Springer International Publishing.
+#'
+#'
 #' @examples
 #' library(funcharts)
 #' data("air")
@@ -169,7 +185,8 @@ control_charts_pca <- function(pca,
                                nfold = 5,
                                ncores = 1,
                                tot_variance_explained = 0.9,
-                               single_min_variance_explained = 0) {
+                               single_min_variance_explained = 0,
+                               absolute_error = FALSE) {
 
   if (!missing(seed)) {
     warning(paste0("argument seed is deprecated; ",
@@ -221,19 +238,24 @@ control_charts_pca <- function(pca,
     pca = pca,
     tuning_data = tuning_data,
     components = components,
-    alpha = alpha)
+    alpha = alpha,
+    absolute_error = absolute_error)
   if (limits == "cv") lim <- calculate_cv_limits(
     pca = pca,
     components = components,
     alpha = alpha,
     nfold = nfold,
-    ncores = ncores)
+    ncores = ncores,
+    absolute_error = absolute_error)
 
   newdata_scaled <- scale_mfd(newdata,
                               center = pca$center_fd,
                               scale = if (pca$scale) pca$scale_fd else FALSE)
 
-  T2_spe <- get_T2_spe(pca, components, newdata_scaled = newdata_scaled)
+  T2_spe <- get_T2_spe(pca,
+                       components,
+                       newdata_scaled = newdata_scaled,
+                       absolute_error = absolute_error)
   id <- data.frame(id = newdata$fdnames[[2]])
 
   cbind(id, T2_spe, lim)
@@ -806,6 +828,9 @@ plot_control_charts <- function(cclist) {
 #'  \code{control_charts_pca},.
 #' If FALSE, only the scalar response, conditionally on the covariates,
 #' is monitored.
+#' @param absolute_error
+#' A logical value that, if \code{include_covariates} is TRUE, is passed
+#' to \code{\link{control_charts_pca}}.
 #'
 #' @return
 #' A \code{data.frame} with as many rows as the
@@ -865,7 +890,8 @@ regr_cc_sof <- function(object,
                         mfdobj_x_tuning = NULL,
                         alpha = 0.05,
                         parametric_limits = TRUE,
-                        include_covariates = FALSE) {
+                        include_covariates = FALSE,
+                        absolute_error = FALSE) {
 
   if (!is.list(object)) {
     stop("object must be a list produced by sof_pc.")
@@ -980,11 +1006,12 @@ regr_cc_sof <- function(object,
   if (include_covariates) {
     alpha_x <- alpha[c("T2", "spe")]
     ccpca <- control_charts_pca(pca = object$pca,
-                                 components = object$components,
-                                 tuning_data = mfdobj_x_tuning,
-                                 newdata = mfdobj_x_new,
-                                 alpha = alpha_x,
-                                 limits = "standard")
+                                components = object$components,
+                                tuning_data = mfdobj_x_tuning,
+                                newdata = mfdobj_x_new,
+                                alpha = alpha_x,
+                                limits = "standard",
+                                absolute_error = absolute_error)
 
     ret <- cbind(ccpca, ret)
 
@@ -1066,6 +1093,9 @@ regr_cc_sof <- function(object,
 #'  \code{control_charts_pca},.
 #' If FALSE, only the functional response, conditionally on the covariates,
 #' is monitored.
+#' @param absolute_error
+#' A logical value that, if \code{include_covariates} is TRUE, is passed
+#' to \code{\link{control_charts_pca}}.
 #'
 #' @return
 #' A \code{data.frame} containing the output of the
@@ -1111,7 +1141,8 @@ regr_cc_fof <- function(object,
                         mfdobj_y_tuning = NULL,
                         mfdobj_x_tuning = NULL,
                         alpha = 0.05,
-                        include_covariates = FALSE) {
+                        include_covariates = FALSE,
+                        absolute_error = FALSE) {
 
   if (!is.list(object)) {
     stop("object must be a list produced by fof_pc.")
@@ -1212,7 +1243,8 @@ regr_cc_fof <- function(object,
       tuning_data = mfdobj_x_tuning,
       newdata = mfdobj_x_new,
       alpha = alpha_x,
-      limits = "standard"
+      limits = "standard",
+      absolute_error = absolute_error
     ) %>%
       rename("T2_x" = "T2",
              "spe_x" = "spe",

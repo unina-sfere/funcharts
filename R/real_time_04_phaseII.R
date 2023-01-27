@@ -50,6 +50,8 @@
 #' See \code{\link{control_charts_pca}}.
 #' @param tot_variance_explained
 #' See \code{\link{control_charts_pca}}.
+#' @param absolute_error
+#' See \code{\link{control_charts_pca}}.
 #' @param ncores
 #' If you want parallelization, give the number of cores/threads
 #' to be used when creating objects separately for different instants.
@@ -93,6 +95,7 @@ control_charts_pca_mfd_real_time <- function(pca_list,
                                              nfold = NULL,
                                              tot_variance_explained = 0.9,
                                              single_min_variance_explained = 0,
+                                             absolute_error = FALSE,
                                              ncores = 1) {
 
   if (!missing(seed)) {
@@ -124,7 +127,8 @@ control_charts_pca_mfd_real_time <- function(pca_list,
       nfold = nfold,
       ncores = 1,
       tot_variance_explained = tot_variance_explained,
-      single_min_variance_explained = single_min_variance_explained
+      single_min_variance_explained = single_min_variance_explained,
+      absolute_error = absolute_error
     )
 
     cclist_kk$arg <- pca_list[[ii]]$data$fdnames[[1]]
@@ -155,7 +159,8 @@ control_charts_pca_mfd_real_time <- function(pca_list,
                       "nfold",
                       "kk_seq",
                       "tot_variance_explained",
-                      "single_min_variance_explained"),
+                      "single_min_variance_explained",
+                      "absolute_error"),
                     envir = environment())
       control_charts_out <- parLapply(cl, seq_along(pca_list), single_k)
       stopCluster(cl)
@@ -393,6 +398,8 @@ control_charts_sof_pc_real_time <- function(mod_list,
 #' See \code{\link{regr_cc_fof}}.
 #' @param include_covariates
 #' See \code{\link{regr_cc_fof}}.
+#' @param absolute_error
+#' See \code{\link{regr_cc_fof}}.
 #' @param ncores
 #' If you want parallelization, give the number of cores/threads
 #' to be used when creating objects separately for different instants.
@@ -439,6 +446,7 @@ regr_cc_fof_real_time <- function(mod_list,
                                   mfdobj_x_tuning_list = NULL,
                                   alpha = 0.05,
                                   include_covariates = FALSE,
+                                  absolute_error = FALSE,
                                   ncores = 1) {
 
 
@@ -458,7 +466,8 @@ regr_cc_fof_real_time <- function(mod_list,
       mfdobj_y_tuning = mfdobj_y_tuning_list[[ii]],
       mfdobj_x_tuning = mfdobj_x_tuning_list[[ii]],
       alpha = alpha,
-      include_covariates = include_covariates
+      include_covariates = include_covariates,
+      absolute_error = absolute_error
     )
 
     regr_cc_fof_kk$arg <- mod_list[[ii]]$pca_x$data$fdnames[[1]]
@@ -487,6 +496,7 @@ regr_cc_fof_real_time <- function(mod_list,
                       "mfdobj_x_tuning_list",
                       "alpha",
                       "include_covariates",
+                      "absolute_error",
                       "kk_seq"),
                     envir = environment())
       control_charts_out <- parLapply(cl, seq_along(mod_list), single_k)
@@ -558,6 +568,8 @@ regr_cc_fof_real_time <- function(mod_list,
 #' See \code{\link{regr_cc_sof}}.
 #' @param include_covariates
 #' See \code{\link{regr_cc_sof}}.
+#' @param absolute_error
+#' See \code{\link{regr_cc_sof}}.
 #' @param ncores
 #' If you want parallelization, give the number of cores/threads
 #' to be used when creating objects separately for different instants.
@@ -605,6 +617,7 @@ regr_cc_sof_real_time <- function(mod_list,
                                   alpha = 0.05,
                                   parametric_limits = TRUE,
                                   include_covariates = FALSE,
+                                  absolute_error = FALSE,
                                   ncores = 1) {
 
 
@@ -649,6 +662,7 @@ regr_cc_sof_real_time <- function(mod_list,
                       "mfdobj_x_tuning_list",
                       "alpha",
                       "include_covariates",
+                      "absolute_error",
                       "kk_seq"),
                     envir = environment())
       control_charts_out <- parLapply(cl, seq_along(mod_list), single_k)

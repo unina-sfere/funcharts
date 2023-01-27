@@ -73,7 +73,8 @@
 calculate_limits <- function(pca,
                              tuning_data = NULL,
                              components,
-                             alpha = list(T2 = .025, spe = .025)) {
+                             alpha = list(T2 = .025, spe = .025),
+                             absolute_error = FALSE) {
 
   if (!is.list(pca)) {
     stop("pca must be a list produced by pca_mfd.")
@@ -96,7 +97,10 @@ calculate_limits <- function(pca,
                 scale = if (pca$scale) pca$scale_fd else FALSE)
   }
 
-  T2_spe <- get_T2_spe(pca, components, newdata_scaled = tuning_data)
+  T2_spe <- get_T2_spe(pca,
+                       components,
+                       newdata_scaled = tuning_data,
+                       absolute_error = absolute_error)
   T2 <- select(T2_spe, "T2", contains("contribution_T2",
                                       ignore.case = FALSE))
   spe <- select(T2_spe, "spe", contains("contribution_spe",
@@ -202,7 +206,8 @@ calculate_cv_limits <- function(pca,
                                 seed,
                                 nfold = 5,
                                 alpha = list(T2 = .025, spe = .025),
-                                ncores = 1) {
+                                ncores = 1,
+                                absolute_error = FALSE) {
 
   if (!missing(seed)) {
     warning(paste0("argument seed is deprecated; ",
@@ -229,7 +234,8 @@ calculate_cv_limits <- function(pca,
     pca_cv <- pca_mfd(fd_train, scale = pca$scale, nharm = max(components))
     control_charts_pca(pca = pca_cv,
                        components = components,
-                       newdata = fd_test)
+                       newdata = fd_test,
+                       absolute_error = absolute_error)
 
     # T2 <- get_T2(pca_cv, components, newdata = fd_test)
     # spe <- get_spe(pca_cv, components, newdata = fd_test)
