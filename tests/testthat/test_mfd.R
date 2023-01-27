@@ -206,3 +206,7 @@ test_that("inprod functions work", {
 })
 
 
+test_that("norm_mfd works", {
+  mfdobj1 <- data_sim_mfd()
+  expect_no_error(norm.mfd(mfdobj1))
+})

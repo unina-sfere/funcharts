@@ -65,28 +65,42 @@ test_that("control_charts functions works", {
 
 })
 
+air1 <- lapply(air, function(x) x[1:8, , drop = FALSE])
+air2 <- lapply(air, function(x) x[9:10, , drop = FALSE])
+mfdobj_x1_list <- get_mfd_list_real_time(air1[c("CO", "temperature")],
+                                         n_basis = 15,
+                                         lambda = 1e-2,
+                                         k_seq = c(0.5, 1))
+mfdobj_x2_list <- get_mfd_list_real_time(air2[c("CO", "temperature")],
+                                         n_basis = 15,
+                                         lambda = 1e-2,
+                                         k_seq = c(0.5, 1))
+y1 <- rowMeans(air1$NO2)
+y2 <- rowMeans(air2$NO2)
+mod_list <- sof_pc_real_time(y1, mfdobj_x1_list)
+
 test_that("control_charts_sof gives warning", {
 
   expect_warning(cc <- control_charts_sof_pc(mod_sof,
                                              y_test = y2_scalar,
                                              mfdobj_x_test = mfdobj_x2))
 
-  air1 <- lapply(air, function(x) x[1:8, , drop = FALSE])
-  air2 <- lapply(air, function(x) x[9:10, , drop = FALSE])
-  mfdobj_x1_list <- get_mfd_list_real_time(air1[c("CO", "temperature")],
-                                           n_basis = 15,
-                                           lambda = 1e-2,
-                                           k_seq = c(0.5, 1))
-  mfdobj_x2_list <- get_mfd_list_real_time(air2[c("CO", "temperature")],
-                                           n_basis = 15,
-                                           lambda = 1e-2,
-                                           k_seq = c(0.5, 1))
-  y1 <- rowMeans(air1$NO2)
-  y2 <- rowMeans(air2$NO2)
-  mod_list <- sof_pc_real_time(y1, mfdobj_x1_list)
+
   expect_warning(cclist <- control_charts_sof_pc_real_time(
     mod_list = mod_list,
     y_test = y2,
     mfdobj_x_test = mfdobj_x2_list))
 })
 
+
+
+test_that("control chart real time works", {
+
+
+  expect_no_error(cclist <- regr_cc_sof_real_time(mod_list = mod_list,
+                                        y_new = y2,
+                                        mfdobj_x_new_list = mfdobj_x2_list,
+                                        include_covariates = TRUE))
+  p <- plot_control_charts_real_time(cclist, 1)
+  expect_is(p, "ggplot")
+})
