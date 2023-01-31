@@ -2236,6 +2236,12 @@ geom_mfd <- function(mapping = NULL,
 #'
 #' @param bifd_obj A bivariate functional data object of class bifd,
 #' containing one single replication.
+#' @param type_plot a character value
+#' If "raster", it plots the bivariate functional data object
+#' as a raster image.
+#' If "contour", it produces a contour plot.
+#' If "perspective", it produces a perspective plot.
+#' Default value is "raster".
 #'
 #' @return
 #' A ggplot with a geom_tile layer providing a plot of the
@@ -2248,7 +2254,7 @@ geom_mfd <- function(mapping = NULL,
 #' tp <- tensor_product_mfd(mfdobj)
 #' plot_bifd(tp)
 #'
-plot_bifd <- function(bifd_obj) {
+plot_bifd <- function(bifd_obj, type_plot = "raster") {
 
   if (!inherits(bifd_obj, "bifd")) {
     stop("bifd_obj must be an object of class bifd")
@@ -2258,6 +2264,9 @@ plot_bifd <- function(bifd_obj) {
   }
   if (dim(bifd_obj$coef)[3] != 1) {
     stop("third dimension of bifd_obj$coef must be 1")
+  }
+  if (!(type_plot %in% c("raster", "contour", "perspective"))) {
+    stop("type_plot must be one of \"raster\", \"contour\", \"perspective\"")
   }
 
 
@@ -2269,7 +2278,7 @@ plot_bifd <- function(bifd_obj) {
                 l = 100)
   X_eval <- eval.bifd(s_eval, t_eval, bifd_obj)
 
-  seq_along(bifd_obj$bifdnames[[4]]) %>%
+  p <- seq_along(bifd_obj$bifdnames[[4]]) %>%
     lapply(function(ii) {
       X_eval[, , , ii] %>%
         data.frame() %>%
@@ -2283,16 +2292,48 @@ plot_bifd <- function(bifd_obj) {
     mutate(variable = factor(.data$variable,
                              levels = bifd_obj$bifdnames[[4]])) %>%
     ggplot() +
-    geom_tile(aes(.data$s, .data$t, fill = .data$value)) +
     facet_wrap(~variable) +
-    scale_fill_gradientn(
-      colours = c("blue", "white", "red"),
-      limits = c(- max(abs(X_eval)), max(abs(X_eval)))) +
     theme_bw() +
     theme(panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           strip.background = element_blank(),
           panel.border = element_rect(colour = "black"))
+
+  variables <- bifd_obj$bifdnames[[4]]
+  nvar <- dim(X_eval)[4]
+  zlim <- c(- max(abs(X_eval)), max(abs(X_eval)))
+
+  if (type_plot == "raster") {
+    p <- p +
+      geom_tile(aes(.data$s, .data$t, fill = .data$value)) +
+      scale_fill_gradientn(
+        colours = c("blue", "white", "red"),
+        limits = zlim)
+    return(p)
+  }
+
+  if (type_plot == "contour") {
+    p <- p +
+      geom_contour(aes(.data$s, .data$t, z = .data$value, colour = after_stat(get("level")))) +
+      scale_color_gradientn(
+        colours = c("blue", "white", "red"),
+        limits = zlim) +
+      labs(colour = 'level')
+    return(p)
+  }
+
+  if (type_plot == "perspective") {
+    nr <- ceiling(sqrt(nvar))
+    open3d()
+    mfrow3d(nr, nr, sharedMouse = TRUE)
+    for (ii in 1:nvar) rgl::persp3d(s_eval,
+                                    t_eval,
+                                    X_eval[,,1,ii],
+                                    xlab = "s",
+                                    ylab = "t",
+                                    zlab = variables[ii],
+                                    zlim = zlim)
+  }
 
 }
 

@@ -20,7 +20,7 @@ A list with three objects, \code{datI} contains the phase I data,
 In the phase II data, the first group of observations are in control,
 the second group of observations contains a moderate mean shift,
 while the third group of observations contains a severe mean shift.
-The shift types are described in the paper from Centofanti et al. (2021),
+The shift types are described in the paper from Capezza et al. (2022).
 }
 \description{
 Function used to simulate three data sets to illustrate the use
@@ -40,4 +40,8 @@ see also \code{\link[funcharts]{simulate_mfd}}.
 Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 Functional Regression Control Chart.
 \emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
+
+Capezza, C., Centofanti, F., Lepore, A., Menafoglio, A., Palumbo, B.,
+& Vantini, S. (2022). funcharts: Control charts for multivariate
+functional data in R. arXiv preprint arXiv:2207.09321.
 }

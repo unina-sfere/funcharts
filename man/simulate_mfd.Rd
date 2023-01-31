@@ -6,31 +6,37 @@
 \usage{
 simulate_mfd(
   nobs = 1000,
+  p = 3,
   R2 = 0.97,
-  seed,
   shift_type_y = "0",
-  shift_type_x1 = "0",
-  shift_type_x2 = "0",
-  shift_type_x3 = "0",
+  shift_type_x = c("0", "0", "0"),
+  correlation_type_y = "Bessel",
+  correlation_type_x = c("Bessel", "Gaussian", "Exponential"),
   d_y = 0,
-  d_x1 = 0,
-  d_x2 = 0,
-  d_x3 = 0,
   d_y_scalar = 0,
-  save_beta = FALSE
+  d_x = c(0, 0, 0),
+  n_comp_y = 10,
+  n_comp_x = 50,
+  P = 500,
+  ngrid = 150,
+  save_beta = FALSE,
+  mean_y = NULL,
+  mean_x = NULL,
+  variance_y = NULL,
+  variance_x = NULL,
+  sd_y = 0.3,
+  sd_x = c(0.3, 0.05, 0.3),
+  seed
 )
 }
 \arguments{
 \item{nobs}{The number of observation to simulate}
 
-\item{R2}{The desired coefficient of determination in the regression.
-In both the scalar and functional response cases,
- only three values are allowed,
-i.e. 0.97, 0.86, 0.74.
-Default is 0.97.}
+\item{p}{The number of functional covariates to simulate. Default value is 3.}
 
-\item{seed}{Deprecated: use \code{set.seed()} before calling
-the function for reproducibility.}
+\item{R2}{The desired coefficient of determination in the regression
+in both the scalar and functional response cases,
+Default is 0.97.}
 
 \item{shift_type_y}{The shift type for the functional response.
 There are five possibilities: "0" if there is no shift,
@@ -38,80 +44,138 @@ There are five possibilities: "0" if there is no shift,
 shown in Centofanti et al. (2021).
 Default is "0".}
 
-\item{shift_type_x1}{#' The shift type for the first functional covariate.
-There are five possibilities: "0" if there is no shift,
+\item{shift_type_x}{A list of length \code{p}, indicating, for each functional covariate,
+the shift type. For each element of the list,
+there are five possibilities: "0" if there is no shift,
 "A", "B", "C" or "D" for the corresponding shift types
 shown in Centofanti et al. (2021).
-Default is "0".}
+By default, shift is not applied to any functional coviarate.}
 
-\item{shift_type_x2}{#' The shift type for the second functional covariate.
-#' There are five possibilities: "0" if there is no shift,
-"A", "B", "C" or "D" for the corresponding shift types
-shown in Centofanti et al. (2021).
-Default is "0".}
+\item{correlation_type_y}{A character vector indicating the type of correlation function for
+the functional response.
+See  Centofanti et al. (2021)
+for more details. Three possible values are available,
+namely \code{"Bessel"}, \code{"Gaussian"} and \code{"Exponential"}.
+Default value is \code{"Bessel"}.}
 
-\item{shift_type_x3}{#' The shift type for the third functional covariate.
-#' There are five possibilities: "0" if there is no shift,
-"A", "B", "C" or "D" for the corresponding shift types
-shown in Centofanti et al. (2021).
-Default is "0".}
+\item{correlation_type_x}{A list of \code{p} character vectors indicating
+the type of correlation function for each
+functional covariate.
+See  Centofanti et al. (2021)
+for more details. For each element of the list,
+three possible values are available,
+namely \code{"Bessel"}, \code{"Gaussian"} and \code{"Exponential"}.
+Default value is \code{c("Bessel", "Gaussian", "Exponential")}.}
 
 \item{d_y}{A number indicating the severity of the shift type for
 the functional response.
-Default is 0.}
-
-\item{d_x1}{A number indicating the severity of the shift type for
-the first functional covariate.
-Default is 0.}
-
-\item{d_x2}{A number indicating the severity of the shift type for
-the second functional covariate.
-Default is 0.}
-
-\item{d_x3}{A number indicating the severity of the shift type for
-the third functional covariate.
 Default is 0.}
 
 \item{d_y_scalar}{A number indicating the severity of the shift type for
 the scalar response.
 Default is 0.}
 
+\item{d_x}{A list of \code{p} numbers, each indicating the
+severity of the shift type for
+the corresponding functional covariate.
+By default, the severity is set to zero for all functional covariates.}
+
+\item{n_comp_y}{A positive integer number indicating how many principal components
+obtained after the eigendecomposiiton of the covariance function
+of the functional response variable to retain.
+Default value is 10.}
+
+\item{n_comp_x}{A positive integer number indicating how many principal components
+obtained after the eigendecomposiiton of the covariance function
+of the multivariate functional covariates variable to retain.
+Default value is 50.}
+
+\item{P}{A positive integer number indicating the number of equally spaced
+grid points over which the covariance functions are discretized.
+Default value is 500.}
+
+\item{ngrid}{A positive integer number indicating the number of equally spaced
+grid points between zero and one
+over which all functional observations are discretized before adding
+noise. Default value is 150.}
+
 \item{save_beta}{If TRUE, the true regression coefficients of both the function-on-function
 and the scalar-on-function models are saved.
 Default is FALSE.}
+
+\item{mean_y}{The mean function of the functional response can be set manually
+through this argument. If not NULL, it must be a vector of length
+equal to \code{ngrid}, providing the values of the mean function of
+the functional response discretized on \code{seq(0,1,l=ngrid)}.
+If NULL, the mean function is generated as done in the simulation study
+of Centofanti et al. (2021).
+Default is NULL.}
+
+\item{mean_x}{The mean function of the functional covariates can be set manually
+through this argument. If not NULL, it must be a list of vectors,
+each with length equal to \code{ngrid},
+providing the values of the mean function of
+each functional covariate discretized on \code{seq(0,1,l=ngrid)}.
+If NULL, the mean function is generated as done in the simulation study
+of Centofanti et al. (2021).
+Default is NULL.}
+
+\item{variance_y}{The variance function of the functional response can be set manually
+through this argument. If not NULL, it must be a vector of length
+equal to \code{ngrid}, providing the values of the variance function of
+the functional response discretized on \code{seq(0,1,l=ngrid)}.
+If NULL, the variance function is generated as done in the simulation study
+of Centofanti et al. (2021).
+Default is NULL.}
+
+\item{variance_x}{The variance function of the functional covariates can be set manually
+through this argument. If not NULL, it must be a list of vectors,
+each with length equal to \code{ngrid},
+providing the values of the variance function of
+each functional covariate discretized on \code{seq(0,1,l=ngrid)}.
+If NULL, the variance function is generated as done in the simulation study
+of Centofanti et al. (2021).
+Default is NULL.}
+
+\item{sd_y}{A positive number indicating the standard deviation of the generated
+noise with which the functional response discretized values are observed.
+Default value is 0.3}
+
+\item{sd_x}{A vector of \code{p} positive numbers indicating the standard deviation
+of the generated noise with which the
+functional covariates discretized values are observed.
+Default value is \code{c(0.3, 0.05, 0.3)}.}
+
+\item{seed}{Deprecated: use \code{set.seed()} before calling
+the function for reproducibility.}
 }
 \value{
 A list with the following elements:
 
-* \code{X1} is a \code{nobs}x150 matrix with the simulated
-observations of the first functional covariate
+* \code{X_list} is a list of \code{p} matrices, each with dimension
+\code{nobs}x\code{ngrid}, containing the simulated
+observations of the multivariate functional covariate
 
-* \code{X2} is a \code{nobs}x150 matrix with the simulated
-observations of the second functional covariate
-
-* \code{X3} is a \code{nobs}x150 matrix with the simulated
-observations of the third functional covariate
-
-* \code{Y} is a \code{nobs}x150 matrix with the simulated
+* \code{Y} is a \code{nobs}x\code{ngrid} matrix with the simulated
 observations of the functional response
 
-* \code{y_scalar} is a vector of length 150 with the simulated
+* \code{y_scalar} is a vector of length \code{nobs} with the simulated
 observations of the scalar response
 
 * \code{beta_fof}, if \code{save_beta = TRUE}, is a
-list of three 500x500 matrices
+list of \code{p} matrices, each with dimension \code{P}x\code{P}
 with the discretized functional coefficients of the
 function-on-function regression
 
 * \code{beta_sof}, if \code{save_beta = TRUE}, is a
-list of three vectors of length 500
+list of \code{p} vectors, each with length \code{P},
 with the discretized functional coefficients of the
 scalar-on-function regression
 }
 \description{
 Function used to simulate a data set to illustrate
 the use of \code{funcharts}.
-It creates a data set with three functional covariates,
+By default, it creates a data set with three functional covariates,
 a functional response generated as a function of the
 three functional covariates
 through a function-on-function linear model,
@@ -121,13 +185,19 @@ through a scalar-on-function linear model.
 This function covers the simulation study in Centofanti et al. (2021)
 for the function-on-function case and also simulates data in a similar way
 for the scalar response case.
+It is possible to select the number of functional covariates,
+the correlation function type for each functional covariate
+and the functional response, moreover
+it is possible to provide manually the mean and variance functions
+for both functional covariates and the response.
 In the default case, the function generates in-control data.
 Additional arguments can be used to generate additional
 data that are out of control,
 with mean shifts according to the scenarios proposed
 by Centofanti et al. (2021).
 Each simulated observation of a functional variable consists of
-a vector of 150 discrete points, equally spaced between 0 and 1,
+a vector of discrete points equally spaced between 0 and 1 (by default
+150 points),
 generated with noise.
 }
 \references{

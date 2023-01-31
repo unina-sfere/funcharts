@@ -17,11 +17,13 @@
 #' @importFrom stats
 #' setNames var rnorm dnorm approx
 #' @importFrom stats
-#' model.matrix rstandard formula
+#' model.matrix rstandard formula uniroot
 #' @importFrom tidyr pivot_longer drop_na
 #' @importFrom rlang .data
 #' @importFrom RSpectra eigs_sym
 #' @importFrom matrixStats rowCumsums
+#' @importFrom rgl
+#' persp3d open3d mfrow3d
 #' @references
 #' Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
 #' Control charts for

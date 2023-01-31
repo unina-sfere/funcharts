@@ -74,9 +74,10 @@ generate_cov_str <- function() {
       if (jj == ii) {
         corr_mat[[ii]][[jj]] <- covmatList[[ii]]
       } else {
-        V <- eigList[[ii]]$vectors[, seq_len(n_comp_x)]
+        V1 <- eigList[[ii]]$vectors[, seq_len(n_comp_x)]
+        V2 <- eigList[[jj]]$vectors[, seq_len(n_comp_x)]
         lambdas <- eigenvalues[seq_len(n_comp_x)]
-        sum <- V %*% (t(V) * lambdas) / 3
+        sum <- V1 %*% (t(V2) * lambdas) / 3
         # sum <- 0
         # for (kk in seq_len(n_comp_x)) {
         #   sum <- sum +

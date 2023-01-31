@@ -4,11 +4,18 @@
 \alias{plot_bifd}
 \title{Plot a Bivariate Functional Data Object.}
 \usage{
-plot_bifd(bifd_obj)
+plot_bifd(bifd_obj, type_plot = "raster")
 }
 \arguments{
 \item{bifd_obj}{A bivariate functional data object of class bifd,
 containing one single replication.}
+
+\item{type_plot}{a character value
+If "raster", it plots the bivariate functional data object
+as a raster image.
+If "contour", it produces a contour plot.
+If "perspective", it produces a perspective plot.
+Default value is "raster".}
 }
 \value{
 A ggplot with a geom_tile layer providing a plot of the
