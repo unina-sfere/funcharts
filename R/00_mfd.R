@@ -2337,13 +2337,16 @@ plot_bifd <- function(bifd_obj,
     nr <- ceiling(sqrt(nvar))
     par(mfrow = c(nr, nr))
     for (ii in seq_len(nvar)) {
-      plot3D::persp3D(s_eval,
-                      t_eval,
-                      X_eval[,,1,ii],
-                      phi = phi,
-                      theta = theta,
-                      main = variables[ii],
-                      zlim = zlim)
+      persp(s_eval,
+            t_eval,
+            X_eval[,,1,ii],
+            phi = phi,
+            theta = theta,
+            main = variables[ii],
+            zlim = zlim,
+            xlab = "s",
+            ylab = "t",
+            zlab = "value")
     }
     par(mfrow = c(1, 1))
   }

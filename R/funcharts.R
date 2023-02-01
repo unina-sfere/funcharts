@@ -22,8 +22,7 @@
 #' @importFrom rlang .data
 #' @importFrom RSpectra eigs_sym
 #' @importFrom matrixStats rowCumsums
-#' @importFrom plot3D persp3D
-#' @importFrom graphics par
+#' @importFrom graphics par persp
 #' @references
 #' Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
 #' Control charts for
