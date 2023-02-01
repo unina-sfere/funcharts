@@ -2242,6 +2242,12 @@ geom_mfd <- function(mapping = NULL,
 #' If "contour", it produces a contour plot.
 #' If "perspective", it produces a perspective plot.
 #' Default value is "raster".
+#' @param phi
+#' If \code{type_plot=="perspective"}, it is the \code{phi} argument
+#' of the function \code{plot3D::persp3D}.
+#' @param theta
+#' If \code{type_plot=="perspective"}, it is the \code{theta} argument
+#' of the function \code{plot3D::persp3D}.
 #'
 #' @return
 #' A ggplot with a geom_tile layer providing a plot of the
@@ -2254,7 +2260,10 @@ geom_mfd <- function(mapping = NULL,
 #' tp <- tensor_product_mfd(mfdobj)
 #' plot_bifd(tp)
 #'
-plot_bifd <- function(bifd_obj, type_plot = "raster") {
+plot_bifd <- function(bifd_obj,
+                      type_plot = "raster",
+                      phi = 40,
+                      theta = 40) {
 
   if (!inherits(bifd_obj, "bifd")) {
     stop("bifd_obj must be an object of class bifd")
@@ -2323,16 +2332,20 @@ plot_bifd <- function(bifd_obj, type_plot = "raster") {
   }
 
   if (type_plot == "perspective") {
+    phi <- 40
+    theta <- 40
     nr <- ceiling(sqrt(nvar))
-    open3d()
-    mfrow3d(nr, nr, sharedMouse = TRUE)
-    for (ii in 1:nvar) rgl::persp3d(s_eval,
-                                    t_eval,
-                                    X_eval[,,1,ii],
-                                    xlab = "s",
-                                    ylab = "t",
-                                    zlab = variables[ii],
-                                    zlim = zlim)
+    par(mfrow = c(nr, nr))
+    for (ii in seq_len(nvar)) {
+      plot3D::persp3D(s_eval,
+                      t_eval,
+                      X_eval[,,1,ii],
+                      phi = phi,
+                      theta = theta,
+                      main = variables[ii],
+                      zlim = zlim)
+    }
+    par(mfrow = c(1, 1))
   }
 
 }

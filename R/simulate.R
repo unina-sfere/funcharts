@@ -75,7 +75,7 @@ sim_funcharts <- function(nobs1 = 1000, nobs_tun = 1000, nobs2 = 60) {
                    y_scalar = datI_tun$y_scalar)
 
 
-  list(datI = datI, datI_tun = datI_tun, datII = datII)
+  return(list(datI = datI, datI_tun = datI_tun, datII = datII))
 }
 
 
@@ -327,7 +327,7 @@ simulate_mfd <- function(nobs = 1000,
                         n_comp = n_comp_x)
   x_seq <- seq(0, 1, l = P)
 
-  b_perfect <- sqrt(ey$values / e$values[1:10])
+  b_perfect <- sqrt(ey$values / e$values[seq_along(ey$values)])
   b_perfect_sof <- rep(1 / sqrt(sum(e$values[1:10])), 10)
 
   vary <- rowSums(t(t(ey$vectors^2) * ey$values))

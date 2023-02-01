@@ -8,6 +8,8 @@ In particular, Fourier, exponential, monomial, polygonal, power and constant bas
 Instead, use `regr_cc_sof()` and `regr_cc_sof_real_time()`, respectively, with argument `include_covariates = TRUE`. 
 This has been done to make more consistent the regression control chart functions for the scalar (`regr_cc_sof()` and `regr_cc_sof_real_time()`) and functional (`regr_cc_fof()` and `regr_cc_fof_real_time()`) response cases.
 * `alpha` parameter in all control charting functions, which previously could only be a list with manually specified values of the type-I error probability in each control chart, now can also be a single number between 0 and 1. In this case, Bonferroni correction is automatically applied to take into account the multiplicity problem when more than one control chart is applied.
+* `plot_bifd()` now allows to choose to produce also contour or perspective plots of `bifd` objects.
+* `simulate_mfd()` is much more general, now it allows to simulate as many covariates as one wants (before the number was fixed to three), it is possible to provide manually the mean and variance function for each variable, it is possible to select the type of correlation function for each variable.
 
 # funcharts 1.2.0
 

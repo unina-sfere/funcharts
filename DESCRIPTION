@@ -28,7 +28,7 @@ Imports:
     matrixStats,
     roahd,
     dplyr,
-    rgl
+    plot3D
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

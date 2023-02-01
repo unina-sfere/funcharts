@@ -70,6 +70,8 @@ test_that("plot mfd functions work", {
   mod <- fof_pc(mfdobj_y, mfdobj_x)
   p <- plot_bifd(mod$beta_fd)
   expect_is(p, "ggplot")
+  p <- plot_bifd(mod$beta_fd, type_plot = "contour")
+  expect_no_error(plot_bifd(mod$beta_fd, type_plot = "perspective"))
 
   library(ggplot2)
   data("air")
