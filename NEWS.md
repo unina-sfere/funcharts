@@ -10,6 +10,7 @@ This has been done to make more consistent the regression control chart function
 * `alpha` parameter in all control charting functions, which previously could only be a list with manually specified values of the type-I error probability in each control chart, now can also be a single number between 0 and 1. In this case, Bonferroni correction is automatically applied to take into account the multiplicity problem when more than one control chart is applied.
 * `plot_bifd()` now allows to choose to produce also contour or perspective plots of `bifd` objects.
 * `simulate_mfd()` is much more general, now it allows to simulate as many covariates as one wants (before the number was fixed to three), it is possible to provide manually the mean and variance function for each variable, it is possible to select the type of correlation function for each variable.
+* `plot_mfd()` now relies on patchwork, while the new function `lines_mfd()` allows to add new curve to an existing plot.
 
 # funcharts 1.2.0
 

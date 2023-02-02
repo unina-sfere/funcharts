@@ -77,8 +77,9 @@ test_that("plot mfd functions work", {
   data("air")
   xlist <- list(NO2 = air$NO2[1:2, ])
   mfdobj <- get_mfd_list(xlist)
-  p <- ggplot() +
-    geom_mfd(mfdobj = mfdobj, type_mfd = "raw")
+  p <- plot_mfd(mfdobj = mfdobj, type_mfd = "raw")
+  expect_is(p, "ggplot")
+  p <- lines_mfd(p, mfdobj = mfdobj)
   expect_is(p, "ggplot")
 })
 

@@ -522,13 +522,22 @@ simulate_mfd <- function(nobs = 1000,
   X_list <- list()
   for (jj in seq_len(p)) {
     meig_jj <- e$vectors[1:P + (jj-1)*P, ]
-    meig_jj_interpolate <- apply(t(meig_jj), 1, function(y) approx(x_seq, y, grid)$y)
+    meig_jj_interpolate <- apply(t(meig_jj),
+                                 1,
+                                 function(y) approx(x_seq, y, grid)$y)
     X_jj_scaled <- csi_X %*% t(meig_jj_interpolate)
     X_jj <- t(mean_x[[jj]] + t(X_jj_scaled) * sqrt(variance_x[[jj]]))
     X_list[[jj]] <- X_jj + rnorm(length(X_jj), sd = sd_x[jj])
   }
 
-  eig_y_interpolate <- apply(t(ey$vectors), 1, function(y) approx(x_seq, y, grid)$y)
+  ndigits <- floor(log10(p)) + 1
+  names(X_list) <- paste0("X",
+                          sprintf(seq_len(p),
+                                  fmt = paste0("%0", ndigits, "d")))
+
+  eig_y_interpolate <- apply(t(ey$vectors),
+                             1,
+                             function(y) approx(x_seq, y, grid)$y)
   Y_scaled <- csi_Y %*% t(eig_y_interpolate)
   Y <- t(mean_y + t(Y_scaled) * sqrt(variance_y))
   Y <- Y + rnorm(length(Y), sd = sd_y)

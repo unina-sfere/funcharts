@@ -4,7 +4,7 @@
 \alias{plot_mon}
 \title{Plot multivariate functional object over the training data set}
 \usage{
-plot_mon(cclist, fd_train, fd_test, print_id = FALSE)
+plot_mon(cclist, fd_train, fd_test, plot_title = FALSE, print_id = FALSE)
 }
 \arguments{
 \item{cclist}{A \code{data.frame} produced by
@@ -19,9 +19,14 @@ They are plotted in gray in the background.}
 the phase II data set of the functional variables to be monitored.
 They are coloured in black or red on the foreground.}
 
-\item{print_id}{A logical value, if TRUE,
+\item{plot_title}{A logical value. If \code{TRUE},
+it prints the title with the observation name.
+Default is \code{FALSE}.}
+
+\item{print_id}{A logical value. If \code{TRUE}, and also \code{plot_title} is \code{TRUE},
 it prints also the id of the observation
-in the title of the ggplot.}
+in the title of the ggplot.
+Default is \code{FALSE}}
 }
 \value{
 A ggplot of the multivariate functional data.

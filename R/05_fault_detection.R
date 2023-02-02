@@ -306,10 +306,15 @@ cont_plot <- function(cclist,
 #' An object of class \code{mfd} containing
 #' the phase II data set of the functional variables to be monitored.
 #' They are coloured in black or red on the foreground.
+#' @param plot_title
+#' A logical value. If \code{TRUE},
+#' it prints the title with the observation name.
+#' Default is \code{FALSE}.
 #' @param print_id
-#' A logical value, if TRUE,
+#' A logical value. If \code{TRUE}, and also \code{plot_title} is \code{TRUE},
 #' it prints also the id of the observation
 #' in the title of the ggplot.
+#' Default is \code{FALSE}
 #'
 #' @return
 #' A ggplot of the multivariate functional data.
@@ -348,7 +353,11 @@ cont_plot <- function(cclist,
 #' cont_plot(cclist, 3)
 #' plot_mon(cclist, fd_train = mfdobj_x1, fd_test = mfdobj_x2[3])
 #'
-plot_mon <- function(cclist, fd_train, fd_test, print_id = FALSE) {
+plot_mon <- function(cclist,
+                     fd_train,
+                     fd_test,
+                     plot_title = FALSE,
+                     print_id = FALSE) {
 
   id_num <- if (length(fd_test$fdnames[[2]]) == 1) {
     id_num <- which(cclist$id == fd_test$fdnames[[2]])
@@ -385,12 +394,16 @@ plot_mon <- function(cclist, fd_train, fd_test, print_id = FALSE) {
   }
 
 
-  ggplot() +
-    geom_mfd(mfdobj = fd_train, col = "grey") +
-    geom_mfd(mfdobj = fd_test, data = df,
-             mapping = aes(col = .data$`contribution ooc`), lwd = 1) +
-    scale_color_manual(values = c("TRUE" = "tomato1", "FALSE" = "black")) +
-    ggtitle(title) +
-    theme(legend.position = "none")
+  p <- plot_mfd(mfdobj = fd_train, col = "grey")
+  p <- lines_mfd(p, mfdobj_new = fd_test, data = df,
+            mapping = aes(col = .data$`contribution ooc`), linewidth = 1) +
+    scale_color_manual(values = c("TRUE" = "tomato1", "FALSE" = "black"))
+  if (plot_title) {
+    p <- p + patchwork::plot_annotation(
+      title = title,
+      theme = theme(plot.title = element_text(hjust = 0.5)))
+  }
+
+  p & theme(legend.position = "none")
 
 }

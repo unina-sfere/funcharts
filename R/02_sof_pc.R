@@ -471,11 +471,9 @@ plot_bootstrap_sof_pc <- function(mod, nboot = 25, ncores = 1) {
          seq_len(nboot),
          variables),
     B = mod$beta_fd$basis$B)
-  ggplot() +
-    geom_mfd(mfdobj = B_mfd, alpha = .3, lwd = .3, col = "darkgray") +
-    geom_hline(yintercept = 0, lty = 2) +
-    geom_mfd(mfdobj = mod$beta_fd) +
-    facet_wrap(~var)
+  p <- plot_mfd(mfdobj = B_mfd, alpha = .3, lwd = .3, col = "darkgray") &
+    geom_hline(yintercept = 0, lty = 2)
+  lines_mfd(p, mfdobj_new = mod$beta_fd, linewidth = 0.5)
 
 }
 

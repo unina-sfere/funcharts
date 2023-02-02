@@ -100,7 +100,7 @@ mfd <- function(coef,
 
   if (is.null(fdnames)) {
     fdnames <- list(
-      "arg",
+      "t",
       paste0("rep", seq_len(dim(coef)[2])),
       paste0("var", seq_len(dim(coef)[3]))
     )
@@ -109,9 +109,9 @@ mfd <- function(coef,
     stop("If either raw or id_var are not NULL, both must be not NULL")
   }
   if (!is.null(raw)) {
-    if (!(fdnames[[1]] %in% names(raw))) {
-      stop("fdnames[[1]] must be the name of a column of the raw data.")
-    }
+    # if (!(fdnames[[1]] %in% names(raw))) {
+    #   stop("fdnames[[1]] must be the name of a column of the raw data.")
+    # }
     if (!is.data.frame(raw)) {
       stop("raw must be a data frame.")
     }
@@ -1493,7 +1493,7 @@ get_mfd_array <- function(data_array,
 
   df_raw <- bind_cols(
     data.frame(id = rep(ids, each = n_args)),
-    data.frame(arg = rep(grid, n_obs)),
+    data.frame(t = rep(grid, n_obs)),
     lapply(seq_len(dim(data_array)[3]), function(ii) {
       data_array[, , ii] %>%
         as.data.frame() %>%
@@ -1510,7 +1510,7 @@ get_mfd_array <- function(data_array,
 
   fdObj <- mfd(coef = coef,
                basisobj = basisobj,
-               fdnames = list("arg",
+               fdnames = list("t",
                               as.character(ids),
                               as.character(variables)),
                raw = df_raw,
@@ -2101,33 +2101,15 @@ mfd_to_df <- function(mfdobj) {
 
 #' Plot a Multivariate Functional Data Object.
 #'
-#' Plot an object of class \code{mfd} using \code{ggplot2}.
-#'
-#' @param mfdobj A multivariate functional data object of class mfd.
-#'
-#' @return an object of class ggplot, created using
-#' \code{ggplot() + geom_mfd(mfdobj = mfdobj)}.
-#' @export
-#'
-#' @seealso \code{\link{geom_mfd}}
-#' @examples
-#' library(funcharts)
-#' mfdobj <- data_sim_mfd()
-#' plot_mfd(mfdobj)
-#'
-plot_mfd <- function(mfdobj) {
-  ggplot() + geom_mfd(mfdobj = mfdobj)
-}
-
-#' Creates a geom layer to plot a Multivariate Functional Data Object
-#' with \code{ggplot}
+#' Plot an object of class \code{mfd} using \code{ggplot2}
+#' and \code{patchwork}.
 #'
 #' @param mfdobj
 #' A multivariate functional data object of class mfd.
 #' @param data
 #' A \code{data.frame} providing columns
 #' to create additional aesthetic mappings.
-#' It must contain a column "id" with the replication values
+#' It must contain a factor column "id" with the replication values
 #' as in \code{mfdobj$fdnames[[2]]}.
 #' If it contains a column "var", this must contain
 #' the functional variables as in \code{mfdobj$fdnames[[3]]}.
@@ -2155,9 +2137,8 @@ plot_mfd <- function(mfdobj) {
 #' the original discrete data are plotted.
 #'
 #' @return
-#' A geom_line layer to be added to
-#' \code{ggplot2::\link[ggplot2]{ggplot}()}
-#' in order to plot \code{mfdobj}.
+#' A plot of the multivariate functional data object.
+#'
 #' @export
 #' @examples
 #' library(funcharts)
@@ -2165,14 +2146,13 @@ plot_mfd <- function(mfdobj) {
 #' mfdobj <- data_sim_mfd()
 #' ids <- mfdobj$fdnames[[2]]
 #' df <- data.frame(id = ids, first_two_obs = ids %in% c("rep1", "rep2"))
-#' ggplot() +
-#'   geom_mfd(mapping = aes(colour = first_two_obs),
-#'            data = df,
-#'            mfdobj = mfdobj)
+#' plot_mfd(mapping = aes(colour = first_two_obs),
+#'          data = df,
+#'          mfdobj = mfdobj)
 #'
-geom_mfd <- function(mapping = NULL,
+plot_mfd <- function(mfdobj,
+                     mapping = NULL,
                      data = NULL,
-                     mfdobj,
                      stat = "identity",
                      position = "identity",
                      na.rm = TRUE,
@@ -2204,25 +2184,162 @@ geom_mfd <- function(mapping = NULL,
   mapping_tot <- c(mapping1, mapping)
   class(mapping_tot) <- "uneval"
 
-  list(
-    geom_line(mapping = mapping_tot,
-              data = df,
-              stat = stat,
-              position = position,
-              na.rm = na.rm,
-              orientation = orientation,
-              show.legend = show.legend,
-              inherit.aes = inherit.aes,
-              ...),
-    ylab(NULL), xlab(arg_var),
-    theme_bw(),
-    theme(strip.background = element_blank(),
-          strip.placement = "outside"),
-    facet_wrap(~var, scales = "free_y",
-               strip.position = "left",
-               # labeller = as_labeller(variable_labels)
-    )
-  )
+  for (kk in seq_along(mapping_tot)) {
+
+    column <- as.character(mapping_tot[kk])
+    column <- substr(column, 2, str_count(column))
+    mapping_type <- names(mapping_tot)[kk]
+
+
+    if (!(column %in% names(df))) {
+      df <- df %>%
+        mutate(!!mapping_type := factor(eval(parse(text=column))))
+    }
+  }
+
+  plot_list <- list()
+  for (jj in seq_along(variables)) {
+    dat <- df %>%
+      filter(var == variables[jj])
+
+    mapping1 <- aes_string(arg_var, "value", group = "id")
+    mapping_tot <- c(mapping1, mapping)
+    class(mapping_tot) <- "uneval"
+
+
+    geom_line_obj <- geom_line(mapping = mapping_tot,
+                               data = dat,
+                               stat = stat,
+                               position = position,
+                               na.rm = na.rm,
+                               orientation = orientation,
+                               show.legend = show.legend,
+                               inherit.aes = inherit.aes,
+                               ...)
+    if (is.null(geom_line_obj$aes_params$linewidth)) {
+      geom_line_obj$aes_params$linewidth <- 0.25
+    }
+
+    p <- ggplot() +
+      geom_line_obj +
+      ylab(variables[jj]) +
+      xlab(arg_var) +
+      theme_bw() +
+      scale_linetype_discrete(drop = FALSE)
+
+
+
+    if (!is.null(p$layers[[1]]$data[["colour"]])) {
+      if (is.numeric(p$layers[[1]]$data$colour)) {
+        p <- p + scale_colour_continuous(limits = range(dat$colour))
+      } else {
+        p <- p + scale_colour_discrete(drop = FALSE)
+      }
+    }
+    if (!is.null(p$layers[[1]]$data[["color"]])) {
+      if (is.numeric(p$layers[[1]]$data$color)) {
+        p <- p + scale_color_continuous(limits = range(dat$color))
+      } else {
+        p <- p + scale_color_discrete(drop = FALSE)
+      }
+    }
+
+    plot_list[[jj]] <- p
+  }
+
+  patchwork::wrap_plots(plot_list) + patchwork::plot_layout(guides = "collect")
+
+}
+
+
+
+
+
+#' Add the plot of a new multivariate functional data object to an existing
+#' plot.
+#'
+#'
+#' @param plot_mfd_obj
+#' A plot produced by \code{link{plot_mfd}}
+#' @param mfdobj_new
+#' A new multivariate functional data object of class mfd to be plotted.
+#' @param data
+#' See \code{\link{plot_mfd}}.
+#' @param mapping
+#' See \code{\link{plot_mfd}}.
+#' @param stat
+#' See \code{\link{plot_mfd}}.
+#' @param position
+#' See \code{\link{plot_mfd}}.
+#' @param na.rm
+#' See \code{\link{plot_mfd}}.
+#' @param orientation
+#' See \code{\link{plot_mfd}}.
+#' @param show.legend
+#' See \code{\link{plot_mfd}}.
+#' @param inherit.aes
+#' See \code{\link{plot_mfd}}.
+#' @param ...
+#' See \code{\link{plot_mfd}}.
+#' @param type_mfd
+#' See \code{\link{plot_mfd}}.
+#'
+#' @return
+#' A plot of the multivariate functional data object added to the existing
+#' one.
+#'
+#' @export
+#' @examples
+#' library(funcharts)
+#' library(ggplot2)
+#' mfdobj1 <- data_sim_mfd()
+#' mfdobj2 <- data_sim_mfd()
+#' p <- plot_mfd(mfdobj1)
+#' lines_mfd(p, mfdobj_new = mfdobj2)
+#'
+lines_mfd <- function(plot_mfd_obj,
+                      mfdobj_new,
+                      mapping = NULL,
+                      data = NULL,
+                      stat = "identity",
+                      position = "identity",
+                      na.rm = TRUE,
+                      orientation = NA,
+                      show.legend = NA,
+                      inherit.aes = TRUE,
+                      type_mfd = "mfd",
+                      ...) {
+  nvars <- length(plot_mfd_obj$patches$plots) + 1
+  p2 <- plot_mfd(mfdobj = mfdobj_new,
+                 mapping = mapping,
+                 data = data,
+                 stat = stat,
+                 position = position,
+                 na.rm = na.rm,
+                 orientation = orientation,
+                 show.legend = show.legend,
+                 inherit.aes = inherit.aes,
+                 type_mfd = type_mfd,
+                 ... = ...)
+
+  # check obs names
+  obs_names <- list()
+  for (jj in seq_len(nvars)) {
+    obs_names[[jj]] <- unique(as.character(plot_mfd_obj[[1]]$layers[[1]]$data$id))
+  }
+  obs_names <- unique(unlist(obs_names))
+  if (any(mfdobj_new$fdnames[[2]] %in% obs_names)) {
+    mfdobj_new$fdnames[[2]] <- paste0(mfdobj_new$fdnames[[2]], "_2")
+    dimnames(mfdobj_new$coefs)[[2]] <- paste0(mfdobj_new$fdnames[[2]], "_2")
+  }
+
+  p <- plot_mfd_obj
+  for (jj in seq_len(nvars)) {
+    p[[jj]] <- plot_mfd_obj[[jj]] +
+      p2[[jj]]$layers[[1]]
+  }
+  p
+
 }
 
 
