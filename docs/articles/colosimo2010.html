@@ -119,16 +119,13 @@ multivariate functional data objects of class <code>mfd</code>, see
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span></span>
 <span><span class="va">mfdobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span>, grid <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">24</span><span class="op">)</span></span>
 <span><span class="va">nobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">mfdobj</span><span class="op">$</span><span class="va">coefs</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
-<span><span class="va">nobs</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 355</span></span></code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_mfd.html">plot_mfd</a></span><span class="op">(</span><span class="va">mfdobj</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="figure/unnamed-chunk-1-1.png" alt=""><p class="caption">plot of chunk unnamed-chunk-1</p>
-</div>
+<span><span class="va">nobs</span></span>
+<span><span class="co">#&gt; [1] 355</span></span>
+<span><span class="fu"><a href="../reference/plot_mfd.html">plot_mfd</a></span><span class="op">(</span><span class="va">mfdobj</span><span class="op">)</span></span></code></pre></div>
+<p><img src="colosimo2010-unnamed-chunk-2-1.png" alt="plot of chunk unnamed-chunk-2" style="display:block; margin: auto"></p>
 <p>In order to perform the statistical process monitoring analysis, we
 divide the data set into a phase I and a phase II dataset.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rows1</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">300</span></span>
 <span><span class="va">rows2</span> <span class="op">&lt;-</span> <span class="fl">301</span><span class="op">:</span><span class="fl">355</span></span>
 <span><span class="va">mfdobj1</span> <span class="op">&lt;-</span> <span class="va">mfdobj</span><span class="op">[</span><span class="va">rows1</span><span class="op">]</span></span>
@@ -145,12 +142,10 @@ eigenfunctions or multivariate functional principal components given in
 <code>harmonics</code> argument are converted to the <code>mfd</code>
 class. We also provide a plot function for the eigenfunctions (the
 argument <code>harm</code> selects which components to plot).</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pca_mfd.html">pca_mfd</a></span><span class="op">(</span><span class="va">mfdobj1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_pca_mfd.html">plot_pca_mfd</a></span><span class="op">(</span><span class="va">pca</span>, harm <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="figure/unnamed-chunk-3-1.png" alt=""><p class="caption">plot of chunk unnamed-chunk-3</p>
-</div>
+<p><img src="colosimo2010-unnamed-chunk-4-1.png" alt="plot of chunk unnamed-chunk-4" style="display:block; margin: auto"></p>
 </div>
 <div class="section level3">
 <h3 id="control-charts">Control charts<a class="anchor" aria-label="anchor" href="#control-charts"></a>
@@ -167,12 +162,10 @@ calculated on the basis of the training data. The argument
 multivariate functional covariates to be monitored. The function
 <code>plot_control_charts</code> returns the plot of the control
 charts.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cclist_pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/control_charts_pca.html">control_charts_pca</a></span><span class="op">(</span>pca <span class="op">=</span> <span class="va">pca</span>, newdata <span class="op">=</span> <span class="va">mfdobj2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_control_charts.html">plot_control_charts</a></span><span class="op">(</span><span class="va">cclist_pca</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="figure/plot_control_charts_pca-1.png" alt=""><p class="caption">plot of chunk plot_control_charts_pca</p>
-</div>
+<p><img src="colosimo2010-plot_control_charts_pca-1.png" alt="plot of chunk plot_control_charts_pca" style="display:block; margin: auto"></p>
 </div>
 <div class="section level3">
 <h3 id="fault-detection">Fault detection<a class="anchor" aria-label="anchor" href="#fault-detection"></a>
@@ -183,45 +176,45 @@ monitoring statistics to understand which variable was possibly
 responsible of the anomalous observation.</p>
 <p>We can get the out of control observations using
 <code>which_ooc</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ooc_index</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/which_ooc.html">which_ooc</a></span><span class="op">(</span><span class="va">cclist_pca</span><span class="op">)</span></span>
-<span><span class="va">ooc_index</span></span></code></pre></div>
-<pre><code><span><span class="co">## $T2</span></span>
-<span><span class="co">##    n  id</span></span>
-<span><span class="co">## 1  2 302</span></span>
-<span><span class="co">## 2  5 305</span></span>
-<span><span class="co">## 3  9 309</span></span>
-<span><span class="co">## 4 12 312</span></span>
-<span><span class="co">## 5 23 323</span></span>
-<span><span class="co">## 6 32 332</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $spe</span></span>
-<span><span class="co">##    n  id</span></span>
-<span><span class="co">## 1  9 309</span></span>
-<span><span class="co">## 2 25 325</span></span>
-<span><span class="co">## 3 28 328</span></span>
-<span><span class="co">## 4 34 334</span></span>
-<span><span class="co">## 5 48 348</span></span>
-<span><span class="co">## 6 52 352</span></span>
-<span><span class="co">## 7 54 354</span></span>
-<span><span class="co">## 8 55 355</span></span></code></pre>
+<span><span class="va">ooc_index</span></span>
+<span><span class="co">#&gt; $T2</span></span>
+<span><span class="co">#&gt;    n  id</span></span>
+<span><span class="co">#&gt; 1  2 302</span></span>
+<span><span class="co">#&gt; 2  5 305</span></span>
+<span><span class="co">#&gt; 3  9 309</span></span>
+<span><span class="co">#&gt; 4 12 312</span></span>
+<span><span class="co">#&gt; 5 23 323</span></span>
+<span><span class="co">#&gt; 6 32 332</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $spe</span></span>
+<span><span class="co">#&gt;    n  id</span></span>
+<span><span class="co">#&gt; 1  9 309</span></span>
+<span><span class="co">#&gt; 2 25 325</span></span>
+<span><span class="co">#&gt; 3 28 328</span></span>
+<span><span class="co">#&gt; 4 34 334</span></span>
+<span><span class="co">#&gt; 5 48 348</span></span>
+<span><span class="co">#&gt; 6 52 352</span></span>
+<span><span class="co">#&gt; 7 54 354</span></span>
+<span><span class="co">#&gt; 8 55 355</span></span></code></pre></div>
 <p>From the control charts it is possible to see some phase II
 observations out of control. For example, let us consider observation 9.
 We can exploit the contribution plots using the function
 <code>cont_plot</code> to identify the variables responsible of the
 anomaly. The contributions are plotted as bar plots, against upper
 control limits estimated empirically on the training data.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cont_plot.html">cont_plot</a></span><span class="op">(</span><span class="va">cclist_pca</span>, <span class="fl">9</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/cont_plot-1.png" alt="plot of chunk cont_plot">
+<p><img src="colosimo2010-cont_plot-1.png" alt="plot of chunk cont_plot" style="display:block; margin: auto">
 Finally, we can also plot any multivariate functional observation
 against a reference data set by using the function
 <code>plot_mon</code>:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_mon.html">plot_mon</a></span><span class="op">(</span><span class="va">cclist_pca</span>, fd_train <span class="op">=</span> <span class="va">mfdobj1</span>, fd_test <span class="op">=</span> <span class="va">mfdobj2</span><span class="op">[</span><span class="fl">9</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/plot_mon-1.png" alt="plot of chunk plot_mon"> This
-helps to understand which profiles were anomalous. Variables exceeding
-contribution plot limits are coloured in red.</p>
+<p><img src="colosimo2010-plot_mon-1.png" alt="plot of chunk plot_mon" style="display:block; margin: auto">
+This helps to understand which profiles were anomalous. Variables
+exceeding contribution plot limits are coloured in red.</p>
 </div>
 </div>
 <div class="section level2">

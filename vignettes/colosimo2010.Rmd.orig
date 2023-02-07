@@ -12,6 +12,18 @@ body {
 text-align: justify}
 </style>
 
+```{r, include = FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>",
+    out.extra='style="display:block; margin: auto"',
+    fig.align="center",
+    fig.path = "colosimo2010-",
+    tidy=FALSE,
+    fig.width=7,
+    fig.height=4)
+```
 
 # Functional control charts for multivariate quality characteristics
 
