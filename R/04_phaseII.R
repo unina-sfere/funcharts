@@ -469,6 +469,12 @@ control_charts_sof_pc <- function(mod,
 #' A \code{data.frame} produced by
 #' \code{\link{control_charts_pca}}, \code{\link{control_charts_sof_pc}}
 #' \code{\link{regr_cc_fof}}, or \code{\link{regr_cc_sof}}.
+#' @param nobsI
+#' An integer indicating the first observations that are plotted in gray.
+#' It is useful when one wants to plot the phase I data set together
+#' with the phase II data. In that case, one needs to indicate the number
+#' of phase I observations included in \code{cclist}.
+#' Default is zero.
 #'
 #' @return A ggplot with the functional control charts.
 #'
@@ -500,7 +506,7 @@ control_charts_sof_pc <- function(mod,
 #'                       mfdobj_x_tuning = NULL)
 #' plot_control_charts(cclist)
 #'
-plot_control_charts <- function(cclist) {
+plot_control_charts <- function(cclist, nobsI = 0) {
 
   if (!is.data.frame(cclist)) {
     stop(paste0("cclist must be a data frame ",
@@ -629,11 +635,6 @@ plot_control_charts <- function(cclist) {
       geom_blank(aes(y = 0)) +
       geom_point(aes(y = .data$ucl),
                  pch = "-", size = 5) +
-      scale_x_continuous(
-        limits = c(0, max(df_hot$id) + 1),
-        breaks = seq(1, max(df_hot$id), by = round(max(df_hot$id) / 50) + 1),
-        expand = c(0, 0)) +
-      scale_color_manual(values = c("black", "red")) +
       theme_bw() +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
       theme(legend.position = "none",
@@ -653,11 +654,6 @@ plot_control_charts <- function(cclist) {
       geom_blank(aes(y = 0)) +
       geom_point(aes(y = .data$ucl),
                  pch = "-", size = 5) +
-      scale_x_continuous(
-        limits = c(0, max(df_spe$id) + 1),
-        breaks = seq(1, max(df_spe$id), by = round(max(df_spe$id) / 50) + 1),
-        expand = c(0, 0)) +
-      scale_color_manual(values = c("black", "red")) +
       theme_bw() +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
       theme(legend.position = "none",
@@ -677,11 +673,6 @@ plot_control_charts <- function(cclist) {
       geom_blank(aes(y = 0)) +
       geom_line(aes(y = .data$lcl), lty = 2) +
       geom_line(aes(y = .data$ucl), lty = 2) +
-      scale_x_continuous(
-        limits = c(0, max(df_y$id) + 1),
-        breaks = seq(1, max(df_y$id), by = round(max(df_y$id) / 50) + 1),
-        expand = c(0, 0)) +
-      scale_color_manual(values = c("black", "red")) +
       theme_bw() +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
       theme(legend.position = "none",
@@ -701,11 +692,6 @@ plot_control_charts <- function(cclist) {
       geom_blank(aes(y = 0)) +
       geom_point(aes(y = .data$ucl),
                  pch = "-", size = 5) +
-      scale_x_continuous(
-        limits = c(0, max(df_hot_x$id) + 1),
-        breaks = seq(1, max(df_hot_x$id), by = round(max(df_hot_x$id) / 50) + 1),
-        expand = c(0, 0)) +
-      scale_color_manual(values = c("black", "red")) +
       theme_bw() +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
       theme(legend.position = "none",
@@ -728,11 +714,6 @@ plot_control_charts <- function(cclist) {
       geom_blank(aes(y = 0)) +
       geom_point(aes(y = .data$ucl),
                  pch = "-", size = 5) +
-      scale_x_continuous(
-        limits = c(0, max(df_spe_x$id) + 1),
-        breaks = seq(1, max(df_spe_x$id), by = round(max(df_spe_x$id) / 50) + 1),
-        expand = c(0, 0)) +
-      scale_color_manual(values = c("black", "red")) +
       theme_bw() +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
       theme(legend.position = "none",
@@ -748,7 +729,38 @@ plot_control_charts <- function(cclist) {
       ggtitle(expression(SPE~CONTROL~CHART~(RESPONSE)))
   }
 
-  patchwork::wrap_plots(plot_list, ncol = 1)
+  p <- patchwork::wrap_plots(plot_list, ncol = 1) &
+    scale_color_manual(values = c("TRUE" = "red",
+                                  "FALSE" = "black",
+                                  "phase1" = "grey")) &
+    scale_x_continuous(
+      limits = c(0, nrow(cclist) + 1),
+      breaks = seq(1, nrow(cclist), by = round(nrow(cclist) / 50) + 1),
+      expand = c(0.015, 0.015))
+
+  if (nobsI > 0) {
+
+    nplots <- length(p$patches$plots) + 1
+    for (jj in seq_len(nplots)) {
+      p[[jj]]$data$ooc[seq_len(nobsI)] <- "phase1"
+      p[[jj]]$layers[[5]]$data <- p[[jj]]$layers[[5]]$data %>%
+        filter(id > nobsI) %>%
+        as.data.frame()
+      p[[jj]] <- p[[jj]] +
+        geom_point(aes_string(y = "ucl"),
+                   pch = "-",
+                   size = 5,
+                   col = "grey",
+                   data = filter(p[[jj]]$data, id <= nobsI)) +
+        geom_line(aes_string("id", "statistic"),
+                  col = "grey",
+                  data = filter(p[[jj]]$data, id < nobsI))
+    }
+    p <- p &
+      geom_vline(aes(xintercept = nobsI + 1), lty = 2)
+  }
+
+  return(p)
 
 }
 

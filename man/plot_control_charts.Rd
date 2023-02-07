@@ -4,12 +4,18 @@
 \alias{plot_control_charts}
 \title{Plot control charts}
 \usage{
-plot_control_charts(cclist)
+plot_control_charts(cclist, nobsI = 0)
 }
 \arguments{
 \item{cclist}{A \code{data.frame} produced by
 \code{\link{control_charts_pca}}, \code{\link{control_charts_sof_pc}}
 \code{\link{regr_cc_fof}}, or \code{\link{regr_cc_sof}}.}
+
+\item{nobsI}{An integer indicating the first observations that are plotted in gray.
+It is useful when one wants to plot the phase I data set together
+with the phase II data. In that case, one needs to indicate the number
+of phase I observations included in \code{cclist}.
+Default is zero.}
 }
 \value{
 A ggplot with the functional control charts.

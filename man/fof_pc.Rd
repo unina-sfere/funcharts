@@ -78,7 +78,7 @@ the covariates are the MFPCA scores of the functional covariates.
 \code{mod$coefficients} contains the matrix of coefficients
 of the functional regression basis functions,
 
-* \code{beta_fd}: a \code{bi_fd} object containing the
+* \code{beta_fd}: a \code{bifd} object containing the
 bivariate functional regression coefficients \eqn{\beta(s,t)}
 estimated with the function-on-function linear regression model,
 

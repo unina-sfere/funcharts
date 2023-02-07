@@ -990,7 +990,7 @@ is.eqbasis <- function (basisobj1, basisobj2) {
 #' The default of 4 gives cubic splines.
 #' @param basisobj
 #' An object of class \code{basisfd} defining
-#' the B-spline basis function expansion.
+#' the basis function expansion.
 #' Deafult is \code{NULL}, which means that
 #' a \code{basisfd} object is created by doing
 #' \code{create.bspline.basis(rangeval = domain,
@@ -1228,7 +1228,7 @@ get_mfd_df <- function(dt,
 #' default value is 30.
 #' See details on basis functions.
 #' @param n_order
-#' An integer specifying the order of b-splines,
+#' An integer specifying the order of B-splines,
 #' which is one higher than their degree.
 #' The default of 4 gives cubic splines.
 #' @param basisobj
@@ -2129,12 +2129,17 @@ mfd_to_df <- function(mfdobj) {
 #' See \code{ggplot2::\link[ggplot2]{geom_line}}.
 #' @param inherit.aes
 #' See \code{ggplot2::\link[ggplot2]{geom_line}}.
-#' @param ...
-#' See \code{ggplot2::\link[ggplot2]{geom_line}}.
 #' @param type_mfd
 #' A character value equal to "mfd" or "raw".
 #' If "mfd", the smoothed functional data are plotted, if "raw",
 #' the original discrete data are plotted.
+#' @param y_lim_equal
+#' A logical value. If \code{TRUE}, the limits of the y-axis
+#' are the same for all functional variables.
+#' If \code{FALSE}, limits are different for each variable.
+#' Default value is \code{FALSE}.
+#' @param ...
+#' See \code{ggplot2::\link[ggplot2]{geom_line}}.
 #'
 #' @return
 #' A plot of the multivariate functional data object.
@@ -2160,6 +2165,7 @@ plot_mfd <- function(mfdobj,
                      show.legend = NA,
                      inherit.aes = TRUE,
                      type_mfd = "mfd",
+                     y_lim_equal = FALSE,
                      ...) {
 
   if (!(is.mfd(mfdobj))) {
@@ -2180,9 +2186,15 @@ plot_mfd <- function(mfdobj,
   variables <- mfdobj$fdnames[[3]]
   df$var <- factor(as.character(df$var), levels = variables)
   arg_var <- mfdobj$fdnames[[1]]
-  mapping1 <- aes_string(arg_var, "value", group = "id")
+  if (grepl(" ", arg_var)) {
+    mapping1 <- aes_string(paste0("`", arg_var, "`"), "value", group = "id")
+  } else {
+    mapping1 <- aes_string(arg_var, "value", group = "id")
+  }
   mapping_tot <- c(mapping1, mapping)
   class(mapping_tot) <- "uneval"
+
+  ylim_common <- range(df$value)
 
   for (kk in seq_along(mapping_tot)) {
 
@@ -2202,7 +2214,11 @@ plot_mfd <- function(mfdobj,
     dat <- df %>%
       filter(var == variables[jj])
 
-    mapping1 <- aes_string(arg_var, "value", group = "id")
+    if (grepl(" ", arg_var)) {
+      mapping1 <- aes_string(paste0("`", arg_var, "`"), "value", group = "id")
+    } else {
+      mapping1 <- aes_string(arg_var, "value", group = "id")
+    }
     mapping_tot <- c(mapping1, mapping)
     class(mapping_tot) <- "uneval"
 
@@ -2244,6 +2260,10 @@ plot_mfd <- function(mfdobj,
       }
     }
 
+    if (y_lim_equal) {
+      p <- p + ylim(ylim_common)
+    }
+
     plot_list[[jj]] <- p
   }
 
@@ -2279,9 +2299,11 @@ plot_mfd <- function(mfdobj,
 #' See \code{\link{plot_mfd}}.
 #' @param inherit.aes
 #' See \code{\link{plot_mfd}}.
-#' @param ...
-#' See \code{\link{plot_mfd}}.
 #' @param type_mfd
+#' See \code{\link{plot_mfd}}.
+#' @param y_lim_equal
+#' See \code{\link{plot_mfd}}.
+#' @param ...
 #' See \code{\link{plot_mfd}}.
 #'
 #' @return
@@ -2308,8 +2330,10 @@ lines_mfd <- function(plot_mfd_obj,
                       show.legend = NA,
                       inherit.aes = TRUE,
                       type_mfd = "mfd",
+                      y_lim_equal = FALSE,
                       ...) {
   nvars <- length(plot_mfd_obj$patches$plots) + 1
+
   p2 <- plot_mfd(mfdobj = mfdobj_new,
                  mapping = mapping,
                  data = data,
@@ -2320,6 +2344,7 @@ lines_mfd <- function(plot_mfd_obj,
                  show.legend = show.legend,
                  inherit.aes = inherit.aes,
                  type_mfd = type_mfd,
+                 y_lim_equal = y_lim_equal,
                  ... = ...)
 
   # check obs names
@@ -2333,10 +2358,30 @@ lines_mfd <- function(plot_mfd_obj,
     dimnames(mfdobj_new$coefs)[[2]] <- paste0(mfdobj_new$fdnames[[2]], "_2")
   }
 
+  if (!y_lim_equal) {
+    plot_mfd_obj$scales$scales[[2]] <- NULL
+  } else {
+    ylim_common2 <- p2$scales$scales[[2]]$limits
+    if (length(plot_mfd_obj$scales$scales) == 2) {
+      ylim_common <- plot_mfd_obj$scales$scales[[2]]$limits
+      plot_mfd_obj$scales$scales[[2]] <- NULL
+    } else {
+      ylim_common <- range(vapply(seq_len(nvars), function(jj) {
+        range(plot_mfd_obj[[jj]]$layers[[1]]$data$value)
+      }, c(0, 0)))
+    }
+    ylim_common_new <- range(c(ylim_common, ylim_common2))
+  }
+
   p <- plot_mfd_obj
   for (jj in seq_len(nvars)) {
     p[[jj]] <- plot_mfd_obj[[jj]] +
       p2[[jj]]$layers[[1]]
+    if (y_lim_equal) {
+      p[[jj]]$scales$scales[[2]] <- NULL
+      p[[jj]] <- p[[jj]] + ylim(ylim_common_new)
+    }
+
   }
   p
 
@@ -2404,49 +2449,9 @@ plot_bifd <- function(bifd_obj,
                 l = 100)
   X_eval <- eval.bifd(s_eval, t_eval, bifd_obj)
 
-  p <- seq_along(bifd_obj$bifdnames[[4]]) %>%
-    lapply(function(ii) {
-      X_eval[, , , ii] %>%
-        data.frame() %>%
-        setNames(t_eval) %>%
-        mutate(s = s_eval) %>%
-        tidyr::pivot_longer(-.data$s, names_to = "t", values_to = "value") %>%
-        mutate(t = as.numeric(.data$t),
-               variable = bifd_obj$bifdnames[[4]][ii])
-    }) %>%
-    bind_rows() %>%
-    mutate(variable = factor(.data$variable,
-                             levels = bifd_obj$bifdnames[[4]])) %>%
-    ggplot() +
-    facet_wrap(~variable) +
-    theme_bw() +
-    theme(panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          strip.background = element_blank(),
-          panel.border = element_rect(colour = "black"))
-
   variables <- bifd_obj$bifdnames[[4]]
-  nvar <- dim(X_eval)[4]
+  nvar <- length(variables)
   zlim <- c(- max(abs(X_eval)), max(abs(X_eval)))
-
-  if (type_plot == "raster") {
-    p <- p +
-      geom_tile(aes(.data$s, .data$t, fill = .data$value)) +
-      scale_fill_gradientn(
-        colours = c("blue", "white", "red"),
-        limits = zlim)
-    return(p)
-  }
-
-  if (type_plot == "contour") {
-    p <- p +
-      geom_contour(aes(.data$s, .data$t, z = .data$value, colour = after_stat(get("level")))) +
-      scale_color_gradientn(
-        colours = c("blue", "white", "red"),
-        limits = zlim) +
-      labs(colour = 'level')
-    return(p)
-  }
 
   if (type_plot == "perspective") {
     phi <- 40
@@ -2466,6 +2471,47 @@ plot_bifd <- function(bifd_obj,
             zlab = "value")
     }
     par(mfrow = c(1, 1))
+  } else {
+    plot_list <- list()
+    for (ii in seq_along(variables)) {
+      p <- X_eval[, , , ii] %>%
+        data.frame() %>%
+        setNames(t_eval) %>%
+        mutate(s = s_eval) %>%
+        tidyr::pivot_longer(-.data$s, names_to = "t", values_to = "value") %>%
+        mutate(t = as.numeric(.data$t),
+               variable = bifd_obj$bifdnames[[4]][ii]) %>%
+        ggplot() +
+        theme_bw() +
+        theme(panel.grid.major = element_blank(),
+              panel.grid.minor = element_blank(),
+              strip.background = element_blank(),
+              panel.border = element_rect(colour = "black")) +
+        ggtitle(variables[ii])
+
+      if (type_plot == "raster") {
+        p <- p +
+          geom_tile(aes(.data$s, .data$t, fill = .data$value)) +
+          scale_fill_gradientn(
+            colours = c("blue", "white", "red"),
+            limits = zlim)
+      }
+
+      if (type_plot == "contour") {
+        p <- p +
+          geom_contour(aes(.data$s, .data$t, z = .data$value,
+                           colour = after_stat(get("level")))) +
+          scale_color_gradientn(
+            colours = c("blue", "white", "red"),
+            limits = zlim) +
+          labs(colour = 'level')
+      }
+      plot_list[[ii]] <- p +
+        theme(plot.title = element_text(hjust = 0.5, size = 9))
+    }
+    patchwork::wrap_plots(plot_list) +
+      patchwork::plot_layout(guides = "collect")
+
   }
 
 }

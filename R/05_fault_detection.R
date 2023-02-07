@@ -395,13 +395,16 @@ plot_mon <- function(cclist,
 
 
   p <- plot_mfd(mfdobj = fd_train, col = "grey")
-  p <- lines_mfd(p, mfdobj_new = fd_test, data = df,
-            mapping = aes(col = .data$`contribution ooc`), linewidth = 1) +
+  p <- lines_mfd(p,
+                 mfdobj_new = fd_test,
+                 data = filter(df, id %in% fd_test$fdnames[[2]]),
+            mapping = aes(col = .data$`contribution ooc`), linewidth = 1) &
     scale_color_manual(values = c("TRUE" = "tomato1", "FALSE" = "black"))
   if (plot_title) {
-    p <- p + patchwork::plot_annotation(
-      title = title,
-      theme = theme(plot.title = element_text(hjust = 0.5)))
+    p <- p & ggtitle(title) & theme(plot.title = element_text(hjust = 0.5))
+    # patchwork::plot_annotation(
+    #   title = title,
+    #   theme = theme(plot.title = element_text(hjust = 0.5)))
   }
 
   p & theme(legend.position = "none")

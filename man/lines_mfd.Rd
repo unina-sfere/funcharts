@@ -17,6 +17,7 @@ lines_mfd(
   show.legend = NA,
   inherit.aes = TRUE,
   type_mfd = "mfd",
+  y_lim_equal = FALSE,
   ...
 )
 }
@@ -42,6 +43,8 @@ lines_mfd(
 \item{inherit.aes}{See \code{\link{plot_mfd}}.}
 
 \item{type_mfd}{See \code{\link{plot_mfd}}.}
+
+\item{y_lim_equal}{See \code{\link{plot_mfd}}.}
 
 \item{...}{See \code{\link{plot_mfd}}.}
 }

@@ -15,6 +15,7 @@ plot_mfd(
   show.legend = NA,
   inherit.aes = TRUE,
   type_mfd = "mfd",
+  y_lim_equal = FALSE,
   ...
 )
 }
@@ -47,6 +48,11 @@ the functional variables as in \code{mfdobj$fdnames[[3]]}.}
 \item{type_mfd}{A character value equal to "mfd" or "raw".
 If "mfd", the smoothed functional data are plotted, if "raw",
 the original discrete data are plotted.}
+
+\item{y_lim_equal}{A logical value. If \code{TRUE}, the limits of the y-axis
+are the same for all functional variables.
+If \code{FALSE}, limits are different for each variable.
+Default value is \code{FALSE}.}
 
 \item{...}{See \code{ggplot2::\link[ggplot2]{geom_line}}.}
 }

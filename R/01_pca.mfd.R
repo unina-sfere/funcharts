@@ -139,8 +139,7 @@ plot_pca_mfd <- function(pca, harm = 0, scaled = FALSE) {
     pca$harmonics$coefs <- scaled_coefs
   }
 
-  p_functions <- plot_mfd(aes(col = id), mfdobj = pca$harmonics[harm]) +
-    ggtitle("Eigenfunctions")
+  p_functions <- plot_mfd(aes(col = id), mfdobj = pca$harmonics[harm])
 
   components <- which(cumsum(pca$varprop) < .99)
   # p_values <- data.frame(eigenvalues = pca$values[components]) %>%

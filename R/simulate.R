@@ -56,9 +56,12 @@ sim_funcharts <- function(nobs1 = 1000, nobs_tun = 1000, nobs2 = 60) {
                             shift_type_y = "D",
                             d_y = 1.5)
   datII <- list()
-  datII$X1 <- rbind(datII_ic$X_list[[1]], datII_oc1$X_list[[1]], datII_oc2$X_list[[1]])
-  datII$X2 <- rbind(datII_ic$X_list[[2]], datII_oc1$X_list[[2]], datII_oc2$X_list[[2]])
-  datII$X3 <- rbind(datII_ic$X_list[[3]], datII_oc1$X_list[[3]], datII_oc2$X_list[[3]])
+  datII$X1 <-
+    rbind(datII_ic$X_list[[1]], datII_oc1$X_list[[1]], datII_oc2$X_list[[1]])
+  datII$X2 <-
+    rbind(datII_ic$X_list[[2]], datII_oc1$X_list[[2]], datII_oc2$X_list[[2]])
+  datII$X3 <-
+    rbind(datII_ic$X_list[[3]], datII_oc1$X_list[[3]], datII_oc2$X_list[[3]])
   datII$Y <- rbind(datII_ic$Y, datII_oc1$Y, datII_oc2$Y)
   datII$y_scalar <- c(datII_ic$y_scalar, datII_oc1$y_scalar, datII_oc2$y_scalar)
 

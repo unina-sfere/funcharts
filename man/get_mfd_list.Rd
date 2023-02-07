@@ -37,7 +37,7 @@ with as many numbers as the number of columns in each matrix in data_list.}
 default value is 30.
 See details on basis functions.}
 
-\item{n_order}{An integer specifying the order of b-splines,
+\item{n_order}{An integer specifying the order of B-splines,
 which is one higher than their degree.
 The default of 4 gives cubic splines.}
 

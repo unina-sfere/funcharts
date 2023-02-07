@@ -55,7 +55,7 @@ which is one higher than their degree.
 The default of 4 gives cubic splines.}
 
 \item{basisobj}{An object of class \code{basisfd} defining
-the B-spline basis function expansion.
+the basis function expansion.
 Deafult is \code{NULL}, which means that
 a \code{basisfd} object is created by doing
 \code{create.bspline.basis(rangeval = domain,
