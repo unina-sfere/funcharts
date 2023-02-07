@@ -1,7 +1,7 @@
-#' Calculate limits of T^2 and SPE control charts on
+#' Calculate limits of T2 and SPE control charts on
 #' multivariate functional data
 #'
-#' Calculate limits of Hotelling T^2 and
+#' Calculate limits of Hotelling T2 and
 #' squared prediction error (SPE) control charts
 #' on multivariate functional data.
 #' A training data set has already been used to fit a \code{pca_mfd} object.
@@ -23,7 +23,7 @@
 #' Set of multivariate functional principal components
 #' retained into the MFPCA model.
 #' These components are used to calculate the projected observations and
-#' the Hotelling's T^2 statistic,
+#' the Hotelling's T2 statistic,
 #' while the difference between the original functional data and the
 #' projected ones (based on the
 #' selected components) is used to calculate the SPE statistic.
@@ -43,12 +43,12 @@
 #' returning the limits of the monitoring statistics:
 #'
 #' * \code{T2_lim} gives the upper control limit of the
-#' Hotelling's T^2 control chart,
+#' Hotelling's T2 control chart,
 #'
 #' * one \code{contribution_T2_*_lim} column per each
 #' functional variable giving the
 #' limits of the contribution of that variable to
-#' the Hotelling's T^2 statistic,
+#' the Hotelling's T2 statistic,
 #'
 #' * \code{spe_lim} gives the upper control limit of the SPE control chart
 #'
@@ -126,11 +126,11 @@ calculate_limits <- function(pca,
 
 }
 
-#' Calculate limits of T^2 and SPE control charts on multivariate
+#' Calculate limits of T2 and SPE control charts on multivariate
 #' functional data using
 #' cross-validation
 #'
-#' Calculate limits of Hotelling T^2 and
+#' Calculate limits of Hotelling T2 and
 #' squared prediction error (SPE) control charts
 #' on multivariate functional data using cross-validation.
 #' In the case few data are available to use a separate tuning data set in the
@@ -139,7 +139,7 @@ calculate_limits <- function(pca,
 #' training data set and used as tuning data set,
 #' while the remaining observations are used as training data set
 #' to estimate the multivariate functional principal component analysis model.
-#' Then the T^2 and SPE monitoring statistics can be
+#' Then the T2 and SPE monitoring statistics can be
 #' calculated on the tuning data
 #' that have been removed from the model and control limits can be
 #' calculated on the basis
@@ -153,7 +153,7 @@ calculate_limits <- function(pca,
 #' Set of multivariate functional principal components
 #' retained into the MFPCA model.
 #' These components are used to calculate the projected observations
-#' and the Hotelling's T^2 statistic,
+#' and the Hotelling's T2 statistic,
 #' while the difference between the original functional data
 #' and the projected ones (based on the
 #' selected components) is used to calculate the SPE statistic.
@@ -185,12 +185,12 @@ calculate_limits <- function(pca,
 #' limits of the monitoring statistics:
 #'
 #' * \code{T2_lim} gives the upper control limit of the
-#' Hotelling's T^2 control chart,
+#' Hotelling's T2 control chart,
 #'
 #' * one \code{contribution_T2_*_lim} column per each
 #' functional variable giving the
 #' limits of the contribution of that variable to the
-#' Hotelling's T^2 statistic,
+#' Hotelling's T2 statistic,
 #'
 #' * \code{spe_lim} gives the upper control limit of the SPE control chart
 #'
@@ -262,7 +262,7 @@ calculate_cv_limits <- function(pca,
 
   statistics_cv <- statistics_cv %>%
     bind_rows() %>%
-    arrange(id)
+    arrange("id")
 
   cont_T2 <- statistics_cv %>%
     dplyr::select(!contains("_lim")) %>%

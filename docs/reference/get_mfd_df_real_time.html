@@ -24,7 +24,7 @@ It calls the function get_mfd_df for each domain point."><!-- mathjax --><script
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
       </span>
     </div>
 
@@ -43,6 +43,9 @@ It calls the function get_mfd_df for each domain point."><!-- mathjax --><script
     </li>
     <li>
       <a href="../articles/centofanti2021.html">centofanti2021</a>
+    </li>
+    <li>
+      <a href="../articles/colosimo2010.html">colosimo2010</a>
     </li>
     <li>
       <a href="../articles/mfd.html">mfd</a>
@@ -82,50 +85,86 @@ and to build control charts for real-time  monitoring.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_mfd_df_real_time</span><span class="op">(</span>
-  <span class="va">dt</span>,
-  <span class="va">domain</span>,
-  <span class="va">arg</span>,
-  <span class="va">id</span>,
-  <span class="va">variables</span>,
-  n_basis <span class="op">=</span> <span class="fl">30</span>,
-  lambda <span class="op">=</span> <span class="cn">NULL</span>,
-  lambda_grid <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,
-  k_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">0.25</span>, to <span class="op">=</span> <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,
-  ncores <span class="op">=</span> <span class="fl">1</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_mfd_df_real_time</span><span class="op">(</span></span>
+<span>  <span class="va">dt</span>,</span>
+<span>  <span class="va">domain</span>,</span>
+<span>  <span class="va">arg</span>,</span>
+<span>  <span class="va">id</span>,</span>
+<span>  <span class="va">variables</span>,</span>
+<span>  n_basis <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>  n_order <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  basisobj <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  Lfdobj <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  lambda <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lambda_grid <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span>
+<span>  k_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">0.25</span>, to <span class="op">=</span> <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span>
+<span>  ncores <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dt</dt>
 <dd><p>See <code><a href="get_mfd_df.html">get_mfd_df</a></code>.</p></dd>
+
+
 <dt>domain</dt>
 <dd><p>See <code><a href="get_mfd_df.html">get_mfd_df</a></code>.</p></dd>
+
+
 <dt>arg</dt>
 <dd><p>See <code><a href="get_mfd_df.html">get_mfd_df</a></code>.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>See <code><a href="get_mfd_df.html">get_mfd_df</a></code>.</p></dd>
+
+
 <dt>variables</dt>
 <dd><p>See <code><a href="get_mfd_df.html">get_mfd_df</a></code>.</p></dd>
+
+
 <dt>n_basis</dt>
 <dd><p>See <code><a href="get_mfd_df.html">get_mfd_df</a></code>.</p></dd>
+
+
+<dt>n_order</dt>
+<dd><p>See <code><a href="get_mfd_df.html">get_mfd_df</a></code>.</p></dd>
+
+
+<dt>basisobj</dt>
+<dd><p>See <code><a href="get_mfd_df.html">get_mfd_df</a></code>.</p></dd>
+
+
+<dt>Lfdobj</dt>
+<dd><p>See <code><a href="get_mfd_df.html">get_mfd_df</a></code>.</p></dd>
+
+
 <dt>lambda</dt>
 <dd><p>See <code><a href="get_mfd_df.html">get_mfd_df</a></code>.</p></dd>
+
+
 <dt>lambda_grid</dt>
 <dd><p>See <code><a href="get_mfd_df.html">get_mfd_df</a></code>.</p></dd>
+
+
 <dt>k_seq</dt>
 <dd><p>A vector of values between 0 and 1, containing the domain points
 over which functional data are to be evaluated in real time.
 If the domain is the interval (a,b), for each instant k in the sequence,
 functions are evaluated in (a,k(b-a)).</p></dd>
+
+
 <dt>ncores</dt>
 <dd><p>If you want parallelization, give the number of cores/threads
 to be used when creating mfd objects separately for different instants.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of <code>mfd</code> objects as produced by
+    
+
+<p>A list of <code>mfd</code> objects as produced by
 <code><a href="get_mfd_df.html">get_mfd_df</a></code>,
 corresponding to a given instant.</p>
     </div>
@@ -136,25 +175,25 @@ corresponding to a given instant.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span>, length <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y11</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y21</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y12</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">sin</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y22</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">sin</a></span><span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, each <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                 x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">x</span>, times <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span class="r-in">                 y1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">y11</span>, <span class="va">y21</span><span class="op">)</span>,</span>
-<span class="r-in">                 y2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">y12</span>, <span class="va">y22</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">mfdobj_list</span> <span class="op">&lt;-</span> <span class="fu">get_mfd_df_real_time</span><span class="op">(</span>dt <span class="op">=</span> <span class="va">df</span>,</span>
-<span class="r-in">                                    domain <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>,</span>
-<span class="r-in">                                    arg <span class="op">=</span> <span class="st">"x"</span>,</span>
-<span class="r-in">                                    id <span class="op">=</span> <span class="st">"id"</span>,</span>
-<span class="r-in">                                    variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span><span class="op">)</span>,</span>
-<span class="r-in">                                    lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span>, length <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y11</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y21</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y12</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">sin</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y22</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">sin</a></span><span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, each <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">x</span>, times <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 y1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">y11</span>, <span class="va">y21</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 y2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">y12</span>, <span class="va">y22</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">mfdobj_list</span> <span class="op">&lt;-</span> <span class="fu">get_mfd_df_real_time</span><span class="op">(</span>dt <span class="op">=</span> <span class="va">df</span>,</span></span>
+<span class="r-in"><span>                                    domain <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                    arg <span class="op">=</span> <span class="st">"x"</span>,</span></span>
+<span class="r-in"><span>                                    id <span class="op">=</span> <span class="st">"id"</span>,</span></span>
+<span class="r-in"><span>                                    variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                    lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -169,7 +208,7 @@ corresponding to a given instant.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

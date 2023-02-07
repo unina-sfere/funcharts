@@ -165,7 +165,7 @@ which_ooc <- function(cclist) {
 #' A character vector.
 #' Each value indicates which contribution you want to plot:
 #'
-#' "T2" indicates contribution to the Hotelling's T^2 statistic,
+#' "T2" indicates contribution to the Hotelling's T2 statistic,
 #'
 #' "spe" indicates contribution to the squared prediction error statistic.
 #'
@@ -383,7 +383,7 @@ plot_mon <- function(cclist,
     cont_out <- data.frame(cont_T2 | cont_spe)
     names(cont_out) <- gsub("contribution_T2_", "", names(cont_T2))
     df <- bind_cols(df, cont_out) %>%
-      tidyr::pivot_longer(- id,
+      tidyr::pivot_longer(- "id",
                           values_to = "contribution ooc",
                           names_to = "var")
   } else {
@@ -397,7 +397,7 @@ plot_mon <- function(cclist,
   p <- plot_mfd(mfdobj = fd_train, col = "grey")
   p <- lines_mfd(p,
                  mfdobj_new = fd_test,
-                 data = filter(df, id %in% fd_test$fdnames[[2]]),
+                 data = filter(df, .data$id %in% fd_test$fdnames[[2]]),
             mapping = aes(col = .data$`contribution ooc`), linewidth = 1) &
     scale_color_manual(values = c("TRUE" = "tomato1", "FALSE" = "black"))
   if (plot_title) {

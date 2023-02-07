@@ -20,7 +20,7 @@ providing some additional arguments."><!-- mathjax --><script src="https://cdnjs
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
       </span>
     </div>
 
@@ -39,6 +39,9 @@ providing some additional arguments."><!-- mathjax --><script src="https://cdnjs
     </li>
     <li>
       <a href="../articles/centofanti2021.html">centofanti2021</a>
+    </li>
+    <li>
+      <a href="../articles/colosimo2010.html">colosimo2010</a>
     </li>
     <li>
       <a href="../articles/mfd.html">mfd</a>
@@ -75,28 +78,38 @@ providing some additional arguments.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">pca_mfd</span><span class="op">(</span><span class="va">mfdobj</span>, scale <span class="op">=</span> <span class="cn">TRUE</span>, nharm <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pca_mfd</span><span class="op">(</span><span class="va">mfdobj</span>, scale <span class="op">=</span> <span class="cn">TRUE</span>, nharm <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>mfdobj</dt>
 <dd><p>A multivariate functional data object of class mfd.</p></dd>
+
+
 <dt>scale</dt>
 <dd><p>If TRUE, it scales data before doing MFPCA
 using <code>scale_mfd</code>. Default is TRUE.</p></dd>
+
+
 <dt>nharm</dt>
 <dd><p>Number of multivariate functional principal components
 to be calculated. Default is 20.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Modified <code>pca.fd</code> object, with
+    
+
+<p>Modified <code>pca.fd</code> object, with
 multivariate functional principal component scores summed over variables
 (<code>fda::<a href="https://rdrr.io/pkg/fda/man/pca.fd.html" class="external-link">pca.fd</a></code> returns an array of scores
 when providing a multivariate functional data object).
 Moreover, the multivariate functional principal components
-given in <code>harmonics</code>are converted to the <code>mfd</code> class.</p>
+given in <code>harmonics</code></p>
+
+
+<p>are converted to the <code>mfd</code> class.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -105,12 +118,12 @@ given in <code>harmonics</code>are converted to the <code>mfd</code> class.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mfdobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="data_sim_mfd.html">data_sim_mfd</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pca_obj</span> <span class="op">&lt;-</span> <span class="fu">pca_mfd</span><span class="op">(</span><span class="va">mfdobj</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="plot_pca_mfd.html">plot_pca_mfd</a></span><span class="op">(</span><span class="va">pca_obj</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="data_sim_mfd.html">data_sim_mfd</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pca_obj</span> <span class="op">&lt;-</span> <span class="fu">pca_mfd</span><span class="op">(</span><span class="va">mfdobj</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot_pca_mfd.html">plot_pca_mfd</a></span><span class="op">(</span><span class="va">pca_obj</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="pca_mfd-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -125,7 +138,7 @@ given in <code>harmonics</code>are converted to the <code>mfd</code> class.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

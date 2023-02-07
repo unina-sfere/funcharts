@@ -10,6 +10,9 @@
     <loc>/articles/centofanti2021.html</loc>
   </url>
   <url>
+    <loc>/articles/colosimo2010.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -31,9 +34,6 @@
     <loc>/reference/cbind_mfd.html</loc>
   </url>
   <url>
-    <loc>/reference/cont_plot.html</loc>
-  </url>
-  <url>
     <loc>/reference/control_charts_pca.html</loc>
   </url>
   <url>
@@ -44,6 +44,9 @@
   </url>
   <url>
     <loc>/reference/control_charts_sof_pc_real_time.html</loc>
+  </url>
+  <url>
+    <loc>/reference/cont_plot.html</loc>
   </url>
   <url>
     <loc>/reference/data_sim_mfd.html</loc>
@@ -85,6 +88,9 @@
     <loc>/reference/get_ooc.html</loc>
   </url>
   <url>
+    <loc>/reference/get_outliers_mfd.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_sof_pc_outliers.html</loc>
   </url>
   <url>
@@ -98,6 +104,9 @@
   </url>
   <url>
     <loc>/reference/is.mfd.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lines_mfd.html</loc>
   </url>
   <url>
     <loc>/reference/mfd.html</loc>
@@ -151,13 +160,16 @@
     <loc>/reference/regr_cc_sof.html</loc>
   </url>
   <url>
+    <loc>/reference/regr_cc_sof_real_time.html</loc>
+  </url>
+  <url>
     <loc>/reference/scale_mfd.html</loc>
   </url>
   <url>
-    <loc>/reference/sim_funcharts.html</loc>
+    <loc>/reference/simulate_mfd.html</loc>
   </url>
   <url>
-    <loc>/reference/simulate_mfd.html</loc>
+    <loc>/reference/sim_funcharts.html</loc>
   </url>
   <url>
     <loc>/reference/sof_pc.html</loc>

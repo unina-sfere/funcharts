@@ -19,7 +19,7 @@ The object must contain only one single functional replication."><!-- mathjax --
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
       </span>
     </div>
 
@@ -38,6 +38,9 @@ The object must contain only one single functional replication."><!-- mathjax --
     </li>
     <li>
       <a href="../articles/centofanti2021.html">centofanti2021</a>
+    </li>
+    <li>
+      <a href="../articles/colosimo2010.html">colosimo2010</a>
     </li>
     <li>
       <a href="../articles/mfd.html">mfd</a>
@@ -73,7 +76,7 @@ The object must contain only one single functional replication.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">plot_bifd</span><span class="op">(</span><span class="va">bifd_obj</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_bifd</span><span class="op">(</span><span class="va">bifd_obj</span>, type_plot <span class="op">=</span> <span class="st">"raster"</span>, phi <span class="op">=</span> <span class="fl">40</span>, theta <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -81,21 +84,43 @@ The object must contain only one single functional replication.</p>
     <dl><dt>bifd_obj</dt>
 <dd><p>A bivariate functional data object of class bifd,
 containing one single replication.</p></dd>
+
+
+<dt>type_plot</dt>
+<dd><p>a character value
+If "raster", it plots the bivariate functional data object
+as a raster image.
+If "contour", it produces a contour plot.
+If "perspective", it produces a perspective plot.
+Default value is "raster".</p></dd>
+
+
+<dt>phi</dt>
+<dd><p>If <code>type_plot=="perspective"</code>, it is the <code>phi</code> argument
+of the function <code><a href="https://rdrr.io/pkg/plot3D/man/persp3D.html" class="external-link">plot3D::persp3D</a></code>.</p></dd>
+
+
+<dt>theta</dt>
+<dd><p>If <code>type_plot=="perspective"</code>, it is the <code>theta</code> argument
+of the function <code><a href="https://rdrr.io/pkg/plot3D/man/persp3D.html" class="external-link">plot3D::persp3D</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A ggplot with a geom_tile layer providing a plot of the
+    
+
+<p>A ggplot with a geom_tile layer providing a plot of the
 bivariate functional data object as a heat map.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mfdobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="data_sim_mfd.html">data_sim_mfd</a></span><span class="op">(</span>nobs <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tp</span> <span class="op">&lt;-</span> <span class="fu"><a href="tensor_product_mfd.html">tensor_product_mfd</a></span><span class="op">(</span><span class="va">mfdobj</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">plot_bifd</span><span class="op">(</span><span class="va">tp</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="data_sim_mfd.html">data_sim_mfd</a></span><span class="op">(</span>nobs <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tp</span> <span class="op">&lt;-</span> <span class="fu"><a href="tensor_product_mfd.html">tensor_product_mfd</a></span><span class="op">(</span><span class="va">mfdobj</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plot_bifd</span><span class="op">(</span><span class="va">tp</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_bifd-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -110,7 +135,7 @@ bivariate functional data object as a heat map.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

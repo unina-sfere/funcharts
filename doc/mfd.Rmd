@@ -19,9 +19,6 @@ text-align: justify}
 Let us show how the `funcharts` package works through an example with the dataset `air`,
 which has been included from the R package `FRegSigCom` and is used in the paper of Qi and Luo (2019).
 
-NOTE: since the objective of this vignette is only to illustrate how the package works, in the following we will use only 5 basis functions and a fixed smoothing parameter to reduce the computational time.
-
-
 ## Getting multivariate functional data and the `mfd` class
 
 We provide the `mfd` class for multivariate functional data.
@@ -52,78 +49,22 @@ In this example, the dataset `air` is in the second format (list of matrices, wi
 library(funcharts)
 data("air")
 fun_covariates <- names(air)[names(air) != "NO2"]
-mfdobj_x <- get_mfd_list(air[fun_covariates],
-                         grid = 1:24,
-                         n_basis = 5,
-                         lambda = 1e-2)
+mfdobj_x <- get_mfd_list(air[fun_covariates], grid = 1:24)
 ```
-
-In order to perform the statistical process monitoring analysis, we divide the dataset into a phase I and a phase II dataset.
-
-
-```r
-rows1 <- 1:300
-rows2 <- 301:355
-mfdobj_x1 <- mfdobj_x[rows1]
-mfdobj_x2 <- mfdobj_x[rows2]
-```
-
-Now we extract the scalar response variable, i.e. the mean of `NO2` at each observation:
-
-
-```r
-y <- rowMeans(air$NO2)
-y1 <- y[rows1]
-y2 <- y[rows2]
-```
-
 
 ## Plotting functions
 
-We also provide plotting functions using ggplot2.
+We also provide plotting functions based on `ggplot2` and `patchwork`.
 
 
 ```r
-plot_mfd(mfdobj_x1)
+plot_mfd(mfdobj_x)
 ```
 
-<img src="mfd-plot_mfd-1.png" title="plot of chunk plot_mfd" alt="plot of chunk plot_mfd" style="display:block; margin: auto" style="display: block; margin: auto;" />
+<img src="mfd-plot_mfd-1.png" alt="plot of chunk plot_mfd" style="display:block; margin: auto" style="display: block; margin: auto;" />
 
 ```r
-plot_mfd(mfdobj_x1[1:10, c("CO", "C6H6")])
+plot_mfd(mfdobj_x[1:10, c("CO", "C6H6")])
 ```
 
-<img src="mfd-plot_mfd-2.png" title="plot of chunk plot_mfd" alt="plot of chunk plot_mfd" style="display:block; margin: auto" style="display: block; margin: auto;" />
-
-This functions provides a layer `geom_mfd`, which is basically a `geom_line` that is added to `ggplot()` to plot functional data.
-It also allows to plot the original raw data by adding the argument `type_mfd = "raw"`.
-`geom_mfd` accepts the argument `data` as input, which must be a data frame with two columns, `id` and `var`, in order to use aesthetic mappings that allow for example to colour different functions according to some columns in this data frame.
-
-
-```r
-dat <- data.frame(id = unique(mfdobj_x1$raw$id)) %>%
-  mutate(id_greater_than_100 = as.numeric(id) > 100)
-ggplot() +
-  geom_mfd(mapping = aes(col = id_greater_than_100),
-           mfdobj = mfdobj_x1,
-           data = dat,
-           alpha = .2,
-           lwd = .3)
-```
-
-<img src="mfd-geom_mfd-1.png" title="plot of chunk geom_mfd" alt="plot of chunk geom_mfd" style="display:block; margin: auto" style="display: block; margin: auto;" />
-
-## Multivariate functional principal component analysis
-
-For class `mfd` we provide a function `pca_mfd`, which is a wrapper to `pca.fd`.
-It returns multivariate functional principal component scores summed over variables (`fda::pca.fd` returns an array of scores when providing a multivariate functional data object).
-Moreover, the eigenfunctions or multivariate functional principal components given in `harmonics` argument are converted to the `mfd` class.
-We also provide a plot function for the eigenfunctions (the argument `harm` selects which components to plot).
-
-
-```r
-pca <- pca_mfd(mfdobj_x1)
-plot_pca_mfd(pca, harm = 1:3)
-```
-
-<img src="mfd-plot_pca_mfd-1.png" title="plot of chunk plot_pca_mfd" alt="plot of chunk plot_pca_mfd" style="display:block; margin: auto" style="display: block; margin: auto;" />
+<img src="mfd-plot_mfd-2.png" alt="plot of chunk plot_mfd" style="display:block; margin: auto" style="display: block; margin: auto;" />

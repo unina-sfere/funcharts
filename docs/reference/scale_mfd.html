@@ -20,7 +20,7 @@ by the standard deviation function."><!-- mathjax --><script src="https://cdnjs.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
       </span>
     </div>
 
@@ -39,6 +39,9 @@ by the standard deviation function."><!-- mathjax --><script src="https://cdnjs.
     </li>
     <li>
       <a href="../articles/centofanti2021.html">centofanti2021</a>
+    </li>
+    <li>
+      <a href="../articles/colosimo2010.html">colosimo2010</a>
     </li>
     <li>
       <a href="../articles/mfd.html">mfd</a>
@@ -75,13 +78,15 @@ by the standard deviation function.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">scale_mfd</span><span class="op">(</span><span class="va">mfdobj</span>, center <span class="op">=</span> <span class="cn">TRUE</span>, scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">scale_mfd</span><span class="op">(</span><span class="va">mfdobj</span>, center <span class="op">=</span> <span class="cn">TRUE</span>, scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>mfdobj</dt>
 <dd><p>A multivariate functional data object of class <code>mfd</code>.</p></dd>
+
+
 <dt>center</dt>
 <dd><p>A logical value, or a <code>fd</code> object.
 When providing a logical value, if TRUE, <code>mfdobj</code> is centered,
@@ -90,6 +95,8 @@ from all observations in <code>mfdobj</code>,
 if FALSE, <code>mfdobj</code> is not centered.
 If <code>center</code> is a <code>fd</code> object, then this function
 is used as functional mean for centering.</p></dd>
+
+
 <dt>scale</dt>
 <dd><p>A logical value, or a <code>fd</code> object.
 When providing a logical value, if TRUE, <code>mfdobj</code>
@@ -100,10 +107,13 @@ then the observations are divided by this calculated standard deviation,
 if FALSE, <code>mfdobj</code> is not scaled.
 If <code>scale</code> is a <code>fd</code> object,
 then this function is used as standard deviation function for scaling.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A standardized object of class <code>mfd</code>, with two attributes,
+    
+
+<p>A standardized object of class <code>mfd</code>, with two attributes,
 if calculated,
 <code>center</code> and <code>scale</code>, storing the mean and
 standard deviation functions used for standardization.</p>
@@ -121,9 +131,9 @@ and <code>fda::<a href="https://rdrr.io/pkg/fda/man/sd.html" class="external-lin
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mfdobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="data_sim_mfd.html">data_sim_mfd</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mfdobj_scaled</span> <span class="op">&lt;-</span> <span class="fu">scale_mfd</span><span class="op">(</span><span class="va">mfdobj</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="data_sim_mfd.html">data_sim_mfd</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj_scaled</span> <span class="op">&lt;-</span> <span class="fu">scale_mfd</span><span class="op">(</span><span class="va">mfdobj</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -138,7 +148,7 @@ and <code>fda::<a href="https://rdrr.io/pkg/fda/man/sd.html" class="external-lin
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

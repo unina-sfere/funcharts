@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
       </span>
     </div>
 
@@ -54,6 +54,9 @@
     </li>
     <li>
       <a href="../articles/centofanti2021.html">centofanti2021</a>
+    </li>
+    <li>
+      <a href="../articles/colosimo2010.html">colosimo2010</a>
     </li>
     <li>
       <a href="../articles/mfd.html">mfd</a>
@@ -99,62 +102,56 @@ body {
 text-align: justify}
 </style>
 <div class="section level2">
-<h2 id="control-charts-for-monitoring-a-scalar-quality-characteristic-adjusted-for-by-the-effect-of-multivariate-functional-covariates">Control charts for monitoring a scalar quality characteristic
-adjusted for by the effect of multivariate functional covariates<a class="anchor" aria-label="anchor" href="#control-charts-for-monitoring-a-scalar-quality-characteristic-adjusted-for-by-the-effect-of-multivariate-functional-covariates"></a>
+<h2 id="control-charts-for-monitoring-a-scalar-quality-characteristic-adjusted-for-by-the-effect-of-functional-covariates">Control charts for monitoring a scalar quality characteristic
+adjusted for by the effect of functional covariates<a class="anchor" aria-label="anchor" href="#control-charts-for-monitoring-a-scalar-quality-characteristic-adjusted-for-by-the-effect-of-functional-covariates"></a>
 </h2>
 <p>In this vignette we show how to use the <code>funcharts</code>
 package to apply the methods proposed in Capezza et al. (2020) to build
 control charts for monitoring scalar quality characteristic adjusted for
-by the effect of multivariate functional covariates, based on
-scalar-on-function regression. Let us show how the
-<code>funcharts</code> package works through an example with the dataset
-<code>air</code>, which has been included from the R package
-<code>FRegSigCom</code> and is used in the paper of Qi and Luo (2019).
-The authors propose a function-on-function regression model of the
-<code>NO2</code> functional variable on all the other functional
-variables available in the dataset. In order to show how the package
-works, we consider a scalar-on-function regression model, where we take
-the mean of <code>NO2</code> at each observation as the scalar response
-and all other functions as functional covariates.</p>
-<p>NOTE: since the objective of this vignette is only to illustrate how
-the package works, in the following we will use only 15 basis functions
-and a fixed smoothing parameter to reduce the computational time.</p>
+by the effect of functional covariates, based on scalar-on-function
+regression. Let us show how the <code>funcharts</code> package works
+through an example with the dataset <code>air</code>, which has been
+included from the R package <code>FRegSigCom</code> and is used in the
+paper of Qi and Luo (2019). The authors propose a function-on-function
+regression model of the <code>NO2</code> functional variable on all the
+other functional variables available in the dataset. In order to show
+how the package works, we consider a scalar-on-function regression
+model, where we take the mean of <code>NO2</code> at each observation as
+the scalar response and all other functions as functional
+covariates.</p>
 <p>First of all, starting from the discrete data, let us build the
 multivariate functional data objects of class <code>mfd</code>, see
 <code><a href="../articles/mfd.html">vignette("mfd")</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span>
-<span class="va">fun_covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">air</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">air</span><span class="op">)</span> <span class="op">!=</span> <span class="st">"NO2"</span><span class="op">]</span>
-<span class="va">mfdobj_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span><span class="op">[</span><span class="va">fun_covariates</span><span class="op">]</span>,
-                       grid <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">24</span>,
-                       n_basis <span class="op">=</span> <span class="fl">15</span>,
-                       lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span></span>
+<span><span class="va">fun_covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">air</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">air</span><span class="op">)</span> <span class="op">!=</span> <span class="st">"NO2"</span><span class="op">]</span></span>
+<span><span class="va">mfdobj_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span><span class="op">[</span><span class="va">fun_covariates</span><span class="op">]</span>, grid <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">24</span><span class="op">)</span></span></code></pre></div>
 <p>Then, we extract the scalar response variable, i.e. the mean of
 <code>NO2</code> at each observation:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">air</span><span class="op">$</span><span class="va">NO2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">air</span><span class="op">$</span><span class="va">NO2</span><span class="op">)</span></span></code></pre></div>
 <p>In order to perform the statistical process monitoring analysis, we
 divide the data set into a phase I and a phase II dataset.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rows1</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">300</span>
-<span class="va">rows2</span> <span class="op">&lt;-</span> <span class="fl">301</span><span class="op">:</span><span class="fl">355</span>
-<span class="va">mfdobj_x1</span> <span class="op">&lt;-</span> <span class="va">mfdobj_x</span><span class="op">[</span><span class="va">rows1</span><span class="op">]</span>
-<span class="va">mfdobj_x2</span> <span class="op">&lt;-</span> <span class="va">mfdobj_x</span><span class="op">[</span><span class="va">rows2</span><span class="op">]</span>
-<span class="va">y1</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="va">rows1</span><span class="op">]</span>
-<span class="va">y2</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="va">rows2</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rows1</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">300</span></span>
+<span><span class="va">rows2</span> <span class="op">&lt;-</span> <span class="fl">301</span><span class="op">:</span><span class="fl">355</span></span>
+<span><span class="va">mfdobj_x1</span> <span class="op">&lt;-</span> <span class="va">mfdobj_x</span><span class="op">[</span><span class="va">rows1</span><span class="op">]</span></span>
+<span><span class="va">mfdobj_x2</span> <span class="op">&lt;-</span> <span class="va">mfdobj_x</span><span class="op">[</span><span class="va">rows2</span><span class="op">]</span></span>
+<span><span class="va">y1</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="va">rows1</span><span class="op">]</span></span>
+<span><span class="va">y2</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="va">rows2</span><span class="op">]</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="scalar-on-function-regression-based-on-principal-components">Scalar-on-function regression based on principal components<a class="anchor" aria-label="anchor" href="#scalar-on-function-regression-based-on-principal-components"></a>
+<h3 id="scalar-on-function-regression">Scalar-on-function regression<a class="anchor" aria-label="anchor" href="#scalar-on-function-regression"></a>
 </h3>
 <p>We can build a scalar-on-function linear regression model where the
 response variable is a linear function of the multivariate functional
-principal components scores. The components to retain in the model can
-be selected with <code>selection</code> argument. Three alternatives are
-available (default is <code>variance</code>):</p>
+principal components scores. The principal components to retain in the
+model can be selected with <code>selection</code> argument. Three
+alternatives are available (default is <code>variance</code>):</p>
 <ul>
-<li>if “variance”, the first M multivariate functional principal
-components are retained into the MFPCA model such that together they
-explain a fraction of variance greater than
+<li>if “variance” (default), the first M multivariate functional
+principal components are retained into the MFPCA model such that
+together they explain a fraction of variance greater than
 <code>tot_variance_explained</code>,</li>
 <li>if “PRESS”, each j-th functional principal component is retained
 into the MFPCA model if, by adding it to the set of the first j-1
@@ -167,164 +164,46 @@ Capezza et al. (2020).</li>
 but the “PRESS” statistic is substituted by the generalized
 cross-validation (GCV) score.</li>
 </ul>
+<p>Here, we use default values:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sof_pc.html">sof_pc</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y1</span>,
-              mfdobj_x <span class="op">=</span> <span class="va">mfdobj_x1</span>,
-              selection <span class="op">=</span> <span class="st">"PRESS"</span>,
-              single_min_variance_explained <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span></code></pre></div>
-<p>As a result you get a list with the original data used for model
-estimation, the result of applying <code>pca_mfd</code> on the
-multivariate functional covariates, the estimated regression model. It
-is possible to plot the estimated functional regression coefficients,
-which is also a multivariate functional data object of class
-<code>mfd</code>:</p>
+<code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sof_pc.html">sof_pc</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y1</span>, mfdobj_x <span class="op">=</span> <span class="va">mfdobj_x1</span><span class="op">)</span></span></code></pre></div>
+<p>As a result you get a list with several arguments, among which the
+original data used for model estimation, the result of applying
+<code>pca_mfd</code> on the multivariate functional covariates, the
+estimated regression model. It is possible to plot the estimated
+functional regression coefficients, which is also a multivariate
+functional data object of class <code>mfd</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot_mfd.html">plot_mfd</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">beta</span><span class="op">)</span></code></pre></div>
-<p><img src="capezza2020-plot_beta-1.png" title="plot of chunk plot_beta" alt="plot of chunk plot_beta" style="display:block; margin: auto"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_mfd.html">plot_mfd</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">beta</span><span class="op">)</span></span></code></pre></div>
+<p><img src="capezza2020-plot_beta-1.png" alt="plot of chunk plot_beta" style="display:block; margin: auto"></p>
 <p>Moreover bootstrap can be used to obtain uncertainty
 quantification:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot_bootstrap_sof_pc.html">plot_bootstrap_sof_pc</a></span><span class="op">(</span><span class="va">mod</span>, nboot <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
-<p><img src="capezza2020-plot_bootstrap_sof_pc-1.png" title="plot of chunk plot_bootstrap_sof_pc" alt="plot of chunk plot_bootstrap_sof_pc" style="display:block; margin: auto"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_bootstrap_sof_pc.html">plot_bootstrap_sof_pc</a></span><span class="op">(</span><span class="va">mod</span>, nboot <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<p><img src="capezza2020-plot_bootstrap_sof_pc-1.png" alt="plot of chunk plot_bootstrap_sof_pc" style="display:block; margin: auto"></p>
 </div>
 <div class="section level3">
 <h3 id="control-charts">Control charts<a class="anchor" aria-label="anchor" href="#control-charts"></a>
 </h3>
-<p>We can build control charts to monitor both functional covariates and
-the scalar response. We can either monitor the functional covariates
-alone or the functional covariates and the scalar response together, as
-performed in Capezza et al. (2020).</p>
-<div class="section level4">
-<h4 id="monitoring-the-multivariate-functional-covariates">Monitoring the multivariate functional covariates<a class="anchor" aria-label="anchor" href="#monitoring-the-multivariate-functional-covariates"></a>
-</h4>
-<p>The function <code>control_charts_pca</code> provides a data frame
-with all the information required to plot the desired control charts on
-multivariate functional data, based on the Hotelling’s T^2 and the
-squared prediction error statistics (see Capezza et al. (2020) and
-Centofanti et al. (2021)). Among the arguments, you can pass a
-<code>tuning_data</code> set, that is not used for model
-estimation/training, but is used only to estimate control chart limits.
-If this data set is not provided, control chart limits are calculated on
-the basis of the training data. The argument <code>newdata</code>
-contains the phase II data set of observations of multivariate
-functional covariates, that are to be monitored with the control charts.
-The function <code>plot_control_charts</code> returns a ggplot with the
-control charts.</p>
+<p>We can build the regression control chart to monitor the scalar
+response, as performed in Capezza et al. (2020). The function
+<code>regr_cc_sof</code> provides a data frame with all the information
+required to plot the desired control charts. Among the arguments, you
+can pass the arguments <code>y_tuning</code> and
+<code>mfdobj_x_tuning</code> set, that are not used for model
+estimation/training, but only to estimate control chart limits. If these
+arguments are not provided, control chart limits are calculated on the
+basis of the training data. The arguments <code>y_new</code> and
+<code>mfdobj_x_new</code> contain the phase II data set of observations
+of the scalar response and the functional covariates to be monitored,
+respectively. The function <code>plot_control_charts</code> returns the
+plot of the control charts.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cclist_pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/control_charts_pca.html">control_charts_pca</a></span><span class="op">(</span>pca <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">pca</span>,
-                                 components <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">components</span>,
-                                 newdata <span class="op">=</span> <span class="va">mfdobj_x2</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plot_control_charts.html">plot_control_charts</a></span><span class="op">(</span><span class="va">cclist_pca</span><span class="op">)</span></code></pre></div>
-<p><img src="capezza2020-plot_control_charts_pca-1.png" title="plot of chunk plot_control_charts_pca" alt="plot of chunk plot_control_charts_pca" style="display:block; margin: auto"></p>
-</div>
-<div class="section level4">
-<h4 id="monitoring-the-scalar-quality-characteristic-adjusted-for-by-the-effect-of-the-functional-covariates">Monitoring the scalar quality characteristic adjusted for by the
-effect of the functional covariates<a class="anchor" aria-label="anchor" href="#monitoring-the-scalar-quality-characteristic-adjusted-for-by-the-effect-of-the-functional-covariates"></a>
-</h4>
-<p>The function <code>control_charts_sof_pc</code> provides a data frame
-with all the information required to plot the desired control charts. In
-addition to the Hotelling’s T^2 and the squared prediction error
-statistics obtained using <code>control_charts_pca</code> (see previous
-section), this function provides the scalar regression control charts,
-which also monitors the prediction error on the response variable. The
-same function <code>plot_control_charts</code> can be used to obtain
-ggplot with the three control charts. As for monitoring the functional
-covariates, you can pass a <code>tuning_data</code> set (see previous
-section).</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cclist_sof_pc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/control_charts_sof_pc.html">control_charts_sof_pc</a></span><span class="op">(</span>mod <span class="op">=</span> <span class="va">mod</span>,
-                                       y_test <span class="op">=</span> <span class="va">y2</span>,
-                                       mfdobj_x_test <span class="op">=</span> <span class="va">mfdobj_x2</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plot_control_charts.html">plot_control_charts</a></span><span class="op">(</span><span class="va">cclist_sof_pc</span><span class="op">)</span></code></pre></div>
-<p><img src="capezza2020-plot_control_charts_sof_pc-1.png" title="plot of chunk plot_control_charts_sof_pc" alt="plot of chunk plot_control_charts_sof_pc" style="display:block; margin: auto"></p>
-</div>
-</div>
-<div class="section level3">
-<h3 id="fault-detection">Fault detection<a class="anchor" aria-label="anchor" href="#fault-detection"></a>
-</h3>
-<p>Once an out-of-control observation is identified in a control chart,
-one can obtain the contribution of the functional covariates to the
-monitoring statistics to understand which variable was possibly
-responsible of the anomalous observation.</p>
-<p>We can get the out of control observations using
-<code>which_ooc</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ooc_index</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/which_ooc.html">which_ooc</a></span><span class="op">(</span><span class="va">cclist_sof_pc</span><span class="op">)</span>
-<span class="va">ooc_index</span>
-<span class="co">#&gt; $T2</span>
-<span class="co">#&gt;    n  id</span>
-<span class="co">#&gt; 1  5 305</span>
-<span class="co">#&gt; 2 12 312</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $spe</span>
-<span class="co">#&gt;   n  id</span>
-<span class="co">#&gt; 1 9 309</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $y</span>
-<span class="co">#&gt;    n  id</span>
-<span class="co">#&gt; 1 29 329</span>
-<span class="co">#&gt; 2 52 352</span>
-<span class="co">#&gt; 3 53 353</span>
-<span class="co">#&gt; 4 54 354</span>
-<span class="co">#&gt; 5 55 355</span></code></pre></div>
-<p>From the control charts it is possible to see some phase II
-observations out of control. For example, let us consider observation 9.
-We can exploit the contribution plots using the function
-<code>cont_plot</code> to identify the variables responsible of the
-anomaly. The contributions are plotted as bar plots, against upper
-control limits estimated empirically on the training data.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/cont_plot.html">cont_plot</a></span><span class="op">(</span><span class="va">cclist_sof_pc</span>, <span class="fl">9</span><span class="op">)</span></code></pre></div>
-<p><img src="capezza2020-cont_plot-1.png" title="plot of chunk cont_plot" alt="plot of chunk cont_plot" style="display:block; margin: auto">
-Finally, we can also plot any multivariate functional observation
-against a reference data set by using the function
-<code>plot_mon</code>:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot_mon.html">plot_mon</a></span><span class="op">(</span><span class="va">cclist_sof_pc</span>, <span class="va">mfdobj_x1</span>, <span class="va">mfdobj_x2</span><span class="op">[</span><span class="fl">9</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<p><img src="capezza2020-plot_mon-1.png" title="plot of chunk plot_mon" alt="plot of chunk plot_mon" style="display:block; margin: auto">
-This helps to understand which part of the observations were anomalous.
-Variables exceeding contribution plot limits are coloured in red.</p>
-</div>
-<div class="section level3">
-<h3 id="real-time-monitoring">Real-time monitoring<a class="anchor" aria-label="anchor" href="#real-time-monitoring"></a>
-</h3>
-<p>In Capezza et al. (2020), we have also implemented real-time
-monitoring. Given the domain interval <span class="math inline">\((a,
-b)\)</span> of the functional data, for each current domain point <span class="math inline">\(k\)</span> to be monitored, it filters the
-available functional data in the interval <span class="math inline">\((a,k)\)</span>. The function
-<code>get_mfd_list_real_time</code> gives a list of functional data
-objects each evolving up to the intermediate domain point <span class="math inline">\(k\)</span>.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mfd_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_mfd_list_real_time.html">get_mfd_list_real_time</a></span><span class="op">(</span>
-  data_list <span class="op">=</span> <span class="va">air</span><span class="op">[</span><span class="va">fun_covariates</span><span class="op">]</span>,
-  grid <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">24</span>,
-  n_basis <span class="op">=</span> <span class="fl">15</span>,
-  lambda <span class="op">=</span> <span class="fl">1e-2</span>,
-  k_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">7</span><span class="op">)</span><span class="op">)</span>
-<span class="va">mfd_list1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mfd_list</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="va">rows1</span><span class="op">]</span><span class="op">)</span>
-<span class="va">mfd_list2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mfd_list</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="va">rows2</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<p>Then, the function <code>sof_pc_real_time</code> applies the function
-<code>sof_pc</code> to each element in <code>mfd_list1</code>.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mod_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sof_pc_real_time.html">sof_pc_real_time</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y1</span>, mfd_real_time_list <span class="op">=</span> <span class="va">mfd_list1</span><span class="op">)</span></code></pre></div>
-<p>Then, we can use <code>control_charts_sof_pc_real_time</code> to
-apply <code>control_charts_sof_pc</code> to each element in
-<code>mod_list</code> and produce control charts for the phase II data
-<code>mfd_list2</code> and <code>y2</code>.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cc_list_real_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/control_charts_sof_pc_real_time.html">control_charts_sof_pc_real_time</a></span><span class="op">(</span>
-  mod_list <span class="op">=</span> <span class="va">mod_list</span>,
-  y_test <span class="op">=</span> <span class="va">y2</span>,
-  mfdobj_x_test <span class="op">=</span> <span class="va">mfd_list2</span>
-<span class="op">)</span></code></pre></div>
-<p>Finally, we can plot the real-time control charts for a single
-observations, giving for each <span class="math inline">\(k\)</span> the
-monitoring statistics calculated on the data observed in <span class="math inline">\((a, k)\)</span>. Here follows an example showing
-the real time control charts for a single phase II observation (id
-number 9).</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot_control_charts_real_time.html">plot_control_charts_real_time</a></span><span class="op">(</span><span class="va">cc_list_real_time</span>, id_num <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></code></pre></div>
-<p><img src="capezza2020-plot_control_charts_real_time-1.png" title="plot of chunk plot_control_charts_real_time" alt="plot of chunk plot_control_charts_real_time" style="display:block; margin: auto"></p>
+<code class="sourceCode R"><span><span class="va">cclist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/regr_cc_sof.html">regr_cc_sof</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod</span>,</span>
+<span>                      y_new <span class="op">=</span> <span class="va">y2</span>,</span>
+<span>                      mfdobj_x_new <span class="op">=</span> <span class="va">mfdobj_x2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot_control_charts.html">plot_control_charts</a></span><span class="op">(</span><span class="va">cclist</span><span class="op">)</span></span></code></pre></div>
+<p><img src="capezza2020-plot_control_charts_sof_pc-1.png" alt="plot of chunk plot_control_charts_sof_pc" style="display:block; margin: auto"></p>
 </div>
 </div>
 <div class="section level2">
@@ -361,7 +240,7 @@ with multiple predictor curves. <em>Statistica Sinica</em>, 29:719–739.
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

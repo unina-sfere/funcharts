@@ -21,7 +21,7 @@ a fitted function-on-function linear regression model."><!-- mathjax --><script 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
       </span>
     </div>
 
@@ -40,6 +40,9 @@ a fitted function-on-function linear regression model."><!-- mathjax --><script 
     </li>
     <li>
       <a href="../articles/centofanti2021.html">centofanti2021</a>
+    </li>
+    <li>
+      <a href="../articles/colosimo2010.html">colosimo2010</a>
     </li>
     <li>
       <a href="../articles/mfd.html">mfd</a>
@@ -77,7 +80,7 @@ a fitted function-on-function linear regression model.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">predict_fof_pc</span><span class="op">(</span><span class="va">object</span>, <span class="va">mfdobj_y_new</span>, <span class="va">mfdobj_x_new</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">predict_fof_pc</span><span class="op">(</span><span class="va">object</span>, <span class="va">mfdobj_y_new</span>, <span class="va">mfdobj_x_new</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -85,26 +88,43 @@ a fitted function-on-function linear regression model.</p>
     <dl><dt>object</dt>
 <dd><p>A list obtained as output from <code>fof_pc</code>,
 i.e. a fitted function-on-function linear regression model.</p></dd>
+
+
 <dt>mfdobj_y_new</dt>
 <dd><p>An object of class <code>mfd</code> containing
 new observations of the functional response.</p></dd>
+
+
 <dt>mfdobj_x_new</dt>
 <dd><p>An object of class <code>mfd</code> containing
 new observations of the functional covariates.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of mfd objects. It contains:
-* <code>pred_error</code>: the prediction error of the
-standardized functional response variable,
-* <code>pred_error_original_scale</code>:
+    
+
+<p>A list of mfd objects. It contains:</p>
+
+
+<p>* <code>pred_error</code>: the prediction error of the
+standardized functional response variable,</p>
+
+
+<p>* <code>pred_error_original_scale</code>:
 the prediction error of the functional
-response variable on the original scale,
-* <code>y_hat_new</code>: the prediction of the
-functional response observations on the original scale,
-* <code>y_z_new</code>: the standardized version of the
-functional response observations provided in <code>mfdobj_y_new</code>,
-* <code>y_hat_z_new</code>: the prediction of the
+response variable on the original scale,</p>
+
+
+<p>* <code>y_hat_new</code>: the prediction of the
+functional response observations on the original scale,</p>
+
+
+<p>* <code>y_z_new</code>: the standardized version of the
+functional response observations provided in <code>mfdobj_y_new</code>,</p>
+
+
+<p>* <code>y_hat_z_new</code>: the prediction of the
 functional response observations on the standardized/studentized scale.</p>
     </div>
     <div id="references">
@@ -116,16 +136,16 @@ Functional Regression Control Chart.
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">air</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">air</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">fun_covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CO"</span>, <span class="st">"temperature"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mfdobj_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span><span class="op">[</span><span class="va">fun_covariates</span><span class="op">]</span>, lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mfdobj_y</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span><span class="op">[</span><span class="st">"NO2"</span><span class="op">]</span>, lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="fof_pc.html">fof_pc</a></span><span class="op">(</span><span class="va">mfdobj_y</span>, <span class="va">mfdobj_x</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">predict_fof_pc</span><span class="op">(</span><span class="va">mod</span>,</span>
-<span class="r-in">               mfdobj_y_new <span class="op">=</span> <span class="va">mfdobj_y</span>,</span>
-<span class="r-in">               mfdobj_x_new <span class="op">=</span> <span class="va">mfdobj_x</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">air</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">air</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fun_covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CO"</span>, <span class="st">"temperature"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span><span class="op">[</span><span class="va">fun_covariates</span><span class="op">]</span>, lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj_y</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span><span class="op">[</span><span class="st">"NO2"</span><span class="op">]</span>, lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="fof_pc.html">fof_pc</a></span><span class="op">(</span><span class="va">mfdobj_y</span>, <span class="va">mfdobj_x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">predict_fof_pc</span><span class="op">(</span><span class="va">mod</span>,</span></span>
+<span class="r-in"><span>               mfdobj_y_new <span class="op">=</span> <span class="va">mfdobj_y</span>,</span></span>
+<span class="r-in"><span>               mfdobj_x_new <span class="op">=</span> <span class="va">mfdobj_x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pred_error</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , NO2</span>
@@ -428,7 +448,7 @@ Functional Regression Control Chart.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames[[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "arg"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "t"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames[[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10"</span>
@@ -742,7 +762,7 @@ Functional Regression Control Chart.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames[[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "arg"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "t"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames[[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10"</span>
@@ -756,70 +776,70 @@ Functional Regression Control Chart.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $y_hat_new</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> , , 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> , , NO2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              1        2        3        4        5        6        7        8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 7.149208 7.125952 7.234535 7.341004 7.302021 7.251277 7.253774 7.263583</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 7.150828 7.129632 7.236170 7.337752 7.308353 7.255800 7.257483 7.267381</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 7.154072 7.136997 7.239442 7.331250 7.321019 7.264849 7.264905 7.274979</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 7.159545 7.148398 7.244710 7.321719 7.340698 7.279038 7.276498 7.286976</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 7.166541 7.160841 7.250941 7.312805 7.361878 7.294661 7.289219 7.300367</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 7.175986 7.175183 7.258794 7.304859 7.385343 7.312523 7.303780 7.315919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 7.188595 7.192163 7.268871 7.298365 7.411575 7.333187 7.320743 7.334182</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 7.204752 7.212123 7.281577 7.294010 7.440564 7.356799 7.340348 7.355346</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 7.224413 7.234838 7.296924 7.292411 7.471684 7.382966 7.362336 7.379104</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 7.246987 7.259459 7.314385 7.293882 7.503507 7.410589 7.385796 7.404485</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11,] 7.271339 7.284547 7.332864 7.298257 7.533939 7.437952 7.409208 7.429907</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [12,] 7.296052 7.308389 7.350917 7.304992 7.560360 7.462899 7.430639 7.453354</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13,] 7.320025 7.329797 7.367338 7.313279 7.580683 7.483717 7.448537 7.473177</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [14,] 7.342756 7.348682 7.381641 7.322209 7.594237 7.499812 7.462399 7.488724</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15,] 7.364177 7.365840 7.394044 7.330993 7.601768 7.511663 7.472749 7.500324</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16,] 7.384254 7.382149 7.405056 7.339228 7.604663 7.520182 7.480528 7.508738</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [17,] 7.402776 7.398383 7.415385 7.347088 7.604534 7.526391 7.486885 7.514885</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [18,] 7.419314 7.414983 7.425711 7.355238 7.602668 7.531052 7.492801 7.519494</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19,] 7.433350 7.432188 7.436606 7.364418 7.600154 7.534763 7.499100 7.523156</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [20,] 7.444451 7.450133 7.448444 7.375070 7.597816 7.537964 7.506369 7.526297</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21,] 7.452295 7.468839 7.461279 7.387155 7.595983 7.540776 7.514798 7.529015</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22,] 7.456542 7.488051 7.474789 7.400242 7.594374 7.542900 7.524092 7.530994</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [23,] 7.456747 7.507086 7.488335 7.413764 7.592335 7.543736 7.533583 7.531649</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [24,] 7.452535 7.524624 7.500840 7.426981 7.588771 7.542369 7.542089 7.530129</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25,] 7.443806 7.539719 7.511376 7.438976 7.582827 7.538127 7.548636 7.525781</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26,] 7.430956 7.551837 7.519478 7.449266 7.574306 7.530922 7.552774 7.518535</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [27,] 7.414925 7.561447 7.525461 7.457984 7.563529 7.521236 7.554785 7.508860</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [28,] 7.397027 7.569781 7.530215 7.465682 7.551170 7.509944 7.555482 7.497598</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29,] 7.384679 7.575159 7.533128 7.470551 7.542472 7.501999 7.555639 7.489668</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [30,] 7.378502 7.577844 7.534582 7.472984 7.538121 7.498024 7.555714 7.485701</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              9       10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 7.199740 7.212248</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 7.203558 7.214537</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 7.211196 7.219117</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 7.223317 7.226531</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 7.237013 7.235280</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 7.253189 7.246165</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 7.272481 7.259814</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 7.295092 7.276551</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 7.320703 7.296267</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 7.348329 7.318270</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11,] 7.376388 7.341296</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [12,] 7.402923 7.363729</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13,] 7.426413 7.384258</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [14,] 7.446308 7.402323</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15,] 7.462908 7.418043</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16,] 7.476770 7.431776</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [17,] 7.488389 7.443917</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [18,] 7.497958 7.454712</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19,] 7.505525 7.464299</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [20,] 7.511110 7.472742</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21,] 7.514633 7.479955</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22,] 7.515784 7.485609</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [23,] 7.514041 7.489165</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [24,] 7.508771 7.489919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25,] 7.499627 7.487377</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26,] 7.486827 7.481565</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [27,] 7.471115 7.473104</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [28,] 7.453594 7.463031</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29,] 7.441467 7.455936</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [30,] 7.435401 7.452386</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 1        2        3        4        5        6        7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.1  7.149208 7.125952 7.234535 7.341004 7.302021 7.251277 7.253774</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.2  7.150828 7.129632 7.236170 7.337752 7.308353 7.255800 7.257483</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.3  7.154072 7.136997 7.239442 7.331250 7.321019 7.264849 7.264905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.4  7.159545 7.148398 7.244710 7.321719 7.340698 7.279038 7.276498</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.5  7.166541 7.160841 7.250941 7.312805 7.361878 7.294661 7.289219</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.6  7.175986 7.175183 7.258794 7.304859 7.385343 7.312523 7.303780</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.7  7.188595 7.192163 7.268871 7.298365 7.411575 7.333187 7.320743</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.8  7.204752 7.212123 7.281577 7.294010 7.440564 7.356799 7.340348</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.9  7.224413 7.234838 7.296924 7.292411 7.471684 7.382966 7.362336</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.10 7.246987 7.259459 7.314385 7.293882 7.503507 7.410589 7.385796</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.11 7.271339 7.284547 7.332864 7.298257 7.533939 7.437952 7.409208</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.12 7.296052 7.308389 7.350917 7.304992 7.560360 7.462899 7.430639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.13 7.320025 7.329797 7.367338 7.313279 7.580683 7.483717 7.448537</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.14 7.342756 7.348682 7.381641 7.322209 7.594237 7.499812 7.462399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.15 7.364177 7.365840 7.394044 7.330993 7.601768 7.511663 7.472749</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.16 7.384254 7.382149 7.405056 7.339228 7.604663 7.520182 7.480528</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.17 7.402776 7.398383 7.415385 7.347088 7.604534 7.526391 7.486885</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.18 7.419314 7.414983 7.425711 7.355238 7.602668 7.531052 7.492801</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.19 7.433350 7.432188 7.436606 7.364418 7.600154 7.534763 7.499100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.20 7.444451 7.450133 7.448444 7.375070 7.597816 7.537964 7.506369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.21 7.452295 7.468839 7.461279 7.387155 7.595983 7.540776 7.514798</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.22 7.456542 7.488051 7.474789 7.400242 7.594374 7.542900 7.524092</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.23 7.456747 7.507086 7.488335 7.413764 7.592335 7.543736 7.533583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.24 7.452535 7.524624 7.500840 7.426981 7.588771 7.542369 7.542089</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.25 7.443806 7.539719 7.511376 7.438976 7.582827 7.538127 7.548636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.26 7.430956 7.551837 7.519478 7.449266 7.574306 7.530922 7.552774</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.27 7.414925 7.561447 7.525461 7.457984 7.563529 7.521236 7.554785</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.28 7.397027 7.569781 7.530215 7.465682 7.551170 7.509944 7.555482</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.29 7.384679 7.575159 7.533128 7.470551 7.542472 7.501999 7.555639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.30 7.378502 7.577844 7.534582 7.472984 7.538121 7.498024 7.555714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 8        9       10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.1  7.263583 7.199740 7.212248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.2  7.267381 7.203558 7.214537</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.3  7.274979 7.211196 7.219117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.4  7.286976 7.223317 7.226531</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.5  7.300367 7.237013 7.235280</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.6  7.315919 7.253189 7.246165</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.7  7.334182 7.272481 7.259814</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.8  7.355346 7.295092 7.276551</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.9  7.379104 7.320703 7.296267</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.10 7.404485 7.348329 7.318270</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.11 7.429907 7.376388 7.341296</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.12 7.453354 7.402923 7.363729</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.13 7.473177 7.426413 7.384258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.14 7.488724 7.446308 7.402323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.15 7.500324 7.462908 7.418043</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.16 7.508738 7.476770 7.431776</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.17 7.514885 7.488389 7.443917</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.18 7.519494 7.497958 7.454712</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.19 7.523156 7.505525 7.464299</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.20 7.526297 7.511110 7.472742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.21 7.529015 7.514633 7.479955</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.22 7.530994 7.515784 7.485609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.23 7.531649 7.514041 7.489165</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.24 7.530129 7.508771 7.489919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.25 7.525781 7.499627 7.487377</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.26 7.518535 7.486827 7.481565</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.27 7.508860 7.471115 7.473104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.28 7.497598 7.453594 7.463031</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.29 7.489668 7.441467 7.455936</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bspl4.30 7.485701 7.435401 7.452386</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $basis</span>
@@ -1056,7 +1076,7 @@ Functional Regression Control Chart.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames[[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "arg"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "t"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames[[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10"</span>
@@ -1370,7 +1390,7 @@ Functional Regression Control Chart.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames[[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "arg"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "t"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames[[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10"</span>
@@ -1655,7 +1675,7 @@ Functional Regression Control Chart.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames[[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "arg"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "t"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames[[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "mean"</span>
@@ -1934,7 +1954,7 @@ Functional Regression Control Chart.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames$&lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "arg"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "t"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames$`Std. Dev.`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10"</span>
@@ -2248,7 +2268,7 @@ Functional Regression Control Chart.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames[[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "arg"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "t"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fdnames[[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10"</span>
@@ -2274,7 +2294,7 @@ Functional Regression Control Chart.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

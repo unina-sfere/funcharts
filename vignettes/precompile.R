@@ -1,4 +1,5 @@
 ## Create .Rmd from .Rmd.orig
+knitr::knit("vignettes/colosimo2010.Rmd.orig", "vignettes/colosimo2010.Rmd")
 knitr::knit("vignettes/capezza2020.Rmd.orig", "vignettes/capezza2020.Rmd")
 knitr::knit("vignettes/centofanti2021.Rmd.orig", "vignettes/centofanti2021.Rmd")
 knitr::knit("vignettes/mfd.Rmd.orig", "vignettes/mfd.Rmd")

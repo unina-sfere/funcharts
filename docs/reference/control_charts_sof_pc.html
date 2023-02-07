@@ -36,7 +36,7 @@ with the control charts."><!-- mathjax --><script src="https://cdnjs.cloudflare.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
       </span>
     </div>
 
@@ -55,6 +55,9 @@ with the control charts."><!-- mathjax --><script src="https://cdnjs.cloudflare.
     </li>
     <li>
       <a href="../articles/centofanti2021.html">centofanti2021</a>
+    </li>
+    <li>
+      <a href="../articles/colosimo2010.html">colosimo2010</a>
     </li>
     <li>
       <a href="../articles/mfd.html">mfd</a>
@@ -106,17 +109,17 @@ with the control charts.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">control_charts_sof_pc</span><span class="op">(</span>
-  <span class="va">mod</span>,
-  <span class="va">y_test</span>,
-  <span class="va">mfdobj_x_test</span>,
-  mfdobj_x_tuning <span class="op">=</span> <span class="cn">NULL</span>,
-  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>T2 <span class="op">=</span> <span class="fl">0.0125</span>, spe <span class="op">=</span> <span class="fl">0.0125</span>, y <span class="op">=</span> <span class="fl">0.025</span><span class="op">)</span>,
-  limits <span class="op">=</span> <span class="st">"standard"</span>,
-  <span class="va">seed</span>,
-  nfold <span class="op">=</span> <span class="cn">NULL</span>,
-  ncores <span class="op">=</span> <span class="fl">1</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">control_charts_sof_pc</span><span class="op">(</span></span>
+<span>  <span class="va">mod</span>,</span>
+<span>  <span class="va">y_test</span>,</span>
+<span>  <span class="va">mfdobj_x_test</span>,</span>
+<span>  mfdobj_x_tuning <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>T2 <span class="op">=</span> <span class="fl">0.0125</span>, spe <span class="op">=</span> <span class="fl">0.0125</span>, y <span class="op">=</span> <span class="fl">0.025</span><span class="op">)</span>,</span>
+<span>  limits <span class="op">=</span> <span class="st">"standard"</span>,</span>
+<span>  <span class="va">seed</span>,</span>
+<span>  nfold <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ncores <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -124,13 +127,19 @@ with the control charts.</p>
     <dl><dt>mod</dt>
 <dd><p>A list obtained as output from <code>sof_pc</code>,
 i.e. a fitted scalar-on-function linear regression model.</p></dd>
+
+
 <dt>y_test</dt>
 <dd><p>A numeric vector containing the observations
 of the scalar response variable
 in the phase II data set.</p></dd>
+
+
 <dt>mfdobj_x_test</dt>
 <dd><p>An object of class <code>mfd</code> containing
 the phase II data set of the functional covariates observations.</p></dd>
+
+
 <dt>mfdobj_x_tuning</dt>
 <dd><p>An object of class <code>mfd</code> containing
 the tuning set of the multivariate functional data, used to estimate the
@@ -138,6 +147,8 @@ T^2 and SPE control chart limits.
 If NULL, the training data, i.e. the data used to fit the MFPCA model,
 are also used as the tuning data set, i.e. <code>tuning_data=pca$data</code>.
 Default is NULL.</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>A named list with three elements, named <code>T2</code>, <code>spe</code>,
 and codey,
@@ -151,18 +162,24 @@ the family-wise error rate and adjust
 the two values accordingly. See Capezza et al. (2020)
 for additional details. Default value is
 <code>list(T2 = 0.0125, spe = 0.0125, y = 0.025)</code>.</p></dd>
+
+
 <dt>limits</dt>
 <dd><p>A character value.
 If "standard", it estimates the control limits on the tuning
 data set. If "cv", the function calculates the control limits only on the
 training data using cross-validation
 using <code>calculate_cv_limits</code>. Default is "standard".</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>If <code>limits=="cv"</code>,
 since the split in the k groups is random,
 you can fix a seed to ensure reproducibility.
 Deprecated: use <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> before calling
 the function for reproducibility.</p></dd>
+
+
 <dt>nfold</dt>
 <dd><p>If <code>limits=="cv"</code>, this gives the number of groups k
 used for k-fold cross-validation.
@@ -170,44 +187,91 @@ If it is equal to the number of observations in the training data set,
 then we have
 leave-one-out cross-validation.
 Otherwise, this argument is ignored.</p></dd>
+
+
 <dt>ncores</dt>
 <dd><p>If <code>limits=="cv"</code>, if you want perform the analysis
 in the k groups in parallel,
 give the number of cores/threads.
 Otherwise, this argument is ignored.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.frame</code> with as many rows as the number of
+    
+
+<p>A <code>data.frame</code> with as many rows as the number of
 multivariate functional observations in the phase II data set and
-the following columns:
-* one <code>id</code> column identifying the multivariate functional observation
-in the phase II data set,
-* one <code>T2</code> column containing the Hotelling T^2 statistic calculated
-for all observations,
-* one column per each functional variable, containing its contribution
-to the T^2 statistic,
-* one <code>spe</code> column containing the SPE statistic calculated
-for all observations,
-* one column per each functional variable, containing its contribution
-to the SPE statistic,
-* <code>T2_lim</code> gives the upper control limit of the
-Hotelling's T^2 control chart,
-* one <code>contribution_T2_*_lim</code> column per each
+the following columns:</p>
+
+
+<p>* one <code>id</code> column identifying the multivariate functional observation
+in the phase II data set,</p>
+
+
+<p>* one <code>T2</code> column containing the Hotelling T^2 statistic calculated
+for all observations,</p>
+
+
+<p>* one column per each functional variable, containing its contribution
+to the T^2 statistic,</p>
+
+
+<p>* one <code>spe</code> column containing the SPE statistic calculated
+for all observations,</p>
+
+
+<p>* one column per each functional variable, containing its contribution
+to the SPE statistic,</p>
+
+
+<p>* <code>T2_lim</code> gives the upper control limit of the
+Hotelling's T^2 control chart,</p>
+
+
+<p>* one <code>contribution_T2_*_lim</code> column per each
 functional variable giving the
 limits of the contribution of that variable to the
-Hotelling's T^2 statistic,
-* <code>spe_lim</code> gives the upper control limit of the SPE control chart
-* one <code>contribution_spe*_lim</code> column per
+Hotelling's T^2 statistic,</p>
+
+
+<p>* <code>spe_lim</code> gives the upper control limit of the SPE control chart</p>
+
+
+<p>* one <code>contribution_spe*_lim</code> column per
 each functional variable giving the
-limits of the contribution of that variable to the SPE statistic.
-* <code>y_hat</code>: the predictions of the response variable
-corresponding to <code>mfdobj_x_new</code>,
-* <code>y</code>: the same as the argument <code>y_new</code>given as input to this function,
-* <code>lwr</code>: lower limit of the <code>1-alpha</code>prediction interval on the response,
-* <code>pred_err</code>: prediction error calculated as <code>y-y_hat</code>,
-* <code>pred_err_sup</code>: upper limit of the <code>1-alpha</code>prediction interval on the prediction error,
-* <code>pred_err_inf</code>: lower limit of the <code>1-alpha</code> prediction interval on the prediction error.</p>
+limits of the contribution of that variable to the SPE statistic.</p>
+
+
+<p>* <code>y_hat</code>: the predictions of the response variable
+corresponding to <code>mfdobj_x_new</code>,</p>
+
+
+<p>* <code>y</code>: the same as the argument <code>y_new</code></p>
+
+
+<p>given as input to this function,</p>
+
+
+<p>* <code>lwr</code>: lower limit of the <code>1-alpha</code></p>
+
+
+<p>prediction interval on the response,</p>
+
+
+<p>* <code>pred_err</code>: prediction error calculated as <code>y-y_hat</code>,</p>
+
+
+<p>* <code>pred_err_sup</code>: upper limit of the <code>1-alpha</code></p>
+
+
+<p>prediction interval on the prediction error,</p>
+
+
+<p>* <code>pred_err_inf</code>: lower limit of the <code>1-alpha</code></p>
+
+
+<p>prediction interval on the prediction error.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -216,27 +280,28 @@ corresponding to <code>mfdobj_x_new</code>,
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">air</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">air</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">201</span><span class="op">:</span><span class="fl">300</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">fun_covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CO"</span>, <span class="st">"temperature"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mfdobj_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span><span class="op">[</span><span class="va">fun_covariates</span><span class="op">]</span>,</span>
-<span class="r-in">                         n_basis <span class="op">=</span> <span class="fl">15</span>,</span>
-<span class="r-in">                         lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">air</span><span class="op">$</span><span class="va">NO2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y1</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">60</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">y2</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="fl">91</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">mfdobj_x1</span> <span class="op">&lt;-</span> <span class="va">mfdobj_x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">60</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">mfdobj_x_tuning</span> <span class="op">&lt;-</span> <span class="va">mfdobj_x</span><span class="op">[</span><span class="fl">61</span><span class="op">:</span><span class="fl">90</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">mfdobj_x2</span> <span class="op">&lt;-</span> <span class="va">mfdobj_x</span><span class="op">[</span><span class="fl">91</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="sof_pc.html">sof_pc</a></span><span class="op">(</span><span class="va">y1</span>, <span class="va">mfdobj_x1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">cclist</span> <span class="op">&lt;-</span> <span class="fu">control_charts_sof_pc</span><span class="op">(</span>mod <span class="op">=</span> <span class="va">mod</span>,</span>
-<span class="r-in">                                y_test <span class="op">=</span> <span class="va">y2</span>,</span>
-<span class="r-in">                                mfdobj_x_test <span class="op">=</span> <span class="va">mfdobj_x2</span>,</span>
-<span class="r-in">                                mfdobj_x_tuning <span class="op">=</span> <span class="va">mfdobj_x_tuning</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="plot_control_charts.html">plot_control_charts</a></span><span class="op">(</span><span class="va">cclist</span><span class="op">)</span></span>
-<span class="r-plt img"><img src="control_charts_sof_pc-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co">#' library(funcharts)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">air</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">air</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">201</span><span class="op">:</span><span class="fl">300</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fun_covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CO"</span>, <span class="st">"temperature"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span><span class="op">[</span><span class="va">fun_covariates</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                         n_basis <span class="op">=</span> <span class="fl">15</span>,</span></span>
+<span class="r-in"><span>                         lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">air</span><span class="op">$</span><span class="va">NO2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y1</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">60</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">y2</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="fl">91</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj_x1</span> <span class="op">&lt;-</span> <span class="va">mfdobj_x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">60</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj_x_tuning</span> <span class="op">&lt;-</span> <span class="va">mfdobj_x</span><span class="op">[</span><span class="fl">61</span><span class="op">:</span><span class="fl">90</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj_x2</span> <span class="op">&lt;-</span> <span class="va">mfdobj_x</span><span class="op">[</span><span class="fl">91</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="sof_pc.html">sof_pc</a></span><span class="op">(</span><span class="va">y1</span>, <span class="va">mfdobj_x1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cclist</span> <span class="op">&lt;-</span> <span class="fu">control_charts_sof_pc</span><span class="op">(</span>mod <span class="op">=</span> <span class="va">mod</span>,</span></span>
+<span class="r-in"><span>                                y_test <span class="op">=</span> <span class="va">y2</span>,</span></span>
+<span class="r-in"><span>                                mfdobj_x_test <span class="op">=</span> <span class="va">mfdobj_x2</span>,</span></span>
+<span class="r-in"><span>                                mfdobj_x_tuning <span class="op">=</span> <span class="va">mfdobj_x_tuning</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot_control_charts.html">plot_control_charts</a></span><span class="op">(</span><span class="va">cclist</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -251,7 +316,7 @@ corresponding to <code>mfdobj_x_new</code>,
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

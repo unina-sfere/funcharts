@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
       </span>
     </div>
 
@@ -36,6 +36,9 @@
     </li>
     <li>
       <a href="../articles/centofanti2021.html">centofanti2021</a>
+    </li>
+    <li>
+      <a href="../articles/colosimo2010.html">colosimo2010</a>
     </li>
     <li>
       <a href="../articles/mfd.html">mfd</a>
@@ -69,7 +72,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">rbind_mfd</span><span class="op">(</span><span class="va">mfdobj1</span>, <span class="va">mfdobj2</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rbind_mfd</span><span class="op">(</span><span class="va">mfdobj1</span>, <span class="va">mfdobj2</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -77,29 +80,34 @@
     <dl><dt>mfdobj1</dt>
 <dd><p>An object of class mfd, with the same variables of mfdobj2
 and different replication names with respect to mfdobj2.</p></dd>
+
+
 <dt>mfdobj2</dt>
 <dd><p>An object of class mfd, with the same variables of mfdobj1,
 and different replication names with respect to mfdobj1.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An object of class mfd, whose variables are the same of mfdobj1 and
+    
+
+<p>An object of class mfd, whose variables are the same of mfdobj1 and
 mfdobj2 and whose replications are the union of the replications
 in mfdobj1 and mfdobj2.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mfdobj1</span> <span class="op">&lt;-</span> <span class="fu"><a href="data_sim_mfd.html">data_sim_mfd</a></span><span class="op">(</span>nvar <span class="op">=</span> <span class="fl">3</span>, nobs <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mfdobj2</span> <span class="op">&lt;-</span> <span class="fu"><a href="data_sim_mfd.html">data_sim_mfd</a></span><span class="op">(</span>nvar <span class="op">=</span> <span class="fl">3</span>, nobs <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span><span class="va">mfdobj2</span><span class="op">$</span><span class="va">coefs</span><span class="op">)</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">mfdobj2</span><span class="op">$</span><span class="va">fdnames</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rep11"</span>, <span class="st">"rep12"</span>, <span class="st">"rep13"</span>, <span class="st">"rep14"</span>, <span class="st">"rep15"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mfdobj_rbind</span> <span class="op">&lt;-</span> <span class="fu">rbind_mfd</span><span class="op">(</span><span class="va">mfdobj1</span>, <span class="va">mfdobj2</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="plot_mfd.html">plot_mfd</a></span><span class="op">(</span><span class="va">mfdobj_rbind</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj1</span> <span class="op">&lt;-</span> <span class="fu"><a href="data_sim_mfd.html">data_sim_mfd</a></span><span class="op">(</span>nvar <span class="op">=</span> <span class="fl">3</span>, nobs <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj2</span> <span class="op">&lt;-</span> <span class="fu"><a href="data_sim_mfd.html">data_sim_mfd</a></span><span class="op">(</span>nvar <span class="op">=</span> <span class="fl">3</span>, nobs <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span><span class="va">mfdobj2</span><span class="op">$</span><span class="va">coefs</span><span class="op">)</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">mfdobj2</span><span class="op">$</span><span class="va">fdnames</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rep11"</span>, <span class="st">"rep12"</span>, <span class="st">"rep13"</span>, <span class="st">"rep14"</span>, <span class="st">"rep15"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj_rbind</span> <span class="op">&lt;-</span> <span class="fu">rbind_mfd</span><span class="op">(</span><span class="va">mfdobj1</span>, <span class="va">mfdobj2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot_mfd.html">plot_mfd</a></span><span class="op">(</span><span class="va">mfdobj_rbind</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="rbind_mfd-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -114,7 +122,7 @@ in mfdobj1 and mfdobj2.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

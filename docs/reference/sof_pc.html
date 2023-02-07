@@ -27,7 +27,7 @@ See Capezza et al. (2020) for additional details."><!-- mathjax --><script src="
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
       </span>
     </div>
 
@@ -46,6 +46,9 @@ See Capezza et al. (2020) for additional details."><!-- mathjax --><script src="
     </li>
     <li>
       <a href="../articles/centofanti2021.html">centofanti2021</a>
+    </li>
+    <li>
+      <a href="../articles/colosimo2010.html">colosimo2010</a>
     </li>
     <li>
       <a href="../articles/mfd.html">mfd</a>
@@ -89,14 +92,14 @@ See Capezza et al. (2020) for additional details.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">sof_pc</span><span class="op">(</span>
-  <span class="va">y</span>,
-  <span class="va">mfdobj_x</span>,
-  tot_variance_explained <span class="op">=</span> <span class="fl">0.9</span>,
-  selection <span class="op">=</span> <span class="st">"variance"</span>,
-  single_min_variance_explained <span class="op">=</span> <span class="fl">0</span>,
-  components <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sof_pc</span><span class="op">(</span></span>
+<span>  <span class="va">y</span>,</span>
+<span>  <span class="va">mfdobj_x</span>,</span>
+<span>  tot_variance_explained <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span>  selection <span class="op">=</span> <span class="st">"variance"</span>,</span>
+<span>  single_min_variance_explained <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  components <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -104,9 +107,13 @@ See Capezza et al. (2020) for additional details.</p>
     <dl><dt>y</dt>
 <dd><p>A numeric vector containing the observations of the
 scalar response variable.</p></dd>
+
+
 <dt>mfdobj_x</dt>
 <dd><p>A multivariate functional data object of class mfd
 denoting the functional covariates.</p></dd>
+
+
 <dt>tot_variance_explained</dt>
 <dd><p>The minimum fraction of variance
 that has to be explained
@@ -114,6 +121,8 @@ by the set of multivariate functional principal components
 retained into the MFPCA model
 fitted on the functional covariates.
 Default is 0.9.</p></dd>
+
+
 <dt>selection</dt>
 <dd><p>A character value with one of three possible values:</p>
 <p>if "variance", the first M multivariate functional principal components
@@ -133,6 +142,8 @@ This criterion is used in Capezza et al. (2020).</p>
 but the "PRESS" statistic is substituted by the
 generalized cross-validation (GCV) score.</p>
 <p>Default value is "variance".</p></dd>
+
+
 <dt>single_min_variance_explained</dt>
 <dd><p>The minimum fraction of variance
 that has to be explained
@@ -140,6 +151,8 @@ by each multivariate functional principal component into the
 MFPCA model fitted
 on the functional covariates such that it is retained into the MFPCA model.
 Default is 0.</p></dd>
+
+
 <dt>components</dt>
 <dd><p>A vector of integers with the components over which
 to project the functional covariates.
@@ -147,31 +160,52 @@ If this is not NULL, the criteria to select components are ignored.
 If NULL, components are selected according to
 the criterion defined by <code>selection</code>.
 Default is NULL.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a list containing the following arguments:
-* <code>mod</code>: an object of class <code>lm</code> that is a linear regression
+    
+
+<p>a list containing the following arguments:</p>
+
+
+<p>* <code>mod</code>: an object of class <code>lm</code> that is a linear regression
 model where
 the scalar response variable is <code>y</code> and
 the covariates are the MFPCA scores of the functional covariates,
 * <code>mod$coefficients</code> contains the matrix of coefficients of the
-functional regression basis functions,
-* <code>pca</code>: an object of class <code>pca_mfd</code> obtained by doing MFPCA
-on the functional covariates,
-* <code>beta_fd</code>: an object of class <code>mfd</code> object containing
+functional regression basis functions,</p>
+
+
+<p>* <code>pca</code>: an object of class <code>pca_mfd</code> obtained by doing MFPCA
+on the functional covariates,</p>
+
+
+<p>* <code>beta_fd</code>: an object of class <code>mfd</code> object containing
 the functional regression coefficient
 \(\beta(t)\) estimated with the
-scalar-on-function linear regression model,
-* <code>components</code>: a vector of integers with the components
-selected in the <code>pca</code> model,
-* <code>selection</code>: the same as the provided argument
-* <code>single_min_variance_explained</code>: the same as the provided argument
-* <code>tot_variance_explained</code>: the same as the provided argument
-* <code>gcv</code>: a vector whose j-th element is the GCV score obtained
+scalar-on-function linear regression model,</p>
+
+
+<p>* <code>components</code>: a vector of integers with the components
+selected in the <code>pca</code> model,</p>
+
+
+<p>* <code>selection</code>: the same as the provided argument</p>
+
+
+<p>* <code>single_min_variance_explained</code>: the same as the provided argument</p>
+
+
+<p>* <code>tot_variance_explained</code>: the same as the provided argument</p>
+
+
+<p>* <code>gcv</code>: a vector whose j-th element is the GCV score obtained
 when retaining the first j components
-in the MFPCA model.
-* <code>PRESS</code>: a vector whose j-th element is the PRESS statistic
+in the MFPCA model.</p>
+
+
+<p>* <code>PRESS</code>: a vector whose j-th element is the PRESS statistic
 obtained when retaining the first j components
 in the MFPCA model.</p>
     </div>
@@ -188,14 +222,14 @@ on scalar-on-function regression.
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">air</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">air</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">fun_covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CO"</span>, <span class="st">"temperature"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mfdobj_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span><span class="op">[</span><span class="va">fun_covariates</span><span class="op">]</span>, lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">air</span><span class="op">$</span><span class="va">NO2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">sof_pc</span><span class="op">(</span><span class="va">y</span>, <span class="va">mfdobj_x</span><span class="op">)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">air</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">air</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fun_covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CO"</span>, <span class="st">"temperature"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span><span class="op">[</span><span class="va">fun_covariates</span><span class="op">]</span>, lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">air</span><span class="op">$</span><span class="va">NO2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">sof_pc</span><span class="op">(</span><span class="va">y</span>, <span class="va">mfdobj_x</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -210,7 +244,7 @@ on scalar-on-function regression.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

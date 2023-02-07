@@ -21,7 +21,7 @@ a fitted scalar-on-function linear regression model"><!-- mathjax --><script src
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
       </span>
     </div>
 
@@ -40,6 +40,9 @@ a fitted scalar-on-function linear regression model"><!-- mathjax --><script src
     </li>
     <li>
       <a href="../articles/centofanti2021.html">centofanti2021</a>
+    </li>
+    <li>
+      <a href="../articles/colosimo2010.html">colosimo2010</a>
     </li>
     <li>
       <a href="../articles/mfd.html">mfd</a>
@@ -77,7 +80,13 @@ a fitted scalar-on-function linear regression model</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">predict_sof_pc</span><span class="op">(</span><span class="va">object</span>, newdata <span class="op">=</span> <span class="cn">NULL</span>, alpha <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">predict_sof_pc</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  y_new <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mfdobj_x_new <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  <span class="va">newdata</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -85,54 +94,84 @@ a fitted scalar-on-function linear regression model</p>
     <dl><dt>object</dt>
 <dd><p>A list obtained as output from <code>sof_pc</code>,
 i.e. a fitted scalar-on-function linear regression model.</p></dd>
-<dt>newdata</dt>
+
+
+<dt>y_new</dt>
+<dd><p>A numeric vector containing the new observations of
+the scalar response variable
+to be predicted.</p></dd>
+
+
+<dt>mfdobj_x_new</dt>
 <dd><p>An object of class <code>mfd</code> containing
 new observations of the functional covariates.
 If NULL, it is set as the functional covariates data used for model fitting.</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>A numeric value indicating the Type I error
 for the regression control chart
 and such that this function returns the <code>1-alpha</code>
 prediction interval on the response.
 Default is 0.05.</p></dd>
+
+
+<dt>newdata</dt>
+<dd><p>Deprecated, use <code>mfdobj_x_new</code> argument.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.frame</code> with as many rows as the
+    
+
+<p>A <code>data.frame</code> with as many rows as the
 number of functional replications in <code>newdata</code>,
-with the following columns:
-* <code>fit</code>: the predictions of the response variable
-corresponding to <code>new_data</code>,
-* <code>lwr</code>:
+with the following columns:</p>
+
+
+<p>* <code>fit</code>: the predictions of the response variable
+corresponding to <code>new_data</code>,</p>
+
+
+<p>* <code>lwr</code>:
 lower limit of the <code>1-alpha</code> prediction interval
-on the response,
-* <code>upr</code>:
+on the response, based on the assumption that it is normally distributed.</p>
+
+
+<p>* <code>upr</code>:
 upper limit of the <code>1-alpha</code> prediction interval
-on the response.</p>
+on the response, based on the assumption that it is normally distributed.</p>
+
+
+<p>* <code>res</code>:
+the residuals obtained as the values of <code>y_new</code> minus their
+fitted values. If the scalar-on-function model has been fitted with
+<code>type_residual == "studentized"</code>, then the studentized residuals
+are calculated.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">air</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">air</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">fun_covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CO"</span>, <span class="st">"temperature"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mfdobj_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span><span class="op">[</span><span class="va">fun_covariates</span><span class="op">]</span>, lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">air</span><span class="op">$</span><span class="va">NO2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="sof_pc.html">sof_pc</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">mfdobj_x</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">predict_sof_pc</span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         fit      lwr      upr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  7.328329 7.238309 7.418348</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  7.363446 7.270688 7.456204</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  7.388644 7.305105 7.472182</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  7.359027 7.263627 7.454426</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  7.519710 7.427195 7.612224</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  7.453269 7.375114 7.531425</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  7.442536 7.358799 7.526274</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  7.446190 7.370298 7.522082</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  7.404424 7.326028 7.482819</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.384681 7.304250 7.465112</span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">air</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">air</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fun_covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CO"</span>, <span class="st">"temperature"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span><span class="op">[</span><span class="va">fun_covariates</span><span class="op">]</span>, lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">air</span><span class="op">$</span><span class="va">NO2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="sof_pc.html">sof_pc</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">mfdobj_x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">predict_sof_pc</span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         fit      lwr      upr      pred_err        y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  7.328329 7.238309 7.418348 -0.0183013627 7.310027</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  7.363446 7.270688 7.456204  0.0120441880 7.375490</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  7.388644 7.305105 7.472182 -0.0204670518 7.368177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  7.359027 7.263627 7.454426  0.0143399689 7.373367</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  7.519710 7.427195 7.612224  0.0052219043 7.524931</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  7.453269 7.375114 7.531425 -0.0099885559 7.443281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  7.442536 7.358799 7.526274 -0.0005674598 7.441969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  7.446190 7.370298 7.522082 -0.0194755345 7.426714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  7.404424 7.326028 7.482819  0.0447843608 7.449208</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.384681 7.304250 7.465112 -0.0075904572 7.377091</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -147,7 +186,7 @@ on the response.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

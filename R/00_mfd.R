@@ -1506,7 +1506,7 @@ get_mfd_array <- function(data_array,
     }) %>%
       bind_cols()
   ) %>%
-    mutate(id = factor(id, levels = ids))
+    mutate(id = factor(.data$id, levels = ids))
 
   fdObj <- mfd(coef = coef,
                basisobj = basisobj,
@@ -2041,9 +2041,9 @@ mfd_to_df_raw <- function(mfdobj) {
   dt %>%
     select(variables, !!id_var, !!arg_var) %>%
     rename(id = !!id_var) %>%
-    filter(id %in% !!obs) %>%
+    filter(.data$id %in% !!obs) %>%
     tidyr::pivot_longer(variables, names_to = "var") %>%
-    arrange(id, var, !!arg_var) %>%
+    arrange("id", "var", !!arg_var) %>%
     drop_na()
 }
 
@@ -2350,7 +2350,8 @@ lines_mfd <- function(plot_mfd_obj,
   # check obs names
   obs_names <- list()
   for (jj in seq_len(nvars)) {
-    obs_names[[jj]] <- unique(as.character(plot_mfd_obj[[1]]$layers[[1]]$data$id))
+    obs_names[[jj]] <-
+      unique(as.character(plot_mfd_obj[[1]]$layers[[1]]$data$id))
   }
   obs_names <- unique(unlist(obs_names))
   if (any(mfdobj_new$fdnames[[2]] %in% obs_names)) {

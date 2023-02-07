@@ -1,4 +1,4 @@
-#' Real-time T^2 and SPE control charts for multivariate functional data
+#' Real-time T2 and SPE control charts for multivariate functional data
 #'
 #' This function produces a list of data frames,
 #' each of them is produced by \code{\link{control_charts_pca}}
@@ -741,7 +741,7 @@ plot_control_charts_real_time <- function(cclist, id_num) {
   xmin <- cclist$range1[1]
   xmax <- max(cclist$range2)
 
-  cclist_id <- filter(cclist, id == unique(cclist$id)[id_num])
+  cclist_id <- filter(cclist, .data$id == unique(cclist$id)[id_num])
 
   kk_range <- range(cclist_id$kk)
   kk_seq <- seq(kk_range[1], kk_range[2], l = 1000)

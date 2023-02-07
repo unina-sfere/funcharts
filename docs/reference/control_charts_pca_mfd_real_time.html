@@ -21,7 +21,7 @@ each evolving up to an intermediate domain point."><!-- mathjax --><script src="
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
       </span>
     </div>
 
@@ -40,6 +40,9 @@ each evolving up to an intermediate domain point."><!-- mathjax --><script src="
     </li>
     <li>
       <a href="../articles/centofanti2021.html">centofanti2021</a>
+    </li>
+    <li>
+      <a href="../articles/colosimo2010.html">colosimo2010</a>
     </li>
     <li>
       <a href="../articles/mfd.html">mfd</a>
@@ -77,19 +80,20 @@ each evolving up to an intermediate domain point.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">control_charts_pca_mfd_real_time</span><span class="op">(</span>
-  <span class="va">pca_list</span>,
-  components_list <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">mfdobj_x_test</span>,
-  mfdobj_x_tuning <span class="op">=</span> <span class="cn">NULL</span>,
-  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>T2 <span class="op">=</span> <span class="fl">0.0125</span>, spe <span class="op">=</span> <span class="fl">0.0125</span><span class="op">)</span>,
-  limits <span class="op">=</span> <span class="st">"standard"</span>,
-  <span class="va">seed</span>,
-  nfold <span class="op">=</span> <span class="cn">NULL</span>,
-  tot_variance_explained <span class="op">=</span> <span class="fl">0.9</span>,
-  single_min_variance_explained <span class="op">=</span> <span class="fl">0</span>,
-  ncores <span class="op">=</span> <span class="fl">1</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">control_charts_pca_mfd_real_time</span><span class="op">(</span></span>
+<span>  <span class="va">pca_list</span>,</span>
+<span>  components_list <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">mfdobj_x_test</span>,</span>
+<span>  mfdobj_x_tuning <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  limits <span class="op">=</span> <span class="st">"standard"</span>,</span>
+<span>  <span class="va">seed</span>,</span>
+<span>  nfold <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tot_variance_explained <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span>  single_min_variance_explained <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  absolute_error <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ncores <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -99,9 +103,13 @@ each evolving up to an intermediate domain point.</p>
 containing a list of multivariate functional principal component analysis
 models estimated
 on functional data each evolving up to an intermediate domain point.</p></dd>
+
+
 <dt>components_list</dt>
 <dd><p>A list of components given as input to <code><a href="pca_mfd.html">pca_mfd</a></code>
 for each intermediate domain point.</p></dd>
+
+
 <dt>mfdobj_x_test</dt>
 <dd><p>A list created using
 <code><a href="get_mfd_df_real_time.html">get_mfd_df_real_time</a></code> or
@@ -112,6 +120,8 @@ with observations of the multivariate functional data.
 The length of this list and <code>pca_list</code> must be equal,
 and their elements in the same position in the list
 must correspond to the same intermediate domain point.</p></dd>
+
+
 <dt>mfdobj_x_tuning</dt>
 <dd><p>A list created using
 <code><a href="get_mfd_df_real_time.html">get_mfd_df_real_time</a></code> or
@@ -126,25 +136,46 @@ If NULL, the training data, i.e. the functional data
 in <code>pca_list</code>,
 are also used as the tuning data set.
 Default is NULL.</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>See <code><a href="control_charts_pca.html">control_charts_pca</a></code>.</p></dd>
+
+
 <dt>limits</dt>
 <dd><p>See <code><a href="control_charts_pca.html">control_charts_pca</a></code>.</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>Deprecated: See <code><a href="control_charts_pca.html">control_charts_pca</a></code>.</p></dd>
+
+
 <dt>nfold</dt>
 <dd><p>See <code><a href="control_charts_pca.html">control_charts_pca</a></code>.</p></dd>
+
+
 <dt>tot_variance_explained</dt>
 <dd><p>See <code><a href="control_charts_pca.html">control_charts_pca</a></code>.</p></dd>
+
+
 <dt>single_min_variance_explained</dt>
 <dd><p>See <code><a href="control_charts_pca.html">control_charts_pca</a></code>.</p></dd>
+
+
+<dt>absolute_error</dt>
+<dd><p>See <code><a href="control_charts_pca.html">control_charts_pca</a></code>.</p></dd>
+
+
 <dt>ncores</dt>
 <dd><p>If you want parallelization, give the number of cores/threads
 to be used when creating objects separately for different instants.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of <code>data.frame</code>s each
+    
+
+<p>A list of <code>data.frame</code>s each
 produced by <code><a href="control_charts_pca.html">control_charts_pca</a></code>,
 corresponding to a given instant.</p>
     </div>
@@ -155,27 +186,27 @@ corresponding to a given instant.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">air1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">air</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">air2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">air</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">9</span><span class="op">:</span><span class="fl">10</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mfdobj_x1_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mfd_list_real_time.html">get_mfd_list_real_time</a></span><span class="op">(</span><span class="va">air1</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CO"</span>, <span class="st">"temperature"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span class="r-in">                                         n_basis <span class="op">=</span> <span class="fl">15</span>,</span>
-<span class="r-in">                                         lambda <span class="op">=</span> <span class="fl">1e-2</span>,</span>
-<span class="r-in">                                         k_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mfdobj_x2_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mfd_list_real_time.html">get_mfd_list_real_time</a></span><span class="op">(</span><span class="va">air2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CO"</span>, <span class="st">"temperature"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span class="r-in">                                         n_basis <span class="op">=</span> <span class="fl">15</span>,</span>
-<span class="r-in">                                         lambda <span class="op">=</span> <span class="fl">1e-2</span>,</span>
-<span class="r-in">                                         k_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pca_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="pca_mfd_real_time.html">pca_mfd_real_time</a></span><span class="op">(</span><span class="va">mfdobj_x1_list</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">cclist</span> <span class="op">&lt;-</span> <span class="fu">control_charts_pca_mfd_real_time</span><span class="op">(</span></span>
-<span class="r-in">  pca_list <span class="op">=</span> <span class="va">pca_list</span>,</span>
-<span class="r-in">  components_list <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
-<span class="r-in">  mfdobj_x_test <span class="op">=</span> <span class="va">mfdobj_x2_list</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="plot_control_charts_real_time.html">plot_control_charts_real_time</a></span><span class="op">(</span><span class="va">cclist</span>, <span class="fl">1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">air1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">air</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">air2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">air</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">9</span><span class="op">:</span><span class="fl">10</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj_x1_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mfd_list_real_time.html">get_mfd_list_real_time</a></span><span class="op">(</span><span class="va">air1</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CO"</span>, <span class="st">"temperature"</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                                         n_basis <span class="op">=</span> <span class="fl">15</span>,</span></span>
+<span class="r-in"><span>                                         lambda <span class="op">=</span> <span class="fl">1e-2</span>,</span></span>
+<span class="r-in"><span>                                         k_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj_x2_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mfd_list_real_time.html">get_mfd_list_real_time</a></span><span class="op">(</span><span class="va">air2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CO"</span>, <span class="st">"temperature"</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                                         n_basis <span class="op">=</span> <span class="fl">15</span>,</span></span>
+<span class="r-in"><span>                                         lambda <span class="op">=</span> <span class="fl">1e-2</span>,</span></span>
+<span class="r-in"><span>                                         k_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pca_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="pca_mfd_real_time.html">pca_mfd_real_time</a></span><span class="op">(</span><span class="va">mfdobj_x1_list</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">cclist</span> <span class="op">&lt;-</span> <span class="fu">control_charts_pca_mfd_real_time</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  pca_list <span class="op">=</span> <span class="va">pca_list</span>,</span></span>
+<span class="r-in"><span>  components_list <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span></span>
+<span class="r-in"><span>  mfdobj_x_test <span class="op">=</span> <span class="va">mfdobj_x2_list</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot_control_charts_real_time.html">plot_control_charts_real_time</a></span><span class="op">(</span><span class="va">cclist</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="control_charts_pca_mfd_real_time-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -190,7 +221,7 @@ corresponding to a given instant.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
       </span>
     </div>
 
@@ -54,6 +54,9 @@
     </li>
     <li>
       <a href="../articles/centofanti2021.html">centofanti2021</a>
+    </li>
+    <li>
+      <a href="../articles/colosimo2010.html">colosimo2010</a>
     </li>
     <li>
       <a href="../articles/mfd.html">mfd</a>
@@ -104,38 +107,33 @@ text-align: justify}
 <p>In this vignette we show how to use the <code>funcharts</code>
 package to apply the methods proposed in Centofanti et al. (2021) to
 build the functional regression control chart to monitor a functional
-quality characteristic adjusted for by multivariate functional
-covariates. Let us show how the <code>funcharts</code> package works
-through an example with the dataset <code>air</code>, which has been
-included from the R package <code>FRegSigCom</code> and is used in the
-paper of Qi and Luo (2019). The authors propose a function-on-function
-regression model of the <code>NO2</code> functional variable on all the
-other functional variables available in the dataset.</p>
-<p>NOTE: since the objective of this vignette is only to illustrate how
-the package works, in the following we will use only 15 basis functions
-and a fixed smoothing parameter to reduce the computational time.</p>
+quality characteristic adjusted for by the effect of multivariate
+functional covariates. Let us show how the <code>funcharts</code>
+package works through an example with the dataset <code>air</code>,
+which has been included from the R package <code>FRegSigCom</code> and
+is used in the paper of Qi and Luo (2019). The authors propose a
+function-on-function regression model of the <code>NO2</code> functional
+variable on all the other functional variables available in the
+dataset.</p>
 <p>First of all, starting from the discrete data, let us build the
 multivariate functional data objects of class <code>mfd</code>, see
 <code><a href="../articles/mfd.html">vignette("mfd")</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span>
-<span class="va">fun_covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">air</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">air</span><span class="op">)</span> <span class="op">!=</span> <span class="st">"NO2"</span><span class="op">]</span>
-<span class="va">mfdobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span>,
-                       grid <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">24</span>,
-                       n_basis <span class="op">=</span> <span class="fl">15</span>,
-                       lambda <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span>
-<span class="va">mfdobj_y</span> <span class="op">&lt;-</span> <span class="va">mfdobj</span><span class="op">[</span>, <span class="st">"NO2"</span><span class="op">]</span>
-<span class="va">mfdobj_x</span> <span class="op">&lt;-</span> <span class="va">mfdobj</span><span class="op">[</span>, <span class="va">fun_covariates</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span></span>
+<span><span class="va">fun_covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">air</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">air</span><span class="op">)</span> <span class="op">!=</span> <span class="st">"NO2"</span><span class="op">]</span></span>
+<span><span class="va">mfdobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_mfd_list.html">get_mfd_list</a></span><span class="op">(</span><span class="va">air</span>, grid <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">24</span><span class="op">)</span></span>
+<span><span class="va">mfdobj_y</span> <span class="op">&lt;-</span> <span class="va">mfdobj</span><span class="op">[</span>, <span class="st">"NO2"</span><span class="op">]</span></span>
+<span><span class="va">mfdobj_x</span> <span class="op">&lt;-</span> <span class="va">mfdobj</span><span class="op">[</span>, <span class="va">fun_covariates</span><span class="op">]</span></span></code></pre></div>
 <p>In order to perform the statistical process monitoring analysis, we
 divide the data set into a phase I and a phase II dataset.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rows1</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">300</span>
-<span class="va">rows2</span> <span class="op">&lt;-</span> <span class="fl">301</span><span class="op">:</span><span class="fl">355</span>
-<span class="va">mfdobj_x1</span> <span class="op">&lt;-</span> <span class="va">mfdobj_x</span><span class="op">[</span><span class="va">rows1</span><span class="op">]</span>
-<span class="va">mfdobj_x2</span> <span class="op">&lt;-</span> <span class="va">mfdobj_x</span><span class="op">[</span><span class="va">rows2</span><span class="op">]</span>
-<span class="va">mfdobj_y1</span> <span class="op">&lt;-</span> <span class="va">mfdobj_y</span><span class="op">[</span><span class="va">rows1</span><span class="op">]</span>
-<span class="va">mfdobj_y2</span> <span class="op">&lt;-</span> <span class="va">mfdobj_y</span><span class="op">[</span><span class="va">rows2</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rows1</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">300</span></span>
+<span><span class="va">rows2</span> <span class="op">&lt;-</span> <span class="fl">301</span><span class="op">:</span><span class="fl">355</span></span>
+<span><span class="va">mfdobj_x1</span> <span class="op">&lt;-</span> <span class="va">mfdobj_x</span><span class="op">[</span><span class="va">rows1</span><span class="op">]</span></span>
+<span><span class="va">mfdobj_x2</span> <span class="op">&lt;-</span> <span class="va">mfdobj_x</span><span class="op">[</span><span class="va">rows2</span><span class="op">]</span></span>
+<span><span class="va">mfdobj_y1</span> <span class="op">&lt;-</span> <span class="va">mfdobj_y</span><span class="op">[</span><span class="va">rows1</span><span class="op">]</span></span>
+<span><span class="va">mfdobj_y2</span> <span class="op">&lt;-</span> <span class="va">mfdobj_y</span><span class="op">[</span><span class="va">rows2</span><span class="op">]</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="function-on-function-regression-based-on-principal-components">Function-on-function regression based on principal components<a class="anchor" aria-label="anchor" href="#function-on-function-regression-based-on-principal-components"></a>
 </h3>
@@ -151,7 +149,7 @@ arguments <code>tot_variance_explained_x</code>,
 also set the type_residuals in order to choose between standard
 residuals and studentized residuals (see Centofanti et al. (2021)).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mod_fof</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fof_pc.html">fof_pc</a></span><span class="op">(</span>mfdobj_y <span class="op">=</span> <span class="va">mfdobj_y1</span>, mfdobj_x <span class="op">=</span> <span class="va">mfdobj_x1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mod_fof</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fof_pc.html">fof_pc</a></span><span class="op">(</span>mfdobj_y <span class="op">=</span> <span class="va">mfdobj_y1</span>, mfdobj_x <span class="op">=</span> <span class="va">mfdobj_x1</span><span class="op">)</span></span></code></pre></div>
 <p>As a result you get a list with the original data used for model
 estimation, the result of applying <code>pca_mfd</code> on the
 multivariate functional covariates, the functional response, and the
@@ -160,8 +158,8 @@ is possible to plot the estimated functional regression coefficients,
 which is a bivariate functional data object of class <code>bifd</code>
 using the function <code>plot_bifd</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot_bifd.html">plot_bifd</a></span><span class="op">(</span><span class="va">mod_fof</span><span class="op">$</span><span class="va">beta_fd</span><span class="op">)</span></code></pre></div>
-<p><img src="centofanti2021-plot_bifd-1.png" title="plot of chunk plot_bifd" alt="plot of chunk plot_bifd" style="display:block; margin: auto"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_bifd.html">plot_bifd</a></span><span class="op">(</span><span class="va">mod_fof</span><span class="op">$</span><span class="va">beta_fd</span><span class="op">)</span></span></code></pre></div>
+<p><img src="centofanti2021-plot_bifd-1.png" alt="plot of chunk plot_bifd" style="display:block; margin: auto"></p>
 </div>
 <div class="section level3">
 <h3 id="plotting-the-functional-regression-control-chart">Plotting the functional regression control chart<a class="anchor" aria-label="anchor" href="#plotting-the-functional-regression-control-chart"></a>
@@ -177,91 +175,82 @@ limits are calculated on the basis of the training data. The arguments
 <code>mfdobj_y_new</code> and <code>mfdobj_x_new</code> contain the
 phase II data set of observations of the functional response and
 multivariate functional covariates that are to be monitored with the
-control charts. The function <code>plot_control_charts</code> returns a
-ggplot with the control charts.</p>
+control charts. The function <code>plot_control_charts</code> plots the
+control charts.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">frcc_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/regr_cc_fof.html">regr_cc_fof</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod_fof</span>,
-                       mfdobj_y_new <span class="op">=</span> <span class="va">mfdobj_y2</span>,
-                       mfdobj_x_new <span class="op">=</span> <span class="va">mfdobj_x2</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plot_control_charts.html">plot_control_charts</a></span><span class="op">(</span><span class="va">frcc_df</span><span class="op">)</span></code></pre></div>
-<p><img src="centofanti2021-plot_control_charts-1.png" title="plot of chunk plot_control_charts" alt="plot of chunk plot_control_charts" style="display:block; margin: auto"></p>
+<code class="sourceCode R"><span><span class="va">frcc_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/regr_cc_fof.html">regr_cc_fof</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod_fof</span>,</span>
+<span>                       mfdobj_y_new <span class="op">=</span> <span class="va">mfdobj_y2</span>,</span>
+<span>                       mfdobj_x_new <span class="op">=</span> <span class="va">mfdobj_x2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot_control_charts.html">plot_control_charts</a></span><span class="op">(</span><span class="va">frcc_df</span><span class="op">)</span></span></code></pre></div>
+<p><img src="centofanti2021-plot_control_charts-1.png" alt="plot of chunk plot_control_charts" style="display:block; margin: auto"></p>
 <p>We can also plot the new functions to be monitored, against the
 reference training data set, by first using <code>predict_fof_pc</code>,
 which produces the prediction of new observations of the functional
 response given the new observations of the functional covariates, as
 well as the corresponding prediction error:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">y_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_fof_pc.html">predict_fof_pc</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod_fof</span>,
-                        mfdobj_y_new <span class="op">=</span> <span class="va">mfdobj_y2</span>,
-                        mfdobj_x_new <span class="op">=</span> <span class="va">mfdobj_x2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">y_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_fof_pc.html">predict_fof_pc</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod_fof</span>,</span>
+<span>                        mfdobj_y_new <span class="op">=</span> <span class="va">mfdobj_y2</span>,</span>
+<span>                        mfdobj_x_new <span class="op">=</span> <span class="va">mfdobj_x2</span><span class="op">)</span></span></code></pre></div>
 <p>and then using <code>plot_mon</code> to plot a given observation
 against the reference data set of prediction errors/residuals used to
 estimate the control chart limits. Here for example we consider the
-observation 54</p>
+observation 28</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot_mon.html">plot_mon</a></span><span class="op">(</span>cclist <span class="op">=</span> <span class="va">frcc_df</span>,
-         fd_train <span class="op">=</span> <span class="va">mod_fof</span><span class="op">$</span><span class="va">residuals</span>,
-         fd_test <span class="op">=</span> <span class="va">y_hat</span><span class="op">$</span><span class="va">pred_error</span><span class="op">[</span><span class="fl">54</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<p><img src="centofanti2021-plot_mon-1.png" title="plot of chunk plot_mon" alt="plot of chunk plot_mon" style="display:block; margin: auto"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_mon.html">plot_mon</a></span><span class="op">(</span>cclist <span class="op">=</span> <span class="va">frcc_df</span>,</span>
+<span>         fd_train <span class="op">=</span> <span class="va">mod_fof</span><span class="op">$</span><span class="va">residuals</span>,</span>
+<span>         fd_test <span class="op">=</span> <span class="va">y_hat</span><span class="op">$</span><span class="va">pred_error</span><span class="op">[</span><span class="fl">28</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<p><img src="centofanti2021-plot_mon-1.png" alt="plot of chunk plot_mon" style="display:block; margin: auto"></p>
 </div>
 <div class="section level3">
 <h3 id="real-time-functional-regression-control-chart">Real-time functional regression control chart<a class="anchor" aria-label="anchor" href="#real-time-functional-regression-control-chart"></a>
 </h3>
-<p>As for the scalar-on-function case shown in Capezza et al. (2020), we
-also provide the real-time version of the functional regression control
-chart. Given the domain interval <span class="math inline">\((a,
-b)\)</span> of the functional data, for each current domain point <span class="math inline">\(k\)</span> to be monitored, it filters the
+<p>The <code>funcharts</code> package also provides the real-time
+version of the functional regression control chart. Given the domain
+interval <span class="math inline">\((a, b)\)</span> of the functional
+data, for each current domain point <span class="math inline">\(k\)</span> to be monitored, it filters the
 available functional data in the interval <span class="math inline">\((a,k)\)</span>. The function
 <code>get_mfd_list_real_time</code> gives a list of functional data
 objects each evolving up to the intermediate domain point <span class="math inline">\(k\)</span>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mfd_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_mfd_list_real_time.html">get_mfd_list_real_time</a></span><span class="op">(</span>data_list <span class="op">=</span> <span class="va">air</span>,
-                                   grid <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">24</span>,
-                                   n_basis <span class="op">=</span> <span class="fl">15</span>,
-                                   lambda <span class="op">=</span> <span class="fl">1e-2</span>,
-                                   k_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">7</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">mfd_list_x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mfd_list</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="va">rows1</span>, <span class="va">fun_covariates</span><span class="op">]</span><span class="op">)</span>
-<span class="va">mfd_list_x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mfd_list</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="va">rows2</span>, <span class="va">fun_covariates</span><span class="op">]</span><span class="op">)</span>
-<span class="va">mfd_list_y1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mfd_list</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="va">rows1</span>, <span class="st">"NO2"</span><span class="op">]</span><span class="op">)</span>
-<span class="va">mfd_list_y2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mfd_list</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="va">rows2</span>, <span class="st">"NO2"</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mfd_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_mfd_list_real_time.html">get_mfd_list_real_time</a></span><span class="op">(</span>data_list <span class="op">=</span> <span class="va">air</span>, grid <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">24</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mfd_list_x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mfd_list</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="va">rows1</span>, <span class="va">fun_covariates</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">mfd_list_x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mfd_list</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="va">rows2</span>, <span class="va">fun_covariates</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">mfd_list_y1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mfd_list</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="va">rows1</span>, <span class="st">"NO2"</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">mfd_list_y2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mfd_list</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="va">rows2</span>, <span class="st">"NO2"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p>Then, the function <code>fof_pc_real_time</code> applies the function
 <code>fof_pc</code> to each element in <code>mfd_list_x1</code> and
 <code>mfd_list_x2</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mod_fof_pc_real_time_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fof_pc_real_time.html">fof_pc_real_time</a></span><span class="op">(</span>
-  mfdobj_y_list <span class="op">=</span> <span class="va">mfd_list_y1</span>,
-  mfdobj_x_list <span class="op">=</span> <span class="va">mfd_list_x1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mod_fof_pc_real_time_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fof_pc_real_time.html">fof_pc_real_time</a></span><span class="op">(</span></span>
+<span>  mfdobj_y_list <span class="op">=</span> <span class="va">mfd_list_y1</span>,</span>
+<span>  mfdobj_x_list <span class="op">=</span> <span class="va">mfd_list_x1</span><span class="op">)</span></span></code></pre></div>
 <p>Then, we can use <code>control_charts_fof_pc_real_time</code> to
 apply <code>control_charts_fof_pc</code> to each element in
 <code>mod_fof_pc_real_time_list</code> and produce control charts for
 the phase II data <code>mfd_list_y2</code> and
 <code>mfd_list_x2</code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cc_list_real_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/regr_cc_fof_real_time.html">regr_cc_fof_real_time</a></span><span class="op">(</span>
-  mod_list <span class="op">=</span> <span class="va">mod_fof_pc_real_time_list</span>,
-  mfdobj_y_new_list <span class="op">=</span> <span class="va">mfd_list_y2</span>,
-  mfdobj_x_new_list <span class="op">=</span> <span class="va">mfd_list_x2</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">cc_list_real_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/regr_cc_fof_real_time.html">regr_cc_fof_real_time</a></span><span class="op">(</span></span>
+<span>  mod_list <span class="op">=</span> <span class="va">mod_fof_pc_real_time_list</span>,</span>
+<span>  mfdobj_y_new_list <span class="op">=</span> <span class="va">mfd_list_y2</span>,</span>
+<span>  mfdobj_x_new_list <span class="op">=</span> <span class="va">mfd_list_x2</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Finally, we can plot the real-time control charts for a single
 observations, giving for each <span class="math inline">\(k\)</span> the
 monitoring statistics calculated on the data observed in <span class="math inline">\((a, k)\)</span>. Here follows an example showing
 the real time control charts for a single phase II observation (id
-number 54).</p>
+number 28).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot_control_charts_real_time.html">plot_control_charts_real_time</a></span><span class="op">(</span><span class="va">cc_list_real_time</span>, id_num <span class="op">=</span> <span class="fl">54</span><span class="op">)</span></code></pre></div>
-<p><img src="centofanti2021-plot_control_charts_real_time-1.png" title="plot of chunk plot_control_charts_real_time" alt="plot of chunk plot_control_charts_real_time" style="display:block; margin: auto"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_control_charts_real_time.html">plot_control_charts_real_time</a></span><span class="op">(</span><span class="va">cc_list_real_time</span>, id_num <span class="op">=</span> <span class="fl">28</span><span class="op">)</span></span></code></pre></div>
+<p><img src="centofanti2021-plot_control_charts_real_time-1.png" alt="plot of chunk plot_control_charts_real_time" style="display:block; margin: auto"></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <ul>
-<li>Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
-Control charts for monitoring ship operating conditions and CO2
-emissions based on scalar-on-function regression. <em>Applied Stochastic
-Models in Business and Industry</em>, 36(3):477–500. <a href="https://doi.org/10.1002/asmb.2507" class="external-link uri">https://doi.org/10.1002/asmb.2507</a>
-</li>
 <li>Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 Functional Regression Control Chart. <em>Technometrics</em>, 63(3),
 281–294. <a href="https://doi.org/10.1080/00401706.2020.1753581" class="external-link uri">https://doi.org/10.1080/00401706.2020.1753581</a>
@@ -291,7 +280,7 @@ with multiple predictor curves. <em>Statistica Sinica</em>, 29:719–739.
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

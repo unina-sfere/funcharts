@@ -1,7 +1,7 @@
-#' T^2 and SPE control charts for multivariate functional data
+#' T2 and SPE control charts for multivariate functional data
 #'
 #' This function builds a data frame needed to plot
-#' the Hotelling's T^2 and squared prediction error (SPE)
+#' the Hotelling's T2 and squared prediction error (SPE)
 #' control charts
 #' based on multivariate functional principal component analysis
 #' (MFPCA) performed
@@ -32,7 +32,7 @@
 #' @param tuning_data
 #' An object of class \code{mfd} containing
 #' the tuning set of the multivariate functional data, used to estimate the
-#' T^2 and SPE control chart limits.
+#' T2 and SPE control chart limits.
 #' If NULL, the training data, i.e. the data used to fit the MFPCA model,
 #' are also used as the tuning data set, i.e. \code{tuning_data=pca$data}.
 #' Default is NULL.
@@ -108,11 +108,11 @@
 #' * one \code{id} column identifying the multivariate functional observation
 #' in the phase II data set,
 #'
-#' * one \code{T2} column containing the Hotelling T^2 statistic
+#' * one \code{T2} column containing the Hotelling T2 statistic
 #' calculated for all observations,
 #'
 #' * one column per each functional variable,
-#' containing its contribution to the T^2 statistic,
+#' containing its contribution to the T2 statistic,
 #'
 #' * one \code{spe} column containing the SPE statistic calculated
 #' for all observations,
@@ -121,12 +121,12 @@
 #' containing its contribution to the SPE statistic,
 #'
 #' * \code{T2_lim} gives the upper control limit of
-#' the Hotelling's T^2 control chart,
+#' the Hotelling's T2 control chart,
 #'
 #' * one \code{contribution_T2_*_lim} column per each
 #' functional variable giving the
 #' limits of the contribution of that variable
-#' to the Hotelling's T^2 statistic,
+#' to the Hotelling's T2 statistic,
 #'
 #' * \code{spe_lim} gives the upper control limit of the SPE control chart
 #'
@@ -276,7 +276,7 @@ control_charts_pca <- function(pca,
 #'
 #' In particular, this function provides:
 #'
-#' * the Hotelling's T^2 control chart,
+#' * the Hotelling's T2 control chart,
 #'
 #' * the squared prediction error (SPE) control chart,
 #'
@@ -306,7 +306,7 @@ control_charts_pca <- function(pca,
 #' @param mfdobj_x_tuning
 #' An object of class \code{mfd} containing
 #' the tuning set of the multivariate functional data, used to estimate the
-#' T^2 and SPE control chart limits.
+#' T2 and SPE control chart limits.
 #' If NULL, the training data, i.e. the data used to fit the MFPCA model,
 #' are also used as the tuning data set, i.e. \code{tuning_data=pca$data}.
 #' Default is NULL.
@@ -315,7 +315,7 @@ control_charts_pca <- function(pca,
 #' and code{y},
 #' respectively, each containing
 #' the desired Type I error probability of the corresponding control chart
-#' (\code{T2} corresponds to the T^2 control chart,
+#' (\code{T2} corresponds to the T2 control chart,
 #' \code{spe}  corresponds to the SPE control chart,
 #' \code{y} corresponds to the scalar regression control chart).
 #' Note that at the moment you have to take into account manually
@@ -356,11 +356,11 @@ control_charts_pca <- function(pca,
 #' * one \code{id} column identifying the multivariate functional observation
 #' in the phase II data set,
 #'
-#' * one \code{T2} column containing the Hotelling T^2 statistic calculated
+#' * one \code{T2} column containing the Hotelling T2 statistic calculated
 #' for all observations,
 #'
 #' * one column per each functional variable, containing its contribution
-#' to the T^2 statistic,
+#' to the T2 statistic,
 #'
 #' * one \code{spe} column containing the SPE statistic calculated
 #' for all observations,
@@ -369,12 +369,12 @@ control_charts_pca <- function(pca,
 #' to the SPE statistic,
 #'
 #' * \code{T2_lim} gives the upper control limit of the
-#' Hotelling's T^2 control chart,
+#' Hotelling's T2 control chart,
 #'
 #' * one \code{contribution_T2_*_lim} column per each
 #' functional variable giving the
 #' limits of the contribution of that variable to the
-#' Hotelling's T^2 statistic,
+#' Hotelling's T2 statistic,
 #'
 #' * \code{spe_lim} gives the upper control limit of the SPE control chart
 #'
@@ -520,7 +520,7 @@ plot_control_charts <- function(cclist, nobsI = 0) {
                          ucl = cclist$T2_lim) %>%
       mutate(id = seq_len(n()),
              ooc = .data$statistic > .data$ucl,
-             type = "HOTELLING~T^2~CONTROL~CHART")
+             type = "HOTELLING~T2~CONTROL~CHART")
 
     hot_range <- df_hot %>%
       select(.data$statistic, .data$ucl, .data$lcl) %>%
@@ -589,7 +589,7 @@ plot_control_charts <- function(cclist, nobsI = 0) {
                            ucl = cclist$T2_lim_x) %>%
       mutate(id = seq_len(n()),
              ooc = .data$statistic > .data$ucl,
-             type = "HOTELLING~T^2~CONTROL~CHART~(COVARIATES)")
+             type = "HOTELLING~T2~CONTROL~CHART~(COVARIATES)")
 
     hot_range <- df_hot_x %>%
       select(.data$statistic, .data$ucl, .data$lcl) %>%
@@ -643,8 +643,8 @@ plot_control_charts <- function(cclist, nobsI = 0) {
                 data = filter(df_hot, .data$ooc),
                 size = 3) +
       xlab("Observation") +
-      ylab(expression(T^2~statistic)) +
-      ggtitle(expression(HOTELLING~T^2~CONTROL~CHART))
+      ylab(expression(T2~statistic)) +
+      ggtitle(expression(HOTELLING~T2~CONTROL~CHART))
   }
 
   if (!is.null(cclist$spe)) {
@@ -686,7 +686,8 @@ plot_control_charts <- function(cclist, nobsI = 0) {
   }
 
   if (!is.null(cclist$T2_x)) {
-    plot_list$p_hot_x <- ggplot(df_hot_x, aes(x = .data$id, y = .data$statistic)) +
+    plot_list$p_hot_x <- ggplot(df_hot_x, aes(x = .data$id,
+                                              y = .data$statistic)) +
       geom_line() +
       geom_point(aes(colour = .data$ooc)) +
       geom_blank(aes(y = 0)) +
@@ -700,15 +701,16 @@ plot_control_charts <- function(cclist, nobsI = 0) {
                 data = filter(df_hot_x, .data$ooc),
                 size = 3) +
       xlab("Observation") +
-      ylab(expression(T^2~statistic)) +
-      ggtitle(expression(HOTELLING~T^2~CONTROL~CHART~(COVARIATES)))
+      ylab(expression(T2~statistic)) +
+      ggtitle(expression(HOTELLING~T2~CONTROL~CHART~(COVARIATES)))
 
     plot_list$p_hot <- plot_list$p_hot +
-      ggtitle(expression(HOTELLING~T^2~CONTROL~CHART~(RESPONSE)))
+      ggtitle(expression(HOTELLING~T2~CONTROL~CHART~(RESPONSE)))
   }
 
   if (!is.null(cclist$spe_x)) {
-    plot_list$p_spe_x <- ggplot(df_spe_x, aes(x = .data$id, y = .data$statistic)) +
+    plot_list$p_spe_x <- ggplot(df_spe_x, aes(x = .data$id,
+                                              y = .data$statistic)) +
       geom_line() +
       geom_point(aes(colour = .data$ooc)) +
       geom_blank(aes(y = 0)) +
@@ -744,17 +746,17 @@ plot_control_charts <- function(cclist, nobsI = 0) {
     for (jj in seq_len(nplots)) {
       p[[jj]]$data$ooc[seq_len(nobsI)] <- "phase1"
       p[[jj]]$layers[[5]]$data <- p[[jj]]$layers[[5]]$data %>%
-        filter(id > nobsI) %>%
+        filter(.data$id > nobsI) %>%
         as.data.frame()
       p[[jj]] <- p[[jj]] +
         geom_point(aes_string(y = "ucl"),
                    pch = "-",
                    size = 5,
                    col = "grey",
-                   data = filter(p[[jj]]$data, id <= nobsI)) +
+                   data = filter(p[[jj]]$data, .data$id <= nobsI)) +
         geom_line(aes_string("id", "statistic"),
                   col = "grey",
-                  data = filter(p[[jj]]$data, id < nobsI))
+                  data = filter(p[[jj]]$data, .data$id < nobsI))
     }
     p <- p &
       geom_vline(aes(xintercept = nobsI + 1), lty = 2)
@@ -777,7 +779,7 @@ plot_control_charts <- function(cclist, nobsI = 0) {
 #' based on a fitted function-on-function linear regression model and
 #' proposed in Capezza et al. (2020).
 #' If \code{include_covariates} is \code{TRUE},
-#' it also plots the Hotelling's T^2 and
+#' it also plots the Hotelling's T2 and
 #' squared prediction error control charts built on the
 #' multivariate functional covariates.
 #'
@@ -1262,7 +1264,7 @@ regr_cc_fof <- function(object,
              "spe_x" = "spe",
              "T2_lim_x" = "T2_lim",
              "spe_lim_x" = "spe_lim")
-    ret <- cbind(ret, select(ret_covariates, -id))
+    ret <- cbind(ret, select(ret_covariates, -"id"))
   }
 
   return(ret)

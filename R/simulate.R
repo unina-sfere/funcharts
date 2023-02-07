@@ -268,7 +268,9 @@ simulate_mfd <- function(nobs = 1000,
                          shift_type_y = "0",
                          shift_type_x = c("0", "0", "0"),
                          correlation_type_y = "Bessel",
-                         correlation_type_x = c("Bessel", "Gaussian", "Exponential"),
+                         correlation_type_x = c("Bessel",
+                                                "Gaussian",
+                                                "Exponential"),
                          d_y = 0,
                          d_y_scalar = 0,
                          d_x = c(0, 0, 0),
@@ -286,9 +288,10 @@ simulate_mfd <- function(nobs = 1000,
                          seed) {
 
   if (!missing(seed)) {
-    warning(paste0("argument seed is deprecated; ",
-                   "please use set.seed() before calling simulate_mfd() instead."),
-            call. = FALSE)
+    warning(paste0(
+      "argument seed is deprecated; ",
+      "please use set.seed() before calling simulate_mfd() instead."),
+      call. = FALSE)
   }
 
   if (!(R2 > 0 & R2 < 1)) {
@@ -596,7 +599,8 @@ generate_cov_str <- function(p = 3,
     stop("correlation_type length must be equal to p.")
   }
   if (!all(correlation_type %in% c("Bessel", "Gaussian", "Exponential"))) {
-    stop("correlation_type admits only values \"Bessel\", \"Gaussian\" and \"Exponential\"")
+    stop("correlation_type admits only values
+         \"Bessel\", \"Gaussian\" and \"Exponential\"")
   }
 
   x_seq <- seq(0, 1, l = P)

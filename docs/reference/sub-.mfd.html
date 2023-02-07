@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
       </span>
     </div>
 
@@ -36,6 +36,9 @@
     </li>
     <li>
       <a href="../articles/centofanti2021.html">centofanti2021</a>
+    </li>
+    <li>
+      <a href="../articles/colosimo2010.html">colosimo2010</a>
     </li>
     <li>
       <a href="../articles/mfd.html">mfd</a>
@@ -77,6 +80,8 @@
     <h2>Arguments</h2>
     <dl><dt>mfdobj</dt>
 <dd><p>An object of class <code>mfd</code>.</p></dd>
+
+
 <dt>i</dt>
 <dd><p>Index specifying functional observations to extract or replace.
 They can be numeric, character,
@@ -89,6 +94,8 @@ Logical vectors indicate TRUE for the observations to select.
 Character vectors will be matched
 to the argument <code>fdnames[[2]]</code> of <code>mfdobj</code>,
 i.e. to functional observations' names.</p></dd>
+
+
 <dt>j</dt>
 <dd><p>Index specifying functional variables to extract or replace.
 They can be numeric, logical,
@@ -101,10 +108,13 @@ Logical vectors indicate TRUE for the variables to select.
 Character vectors will be matched
 to the argument <code>fdnames[[3]]</code> of <code>mfdobj</code>,
 i.e. to functional variables' names.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>mfd</code> object with selected observations and variables.</p>
+    
+
+<p>a <code>mfd</code> object with selected observations and variables.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -124,39 +134,41 @@ as you would normally do when using
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># In the following, we extract the first one/two observations/variables</span></span>
-<span class="r-in"><span class="co"># to see the difference with `[.fd`.</span></span>
-<span class="r-in"><span class="va">mfdobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="data_sim_mfd.html">data_sim_mfd</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">fdobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fda/man/fd.html" class="external-link">fd</a></span><span class="op">(</span><span class="va">mfdobj</span><span class="op">$</span><span class="va">coefs</span>, <span class="va">mfdobj</span><span class="op">$</span><span class="va">basis</span>, <span class="va">mfdobj</span><span class="op">$</span><span class="va">fdnames</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># The argument `coef` in `fd` objects is converted to a matrix when possible.</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fdobj</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.functionaldata.org" class="external-link">fda</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># In the following, we extract the first one/two observations/variables</span></span></span>
+<span class="r-in"><span><span class="co"># to see the difference with `[.fd`.</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="data_sim_mfd.html">data_sim_mfd</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fdobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fda/man/fd.html" class="external-link">fd</a></span><span class="op">(</span><span class="va">mfdobj</span><span class="op">$</span><span class="va">coefs</span>, <span class="va">mfdobj</span><span class="op">$</span><span class="va">basis</span>, <span class="va">mfdobj</span><span class="op">$</span><span class="va">fdnames</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The argument `coef` in `fd`</span></span></span>
+<span class="r-in"><span><span class="co"># objects is converted to a matrix when possible.</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fdobj</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5 1</span>
-<span class="r-in"><span class="co"># Not clear what is the second dimension:</span></span>
-<span class="r-in"><span class="co"># the number of replications or the number of variables?</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fdobj</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># Not clear what is the second dimension:</span></span></span>
+<span class="r-in"><span><span class="co"># the number of replications or the number of variables?</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fdobj</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5 2</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fdobj</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fdobj</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5 2</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># The argument `coef` in `mfd` objects is always a three-dimensional array.</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">mfdobj</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The argument `coef` in `mfd` objects is always a three-dimensional array.</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">mfdobj</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5 1 1</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">mfdobj</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">mfdobj</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5 1 2</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">mfdobj</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">mfdobj</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5 2 1</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Actually, `[.mfd` works as `[.fd` when passing also `drop = FALSE`</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fdobj</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Actually, `[.mfd` works as `[.fd` when passing also `drop = FALSE`</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fdobj</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5 1 1</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fdobj</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fdobj</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5 1 2</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fdobj</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fdobj</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">$</span><span class="va">coef</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5 2 1</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -171,7 +183,7 @@ as you would normally do when using
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

@@ -139,7 +139,7 @@ plot_pca_mfd <- function(pca, harm = 0, scaled = FALSE) {
     pca$harmonics$coefs <- scaled_coefs
   }
 
-  p_functions <- plot_mfd(aes(col = id), mfdobj = pca$harmonics[harm])
+  p_functions <- plot_mfd(aes_string(col = "id"), mfdobj = pca$harmonics[harm])
 
   components <- which(cumsum(pca$varprop) < .99)
   # p_values <- data.frame(eigenvalues = pca$values[components]) %>%
@@ -354,9 +354,9 @@ get_fit_pca_given_scores <- function(scores, harmonics) {
   mfd(fit_coefs, basis, fdnames, B = basis$B)
 }
 
-#' Calculate the Hotelling's T^2 statistics of multivariate functional data
+#' Calculate the Hotelling's T2 statistics of multivariate functional data
 #'
-#' Calculate the Hotelling's T^2 statistics of
+#' Calculate the Hotelling's T2 statistics of
 #' multivariate functional data projected
 #' onto a multivariate functional principal component subspace.
 #'
@@ -375,10 +375,10 @@ get_fit_pca_given_scores <- function(scores, harmonics) {
 #' @return
 #' A \code{data.frame} with as many rows as the number of
 #' functional replications in \code{newdata}.
-#' It has one \code{T2} column containing the Hotelling T^2
+#' It has one \code{T2} column containing the Hotelling T2
 #' statistic calculated for all observations, as well as
 #' one column per each functional variable, containing its
-#' contribution to the T^2 statistic.
+#' contribution to the T2 statistic.
 #' See Capezza et al. (2020) for definition of contributions.
 #' @noRd
 #'
@@ -605,7 +605,7 @@ pca.fd_inprods_faster <- function (fdobj,
   if (nvar == 1) {
     if (identical(fdobj$basis, harmfd$basis)) {
       harmscr <- t(fdobj$coefs) %*% B %*% harmfd$coefs
-    } else harmscr <- inprod(fdobj, harmfd)
+    } else harmscr <- inprod_fd(fdobj, harmfd)
   }
   else {
     harmscr <- array(0, c(nrep, nharm, nvar))
@@ -616,7 +616,7 @@ pca.fd_inprods_faster <- function (fdobj,
       harmfdj <- fd(as.matrix(harmcoefarray[, , j]), basisobj)
       if (identical(fdobjj$basis, harmfdj$basis)) {
         harmscr[, , j] <- t(fdobjj$coefs) %*% B %*% harmfdj$coefs
-      } else harmscr[, , j] <- inprod(fdobjj, harmfdj)
+      } else harmscr[, , j] <- inprod_fd(fdobjj, harmfdj)
     }
   }
   pcafd <- list(harmfd, eigvalc, harmscr, varprop, meanfd)

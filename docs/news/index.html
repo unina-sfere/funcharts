@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
       </span>
     </div>
 
@@ -36,6 +36,9 @@
     </li>
     <li>
       <a href="../articles/centofanti2021.html">centofanti2021</a>
+    </li>
+    <li>
+      <a href="../articles/colosimo2010.html">colosimo2010</a>
     </li>
     <li>
       <a href="../articles/mfd.html">mfd</a>
@@ -64,7 +67,24 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.2.0" id="funcharts-120">funcharts 1.2.0<a class="anchor" aria-label="anchor" href="#funcharts-120"></a></h2>
+<h2 class="page-header" data-toc-text="1.2.0.9000" id="funcharts-1209000">funcharts 1.2.0.9000<a class="anchor" aria-label="anchor" href="#funcharts-1209000"></a></h2>
+<ul><li>all basis function systems that can be used in the <code>fda</code> package now can be used also with <code>funcharts</code>, which previously it could be used only with B-spline basis. In particular, Fourier, exponential, monomial, polygonal, power and constant basis function systems are available.</li>
+<li>
+<code><a href="../reference/get_outliers_mfd.html">get_outliers_mfd()</a></code> allows to find outliers among multivariate functional data using the functional boxplot through the <code><a href="https://rdrr.io/pkg/fda/man/fbplot.html" class="external-link">fbplot()</a></code> function of the <code>roahd</code> package.</li>
+<li>test coverage has been increased</li>
+<li>
+<code>control_charts_sof()</code> and <code>control_charts_sof_real_time()</code> have been deprecated. Instead, use <code><a href="../reference/regr_cc_sof.html">regr_cc_sof()</a></code> and <code><a href="../reference/regr_cc_sof_real_time.html">regr_cc_sof_real_time()</a></code>, respectively, with argument <code>include_covariates = TRUE</code>. This has been done to make more consistent the regression control chart functions for the scalar (<code><a href="../reference/regr_cc_sof.html">regr_cc_sof()</a></code> and <code><a href="../reference/regr_cc_sof_real_time.html">regr_cc_sof_real_time()</a></code>) and functional (<code><a href="../reference/regr_cc_fof.html">regr_cc_fof()</a></code> and <code><a href="../reference/regr_cc_fof_real_time.html">regr_cc_fof_real_time()</a></code>) response cases.</li>
+<li>
+<code>alpha</code> parameter in all control charting functions, which previously could only be a list with manually specified values of the type-I error probability in each control chart, now can also be a single number between 0 and 1. In this case, Bonferroni correction is automatically applied to take into account the multiplicity problem when more than one control chart is applied.</li>
+<li>
+<code><a href="../reference/plot_bifd.html">plot_bifd()</a></code> now allows to choose to produce also contour or perspective plots of <code>bifd</code> objects.</li>
+<li>
+<code><a href="../reference/simulate_mfd.html">simulate_mfd()</a></code> is much more general, now it allows to simulate as many covariates as one wants (before the number was fixed to three), it is possible to provide manually the mean and variance function for each variable, it is possible to select the type of correlation function for each variable.</li>
+<li>
+<code><a href="../reference/plot_mfd.html">plot_mfd()</a></code> now relies on patchwork, while the new function <code><a href="../reference/lines_mfd.html">lines_mfd()</a></code> allows to add new curve to an existing plot.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.2.0" id="funcharts-120">funcharts 1.2.0<small>2022-06-15</small><a class="anchor" aria-label="anchor" href="#funcharts-120"></a></h2>
 <ul><li>improved backward compatibility, <code>funcharts</code> now depends on an older version of R, i.e., &gt;3.6.0 instead of &gt;4.0.0</li>
 <li>
 <code><a href="../reference/fof_pc.html">fof_pc()</a></code> now is much faster especially when the number of basis functions of the functional coefficient is large since the tensor product has been vectorized.</li>
@@ -112,7 +132,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

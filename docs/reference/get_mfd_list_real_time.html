@@ -24,7 +24,7 @@ It calls the function get_mfd_list for each domain point."><!-- mathjax --><scri
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
       </span>
     </div>
 
@@ -43,6 +43,9 @@ It calls the function get_mfd_list for each domain point."><!-- mathjax --><scri
     </li>
     <li>
       <a href="../articles/centofanti2021.html">centofanti2021</a>
+    </li>
+    <li>
+      <a href="../articles/colosimo2010.html">colosimo2010</a>
     </li>
     <li>
       <a href="../articles/mfd.html">mfd</a>
@@ -82,41 +85,71 @@ and to build control charts for real-time  monitoring.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_mfd_list_real_time</span><span class="op">(</span>
-  <span class="va">data_list</span>,
-  grid <span class="op">=</span> <span class="cn">NULL</span>,
-  n_basis <span class="op">=</span> <span class="fl">30</span>,
-  lambda <span class="op">=</span> <span class="cn">NULL</span>,
-  lambda_grid <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,
-  k_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">0.2</span>, to <span class="op">=</span> <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>,
-  ncores <span class="op">=</span> <span class="fl">1</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_mfd_list_real_time</span><span class="op">(</span></span>
+<span>  <span class="va">data_list</span>,</span>
+<span>  grid <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  n_basis <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>  n_order <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  basisobj <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  Lfdobj <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  lambda <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lambda_grid <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span>
+<span>  k_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">0.2</span>, to <span class="op">=</span> <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>,</span>
+<span>  ncores <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data_list</dt>
 <dd><p>See <code><a href="get_mfd_list.html">get_mfd_list</a></code>.</p></dd>
+
+
 <dt>grid</dt>
 <dd><p>See <code><a href="get_mfd_list.html">get_mfd_list</a></code>.</p></dd>
+
+
 <dt>n_basis</dt>
 <dd><p>See <code><a href="get_mfd_list.html">get_mfd_list</a></code>.</p></dd>
+
+
+<dt>n_order</dt>
+<dd><p>See <code><a href="get_mfd_list.html">get_mfd_list</a></code>.</p></dd>
+
+
+<dt>basisobj</dt>
+<dd><p>See <code><a href="get_mfd_list.html">get_mfd_list</a></code>.</p></dd>
+
+
+<dt>Lfdobj</dt>
+<dd><p>See <code><a href="get_mfd_list.html">get_mfd_list</a></code>.</p></dd>
+
+
 <dt>lambda</dt>
 <dd><p>See <code><a href="get_mfd_list.html">get_mfd_list</a></code>.</p></dd>
+
+
 <dt>lambda_grid</dt>
 <dd><p>See <code><a href="get_mfd_df.html">get_mfd_df</a></code>.</p></dd>
+
+
 <dt>k_seq</dt>
 <dd><p>A vector of values between 0 and 1, containing the domain points
 over which functional data are to be evaluated in real time.
 If the domain is the interval (a,b), for each instant k in the sequence,
 functions are evaluated in (a,a+k(b-a)).</p></dd>
+
+
 <dt>ncores</dt>
 <dd><p>If you want parallelization, give the number of cores/threads
 to be used when creating mfd objects separately for different instants.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of <code>mfd</code> objects as produced by
+    
+
+<p>A list of <code>mfd</code> objects as produced by
 <code><a href="get_mfd_list.html">get_mfd_list</a></code>.</p>
     </div>
     <div id="see-also">
@@ -126,15 +159,15 @@ to be used when creating mfd objects separately for different instants.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Only take first 5 multivariate functional observations from air</span></span>
-<span class="r-in"><span class="va">air_small</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">air</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Consider only 3 domain points: 0.5, 0.75, 1</span></span>
-<span class="r-in"><span class="va">mfdobj</span> <span class="op">&lt;-</span> <span class="fu">get_mfd_list_real_time</span><span class="op">(</span>data_list <span class="op">=</span> <span class="va">air_small</span>,</span>
-<span class="r-in">                                 lambda <span class="op">=</span> <span class="fl">1e-2</span>,</span>
-<span class="r-in">                                 k_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/unina-sfere/funcharts" class="external-link">funcharts</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"air"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Only take first 5 multivariate functional observations from air</span></span></span>
+<span class="r-in"><span><span class="va">air_small</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">air</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Consider only 3 domain points: 0.5, 0.75, 1</span></span></span>
+<span class="r-in"><span><span class="va">mfdobj</span> <span class="op">&lt;-</span> <span class="fu">get_mfd_list_real_time</span><span class="op">(</span>data_list <span class="op">=</span> <span class="va">air_small</span>,</span></span>
+<span class="r-in"><span>                                 lambda <span class="op">=</span> <span class="fl">1e-2</span>,</span></span>
+<span class="r-in"><span>                                 k_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -149,7 +182,7 @@ to be used when creating mfd objects separately for different instants.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>
