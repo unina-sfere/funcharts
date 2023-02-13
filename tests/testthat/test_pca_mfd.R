@@ -1,3 +1,4 @@
+set.seed(0)
 mfdobj <- data_sim_mfd()
 pca <- pca_mfd(mfdobj)
 test_that("pca_mfd works well", {

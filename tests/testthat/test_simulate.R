@@ -1,3 +1,4 @@
+set.seed(0)
 test_that("simulation functions work", {
   dat <- sim_funcharts(nobs1 = 10, nobs_tun = 10, nobs2 = 9)
   expect_is(dat, "list")

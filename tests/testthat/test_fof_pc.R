@@ -1,3 +1,4 @@
+set.seed(0)
 data("air")
 air <- lapply(air, function(x) x[1:10, , drop = FALSE])
 fun_covariates <- names(air)[names(air) != "NO2"]

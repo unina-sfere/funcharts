@@ -1,3 +1,4 @@
+set.seed(0)
 x <- seq(1, 10, length = 25)
 y11 <- cos(x)
 y21 <- cos(2 * x)
