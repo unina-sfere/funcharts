@@ -56,7 +56,7 @@ The default of 4 gives cubic splines.}
 
 \item{basisobj}{An object of class \code{basisfd} defining
 the basis function expansion.
-Deafult is \code{NULL}, which means that
+Default is \code{NULL}, which means that
 a \code{basisfd} object is created by doing
 \code{create.bspline.basis(rangeval = domain,
 nbasis = n_basis,  norder = n_order)}}
@@ -68,7 +68,7 @@ Alternatively, a nonnegative integer
 specifying the order m can be given and is
 passed as \code{Lfdobj} argument to the function \code{fdPar},
 which indicates that the derivative of order m is penalized.
-Deafult value is 2, which means that the
+Default value is 2, which means that the
 integrated squared second derivative is penalized.}
 
 \item{lambda}{A non-negative real number.

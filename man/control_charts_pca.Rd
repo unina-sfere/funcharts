@@ -2,7 +2,7 @@
 % Please edit documentation in R/04_phaseII.R
 \name{control_charts_pca}
 \alias{control_charts_pca}
-\title{T^2 and SPE control charts for multivariate functional data}
+\title{T2 and SPE control charts for multivariate functional data}
 \usage{
 control_charts_pca(
   pca,
@@ -38,7 +38,7 @@ Default is NULL.}
 
 \item{tuning_data}{An object of class \code{mfd} containing
 the tuning set of the multivariate functional data, used to estimate the
-T^2 and SPE control chart limits.
+T2 and SPE control chart limits.
 If NULL, the training data, i.e. the data used to fit the MFPCA model,
 are also used as the tuning data set, i.e. \code{tuning_data=pca$data}.
 Default is NULL.}
@@ -114,11 +114,11 @@ the following columns:
 * one \code{id} column identifying the multivariate functional observation
 in the phase II data set,
 
-* one \code{T2} column containing the Hotelling T^2 statistic
+* one \code{T2} column containing the Hotelling T2 statistic
 calculated for all observations,
 
 * one column per each functional variable,
-containing its contribution to the T^2 statistic,
+containing its contribution to the T2 statistic,
 
 * one \code{spe} column containing the SPE statistic calculated
 for all observations,
@@ -127,12 +127,12 @@ for all observations,
 containing its contribution to the SPE statistic,
 
 * \code{T2_lim} gives the upper control limit of
-the Hotelling's T^2 control chart,
+the Hotelling's T2 control chart,
 
 * one \code{contribution_T2_*_lim} column per each
 functional variable giving the
 limits of the contribution of that variable
-to the Hotelling's T^2 statistic,
+to the Hotelling's T2 statistic,
 
 * \code{spe_lim} gives the upper control limit of the SPE control chart
 
@@ -142,7 +142,7 @@ limits of the contribution of that variable to the SPE statistic.
 }
 \description{
 This function builds a data frame needed to plot
-the Hotelling's T^2 and squared prediction error (SPE)
+the Hotelling's T2 and squared prediction error (SPE)
 control charts
 based on multivariate functional principal component analysis
 (MFPCA) performed

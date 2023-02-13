@@ -18,7 +18,7 @@ phase II data set to be plotted, i.e. 1 for the first observation,
 \item{which_plot}{A character vector.
 Each value indicates which contribution you want to plot:
 
-"T2" indicates contribution to the Hotelling's T^2 statistic,
+"T2" indicates contribution to the Hotelling's T2 statistic,
 
 "spe" indicates contribution to the squared prediction error statistic.}
 

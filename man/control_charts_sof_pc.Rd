@@ -30,7 +30,7 @@ the phase II data set of the functional covariates observations.}
 
 \item{mfdobj_x_tuning}{An object of class \code{mfd} containing
 the tuning set of the multivariate functional data, used to estimate the
-T^2 and SPE control chart limits.
+T2 and SPE control chart limits.
 If NULL, the training data, i.e. the data used to fit the MFPCA model,
 are also used as the tuning data set, i.e. \code{tuning_data=pca$data}.
 Default is NULL.}
@@ -39,7 +39,7 @@ Default is NULL.}
 and code{y},
 respectively, each containing
 the desired Type I error probability of the corresponding control chart
-(\code{T2} corresponds to the T^2 control chart,
+(\code{T2} corresponds to the T2 control chart,
 \code{spe}  corresponds to the SPE control chart,
 \code{y} corresponds to the scalar regression control chart).
 Note that at the moment you have to take into account manually
@@ -80,11 +80,11 @@ the following columns:
 * one \code{id} column identifying the multivariate functional observation
 in the phase II data set,
 
-* one \code{T2} column containing the Hotelling T^2 statistic calculated
+* one \code{T2} column containing the Hotelling T2 statistic calculated
 for all observations,
 
 * one column per each functional variable, containing its contribution
-to the T^2 statistic,
+to the T2 statistic,
 
 * one \code{spe} column containing the SPE statistic calculated
 for all observations,
@@ -93,12 +93,12 @@ for all observations,
 to the SPE statistic,
 
 * \code{T2_lim} gives the upper control limit of the
-Hotelling's T^2 control chart,
+Hotelling's T2 control chart,
 
 * one \code{contribution_T2_*_lim} column per each
 functional variable giving the
 limits of the contribution of that variable to the
-Hotelling's T^2 statistic,
+Hotelling's T2 statistic,
 
 * \code{spe_lim} gives the upper control limit of the SPE control chart
 
@@ -133,7 +133,7 @@ as proposed in Capezza et al. (2020).
 
 In particular, this function provides:
 
-* the Hotelling's T^2 control chart,
+* the Hotelling's T2 control chart,
 
 * the squared prediction error (SPE) control chart,
 

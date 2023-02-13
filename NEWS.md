@@ -1,4 +1,4 @@
-# funcharts 1.2.0.9000
+# funcharts 1.3.0
 
 * all basis function systems that can be used in the `fda` package now can be used also with `funcharts`, which previously it could be used only with B-spline basis.
 In particular, Fourier, exponential, monomial, polygonal, power and constant basis function systems are available.

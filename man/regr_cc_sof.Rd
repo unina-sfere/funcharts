@@ -102,7 +102,7 @@ to plot the scalar-on-function regression control chart,
 based on a fitted function-on-function linear regression model and
 proposed in Capezza et al. (2020).
 If \code{include_covariates} is \code{TRUE},
-it also plots the Hotelling's T^2 and
+it also plots the Hotelling's T2 and
 squared prediction error control charts built on the
 multivariate functional covariates.
 }
