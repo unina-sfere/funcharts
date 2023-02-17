@@ -35,7 +35,7 @@ mfdobj_x <- get_mfd_list(air[fun_covariates],
                          lambda = 1e-2)
 y <- rowMeans(air$NO2)
 y1 <- y[1:60]
-ytuning <- y[61:90]
+y_tuning <- y[61:90]
 y2 <- y[91:100]
 mfdobj_x1 <- mfdobj_x[1:60]
 mfdobj_x_tuning <- mfdobj_x[61:90]
