@@ -832,11 +832,12 @@ plot_control_charts <- function(cclist, nobsI = 0) {
 #' regression control chart.
 #' Default value is 0.05.
 #' @param parametric_limits
-#' If TRUE, the limits are calculated based on the normal distribution
+#' If \code{TRUE}, the limits are calculated based on the normal distribution
 #' assumption on the response variable, as in Capezza et al. (2020).
-#' If FALSE, the limits are calculated nonparametrically as
+#' If \code{FALSE}, the limits are calculated nonparametrically as
 #' empirical quantiles of the distribution of the residuals calculated
 #' on the tuning data set.
+#' The default value is \code{FALSE}.
 #' @param include_covariates
 #' If TRUE, also functional covariates are monitored through
 #'  \code{control_charts_pca},.
@@ -903,7 +904,7 @@ regr_cc_sof <- function(object,
                         y_tuning = NULL,
                         mfdobj_x_tuning = NULL,
                         alpha = 0.05,
-                        parametric_limits = TRUE,
+                        parametric_limits = FALSE,
                         include_covariates = FALSE,
                         absolute_error = FALSE) {
 
