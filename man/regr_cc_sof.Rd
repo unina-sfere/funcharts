@@ -11,7 +11,7 @@ regr_cc_sof(
   y_tuning = NULL,
   mfdobj_x_tuning = NULL,
   alpha = 0.05,
-  parametric_limits = TRUE,
+  parametric_limits = FALSE,
   include_covariates = FALSE,
   absolute_error = FALSE
 )
@@ -59,11 +59,12 @@ the corresponding control chart, where \code{y} refers to the
 regression control chart.
 Default value is 0.05.}
 
-\item{parametric_limits}{If TRUE, the limits are calculated based on the normal distribution
+\item{parametric_limits}{If \code{TRUE}, the limits are calculated based on the normal distribution
 assumption on the response variable, as in Capezza et al. (2020).
-If FALSE, the limits are calculated nonparametrically as
+If \code{FALSE}, the limits are calculated nonparametrically as
 empirical quantiles of the distribution of the residuals calculated
-on the tuning data set.}
+on the tuning data set.
+The default value is \code{FALSE}.}
 
 \item{include_covariates}{If TRUE, also functional covariates are monitored through
  \code{control_charts_pca},.
