@@ -1,4 +1,4 @@
-# funcharts 1.3.0.9000
+# funcharts 1.3.1
 
 * the default value of the `parametric_limits` argument in `regr_cc_sof()` is now set to `FALSE`.
 
@@ -38,7 +38,7 @@ It creates a data set with three functional covariates, a functional response ge
 ## Minor changes
 
 * Added a `NEWS.md` file to track changes to the package.
-* `inprod_mfd_diag()` calculates the inner product between two multivariate functional data objects observation by observation, avoiding calculating it between all possible couples of observations. Therefore, there are $n$ calculations instead of $n^2$, saving much computational time when calculating the squared prediction error statistic when $n$ is large.
+* `inprod_mfd_diag()` calculates the inner product between two multivariate functional data objects observation by observation, avoiding calculating it between all possible couples of observations. Therefore, there are n calculations instead of squared n, saving much computational time when calculating the squared prediction error statistic when n is large.
 * Code has been improved so that `scale_mfd()` is pre-computed and therefore is not called many times unnecessarily along the different functions.
 
 
