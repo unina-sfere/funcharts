@@ -8,7 +8,7 @@ the effect of multivariate functional covariates based on
 scalar-on-function regression,
 as proposed in Capezza et al. (2020).
 In particular, this function provides:
-* the Hotelling's T^2 control chart,
+* the Hotelling's T2 control chart,
 * the squared prediction error (SPE) control chart,
 * the scalar regression control chart.
 This function calls control_charts_pca for the control charts on
@@ -36,7 +36,7 @@ with the control charts."><!-- mathjax --><script src="https://cdnjs.cloudflare.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">funcharts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -95,7 +95,7 @@ the effect of multivariate functional covariates based on
 scalar-on-function regression,
 as proposed in Capezza et al. (2020).</p>
 <p>In particular, this function provides:</p>
-<p>* the Hotelling's T^2 control chart,</p>
+<p>* the Hotelling's T2 control chart,</p>
 <p>* the squared prediction error (SPE) control chart,</p>
 <p>* the scalar regression control chart.</p>
 <p>This function calls <code>control_charts_pca</code> for the control charts on
@@ -143,7 +143,7 @@ the phase II data set of the functional covariates observations.</p></dd>
 <dt>mfdobj_x_tuning</dt>
 <dd><p>An object of class <code>mfd</code> containing
 the tuning set of the multivariate functional data, used to estimate the
-T^2 and SPE control chart limits.
+T2 and SPE control chart limits.
 If NULL, the training data, i.e. the data used to fit the MFPCA model,
 are also used as the tuning data set, i.e. <code>tuning_data=pca$data</code>.
 Default is NULL.</p></dd>
@@ -154,7 +154,7 @@ Default is NULL.</p></dd>
 and codey,
 respectively, each containing
 the desired Type I error probability of the corresponding control chart
-(<code>T2</code> corresponds to the T^2 control chart,
+(<code>T2</code> corresponds to the T2 control chart,
 <code>spe</code>  corresponds to the SPE control chart,
 <code>y</code> corresponds to the scalar regression control chart).
 Note that at the moment you have to take into account manually
@@ -209,12 +209,12 @@ the following columns:</p>
 in the phase II data set,</p>
 
 
-<p>* one <code>T2</code> column containing the Hotelling T^2 statistic calculated
+<p>* one <code>T2</code> column containing the Hotelling T2 statistic calculated
 for all observations,</p>
 
 
 <p>* one column per each functional variable, containing its contribution
-to the T^2 statistic,</p>
+to the T2 statistic,</p>
 
 
 <p>* one <code>spe</code> column containing the SPE statistic calculated
@@ -226,13 +226,13 @@ to the SPE statistic,</p>
 
 
 <p>* <code>T2_lim</code> gives the upper control limit of the
-Hotelling's T^2 control chart,</p>
+Hotelling's T2 control chart,</p>
 
 
 <p>* one <code>contribution_T2_*_lim</code> column per each
 functional variable giving the
 limits of the contribution of that variable to the
-Hotelling's T^2 statistic,</p>
+Hotelling's T2 statistic,</p>
 
 
 <p>* <code>spe_lim</code> gives the upper control limit of the SPE control chart</p>

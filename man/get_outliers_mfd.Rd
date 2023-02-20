@@ -33,6 +33,6 @@ get_outliers_mfd(mfdobj_x)
 * Sun, Y., & Genton, M. G. (2011). Functional boxplots.
 \emph{Journal of Computational and Graphical Statistics}, 20(2), 316-334.
 * Sun, Y., & Genton, M. G. (2012).
-Adjusted functional boxplots for spatio‐temporal data visualization
+Adjusted functional boxplots for spatio-temporal data visualization
 and outlier detection. \emph{Environmetrics}, 23(1), 54-64.
 }
