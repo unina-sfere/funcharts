@@ -1,3 +1,5 @@
+# funcharts (development version)
+
 # funcharts 1.3.1
 
 * the default value of the `parametric_limits` argument in `regr_cc_sof()` is now set to `FALSE`.

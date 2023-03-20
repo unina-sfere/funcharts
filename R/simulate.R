@@ -349,7 +349,8 @@ simulate_mfd <- function(nobs = 1000,
   var_yexp <- rowSums(t(t(ey$vectors^2) * (b^2 * e$values[1:10])))
   vary <- rowSums(t(t(ey$vectors^2) * ey$values))
   R2_check <- sum(var_yexp / vary) * w
-  B <- rbind(diag(b), matrix(0, nrow = 40, ncol = 10))
+  dim_additional <- n_comp_x - length(b)
+  B <- rbind(diag(b), matrix(0, nrow = dim_additional, ncol = 10))
   eigeps <- diag(diag(ey$values) - t(B) %*% diag(e$values) %*% B)
 
   csi_X <- rnorm(n = length(e$values) * nobs,

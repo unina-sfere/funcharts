@@ -1438,11 +1438,6 @@ get_mfd_array <- function(data_array,
     n_basis <- basisobj$nbasis
   }
 
-  if (is.basis(basisobj)) {
-    message("basisobj is provided, n_basis and n_order are ignored")
-    n_basis <- basisobj$nbasis
-  }
-
   if (is.null(basisobj)) {
     basisobj <- create.bspline.basis(rangeval = domain,
                                      nbasis = n_basis,
@@ -1672,12 +1667,11 @@ scale_mfd <- function(mfdobj, center = TRUE, scale = TRUE) {
   } else {
     if (is.logical(scale) && scale == TRUE) {
       sd_fd <- sd.fd(mfdobj)
-      sd_fd$coefs <- pmax(sd_fd$coefs, 0)
     }
     if (is.fd(scale)) {
       sd_fd <- scale
     }
-    if (sd_fd$basis$nbasis < 15) {
+    if (sd_fd$basis$nbasis < 15 | sd_fd$basis$type != "bspline") {
       domain <- mfdobj$basis$rangeval
       x_eval <- seq(domain[1], domain[2], length.out = 1000)
       sd_eval <- eval.fd(evalarg = x_eval, sd_fd)
@@ -1769,7 +1763,8 @@ descale_mfd <- function (scaled_mfd, center = FALSE, scale = FALSE) {
   if (is.fd(center)) {
 
     descaled_mean_list <- lapply(seq_len(nvar), function(jj) {
-      centered$coefs[, , jj] + center$coefs[, 1, jj]
+      out <- centered$coefs[, , jj, drop = FALSE] + center$coefs[, 1, jj, drop = FALSE]
+      matrix(out, dim(out)[1], dim(out)[2])
     })
     descaled_coef <- simplify2array(descaled_mean_list)
 
