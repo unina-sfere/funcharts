@@ -1763,7 +1763,7 @@ descale_mfd <- function (scaled_mfd, center = FALSE, scale = FALSE) {
   if (is.fd(center)) {
 
     descaled_mean_list <- lapply(seq_len(nvar), function(jj) {
-      out <- centered$coefs[, , jj, drop = FALSE] + center$coefs[, 1, jj, drop = FALSE]
+      out <- centered$coefs[, , jj, drop = FALSE] + as.numeric(center$coefs[, 1, jj])
       matrix(out, dim(out)[1], dim(out)[2])
     })
     descaled_coef <- simplify2array(descaled_mean_list)
