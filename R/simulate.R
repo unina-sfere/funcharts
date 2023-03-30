@@ -327,10 +327,12 @@ simulate_mfd <- function(nobs = 1000,
                          P = P,
                          correlation_type = correlation_type_y,
                          n_comp = n_comp_y)
+  ey$values <- pmax(ey$values, 0)
   e <- generate_cov_str(p = p,
                         P = P,
                         correlation_type = correlation_type_x,
                         n_comp = n_comp_x)
+  e$values <- pmax(e$values, 0)
   x_seq <- seq(0, 1, l = P)
 
   b_perfect <- sqrt(ey$values / e$values[seq_along(ey$values)])
