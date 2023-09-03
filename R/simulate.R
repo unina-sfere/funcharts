@@ -132,7 +132,7 @@ sim_funcharts <- function(nobs1 = 1000, nobs_tun = 1000, nobs2 = 60) {
 #' there are five possibilities: "0" if there is no shift,
 #' "A", "B", "C" or "D" for the corresponding shift types
 #' shown in Centofanti et al. (2021).
-#' By default, shift is not applied to any functional coviarate.
+#' By default, shift is not applied to any functional covariate.
 #' @param correlation_type_y
 #' A character vector indicating the type of correlation function for
 #' the functional response.

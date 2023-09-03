@@ -1,4 +1,5 @@
 #' @keywords internal
+#' @aliases funcharts-package
 "_PACKAGE"
 
 ## usethis namespace: start

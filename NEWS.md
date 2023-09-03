@@ -1,4 +1,8 @@
-# funcharts (development version)
+# funcharts 1.3.2
+
+* Updated documentation with the newly published paper, which thoroughly illustrates the funcharts package:
+Capezza C, Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2023) funcharts: control charts for multivariate functional data in R.
+Journal of Quality Technology, doi:10.1002/asmb.2507.
 
 # funcharts 1.3.1
 

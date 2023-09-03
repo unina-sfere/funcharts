@@ -1,7 +1,7 @@
 Package: funcharts
 Type: Package
 Title: Functional Control Charts
-Version: 1.3.1.9000
+Version: 1.3.2
 Authors@R: c(
     person("Christian", "Capezza", 
       email = "christian.capezza@unina.it", 
@@ -17,7 +17,7 @@ Description: Provides functional control charts
     using the methods of Capezza et al. (2020) <doi:10.1002/asmb.2507> and 
     Centofanti et al. (2021) <doi:10.1080/00401706.2020.1753581>.
     The package is thoroughly illustrated in the paper of 
-    Capezza et al (2023) <doi:10.1080/00224065.2023.2219012>
+    Capezza et al (2023) <doi:10.1080/00224065.2023.2219012>.
 Depends: R (>= 3.6.0)
 Imports: 
     fda,

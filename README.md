@@ -13,7 +13,8 @@ coverage](https://codecov.io/gh/unina-sfere/funcharts/branch/main/graph/badge.sv
 
 The goal of `funcharts` is to provide control charts for the statistical
 process monitoring of multivariate functional data densely observed on
-one-dimensional intervals. The package provides the methodologies
+one-dimensional intervals. The package is thoroughly illustrated in the
+paper of Capezza et al. (2023). The package provides the methodologies
 proposed in Colosimo and Pacella (2010), Capezza et al. (2020) and
 Centofanti et al. (2021). Moreover, this package provides a new class
 `mfd` for multivariate functional data that is a wrapper of the class
@@ -51,10 +52,10 @@ devtools::install_github("unina-sfere/funcharts")
 
 # References
 
-- Colosimo, BM Pacella, M. (2010) A comparison study of control charts
-  for statistical monitoring of functional data. *International Journal
-  of Production Research*, 48(6), 1575-1601.
-  <https://doi.org/10.1080/00207540802662888>
+- Capezza C, Centofanti F, Lepore A, Menafoglio A, Palumbo B,
+  Vantini S. (2023) funcharts: control charts for multivariate
+  functional data in R. *Journal of Quality Technology*,
+  <https://doi.org/10.1080/00224065.2023.2219012>
 - Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
   Control charts for monitoring ship operating conditions and
   CO<sub>2</sub> emissions based on scalar-on-function regression.
@@ -63,3 +64,7 @@ devtools::install_github("unina-sfere/funcharts")
 - Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
   Functional Regression Control Chart. *Technometrics*, 63(3), 281–294.
   <https://doi.org/10.1080/00401706.2020.1753581>
+- Colosimo, BM Pacella, M. (2010) A comparison study of control charts
+  for statistical monitoring of functional data. *International Journal
+  of Production Research*, 48(6), 1575-1601.
+  <https://doi.org/10.1080/00207540802662888>
