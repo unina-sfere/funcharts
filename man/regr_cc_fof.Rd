@@ -64,7 +64,7 @@ the T2 and SPE control charts for the functional response and
 the multivariate functional covariates, respectively.}
 
 \item{include_covariates}{If TRUE, also functional covariates are monitored through
- \code{control_charts_pca},.
+\code{control_charts_pca},.
 If FALSE, only the functional response, conditionally on the covariates,
 is monitored.}
 
@@ -120,7 +120,7 @@ plot_control_charts(cclist)
 \references{
 Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 Functional Regression Control Chart.
-\emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
+\emph{Technometrics}, 63(3), 281--294. \url{doi:10.1080/00401706.2020.1753581}
 }
 \seealso{
 \code{\link{control_charts_pca}}

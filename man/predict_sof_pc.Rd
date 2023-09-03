@@ -36,23 +36,21 @@ Default is 0.05.}
 A \code{data.frame} with as many rows as the
 number of functional replications in \code{newdata},
 with the following columns:
-
-* \code{fit}: the predictions of the response variable
+\itemize{
+\item \code{fit}: the predictions of the response variable
 corresponding to \code{new_data},
-
-* \code{lwr}:
+\item \code{lwr}:
 lower limit of the \code{1-alpha} prediction interval
 on the response, based on the assumption that it is normally distributed.
-
-* \code{upr}:
+\item \code{upr}:
 upper limit of the \code{1-alpha} prediction interval
 on the response, based on the assumption that it is normally distributed.
-
-* \code{res}:
+\item \code{res}:
 the residuals obtained as the values of \code{y_new} minus their
 fitted values. If the scalar-on-function model has been fitted with
 \code{type_residual == "studentized"}, then the studentized residuals
 are calculated.
+}
 }
 \description{
 Predict new observations of the scalar response variable

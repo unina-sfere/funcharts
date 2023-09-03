@@ -76,52 +76,39 @@ Otherwise, this argument is ignored.}
 A \code{data.frame} with as many rows as the number of
 multivariate functional observations in the phase II data set and
 the following columns:
-
-* one \code{id} column identifying the multivariate functional observation
+\itemize{
+\item one \code{id} column identifying the multivariate functional observation
 in the phase II data set,
-
-* one \code{T2} column containing the Hotelling T2 statistic calculated
+\item one \code{T2} column containing the Hotelling T2 statistic calculated
 for all observations,
-
-* one column per each functional variable, containing its contribution
+\item one column per each functional variable, containing its contribution
 to the T2 statistic,
-
-* one \code{spe} column containing the SPE statistic calculated
+\item one \code{spe} column containing the SPE statistic calculated
 for all observations,
-
-* one column per each functional variable, containing its contribution
+\item one column per each functional variable, containing its contribution
 to the SPE statistic,
-
-* \code{T2_lim} gives the upper control limit of the
+\item \code{T2_lim} gives the upper control limit of the
 Hotelling's T2 control chart,
-
-* one \code{contribution_T2_*_lim} column per each
+\item one \code{contribution_T2_*_lim} column per each
 functional variable giving the
 limits of the contribution of that variable to the
 Hotelling's T2 statistic,
-
-* \code{spe_lim} gives the upper control limit of the SPE control chart
-
-* one \code{contribution_spe*_lim} column per
+\item \code{spe_lim} gives the upper control limit of the SPE control chart
+\item one \code{contribution_spe*_lim} column per
 each functional variable giving the
 limits of the contribution of that variable to the SPE statistic.
-
-* \code{y_hat}: the predictions of the response variable
+\item \code{y_hat}: the predictions of the response variable
 corresponding to \code{mfdobj_x_new},
-
-* \code{y}: the same as the argument \code{y_new}
+\item \code{y}: the same as the argument \code{y_new}
 given as input to this function,
-
-* \code{lwr}: lower limit of the \code{1-alpha}
+\item \code{lwr}: lower limit of the \code{1-alpha}
 prediction interval on the response,
-
-* \code{pred_err}: prediction error calculated as \code{y-y_hat},
-
-* \code{pred_err_sup}: upper limit of the \code{1-alpha}
+\item \code{pred_err}: prediction error calculated as \code{y-y_hat},
+\item \code{pred_err_sup}: upper limit of the \code{1-alpha}
 prediction interval on the prediction error,
-
-* \code{pred_err_inf}: lower limit of the \code{1-alpha}
- prediction interval on the prediction error.
+\item \code{pred_err_inf}: lower limit of the \code{1-alpha}
+prediction interval on the prediction error.
+}
 }
 \description{
 This function builds a data frame needed to
@@ -132,12 +119,11 @@ scalar-on-function regression,
 as proposed in Capezza et al. (2020).
 
 In particular, this function provides:
-
-* the Hotelling's T2 control chart,
-
-* the squared prediction error (SPE) control chart,
-
-* the scalar regression control chart.
+\itemize{
+\item the Hotelling's T2 control chart,
+\item the squared prediction error (SPE) control chart,
+\item the scalar regression control chart.
+}
 
 This function calls \code{control_charts_pca} for the control charts on
 the multivariate functional covariates and \code{\link{regr_cc_sof}}

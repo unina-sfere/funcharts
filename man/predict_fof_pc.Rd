@@ -18,22 +18,19 @@ new observations of the functional covariates.}
 }
 \value{
 A list of mfd objects. It contains:
-
-* \code{pred_error}: the prediction error of the
+\itemize{
+\item \code{pred_error}: the prediction error of the
 standardized functional response variable,
-
-* \code{pred_error_original_scale}:
+\item \code{pred_error_original_scale}:
 the prediction error of the functional
 response variable on the original scale,
-
-* \code{y_hat_new}: the prediction of the
+\item \code{y_hat_new}: the prediction of the
 functional response observations on the original scale,
-
-* \code{y_z_new}: the standardized version of the
+\item \code{y_z_new}: the standardized version of the
 functional response observations provided in \code{mfdobj_y_new},
-
-* \code{y_hat_z_new}: the prediction of the
+\item \code{y_hat_z_new}: the prediction of the
 functional response observations on the standardized/studentized scale.
+}
 }
 \description{
 Predict new observations of the functional response variable
@@ -57,5 +54,5 @@ predict_fof_pc(mod,
 \references{
 Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 Functional Regression Control Chart.
-\emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
+\emph{Technometrics}, 63(3), 281--294. \url{doi:10.1080/00401706.2020.1753581}
 }

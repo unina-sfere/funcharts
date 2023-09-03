@@ -4,6 +4,8 @@
 #' for statistical process monitoring of functional data,
 #' using the methods of Capezza et al. (2020) <doi:10.1002/asmb.2507> and
 #' Centofanti et al. (2021) <doi:10.1080/00401706.2020.1753581>.
+#' The package is thoroughly illustrated in the paper of
+#' Capezza et al (2023) <doi:10.1080/00224065.2023.2219012>
 #'
 #'
 #' @docType package
@@ -53,6 +55,10 @@
 #' @importFrom graphics par persp
 #' @importFrom stringr str_count
 #' @references
+#' Capezza C, Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2023)
+#' funcharts: control charts for multivariate functional data in R.
+#' \emph{Journal of Quality Technology}, \url{doi:10.1002/asmb.2507}
+#'
 #' Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
 #' Control charts for
 #' monitoring ship operating conditions and CO2 emissions based

@@ -7,15 +7,15 @@
 \format{
 A list of 7 matrices with 355 rows and 24 columns:
 \describe{
-  \item{NO2}{Hourly observation of concentration level of NO2 in 355 days}
-  \item{CO}{Hourly observation of concentration level of CO in 355 days}
-  \item{NMHC}{Hourly observation of concentration level of NMHC in 355 days}
-  \item{NOx}{Hourly observation of concentration level of NOx in 355 days}
-  \item{C6H6}{Hourly observation of concentration level of C6H6 in 355 days}
-  \item{temperature}{Hourly observation of concentration
-  level of temperature in 355 days}
-  \item{humidity}{Hourly observation of concentration
-  level of humidity in 355 days}
+\item{NO2}{Hourly observation of concentration level of NO2 in 355 days}
+\item{CO}{Hourly observation of concentration level of CO in 355 days}
+\item{NMHC}{Hourly observation of concentration level of NMHC in 355 days}
+\item{NOx}{Hourly observation of concentration level of NOx in 355 days}
+\item{C6H6}{Hourly observation of concentration level of C6H6 in 355 days}
+\item{temperature}{Hourly observation of concentration
+level of temperature in 355 days}
+\item{humidity}{Hourly observation of concentration
+level of humidity in 355 days}
 }
 }
 \source{
@@ -39,12 +39,12 @@ De Vito, S., Massera E., Piga M., Martinotto L. and Di Francia G. (2008).
 On field calibration of an electronic nose for
 benzene estimation in an urban pollution monitoring scenario
 \emph{Sensors and Actuators B: Chemical}, 129: 50-757.
-<doi:10.1016/j.snb.2007.09.060>
+\url{doi:10.1016/j.snb.2007.09.060}
 
 Xin Qi and Ruiyan Luo (2019).
 Nonlinear function on function
 additive model with multiple predictor curves.
 \emph{Statistica Sinica}, 29:719-739.
-<doi:10.5705/ss.202017.0249>
+\url{doi:10.5705/ss.202017.0249}
 }
 \keyword{datasets}

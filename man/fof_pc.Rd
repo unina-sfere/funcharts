@@ -70,68 +70,53 @@ See Centofanti et al. (2021) for additional details.}
 }
 \value{
 A list containing the following arguments:
-
-* \code{mod}: an object of class \code{lm} that is a linear regression model
+\itemize{
+\item \code{mod}: an object of class \code{lm} that is a linear regression model
 where
 the response variables are the MFPCA scores of the response variable and
 the covariates are the MFPCA scores of the functional covariates.
 \code{mod$coefficients} contains the matrix of coefficients
 of the functional regression basis functions,
-
-* \code{beta_fd}: a \code{bifd} object containing the
+\item \code{beta_fd}: a \code{bifd} object containing the
 bivariate functional regression coefficients \eqn{\beta(s,t)}
 estimated with the function-on-function linear regression model,
-
-* \code{fitted.values}: a multivariate functional data object of
+\item \code{fitted.values}: a multivariate functional data object of
 class mfd with the fitted values of the
 functional response observations based on the
 function-on-function linear regression model,
-
-* \code{residuals_original_scale}: a multivariate functional data object
+\item \code{residuals_original_scale}: a multivariate functional data object
 of class mfd
 with the functional residuals of the
 function-on-function linear regression model on the original scale,
 i.e. they are the difference between
 \code{mfdobj_y} and \code{fitted.values},
-
-* \code{residuals}: a multivariate functional data object of class mfd
+\item \code{residuals}: a multivariate functional data object of class mfd
 with the functional residuals of the
 function-on-function linear regression model,
 standardized or studentized depending on
 the argument \code{type_residuals},
-
-* \code{type_residuals}: the same as the provided argument,
-
-* \code{pca_x}: an object of class \code{pca_mfd}
+\item \code{type_residuals}: the same as the provided argument,
+\item \code{pca_x}: an object of class \code{pca_mfd}
 obtained by doing MFPCA on the functional covariates,
-
-* \code{pca_y}: an object of class \code{pca_mfd}
+\item \code{pca_y}: an object of class \code{pca_mfd}
 obtained by doing MFPCA on the functional response,
-
-* \code{pca_res}: an object of class \code{pca_mfd}
+\item \code{pca_res}: an object of class \code{pca_mfd}
 obtained by doing MFPCA on the functional residuals,
-
-* \code{components_x}: a vector of integers
+\item \code{components_x}: a vector of integers
 with the components selected in the \code{pca_x} model,
-
-* \code{components_y}: a vector of integers
+\item \code{components_y}: a vector of integers
 with the components selected in the \code{pca_y} model,
-
-* \code{components_res}: a vector of integers
+\item \code{components_res}: a vector of integers
 with the components selected in the \code{pca_res} model,
-
-* \code{y_standardized}: the standardized functional response
+\item \code{y_standardized}: the standardized functional response
 obtained doing \code{scale_mfd(mfdobj_y)},
-
-* \code{tot_variance_explained_x}: the same as the provided argument
-
-* \code{tot_variance_explained_y}: the same as the provided argument
-
-* \code{tot_variance_explained_res}: the same as the provided argument
-
-* \code{get_studentized_residuals}: a function that allows
+\item \code{tot_variance_explained_x}: the same as the provided argument
+\item \code{tot_variance_explained_y}: the same as the provided argument
+\item \code{tot_variance_explained_res}: the same as the provided argument
+\item \code{get_studentized_residuals}: a function that allows
 to calculate studentized residuals on new data,
 given the estimated function-on-function linear regression model.
+}
 }
 \description{
 Function-on-function linear regression based on
@@ -161,5 +146,5 @@ mod <- fof_pc(mfdobj_y, mfdobj_x)
 \references{
 Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 Functional Regression Control Chart.
-\emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
+\emph{Technometrics}, 63(3), 281--294. \url{doi:10.1080/00401706.2020.1753581}
 }

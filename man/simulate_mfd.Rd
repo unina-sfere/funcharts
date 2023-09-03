@@ -151,26 +151,23 @@ the function for reproducibility.}
 }
 \value{
 A list with the following elements:
-
-* \code{X_list} is a list of \code{p} matrices, each with dimension
+\itemize{
+\item \code{X_list} is a list of \code{p} matrices, each with dimension
 \code{nobs}x\code{ngrid}, containing the simulated
 observations of the multivariate functional covariate
-
-* \code{Y} is a \code{nobs}x\code{ngrid} matrix with the simulated
+\item \code{Y} is a \code{nobs}x\code{ngrid} matrix with the simulated
 observations of the functional response
-
-* \code{y_scalar} is a vector of length \code{nobs} with the simulated
+\item \code{y_scalar} is a vector of length \code{nobs} with the simulated
 observations of the scalar response
-
-* \code{beta_fof}, if \code{save_beta = TRUE}, is a
+\item \code{beta_fof}, if \code{save_beta = TRUE}, is a
 list of \code{p} matrices, each with dimension \code{P}x\code{P}
 with the discretized functional coefficients of the
 function-on-function regression
-
-* \code{beta_sof}, if \code{save_beta = TRUE}, is a
+\item \code{beta_sof}, if \code{save_beta = TRUE}, is a
 list of \code{p} vectors, each with length \code{P},
 with the discretized functional coefficients of the
 scalar-on-function regression
+}
 }
 \description{
 Function used to simulate a data set to illustrate
@@ -203,5 +200,5 @@ generated with noise.
 \references{
 Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 Functional Regression Control Chart.
-\emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
+\emph{Technometrics}, 63(3), 281--294. \url{doi:10.1080/00401706.2020.1753581}
 }

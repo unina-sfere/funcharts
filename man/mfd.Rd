@@ -8,13 +8,12 @@ mfd(coef, basisobj, fdnames = NULL, raw = NULL, id_var = NULL, B = NULL)
 }
 \arguments{
 \item{coef}{A three-dimensional array of coefficients:
-
-* the first dimension corresponds to basis functions.
-
-* the second dimension corresponds to the number of
+\itemize{
+\item the first dimension corresponds to basis functions.
+\item the second dimension corresponds to the number of
 multivariate functional observations.
-
-* the third dimension corresponds to variables.}
+\item the third dimension corresponds to variables.
+}}
 
 \item{basisobj}{A functional basis object defining the basis,
 as provided to \code{fda::\link[fda]{fd}}, but there is no default.}

@@ -66,38 +66,31 @@ Default is NULL.}
 }
 \value{
 a list containing the following arguments:
-
-* \code{mod}: an object of class \code{lm} that is a linear regression
+\itemize{
+\item \code{mod}: an object of class \code{lm} that is a linear regression
 model where
 the scalar response variable is \code{y} and
 the covariates are the MFPCA scores of the functional covariates,
-* \code{mod$coefficients} contains the matrix of coefficients of the
+\item \code{mod$coefficients} contains the matrix of coefficients of the
 functional regression basis functions,
-
-* \code{pca}: an object of class \code{pca_mfd} obtained by doing MFPCA
+\item \code{pca}: an object of class \code{pca_mfd} obtained by doing MFPCA
 on the functional covariates,
-
-* \code{beta_fd}: an object of class \code{mfd} object containing
+\item \code{beta_fd}: an object of class \code{mfd} object containing
 the functional regression coefficient
 \eqn{\beta(t)} estimated with the
 scalar-on-function linear regression model,
-
-* \code{components}: a vector of integers with the components
+\item \code{components}: a vector of integers with the components
 selected in the \code{pca} model,
-
-* \code{selection}: the same as the provided argument
-
-* \code{single_min_variance_explained}: the same as the provided argument
-
-* \code{tot_variance_explained}: the same as the provided argument
-
-* \code{gcv}: a vector whose j-th element is the GCV score obtained
+\item \code{selection}: the same as the provided argument
+\item \code{single_min_variance_explained}: the same as the provided argument
+\item \code{tot_variance_explained}: the same as the provided argument
+\item \code{gcv}: a vector whose j-th element is the GCV score obtained
 when retaining the first j components
 in the MFPCA model.
-
-* \code{PRESS}: a vector whose j-th element is the PRESS statistic
+\item \code{PRESS}: a vector whose j-th element is the PRESS statistic
 obtained when retaining the first j components
 in the MFPCA model.
+}
 }
 \description{
 Scalar-on-function linear regression based on
@@ -129,5 +122,5 @@ monitoring ship operating conditions and CO2 emissions based
 on scalar-on-function regression.
 \emph{Applied Stochastic Models in Business and Industry},
 36(3):477--500.
-<doi:10.1002/asmb.2507>
+\url{doi:10.1002/asmb.2507}
 }

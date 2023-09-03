@@ -17,7 +17,7 @@ If NULL, then \code{mfdobj2=mfdobj1}. Default is NULL.}
 }
 \value{
 It calculates the inner product of two
- multivariate functional data objects.
+multivariate functional data objects.
 The main function \code{inprod} of the package \code{fda}
 calculates inner products among
 all possible couples of observations.

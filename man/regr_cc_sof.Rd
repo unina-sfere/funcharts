@@ -67,7 +67,7 @@ on the tuning data set.
 The default value is \code{FALSE}.}
 
 \item{include_covariates}{If TRUE, also functional covariates are monitored through
- \code{control_charts_pca},.
+\code{control_charts_pca},.
 If FALSE, only the scalar response, conditionally on the covariates,
 is monitored.}
 
@@ -78,23 +78,19 @@ to \code{\link{control_charts_pca}}.}
 A \code{data.frame} with as many rows as the
 number of functional replications in \code{mfdobj_x_new},
 with the following columns:
-
-* \code{y_hat}: the predictions of the response variable
+\itemize{
+\item \code{y_hat}: the predictions of the response variable
 corresponding to \code{mfdobj_x_new},
-
-* \code{y}: the same as the argument \code{y_new} given as input
+\item \code{y}: the same as the argument \code{y_new} given as input
 to this function,
-
-* \code{lwr}: lower limit of the \code{1-alpha} prediction interval
+\item \code{lwr}: lower limit of the \code{1-alpha} prediction interval
 on the response,
-
-* \code{pred_err}: prediction error calculated as \code{y-y_hat},
-
-* \code{pred_err_sup}: upper limit of the \code{1-alpha} prediction interval
+\item \code{pred_err}: prediction error calculated as \code{y-y_hat},
+\item \code{pred_err_sup}: upper limit of the \code{1-alpha} prediction interval
 on the prediction error,
-
-* \code{pred_err_inf}: lower limit of the \code{1-alpha} prediction interval
+\item \code{pred_err_inf}: lower limit of the \code{1-alpha} prediction interval
 on the prediction error.
+}
 }
 \description{
 This function is deprecated. Use \code{\link{regr_cc_sof}}.
@@ -140,5 +136,5 @@ monitoring ship operating conditions and CO2 emissions
 based on scalar-on-function regression.
 \emph{Applied Stochastic Models in Business and Industry},
 36(3):477--500.
-<doi:10.1002/asmb.2507>
+\url{doi:10.1002/asmb.2507}
 }

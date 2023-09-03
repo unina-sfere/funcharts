@@ -26,13 +26,13 @@ training set of multivariate functional data.}
 
 \item{components}{A vector of integers with the components over which
 to project the multivariate functional data.
-If this is not NULL, the arguments `single_min_variance_explained`
-and `tot_variance_explained` are ignored.
+If this is not NULL, the arguments \code{single_min_variance_explained}
+and \code{tot_variance_explained} are ignored.
 If NULL, components are selected such that
 the total fraction of variance explained by them
-is at least equal to the argument `tot_variance_explained`,
+is at least equal to the argument \code{tot_variance_explained},
 where only components explaining individually a fraction of variance
-at least equal to the argument `single_min_variance_explained`
+at least equal to the argument \code{single_min_variance_explained}
 are considered to be retained.
 Default is NULL.}
 
@@ -110,35 +110,28 @@ Default value is FALSE.}
 A \code{data.frame} with as many rows as the number of
 multivariate functional observations in the phase II data set and
 the following columns:
-
-* one \code{id} column identifying the multivariate functional observation
+\itemize{
+\item one \code{id} column identifying the multivariate functional observation
 in the phase II data set,
-
-* one \code{T2} column containing the Hotelling T2 statistic
+\item one \code{T2} column containing the Hotelling T2 statistic
 calculated for all observations,
-
-* one column per each functional variable,
+\item one column per each functional variable,
 containing its contribution to the T2 statistic,
-
-* one \code{spe} column containing the SPE statistic calculated
+\item one \code{spe} column containing the SPE statistic calculated
 for all observations,
-
-* one column per each functional variable,
+\item one column per each functional variable,
 containing its contribution to the SPE statistic,
-
-* \code{T2_lim} gives the upper control limit of
+\item \code{T2_lim} gives the upper control limit of
 the Hotelling's T2 control chart,
-
-* one \code{contribution_T2_*_lim} column per each
+\item one \code{contribution_T2_*_lim} column per each
 functional variable giving the
 limits of the contribution of that variable
 to the Hotelling's T2 statistic,
-
-* \code{spe_lim} gives the upper control limit of the SPE control chart
-
-* one \code{contribution_spe*_lim} column per each
+\item \code{spe_lim} gives the upper control limit of the SPE control chart
+\item one \code{contribution_spe*_lim} column per each
 functional variable giving the
 limits of the contribution of that variable to the SPE statistic.
+}
 }
 \description{
 This function builds a data frame needed to plot
@@ -183,7 +176,7 @@ monitoring ship operating conditions and CO2 emissions
 based on scalar-on-function regression.
 \emph{Applied Stochastic Models in Business and Industry},
 36(3):477--500.
-<doi:10.1002/asmb.2507>
+\url{doi:10.1002/asmb.2507}
 
 Capizzi, G., & Masarotto, G. (2018).
 Phase I distribution-free analysis with the R package dfphase1.

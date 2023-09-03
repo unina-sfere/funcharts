@@ -17,11 +17,11 @@ data_sim_mfd(nobs = 5, nbasis = 5, nvar = 2, seed)
 the function for reproducibility.}
 }
 \value{
-A simulated object of class `mfd`.
+A simulated object of class \code{mfd}.
 }
 \description{
 Simulate random coefficients and create a multivariate functional data
-object of class `mfd`.
+object of class \code{mfd}.
 It is mainly for internal use, to check that the package functions
 work.
 }

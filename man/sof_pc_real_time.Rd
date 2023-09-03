@@ -66,7 +66,7 @@ Control charts for
 monitoring ship operating conditions and CO2 emissions
 based on scalar-on-function regression.
 \emph{Applied Stochastic Models in Business and Industry},
-36(3):477--500. <doi:10.1002/asmb.2507>
+36(3):477--500. \url{doi:10.1002/asmb.2507}
 }
 \seealso{
 \code{\link{sof_pc}},
