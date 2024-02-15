@@ -198,9 +198,8 @@ sof_pc <- function(y,
     }
   }
 
-  mod <- lm(y ~ .,
-            data = data.frame(scores[, components, drop = FALSE],
-                              y = y))
+  mod <- stats::lm(y ~ .,
+                   data = data.frame(scores[, components, drop = FALSE], y = y))
 
   beta_fd <- 0
   for (jj in seq_along(components)) {
@@ -355,7 +354,7 @@ predict_sof_pc <- function(object,
   if (is.null(mfdobj_x_new) | is.null(y_new)) {
     mfdobj_x_new <- pca$data
     mfdobj_x_new_scaled <- pca$data_scaled
-    fml <- formula(object$mod)
+    fml <- stats::formula(object$mod)
     response_name <- all.vars(fml)[1]
     y_new <- object$mod$model[, response_name]
   } else {
@@ -375,16 +374,16 @@ predict_sof_pc <- function(object,
                                      components,
                                      newdata_scaled = mfdobj_x_new_scaled))
 
-  y_hat_int <- predict(mod,
-                       newdata = scores,
-                       interval = "prediction",
-                       level = 1 - alpha)
+  y_hat_int <- stats::predict(mod,
+                              newdata = scores,
+                              interval = "prediction",
+                              level = 1 - alpha)
 
   ret <- data.frame(y_hat_int)
 
   res <- y_new - ret$fit
   # hatvalues_new <-
-  #   colSums(t(cbind(1, scores)^2) / colSums(model.matrix(object$mod)^2))
+  #   colSums(t(cbind(1, scores)^2) / colSums(stats::model.matrix(object$mod)^2))
   # if (object$type_residual == "studentized") {
   #   res <- res / (summary(mod)$sigma * sqrt(1 - hatvalues_new))
   # }
@@ -449,12 +448,12 @@ plot_bootstrap_sof_pc <- function(mod, nboot = 25, ncores = 1) {
     B <- lapply(seq_len(nboot), single_boot)
   } else {
     if (.Platform$OS.type == "unix") {
-      B <- mclapply(seq_len(nboot), single_boot, mc.cores = ncores)
+      B <- parallel::mclapply(seq_len(nboot), single_boot, mc.cores = ncores)
     } else {
-      cl <- makeCluster(ncores)
-      clusterExport(cl, c("nn", "mod"), envir = environment())
-      B <- parLapply(cl, seq_len(nboot), single_boot)
-      stopCluster(cl)
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport(cl, c("nn", "mod"), envir = environment())
+      B <- parallel::parLapply(cl, seq_len(nboot), single_boot)
+      parallel::stopCluster(cl)
     }
   }
   B <- simplify2array(B)
@@ -476,7 +475,7 @@ plot_bootstrap_sof_pc <- function(mod, nboot = 25, ncores = 1) {
                 lwd = .3,
                 col = "darkgray",
                 y_lim_equal = TRUE) &
-    geom_hline(yintercept = 0, lty = 2)
+    ggplot2::geom_hline(yintercept = 0, lty = 2)
   lines_mfd(p, mfdobj_new = mod$beta_fd, linewidth = 0.5, y_lim_equal = TRUE)
 
 }

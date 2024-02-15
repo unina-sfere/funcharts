@@ -508,6 +508,8 @@ control_charts_sof_pc <- function(mod,
 #'
 plot_control_charts <- function(cclist, nobsI = 0) {
 
+  statistic <- ucl <- lcl <- id <- ooc <- ytext <- NULL
+
   if (!is.data.frame(cclist)) {
     stop(paste0("cclist must be a data frame ",
                 "containing data to produce control charts."))
@@ -518,17 +520,17 @@ plot_control_charts <- function(cclist, nobsI = 0) {
     df_hot <- data.frame(statistic = cclist$T2,
                          lcl = 0,
                          ucl = cclist$T2_lim) %>%
-      mutate(id = seq_len(n()),
-             ooc = .data$statistic > .data$ucl,
-             type = "HOTELLING~T2~CONTROL~CHART")
+      dplyr::mutate(id = seq_len(dplyr::n()),
+                    ooc = statistic > ucl,
+                    type = "HOTELLING~T2~CONTROL~CHART")
 
     hot_range <- df_hot %>%
-      select(.data$statistic, .data$ucl, .data$lcl) %>%
+      dplyr::select(statistic, ucl, lcl) %>%
       range() %>%
       diff()
 
     df_hot <- df_hot %>%
-      mutate(ytext = case_when(
+      dplyr::mutate(ytext = dplyr::case_when(
         statistic < lcl ~ statistic - hot_range * 0.2,
         statistic > ucl ~ statistic + hot_range * 0.2,
         TRUE ~ statistic,
@@ -540,17 +542,17 @@ plot_control_charts <- function(cclist, nobsI = 0) {
     df_spe <- data.frame(statistic = cclist$spe,
                          lcl = 0,
                          ucl = cclist$spe_lim) %>%
-      mutate(id = seq_len(n()),
-             ooc = .data$statistic > .data$ucl,
-             type = "SPE~CONTROL~CHART")
+      dplyr::mutate(id = seq_len(dplyr::n()),
+                    ooc = statistic > ucl,
+                    type = "SPE~CONTROL~CHART")
 
     spe_range <- df_spe %>%
-      select(.data$statistic, .data$ucl, .data$lcl) %>%
+      dplyr::select(statistic, ucl, lcl) %>%
       range() %>%
       diff()
 
     df_spe <- df_spe %>%
-      mutate(ytext = case_when(
+      dplyr::mutate(ytext = dplyr::case_when(
         statistic < lcl ~ statistic - spe_range * 0.2,
         statistic > ucl ~ statistic + spe_range * 0.2,
         TRUE ~ statistic,
@@ -564,21 +566,21 @@ plot_control_charts <- function(cclist, nobsI = 0) {
                        ucl = cclist$pred_err_sup)
 
     y_range <- df_y %>%
-      select(c(.data$statistic, .data$ucl, .data$lcl)) %>%
+      dplyr::select(c(statistic, ucl, lcl)) %>%
       range() %>%
       diff()
 
     df_y <- df_y %>%
-      mutate(ytext = case_when(
+      dplyr::mutate(ytext = dplyr::case_when(
         statistic < lcl ~ statistic - y_range * 0.2,
         statistic > ucl ~ statistic + y_range * 0.2,
         TRUE ~ statistic,
       ))
 
     df_y <- df_y %>%
-      mutate(id = seq_len(n()),
-             ooc = .data$statistic > .data$ucl | .data$statistic < .data$lcl,
-             type = "REGRESSION~CONTROL~CHART")
+      dplyr::mutate(id = seq_len(dplyr::n()),
+                    ooc = statistic > ucl | statistic < lcl,
+                    type = "REGRESSION~CONTROL~CHART")
 
   }
 
@@ -587,17 +589,17 @@ plot_control_charts <- function(cclist, nobsI = 0) {
     df_hot_x <- data.frame(statistic = cclist$T2_x,
                            lcl = 0,
                            ucl = cclist$T2_lim_x) %>%
-      mutate(id = seq_len(n()),
-             ooc = .data$statistic > .data$ucl,
-             type = "HOTELLING~T2~CONTROL~CHART~(COVARIATES)")
+      dplyr::mutate(id = seq_len(dplyr::n()),
+                    ooc = statistic > ucl,
+                    type = "HOTELLING~T2~CONTROL~CHART~(COVARIATES)")
 
     hot_range <- df_hot_x %>%
-      select(.data$statistic, .data$ucl, .data$lcl) %>%
+      dplyr::select(statistic, ucl, lcl) %>%
       range() %>%
       diff()
 
     df_hot_x <- df_hot_x %>%
-      mutate(ytext = case_when(
+      dplyr::mutate(ytext = dplyr::case_when(
         statistic < lcl ~ statistic - hot_range * 0.2,
         statistic > ucl ~ statistic + hot_range * 0.2,
         TRUE ~ statistic,
@@ -609,17 +611,17 @@ plot_control_charts <- function(cclist, nobsI = 0) {
     df_spe_x <- data.frame(statistic = cclist$spe_x,
                            lcl = 0,
                            ucl = cclist$spe_lim_x) %>%
-      mutate(id = seq_len(n()),
-             ooc = .data$statistic > .data$ucl,
-             type = "SPE~CONTROL~CHART~(COVARIATES)")
+      dplyr::mutate(id = seq_len(dplyr::n()),
+                    ooc = statistic > ucl,
+                    type = "SPE~CONTROL~CHART~(COVARIATES)")
 
     spe_range <- df_spe_x %>%
-      select(.data$statistic, .data$ucl, .data$lcl) %>%
+      dplyr::select(statistic, ucl, lcl) %>%
       range() %>%
       diff()
 
     df_spe_x <- df_spe_x %>%
-      mutate(ytext = case_when(
+      dplyr::mutate(ytext = dplyr::case_when(
         statistic < lcl ~ statistic - spe_range * 0.2,
         statistic > ucl ~ statistic + spe_range * 0.2,
         TRUE ~ statistic,
@@ -629,113 +631,122 @@ plot_control_charts <- function(cclist, nobsI = 0) {
   plot_list <- list()
 
   if (!is.null(cclist$T2)) {
-    plot_list$p_hot <- ggplot(df_hot, aes(x = .data$id, y = .data$statistic)) +
-      geom_line() +
-      geom_point(aes(colour = .data$ooc)) +
-      geom_blank(aes(y = 0)) +
-      geom_point(aes(y = .data$ucl),
-                 pch = "-", size = 5) +
-      theme_bw() +
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
-      theme(legend.position = "none",
-            plot.title = element_text(hjust = 0.5)) +
-      geom_text(aes(y = .data$ytext, label = .data$id),
-                data = filter(df_hot, .data$ooc),
-                size = 3) +
-      xlab("Observation") +
-      ylab(expression(T2~statistic)) +
-      ggtitle(expression(HOTELLING~T2~CONTROL~CHART))
+    plot_list$p_hot <- ggplot2::ggplot(df_hot,
+                                       ggplot2::aes(x = id,
+                                                    y = statistic)) +
+      ggplot2::geom_line() +
+      ggplot2::geom_point(ggplot2::aes(colour = ooc)) +
+      ggplot2::geom_blank(ggplot2::aes(y = 0)) +
+      ggplot2::geom_point(ggplot2::aes(y = ucl),
+                          pch = "-", size = 5) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90,
+                                                         vjust = 0.5)) +
+      ggplot2::theme(legend.position = "none",
+                     plot.title = ggplot2::element_text(hjust = 0.5)) +
+      ggplot2::geom_text(ggplot2::aes(y = ytext, label = id),
+                         data = dplyr::filter(df_hot, ooc),
+                         size = 3) +
+      ggplot2::xlab("Observation") +
+      ggplot2::ylab(expression(T2~statistic)) +
+      ggplot2::ggtitle(expression(HOTELLING~T2~CONTROL~CHART))
   }
 
   if (!is.null(cclist$spe)) {
-    plot_list$p_spe <- ggplot(df_spe, aes(x = .data$id, y = .data$statistic)) +
-      geom_line() +
-      geom_point(aes(colour = .data$ooc)) +
-      geom_blank(aes(y = 0)) +
-      geom_point(aes(y = .data$ucl),
-                 pch = "-", size = 5) +
-      theme_bw() +
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
-      theme(legend.position = "none",
-            plot.title = element_text(hjust = 0.5)) +
-      geom_text(aes(y = .data$ytext, label = .data$id),
-                data = filter(df_spe, .data$ooc),
-                size = 3) +
-      xlab("Observation") +
-      ylab(expression(SPE~statistic)) +
-      ggtitle(expression(SPE~CONTROL~CHART))
+    plot_list$p_spe <- ggplot2::ggplot(df_spe,
+                                       ggplot2::aes(x = id, y = statistic)) +
+      ggplot2::geom_line() +
+      ggplot2::geom_point(ggplot2::aes(colour = ooc)) +
+      ggplot2::geom_blank(ggplot2::aes(y = 0)) +
+      ggplot2::geom_point(ggplot2::aes(y = ucl),
+                          pch = "-", size = 5) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90,
+                                                         vjust = 0.5)) +
+      ggplot2::theme(legend.position = "none",
+                     plot.title = ggplot2::element_text(hjust = 0.5)) +
+      ggplot2::geom_text(ggplot2::aes(y = ytext, label = id),
+                         data = dplyr::filter(df_spe, ooc),
+                         size = 3) +
+      ggplot2::xlab("Observation") +
+      ggplot2::ylab(expression(SPE~statistic)) +
+      ggplot2::ggtitle(expression(SPE~CONTROL~CHART))
   }
 
   if (!is.null(cclist$pred_err)) {
-    plot_list$p_y <- ggplot(df_y, aes(x = .data$id, y = .data$statistic)) +
-      geom_line() +
-      geom_point(aes(colour = .data$ooc)) +
-      geom_blank(aes(y = 0)) +
-      geom_line(aes(y = .data$lcl), lty = 2) +
-      geom_line(aes(y = .data$ucl), lty = 2) +
-      theme_bw() +
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
-      theme(legend.position = "none",
-            plot.title = element_text(hjust = 0.5)) +
-      geom_text(aes(y = .data$ytext, label = .data$id),
-                data = filter(df_y, .data$ooc),
-                size = 3) +
-      xlab("Observation") +
-      ylab(expression("Regression residuals")) +
-      ggtitle(expression(REGRESSION~CONTROL~CHART))
+    plot_list$p_y <- ggplot2::ggplot(df_y,
+                                     ggplot2::aes(x = id, y = statistic)) +
+      ggplot2::geom_line() +
+      ggplot2::geom_point(ggplot2::aes(colour = ooc)) +
+      ggplot2::geom_blank(ggplot2::aes(y = 0)) +
+      ggplot2::geom_line(ggplot2::aes(y = lcl), lty = 2) +
+      ggplot2::geom_line(ggplot2::aes(y = ucl), lty = 2) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90,
+                                                         vjust = 0.5)) +
+      ggplot2::theme(legend.position = "none",
+            plot.title = ggplot2::element_text(hjust = 0.5)) +
+      ggplot2::geom_text(ggplot2::aes(y = ytext, label = id),
+                         data = dplyr::filter(df_y, ooc),
+                         size = 3) +
+      ggplot2::xlab("Observation") +
+      ggplot2::ylab(expression("Regression residuals")) +
+      ggplot2::ggtitle(expression(REGRESSION~CONTROL~CHART))
   }
 
   if (!is.null(cclist$T2_x)) {
-    plot_list$p_hot_x <- ggplot(df_hot_x, aes(x = .data$id,
-                                              y = .data$statistic)) +
-      geom_line() +
-      geom_point(aes(colour = .data$ooc)) +
-      geom_blank(aes(y = 0)) +
-      geom_point(aes(y = .data$ucl),
-                 pch = "-", size = 5) +
-      theme_bw() +
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
-      theme(legend.position = "none",
-            plot.title = element_text(hjust = 0.5)) +
-      geom_text(aes(y = .data$ytext, label = .data$id),
-                data = filter(df_hot_x, .data$ooc),
-                size = 3) +
-      xlab("Observation") +
-      ylab(expression(T2~statistic)) +
-      ggtitle(expression(HOTELLING~T2~CONTROL~CHART~(COVARIATES)))
+    plot_list$p_hot_x <- ggplot2::ggplot(df_hot_x,
+                                         ggplot2::aes(x = id, y = statistic)) +
+      ggplot2::geom_line() +
+      ggplot2::geom_point(ggplot2::aes(colour = ooc)) +
+      ggplot2::geom_blank(ggplot2::aes(y = 0)) +
+      ggplot2::geom_point(ggplot2::aes(y = ucl),
+                          pch = "-", size = 5) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90,
+                                                         vjust = 0.5)) +
+      ggplot2::theme(legend.position = "none",
+                     plot.title = ggplot2::element_text(hjust = 0.5)) +
+      ggplot2::geom_text(ggplot2::aes(y = ytext, label = id),
+                         data = dplyr::filter(df_hot_x, ooc),
+                         size = 3) +
+      ggplot2::xlab("Observation") +
+      ggplot2::ylab(expression(T2~statistic)) +
+      ggplot2::ggtitle(expression(HOTELLING~T2~CONTROL~CHART~(COVARIATES)))
 
     plot_list$p_hot <- plot_list$p_hot +
-      ggtitle(expression(HOTELLING~T2~CONTROL~CHART~(RESPONSE)))
+      ggplot2::ggtitle(expression(HOTELLING~T2~CONTROL~CHART~(RESPONSE)))
   }
 
   if (!is.null(cclist$spe_x)) {
-    plot_list$p_spe_x <- ggplot(df_spe_x, aes(x = .data$id,
-                                              y = .data$statistic)) +
-      geom_line() +
-      geom_point(aes(colour = .data$ooc)) +
-      geom_blank(aes(y = 0)) +
-      geom_point(aes(y = .data$ucl),
-                 pch = "-", size = 5) +
-      theme_bw() +
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
-      theme(legend.position = "none",
-            plot.title = element_text(hjust = 0.5)) +
-      geom_text(aes(y = .data$ytext, label = .data$id),
-                data = filter(df_spe_x, .data$ooc),
-                size = 3) +
-      xlab("Observation") +
-      ylab(expression(SPE~statistic)) +
-      ggtitle(expression(SPE~CONTROL~CHART~(COVARIATES)))
+    plot_list$p_spe_x <- ggplot2::ggplot(df_spe_x,
+                                         ggplot2::aes(x = id, y = statistic)) +
+      ggplot2::geom_line() +
+      ggplot2::geom_point(ggplot2::aes(colour = ooc)) +
+      ggplot2::geom_blank(ggplot2::aes(y = 0)) +
+      ggplot2::geom_point(ggplot2::aes(y = ucl),
+                          pch = "-", size = 5) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90,
+                                                         vjust = 0.5)) +
+      ggplot2::theme(legend.position = "none",
+                     plot.title = ggplot2::element_text(hjust = 0.5)) +
+      ggplot2::geom_text(ggplot2::aes(y = ytext, label = id),
+                         data = dplyr::filter(df_spe_x, ooc),
+                         size = 3) +
+      ggplot2::xlab("Observation") +
+      ggplot2::ylab(expression(SPE~statistic)) +
+      ggplot2::ggtitle(expression(SPE~CONTROL~CHART~(COVARIATES)))
 
     plot_list$p_spe <- plot_list$p_spe +
-      ggtitle(expression(SPE~CONTROL~CHART~(RESPONSE)))
+      ggplot2::ggtitle(expression(SPE~CONTROL~CHART~(RESPONSE)))
   }
 
   p <- patchwork::wrap_plots(plot_list, ncol = 1) &
-    scale_color_manual(values = c("TRUE" = "red",
-                                  "FALSE" = "black",
-                                  "phase1" = "grey")) &
-    scale_x_continuous(
+    ggplot2::scale_color_manual(values = c("TRUE" = "red",
+                                           "FALSE" = "black",
+                                           "phase1" = "grey")) &
+    ggplot2::scale_x_continuous(
       limits = c(0, nrow(cclist) + 1),
       breaks = seq(1, nrow(cclist), by = round(nrow(cclist) / 50) + 1),
       expand = c(0.015, 0.015))
@@ -746,20 +757,21 @@ plot_control_charts <- function(cclist, nobsI = 0) {
     for (jj in seq_len(nplots)) {
       p[[jj]]$data$ooc[seq_len(nobsI)] <- "phase1"
       p[[jj]]$layers[[5]]$data <- p[[jj]]$layers[[5]]$data %>%
-        filter(.data$id > nobsI) %>%
+        dplyr::filter(id > nobsI) %>%
         as.data.frame()
       p[[jj]] <- p[[jj]] +
-        geom_point(aes_string(y = "ucl"),
-                   pch = "-",
-                   size = 5,
-                   col = "grey",
-                   data = filter(p[[jj]]$data, .data$id <= nobsI)) +
-        geom_line(aes_string("id", "statistic"),
-                  col = "grey",
-                  data = filter(p[[jj]]$data, .data$id < nobsI))
+        ggplot2::geom_point(ggplot2::aes(y = !!dplyr::sym("ucl")),
+                            pch = "-",
+                            size = 5,
+                            col = "grey",
+                            data = dplyr::filter(p[[jj]]$data, id <= nobsI)) +
+        ggplot2::geom_line(
+          ggplot2::aes(!!dplyr::sym("id"), !!dplyr::sym("statistic")),
+          col = "grey",
+          data = dplyr::filter(p[[jj]]$data, id < nobsI))
     }
     p <- p &
-      geom_vline(aes(xintercept = nobsI + 1), lty = 2)
+      ggplot2::geom_vline(ggplot2::aes(xintercept = nobsI + 1), lty = 2)
   }
 
   return(p)
@@ -998,7 +1010,7 @@ regr_cc_sof <- function(object,
 
     if (is.null(y_tuning) | is.null(mfdobj_x_tuning)) {
 
-      fml <- formula(object$mod)
+      fml <- stats::formula(object$mod)
       response_name <- all.vars(fml)[1]
       y_tuning <- object$mod$model[, response_name]
       mfdobj_x_tuning <- object$pca$data
@@ -1009,8 +1021,8 @@ regr_cc_sof <- function(object,
                                    y_new = y_tuning,
                                    mfdobj_x_new = mfdobj_x_tuning,
                                    alpha = alpha$y)
-    upr_lim <- as.numeric(quantile(y_hat_tuning$pred_err, 1 - alpha$y/2))
-    lwr_lim <- as.numeric(quantile(y_hat_tuning$pred_err, alpha$y/2))
+    upr_lim <- as.numeric(stats::quantile(y_hat_tuning$pred_err, 1 - alpha$y/2))
+    lwr_lim <- as.numeric(stats::quantile(y_hat_tuning$pred_err, alpha$y/2))
 
     ret$pred_err_sup <- upr_lim
     ret$pred_err_inf <- lwr_lim
@@ -1248,7 +1260,7 @@ regr_cc_fof <- function(object,
     limits = "standard"
   )
   ret <- out %>%
-    select(-contains("contribution_"))
+    dplyr::select(-dplyr::contains("contribution_"))
 
   if (include_covariates) {
     alpha_x <- list(T2 = alpha_x$T2, spe = alpha_x$spe)
@@ -1261,11 +1273,11 @@ regr_cc_fof <- function(object,
       limits = "standard",
       absolute_error = absolute_error
     ) %>%
-      rename("T2_x" = "T2",
-             "spe_x" = "spe",
-             "T2_lim_x" = "T2_lim",
-             "spe_lim_x" = "spe_lim")
-    ret <- cbind(ret, select(ret_covariates, -"id"))
+      dplyr::rename("T2_x" = "T2",
+                    "spe_x" = "spe",
+                    "T2_lim_x" = "T2_lim",
+                    "spe_lim_x" = "spe_lim")
+    ret <- cbind(ret, dplyr::select(ret_covariates, -"id"))
   }
 
   return(ret)

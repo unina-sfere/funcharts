@@ -101,10 +101,10 @@ calculate_limits <- function(pca,
                        components,
                        newdata_scaled = tuning_data,
                        absolute_error = absolute_error)
-  T2 <- select(T2_spe, "T2", contains("contribution_T2",
-                                      ignore.case = FALSE))
-  spe <- select(T2_spe, "spe", contains("contribution_spe",
-                                        ignore.case = FALSE))
+  T2 <- dplyr::select(T2_spe, "T2", dplyr::contains("contribution_T2",
+                                                    ignore.case = FALSE))
+  spe <- dplyr::select(T2_spe, "spe", dplyr::contains("contribution_spe",
+                                                      ignore.case = FALSE))
 
   obs <- if (!is.null(tuning_data)) {
     tuning_data$fdnames[[2]]
@@ -113,8 +113,8 @@ calculate_limits <- function(pca,
   }
 
   id <- data.frame(id = obs)
-  T2_lim <- apply(T2, 2, function(x) quantile(x, 1 - alpha$T2))
-  spe_lim <- apply(spe, 2, function(x) quantile(x, 1 - alpha$spe))
+  T2_lim <- apply(T2, 2, function(x) stats::quantile(x, 1 - alpha$T2))
+  spe_lim <- apply(spe, 2, function(x) stats::quantile(x, 1 - alpha$spe))
 
   T2_lim <- as.data.frame(t(T2_lim))
   spe_lim <- as.data.frame(t(spe_lim))
@@ -246,46 +246,46 @@ calculate_cv_limits <- function(pca,
     statistics_cv <- lapply(seq_len(nfold), single_cv)
   } else {
     if (.Platform$OS.type == "unix") {
-      statistics_cv <- mclapply(seq_len(nfold), single_cv, mc.cores = ncores)
+      statistics_cv <- parallel::mclapply(seq_len(nfold), single_cv, mc.cores = ncores)
     } else {
-      cl <- makeCluster(ncores)
-      clusterExport(cl,
-                    c("mfdobj",
-                      "folds",
-                      "pca",
-                      "components"),
-                    envir = environment())
-      statistics_cv <- parLapply(cl, seq_len(nfold), single_cv)
-      stopCluster(cl)
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport(cl,
+                              c("mfdobj",
+                                "folds",
+                                "pca",
+                                "components"),
+                              envir = environment())
+      statistics_cv <- parallel::parLapply(cl, seq_len(nfold), single_cv)
+      parallel::stopCluster(cl)
     }
   }
 
   statistics_cv <- statistics_cv %>%
-    bind_rows() %>%
-    arrange("id")
+    dplyr::bind_rows() %>%
+    dplyr::arrange("id")
 
   cont_T2 <- statistics_cv %>%
-    dplyr::select(!contains("_lim")) %>%
-    dplyr::select(contains("contribution_T2", ignore.case = FALSE))
+    dplyr::select(!dplyr::contains("_lim")) %>%
+    dplyr::select(dplyr::contains("contribution_T2", ignore.case = FALSE))
 
   cont_spe <- statistics_cv %>%
-    dplyr::select(!contains("_lim")) %>%
-    dplyr::select(contains("contribution_spe", ignore.case = FALSE))
+    dplyr::select(!dplyr::contains("_lim")) %>%
+    dplyr::select(dplyr::contains("contribution_spe", ignore.case = FALSE))
 
-  T2_lim <- data.frame(T2 = quantile(statistics_cv$T2, 1 - alpha$T2))
-  spe_lim <- data.frame(spe = quantile(statistics_cv$spe, 1 - alpha$T2))
+  T2_lim <- data.frame(T2 = stats::quantile(statistics_cv$T2, 1 - alpha$T2))
+  spe_lim <- data.frame(spe = stats::quantile(statistics_cv$spe, 1 - alpha$T2))
 
   cont_T2_lim  <- apply(cont_T2, 2, function(x) {
-    quantile(x, 1 - alpha$T2 / nvar)
+    stats::quantile(x, 1 - alpha$T2 / nvar)
     })
   cont_spe_lim <-  apply(cont_spe, 2, function(x) {
-    quantile(x, 1 - alpha$spe / nvar)
+    stats::quantile(x, 1 - alpha$spe / nvar)
     })
 
   cont_T2_lim <- as.data.frame(t(cont_T2_lim))
   cont_spe_lim <- as.data.frame(t(cont_spe_lim))
 
-  df_limits <- bind_cols(T2_lim, cont_T2_lim, spe_lim, cont_spe_lim)
+  df_limits <- dplyr::bind_cols(T2_lim, cont_T2_lim, spe_lim, cont_spe_lim)
 
   names(df_limits) <- paste0(names(df_limits), "_lim")
 
@@ -381,12 +381,12 @@ get_outliers_mfd <- function(mfdobj) {
   nvar <- dim(mfdobj$coefs)[3]
   nobs <- dim(mfdobj$coefs)[2]
   if (nvar == 1) {
-    fd_obj <- fd(mfdobj$coefs[, , 1], mfdobj$basis)
-    fd_eval <- eval.fd(xseq, fd_obj)
+    fd_obj <- fda::fd(mfdobj$coefs[, , 1], mfdobj$basis)
+    fd_eval <- fda::eval.fd(xseq, fd_obj)
     fData_obj <- roahd::fData(xseq, t(fd_eval))
   } else {
-    fd_obj <- fd(mfdobj$coefs, mfdobj$basis)
-    fd_eval <- eval.fd(xseq, fd_obj)
+    fd_obj <- fda::fd(mfdobj$coefs, mfdobj$basis)
+    fd_eval <- fda::eval.fd(xseq, fd_obj)
     fd_eval_list <- lapply(seq_len(nvar), function(ii) t(fd_eval[, , ii]))
     fData_obj <- roahd::mfData(xseq, fd_eval_list)
   }

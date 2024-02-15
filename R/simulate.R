@@ -340,7 +340,7 @@ simulate_mfd <- function(nobs = 1000,
 
   vary <- rowSums(t(t(ey$vectors^2) * ey$values))
   w <- 1 / P
-  optim <- uniroot(function(a) {
+  optim <- stats::uniroot(function(a) {
     b <- pmax(b_perfect - a, 0)
     var_yexp <- rowSums(t(t(ey$vectors^2) * (b^2 * e$values[1:10])))
     R2_check <- sum(var_yexp / vary) * w
@@ -355,12 +355,12 @@ simulate_mfd <- function(nobs = 1000,
   B <- rbind(diag(b), matrix(0, nrow = dim_additional, ncol = 10))
   eigeps <- diag(diag(ey$values) - t(B) %*% diag(e$values) %*% B)
 
-  csi_X <- rnorm(n = length(e$values) * nobs,
-                 mean = 0,
-                 sd = sqrt(rep(e$values, each = nobs)))
+  csi_X <- stats::rnorm(n = length(e$values) * nobs,
+                        mean = 0,
+                        sd = sqrt(rep(e$values, each = nobs)))
   csi_X <- matrix(csi_X, nrow = nobs)
-  csi_eps <- rnorm(n = length(eigeps) * nobs, mean = 0,
-                   sd = sqrt(rep(eigeps, each = nobs)))
+  csi_eps <- stats::rnorm(n = length(eigeps) * nobs, mean = 0,
+                          sd = sqrt(rep(eigeps, each = nobs)))
   csi_eps <- matrix(csi_eps, nrow = nobs)
   csi_Y <- csi_X %*% B + csi_eps
 
@@ -369,7 +369,7 @@ simulate_mfd <- function(nobs = 1000,
     b <- par[2]
     c <- par[3]
     r <- par[4]
-    dnorm_vec <- Vectorize(dnorm, "x")
+    dnorm_vec <- Vectorize(stats::dnorm, "x")
     function(x) {
       norm_dens <- dnorm_vec(x, mean = m, sd = s)
       sum_term <- if (identical(s, 0)) 0 else colSums(norm_dens)
@@ -533,10 +533,10 @@ simulate_mfd <- function(nobs = 1000,
     meig_jj <- e$vectors[1:P + (jj-1)*P, ]
     meig_jj_interpolate <- apply(t(meig_jj),
                                  1,
-                                 function(y) approx(x_seq, y, grid)$y)
+                                 function(y) stats::approx(x_seq, y, grid)$y)
     X_jj_scaled <- csi_X %*% t(meig_jj_interpolate)
     X_jj <- t(mean_x[[jj]] + t(X_jj_scaled) * sqrt(variance_x[[jj]]))
-    X_list[[jj]] <- X_jj + rnorm(length(X_jj), sd = sd_x[jj])
+    X_list[[jj]] <- X_jj + stats::rnorm(length(X_jj), sd = sd_x[jj])
   }
 
   ndigits <- floor(log10(p)) + 1
@@ -546,17 +546,17 @@ simulate_mfd <- function(nobs = 1000,
 
   eig_y_interpolate <- apply(t(ey$vectors),
                              1,
-                             function(y) approx(x_seq, y, grid)$y)
+                             function(y) stats::approx(x_seq, y, grid)$y)
   Y_scaled <- csi_Y %*% t(eig_y_interpolate)
   Y <- t(mean_y + t(Y_scaled) * sqrt(variance_y))
-  Y <- Y + rnorm(length(Y), sd = sd_y)
+  Y <- Y + stats::rnorm(length(Y), sd = sd_y)
 
   vary_scalar <- 1
   b_sof <- rep(sqrt(R2 * vary_scalar / sum(e$values[1:10])), 10)
   R2_sof_check <- sum(b_sof^2 * e$values[1:10])
 
   var_eps_scalar <- vary_scalar - sum(b_sof^2 * e$values[1:10])
-  eps_scalar <- rnorm(n = nobs, mean = 0, sd = sqrt(var_eps_scalar))
+  eps_scalar <- stats::rnorm(n = nobs, mean = 0, sd = sqrt(var_eps_scalar))
   y_scalar <- as.numeric(d_y_scalar + csi_X[, 1:10] %*% b_sof + eps_scalar)
 
   beta_fof <- beta_sof <- NULL

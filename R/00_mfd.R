@@ -144,14 +144,14 @@ mfd <- function(coef,
     stop("1st dimension of coef must be equal to basisobj$nbasis")
   }
 
-  fdobj <- fd(coef, basisobj, fdnames)
+  fdobj <- fda::fd(coef, basisobj, fdnames)
   fdobj$raw <- raw
   fdobj$id_var <- id_var
   nb <- basisobj$nbasis
 
   if (is.null(B)) {
     if (basisobj$type == "bspline") {
-      B <- inprod.bspline(fd(diag(nb), basisobj))
+      B <- fda::inprod.bspline(fda::fd(diag(nb), basisobj))
     }
     if (basisobj$type == "fourier") {
       B <- diag(nb)
@@ -172,8 +172,8 @@ mfd <- function(coef,
               basisobj$rangeval[1] ^ out_mat) / out_mat
     }
     if (basisobj$type == "polygonal") {
-      B <- inprod_fd(fd(diag(basisobj$nbasis), basisobj),
-                     fd(diag(basisobj$nbasis), basisobj))
+      B <- inprod_fd(fda::fd(diag(basisobj$nbasis), basisobj),
+                     fda::fd(diag(basisobj$nbasis), basisobj))
     }
     if (basisobj$type == "power") {
       out_mat <- outer(basisobj$params, basisobj$params, "+") + 1
@@ -237,7 +237,7 @@ data_sim_mfd <- function(nobs = 5,
   }
   coef <- array(stats::rnorm(nobs * nbasis * nvar),
                 dim = c(nbasis, nobs, nvar))
-  bs <- create.bspline.basis(rangeval = c(0, 1), nbasis = nbasis)
+  bs <- fda::create.bspline.basis(rangeval = c(0, 1), nbasis = nbasis)
   mfd(coef = coef, basisobj = bs)
 }
 
@@ -417,8 +417,8 @@ inprod_mfd <- function(mfdobj1, mfdobj2 = NULL) {
         out <- t(C1jj) %*% C2jj * diff(bs1$rangeval)
       }
     } else {
-      fdobj1_jj <- fd(C1jj, bs1)
-      fdobj2_jj <- fd(C2jj, bs2)
+      fdobj1_jj <- fda::fd(C1jj, bs1)
+      fdobj2_jj <- fda::fd(C2jj, bs2)
       out <- inprod_fd(fdobj1_jj, fdobj2_jj)
     }
     out
@@ -500,14 +500,14 @@ inprod_mfd_diag <- function(mfdobj1, mfdobj2 = NULL) {
     stop("Only mfd class allowed for mfdobj1 input")
   }
 
-  if (!(is.fd(mfdobj2) | is.null(mfdobj2))) {
+  if (!(fda::is.fd(mfdobj2) | is.null(mfdobj2))) {
     stop("mfdobj2 input must be of class mfd, or NULL")
   }
 
   nvar1 <- dim(mfdobj1$coefs)[3]
   nobs1 <- dim(mfdobj1$coefs)[2]
 
-  if (is.fd(mfdobj2)) {
+  if (fda::is.fd(mfdobj2)) {
     nvar2 <- dim(mfdobj2$coefs)[3]
     if (nvar1 != nvar2) {
       stop("mfdobj1 and mfdobj2 must have the same number of variables")
@@ -549,15 +549,15 @@ inprod_mfd_diag <- function(mfdobj1, mfdobj2 = NULL) {
   } else {
     inprods <- vapply(seq_len(nvar1), function(jj) {
 
-      fdobj1_jj <- fd(matrix(mfdobj1$coefs[, , jj],
-                             nrow = dim(mfdobj1$coefs)[1],
-                             ncol = dim(mfdobj1$coefs)[2]),
-                      bs1)
+      fdobj1_jj <- fda::fd(matrix(mfdobj1$coefs[, , jj],
+                                  nrow = dim(mfdobj1$coefs)[1],
+                                  ncol = dim(mfdobj1$coefs)[2]),
+                           bs1)
 
-      fdobj2_jj <- fd(matrix(mfdobj2$coefs[, , jj],
-                             nrow = dim(mfdobj2$coefs)[1],
-                             ncol = dim(mfdobj2$coefs)[2]),
-                      bs2)
+      fdobj2_jj <- fda::fd(matrix(mfdobj2$coefs[, , jj],
+                                  nrow = dim(mfdobj2$coefs)[1],
+                                  ncol = dim(mfdobj2$coefs)[2]),
+                           bs2)
       out <- inprod_fd_diag_single(fdobj1_jj, fdobj2_jj)
     }, numeric(dim(mfdobj1$coefs)[2]))
   }
@@ -571,7 +571,7 @@ inprod_mfd_diag <- function(mfdobj1, mfdobj2 = NULL) {
 #'
 inprod_fd_diag_single <- function(fdobj1, fdobj2 = NULL) {
 
-  if (!is.fd(fdobj1)) {
+  if (!fda::is.fd(fdobj1)) {
     stop("Only fd class allowed for fdobj1 input")
   }
 
@@ -581,11 +581,11 @@ inprod_fd_diag_single <- function(fdobj1, fdobj2 = NULL) {
   type1 <- basisobj1$type
   range1 <- basisobj1$rangeval
 
-  if (!(is.fd(fdobj2) | is.null(fdobj2))) {
+  if (!(fda::is.fd(fdobj2) | is.null(fdobj2))) {
     stop("fdobj2 input must be of class fd, or NULL")
   }
 
-  if (is.fd(fdobj2)) {
+  if (fda::is.fd(fdobj2)) {
     type_calculated <- "inner_product"
     nrep2 <- dim(fdobj2$coefs)[2]
     if (nrep1 != nrep2) {
@@ -633,9 +633,9 @@ inprod_fd_diag_single <- function(fdobj1, fdobj2 = NULL) {
     h <- rep(1, JMAXP)
     h[2] <- 0.25
     s <- vector(mode = "list", length = JMAXP)
-    fx1 <- eval.fd(rngi, fdobj1)
+    fx1 <- fda::eval.fd(rngi, fdobj1)
     if (type_calculated == "inner_product") {
-      fx2 <- eval.fd(rngi, fdobj2)
+      fx2 <- fda::eval.fd(rngi, fdobj2)
       s[[1]] <- width * colSums(fx1 * fx2) / 2
     }
     if (type_calculated == "norm") {
@@ -650,10 +650,10 @@ inprod_fd_diag_single <- function(fdobj1, fdobj2 = NULL) {
         del <- width/tnm
         x <- seq(rngi[1] + del/2, rngi[2] - del/2, del)
       }
-      fx1 <- eval.fd(x, fdobj1)
+      fx1 <- fda::eval.fd(x, fdobj1)
 
       if (type_calculated == "inner_product") {
-        fx2 <- eval.fd(x, fdobj2)
+        fx2 <- fda::eval.fd(x, fdobj2)
         chs <- width * colSums(fx1 * fx2) / tnm
       }
       if (type_calculated == "norm") {
@@ -714,8 +714,8 @@ inprod_fd_diag_single <- function(fdobj1, fdobj2 = NULL) {
 #'
 inprod_fd <- function (fdobj1,
                        fdobj2 = NULL,
-                       Lfdobj1 = int2Lfd(0),
-                       Lfdobj2 = int2Lfd(0),
+                       Lfdobj1 = fda::int2Lfd(0),
+                       Lfdobj2 = fda::int2Lfd(0),
                        rng = range1, wtfd = 0) {
   result1 <- fdchk(fdobj1)
   nrep1 <- result1[[1]]
@@ -730,14 +730,14 @@ inprod_fd <- function (fdobj1,
     temptype <- tempbasis$type
     temprng <- tempbasis$rangeval
     if (temptype == "bspline") {
-      basis2 <- create.bspline.basis(temprng, 1, 1)
+      basis2 <- fda::create.bspline.basis(temprng, 1, 1)
     }
     else {
       if (temptype == "fourier")
-        basis2 <- create.fourier.basis(temprng, 1)
-      else basis2 <- create.constant.basis(temprng)
+        basis2 <- fda::create.fourier.basis(temprng, 1)
+      else basis2 <- fda::create.constant.basis(temprng)
     }
-    fdobj2 <- fd(1, basis2)
+    fdobj2 <- fda::fd(1, basis2)
   }
   result2 <- fdchk(fdobj2)
   nrep2 <- result2[[1]]
@@ -748,18 +748,20 @@ inprod_fd <- function (fdobj1,
   range2 <- basisobj2$rangeval
   if (rng[1] < range1[1] || rng[2] > range1[2])
     stop("Limits of integration are inadmissible.")
-  if (is.fd(fdobj1) && is.fd(fdobj2) && type1 == "bspline" &&
+  if (fda::is.fd(fdobj1) && fda::is.fd(fdobj2) && type1 == "bspline" &&
       type2 == "bspline" && is.eqbasis(basisobj1, basisobj2) &&
       is.integer(Lfdobj1) && is.integer(Lfdobj2) &&
       length(basisobj1$dropind) ==
       0 && length(basisobj1$dropind) == 0 && wtfd == 0 &&
       all(rng == range1)) {
-    inprodmat <- inprod.bspline(fdobj1, fdobj2, Lfdobj1$nderiv,
-                                Lfdobj2$nderiv)
+    inprodmat <- fda::inprod.bspline(fdobj1,
+                                     fdobj2,
+                                     Lfdobj1$nderiv,
+                                     Lfdobj2$nderiv)
     return(inprodmat)
   }
-  Lfdobj1 <- int2Lfd(Lfdobj1)
-  Lfdobj2 <- int2Lfd(Lfdobj2)
+  Lfdobj1 <- fda::int2Lfd(Lfdobj1)
+  Lfdobj2 <- fda::int2Lfd(Lfdobj2)
   iter <- 0
   rngvec <- rng
   knotmult <- numeric(0)
@@ -793,10 +795,10 @@ inprod_fd <- function (fdobj1,
     h[2] <- 0.25
     s <- array(0, c(JMAXP, nrep1, nrep2))
     sdim <- length(dim(s))
-    fx1 <- eval.fd(rngi, fdobj1, Lfdobj1)
-    fx2 <- eval.fd(rngi, fdobj2, Lfdobj2)
+    fx1 <- fda::eval.fd(rngi, fdobj1, Lfdobj1)
+    fx2 <- fda::eval.fd(rngi, fdobj2, Lfdobj2)
     if (!is.numeric(wtfd)) {
-      wtd <- eval.fd(rngi, wtfd, 0)
+      wtd <- fda::eval.fd(rngi, wtfd, 0)
       fx2 <- matrix(wtd, dim(wtd)[1], dim(fx2)[2]) * fx2
     }
     s[1, , ] <- width * matrix(crossprod(fx1, fx2), nrep1,
@@ -811,10 +813,10 @@ inprod_fd <- function (fdobj1,
         del <- width/tnm
         x <- seq(rngi[1] + del/2, rngi[2] - del/2, del)
       }
-      fx1 <- eval.fd(x, fdobj1, Lfdobj1)
-      fx2 <- eval.fd(x, fdobj2, Lfdobj2)
+      fx1 <- fda::eval.fd(x, fdobj1, Lfdobj1)
+      fx2 <- fda::eval.fd(x, fdobj2, Lfdobj2)
       if (!is.numeric(wtfd)) {
-        wtd <- eval.fd(wtfd, x, 0)
+        wtd <- fda::eval.fd(wtfd, x, 0)
         fx2 <- matrix(wtd, dim(wtd)[1], dim(fx2)[2]) *
           fx2
       }
@@ -877,6 +879,7 @@ inprod_fd <- function (fdobj1,
   }
 }
 
+
 #' @noRd
 #'
 fdchk <- function (fdobj) {
@@ -886,7 +889,7 @@ fdchk <- function (fdobj) {
   else {
     if (inherits(fdobj, "basisfd")) {
       coef <- diag(rep(1, fdobj$nbasis - length(fdobj$dropind)))
-      fdobj <- fd(coef, fdobj)
+      fdobj <- fda::fd(coef, fdobj)
     }
     else {
       stop("FDOBJ is not an FD object.")
@@ -948,8 +951,6 @@ is.eqbasis <- function (basisobj1, basisobj2) {
   }
   return(eqwrd)
 }
-
-
 
 
 #' Get Multivariate Functional Data from a data frame
@@ -1096,13 +1097,13 @@ get_mfd_df <- function(dt,
   if (!is.numeric(domain) | length(domain) != 2) {
     stop("domain must be a vector with two numbers.")
   }
-  if (!is.null(basisobj) & !is.basis(basisobj)) {
+  if (!is.null(basisobj) & !fda::is.basis(basisobj)) {
     stop("basisobj must be NULL or a basisfd object")
   }
   if (!is.null(basisobj) & !all(basisobj$rangeval == domain)) {
     stop("if basisobj is provided, basisobj$rangeval must be equal to domain")
   }
-  if (!is.null(Lfdobj) & !is.Lfd(Lfdobj)) {
+  if (!is.null(Lfdobj) & !fda::is.Lfd(Lfdobj)) {
     if (is.numeric(Lfdobj)) {
       if (Lfdobj != abs(round(Lfdobj))) {
         stop("Lfdobj must be a positive integer or a Lfd object")
@@ -1112,14 +1113,14 @@ get_mfd_df <- function(dt,
     }
   }
 
-  if (is.basis(basisobj)) {
+  if (fda::is.basis(basisobj)) {
     message("basisobj is provided, n_basis and n_order are ignored")
     n_basis <- basisobj$nbasis
   }
   if (is.null(basisobj)) {
-    basisobj <- create.bspline.basis(rangeval = domain,
-                                     nbasis = n_basis,
-                                     norder = n_order)
+    basisobj <- fda::create.bspline.basis(rangeval = domain,
+                                          nbasis = n_basis,
+                                          norder = n_order)
   }
 
   ids <- levels(factor(dt[[id]]))
@@ -1147,8 +1148,8 @@ get_mfd_df <- function(dt,
     rownames(gcv) <- variables
     colnames(gcv) <- lambda_search
     for (h in seq_len(n_lam)) {
-      fdpenalty <- fdPar(basisobj, Lfdobj, lambda_search[h])
-      smoothObj <- smooth.basis(x, y, fdpenalty)
+      fdpenalty <- fda::fdPar(basisobj, Lfdobj, lambda_search[h])
+      smoothObj <- fda::smooth.basis(x, y, fdpenalty)
       coefList[[h]] <- smoothObj$fd$coefs
       gcv[, h] <- smoothObj$gcv
 
@@ -1176,20 +1177,20 @@ get_mfd_df <- function(dt,
     coefs_list <- lapply(seq_len(n_obs), fun_gcv)
   } else {
     if (.Platform$OS.type == "unix") {
-      coefs_list <- mclapply(seq_len(n_obs), fun_gcv, mc.cores = ncores)
+      coefs_list <- parallel::mclapply(seq_len(n_obs), fun_gcv, mc.cores = ncores)
     } else {
-      cl <- makeCluster(ncores)
-      clusterExport(cl,
-                    c("dt",
-                      "ids",
-                      "domain",
-                      "variables",
-                      "n_var",
-                      "n_lam",
-                      "lambda_search"),
-                    envir = environment())
-      coefs_list <- parLapply(cl, seq_len(n_obs), fun_gcv)
-      stopCluster(cl)
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport(cl,
+                              c("dt",
+                                "ids",
+                                "domain",
+                                "variables",
+                                "n_var",
+                                "n_lam",
+                                "lambda_search"),
+                              envir = environment())
+      coefs_list <- parallel::parLapply(cl, seq_len(n_obs), fun_gcv)
+      parallel::stopCluster(cl)
     }
   }
 
@@ -1399,6 +1400,9 @@ get_mfd_array <- function(data_array,
                           lambda = NULL,
                           lambda_grid = 10^seq(- 10, 1, length.out = 10),
                           ncores = 1) {
+
+  name <- value <- id <- NULL
+
   if (!missing(ncores)) {
     warning("argument ncores is deprecated.", call. = FALSE)
   }
@@ -1414,13 +1418,13 @@ get_mfd_array <- function(data_array,
   if (is.null(grid)) grid <- seq(0, 1, l = n_args)
   domain <- range(grid)
 
-  if (!is.null(basisobj) & !is.basis(basisobj)) {
+  if (!is.null(basisobj) & !fda::is.basis(basisobj)) {
     stop("basisobj must be NULL or a basisfd object")
   }
   if (!is.null(basisobj) & !all(basisobj$rangeval == domain)) {
     stop("if basisobj is provided, basisobj$rangeval must be equal to domain")
   }
-  if (!is.null(Lfdobj) & !is.Lfd(Lfdobj)) {
+  if (!is.null(Lfdobj) & !fda::is.Lfd(Lfdobj)) {
     if (is.numeric(Lfdobj)) {
       if (Lfdobj != abs(round(Lfdobj))) {
         stop("Lfdobj must be a positive integer or a Lfd object")
@@ -1430,7 +1434,7 @@ get_mfd_array <- function(data_array,
     }
   }
 
-  if (is.basis(basisobj)) {
+  if (fda::is.basis(basisobj)) {
     if (!(basisobj$type %in% c("bspline", "fourier", "const"))) {
       stop("basisobj supported types are only bspline and fourier and constant")
     }
@@ -1439,9 +1443,9 @@ get_mfd_array <- function(data_array,
   }
 
   if (is.null(basisobj)) {
-    basisobj <- create.bspline.basis(rangeval = domain,
-                                     nbasis = n_basis,
-                                     norder = n_order)
+    basisobj <- fda::create.bspline.basis(rangeval = domain,
+                                          nbasis = n_basis,
+                                          norder = n_order)
   }
 
   variables <- dimnames(data_array)[[3]]
@@ -1459,8 +1463,8 @@ get_mfd_array <- function(data_array,
   dimnames(gcv)[[2]] <- variables
   dimnames(gcv)[[3]] <- lambda_search
   for (h in seq_len(n_lam)) {
-    fdpenalty <- fdPar(basisobj, Lfdobj, lambda_search[h])
-    smoothObj <- smooth.basis(grid, data_array, fdpenalty)
+    fdpenalty <- fda::fdPar(basisobj, Lfdobj, lambda_search[h])
+    smoothObj <- fda::smooth.basis(grid, data_array, fdpenalty)
     cc <- smoothObj$fd$coefs
     if (n_var == 1) {
       cc <- array(cc, dim = c(dim(cc)[1], dim(cc)[2], 1))
@@ -1486,22 +1490,22 @@ get_mfd_array <- function(data_array,
     }
   }
 
-  df_raw <- bind_cols(
+  df_raw <- dplyr::bind_cols(
     data.frame(id = rep(ids, each = n_args)),
     data.frame(t = rep(grid, n_obs)),
     lapply(seq_len(dim(data_array)[3]), function(ii) {
       data_array[, , ii] %>%
         as.data.frame() %>%
-        setNames(ids) %>%
-        tidyr::pivot_longer(everything()) %>%
-        mutate(name = factor(.data$name, levels = ids)) %>%
-        arrange(.data$name) %>%
-        dplyr::select(.data$value) %>%
-        setNames(variables[ii])
+        stats::setNames(ids) %>%
+        tidyr::pivot_longer(dplyr::everything()) %>%
+        dplyr::mutate(name = factor(name, levels = ids)) %>%
+        dplyr::arrange(name) %>%
+        dplyr::select(value) %>%
+        stats::setNames(variables[ii])
     }) %>%
-      bind_cols()
+      dplyr::bind_cols()
   ) %>%
-    mutate(id = factor(.data$id, levels = ids))
+    dplyr::mutate(id = factor(id, levels = ids))
 
   fdObj <- mfd(coef = coef,
                basisobj = basisobj,
@@ -1540,7 +1544,7 @@ get_mfd_fd <- function(fdobj) {
 
   if (length(fdobj$fdnames[[1]]) > 1) fdobj$fdnames[[1]] <- "time"
 
-  if (!is.fd(fdobj)) {
+  if (!fda::is.fd(fdobj)) {
     stop("fdobj must be an object of class fd.")
   }
   coefs <- fdobj$coefs
@@ -1630,12 +1634,12 @@ scale_mfd <- function(mfdobj, center = TRUE, scale = TRUE) {
   bs <- mfdobj$basis
   n_obs <- length(mfdobj$fdnames[[2]])
 
-  if (n_obs == 1 & (!is.fd(scale) | !is.fd(center))) {
+  if (n_obs == 1 & (!fda::is.fd(scale) | !fda::is.fd(center))) {
     stop("There is only one observation in the data set")
   }
 
   # Center
-  if (!(is.logical(center) | is.fd(center))) {
+  if (!(is.logical(center) | fda::is.fd(center))) {
     stop("Only logical or fd classes allowed for center input")
   }
 
@@ -1644,20 +1648,20 @@ scale_mfd <- function(mfdobj, center = TRUE, scale = TRUE) {
     cen_fd <- mfdobj
   } else {
     if (is.logical(center) && center == TRUE) {
-      mean_fd <- mean.fd(mfdobj)
+      mean_fd <- fda::mean.fd(mfdobj)
     }
-    if (is.fd(center)) {
+    if (fda::is.fd(center)) {
       mean_fd <- center
     }
     mean_fd_coefs <- array(mean_fd$coefs[, 1, ],
                            dim = c(dim(mean_fd$coefs)[c(1, 3)], n_obs))
     mean_fd_coefs <- aperm(mean_fd_coefs, c(1, 3, 2))
-    mean_fd_rep <- fd(mean_fd_coefs, bs, mfdobj$fdnames)
-    cen_fd <- minus.fd(mfdobj, mean_fd_rep)
+    mean_fd_rep <- fda::fd(mean_fd_coefs, bs, mfdobj$fdnames)
+    cen_fd <- fda::minus.fd(mfdobj, mean_fd_rep)
   }
 
   # Scale
-  if (!(is.logical(scale) | is.fd(scale))) {
+  if (!(is.logical(scale) | fda::is.fd(scale))) {
     stop("Only logical or fd classes allowed for scale input")
   }
 
@@ -1666,31 +1670,32 @@ scale_mfd <- function(mfdobj, center = TRUE, scale = TRUE) {
     fd_std <- cen_fd
   } else {
     if (is.logical(scale) && scale == TRUE) {
-      sd_fd <- sd.fd(mfdobj)
+      sd_fd <- fda::sd.fd(mfdobj)
     }
-    if (is.fd(scale)) {
+    if (fda::is.fd(scale)) {
       sd_fd <- scale
     }
     if (sd_fd$basis$nbasis < 15 | sd_fd$basis$type != "bspline") {
       domain <- mfdobj$basis$rangeval
       x_eval <- seq(domain[1], domain[2], length.out = 1000)
-      sd_eval <- eval.fd(evalarg = x_eval, sd_fd)
+      sd_eval <- fda::eval.fd(evalarg = x_eval, sd_fd)
 
-      bs_sd <- create.bspline.basis(rangeval = domain, nbasis = 20)
+      bs_sd <- fda::create.bspline.basis(rangeval = domain, nbasis = 20)
 
-      fdpar_more_basis <- fdPar(bs_sd, 2, 0)
-      sd_fd_more_basis <- smooth.basis(x_eval, sd_eval, fdpar_more_basis)$fd
+      fdpar_more_basis <- fda::fdPar(bs_sd, 2, 0)
+      sd_fd_more_basis <- fda::smooth.basis(x_eval, sd_eval,
+                                            fdpar_more_basis)$fd
       sd_inv <- sd_fd_more_basis^(-1)
-      sd_inv_eval <- eval.fd(evalarg = x_eval, sd_inv)
-      sd_inv <- smooth.basis(x_eval, sd_inv_eval, fdPar(bs, 2, 0))$fd
+      sd_inv_eval <- fda::eval.fd(evalarg = x_eval, sd_inv)
+      sd_inv <- fda::smooth.basis(x_eval, sd_inv_eval, fda::fdPar(bs, 2, 0))$fd
 
     } else {
       sd_inv <- sd_fd^(-1)
     }
     sd_inv_coefs <- array(sd_inv$coefs, dim = c(dim(sd_inv$coefs), n_obs))
     sd_inv_coefs <- aperm(sd_inv_coefs, c(1, 3, 2))
-    sd_inv_rep <- fd(sd_inv_coefs, bs, mfdobj$fdnames)
-    fd_std <- times.fd(cen_fd, sd_inv_rep, bs)
+    sd_inv_rep <- fda::fd(sd_inv_coefs, bs, mfdobj$fdnames)
+    fd_std <- fda::times.fd(cen_fd, sd_inv_rep, bs)
     fd_std$fdnames <- mfdobj$fdnames
     dimnames(fd_std$coefs) <- dimnames(mfdobj$coefs)
     dimnames(fd_std$fdnames) <- NULL
@@ -1743,14 +1748,14 @@ descale_mfd <- function (scaled_mfd, center = FALSE, scale = FALSE) {
   nobs <- length(scaled_mfd$fdnames[[2]])
   nvar <- length(scaled_mfd$fdnames[[3]])
 
-  if (is.fd(scale)) {
+  if (fda::is.fd(scale)) {
 
     coef_sd_list <- lapply(seq_len(nvar), function(jj) {
       matrix(scale$coefs[, jj], nrow = nbasis, ncol = nobs)
     })
     coef_sd <- simplify2array(coef_sd_list)
-    sd_fd <- fd(coef_sd, scaled_mfd$basis)
-    centered <- times.fd(scaled_mfd, sd_fd, basisobj = basis)
+    sd_fd <- fda::fd(coef_sd, scaled_mfd$basis)
+    centered <- fda::times.fd(scaled_mfd, sd_fd, basisobj = basis)
 
   } else {
     if (is.logical(scale) & !scale & length(scale) == 1) {
@@ -1760,7 +1765,7 @@ descale_mfd <- function (scaled_mfd, center = FALSE, scale = FALSE) {
     }
   }
 
-  if (is.fd(center)) {
+  if (fda::is.fd(center)) {
 
     descaled_mean_list <- lapply(seq_len(nvar), function(jj) {
       out <- centered$coefs[, , jj, drop = FALSE] + as.numeric(center$coefs[, 1, jj])
@@ -1871,7 +1876,7 @@ tensor_product_mfd <- function(mfdobj1, mfdobj2 = NULL) {
 
   dimnames(coef) <- fdnames
 
-  bifd(coef, basis1, basis2, fdnames)
+  fda::bifd(coef, basis1, basis2, fdnames)
 
 }
 
@@ -2023,6 +2028,8 @@ rbind_mfd <- function(mfdobj1, mfdobj2) {
 #' @noRd
 mfd_to_df_raw <- function(mfdobj) {
 
+  id <- NULL
+
   if (!(is.mfd(mfdobj))) {
     stop("Input must be a multivariate functional data object.")
   }
@@ -2033,13 +2040,14 @@ mfd_to_df_raw <- function(mfdobj) {
   arg_var <- mfdobj$fdnames[[1]]
   obs <- mfdobj$fdnames[[2]]
   variables <- mfdobj$fdnames[[3]]
+  vars_to_select <- c(variables, id_var, arg_var)
   dt %>%
-    select(variables, !!id_var, !!arg_var) %>%
-    rename(id = !!id_var) %>%
-    filter(.data$id %in% !!obs) %>%
+    dplyr::select(dplyr::all_of(vars_to_select)) %>%
+    dplyr::rename(id = !!id_var) %>%
+    dplyr::filter(id %in% !!obs) %>%
     tidyr::pivot_longer(variables, names_to = "var") %>%
-    arrange("id", "var", !!arg_var) %>%
-    drop_na()
+    dplyr::arrange("id", "var", !!arg_var) %>%
+    tidyr::drop_na()
 }
 
 
@@ -2059,6 +2067,10 @@ mfd_to_df_raw <- function(mfdobj) {
 #' @noRd
 mfd_to_df <- function(mfdobj) {
 
+  pos <- NULL
+
+  n <- var <- NULL
+
   if (!(is.mfd(mfdobj))) {
     stop("Input must be a multivariate functional data object.")
   }
@@ -2067,30 +2079,32 @@ mfd_to_df <- function(mfdobj) {
   arg_var <- mfdobj$fdnames[[1]]
   range <- mfdobj$basis$rangeval
   evalarg <- seq(range[1], range[2], l = 200)
-  X <- eval.fd(evalarg, mfdobj)
+  X <- fda::eval.fd(evalarg, mfdobj)
   id <- mfdobj$fdnames[[2]]
 
   id <- data.frame(id = id) %>%
-    mutate(pos = seq_len(n())) %>%
-    group_by(id) %>%
-    mutate(n = n()) %>%
-    mutate(id = ifelse(n == 1, id, paste0(id, " rep", seq_len(n())))) %>%
-    arrange(.data$pos) %>%
-    pull(id)
+    dplyr::mutate(pos = seq_len(dplyr::n())) %>%
+    dplyr::group_by(id) %>%
+    dplyr::mutate(n = dplyr::n()) %>%
+    dplyr::mutate(id = ifelse(n == 1,
+                              id,
+                              paste0(id, " rep", seq_len(dplyr::n())))) %>%
+    dplyr::arrange(pos) %>%
+    dplyr::pull(id)
 
   variables <- mfdobj$fdnames[[3]]
   lapply(seq_along(variables), function(jj) {
     variable <- variables[jj]
 
     .df <- as.data.frame(X[, , jj, drop = FALSE]) %>%
-      setNames(id)
+      stats::setNames(id)
     .df[[arg_var]] <- evalarg
     .df$var <- variable
     tidyr::pivot_longer(.df, -c(!!arg_var, var), names_to = "id")
   }) %>%
-    bind_rows() %>%
-    mutate(var = factor(var, levels = !!variables),
-           id = factor(id, levels = !!id))
+    dplyr::bind_rows() %>%
+    dplyr::mutate(var = factor(var, levels = !!variables),
+                  id = factor(id, levels = !!id))
 }
 
 
@@ -2163,6 +2177,8 @@ plot_mfd <- function(mfdobj,
                      y_lim_equal = FALSE,
                      ...) {
 
+  var <- id <- value <- NULL
+
   if (!(is.mfd(mfdobj))) {
     stop("First argument must be a multivariate functional data object.")
   }
@@ -2176,15 +2192,15 @@ plot_mfd <- function(mfdobj,
   if (!is.null(data)) {
     join_vars <- "id"
     if ("var" %in% names(data)) join_vars <- c(join_vars, "var")
-    df <- inner_join(df, data, by = join_vars)
+    df <- dplyr::inner_join(df, data, by = join_vars)
   }
   variables <- mfdobj$fdnames[[3]]
   df$var <- factor(as.character(df$var), levels = variables)
   arg_var <- mfdobj$fdnames[[1]]
   if (grepl(" ", arg_var)) {
-    mapping1 <- aes_string(paste0("`", arg_var, "`"), "value", group = "id")
+    mapping1 <- ggplot2::aes(!!dplyr::sym(paste0("`", arg_var, "`")), y = value, group = id)
   } else {
-    mapping1 <- aes_string(arg_var, "value", group = "id")
+    mapping1 <- ggplot2::aes(!!dplyr::sym(arg_var), y = value, group = id)
   }
   mapping_tot <- c(mapping1, mapping)
   class(mapping_tot) <- "uneval"
@@ -2194,69 +2210,71 @@ plot_mfd <- function(mfdobj,
   for (kk in seq_along(mapping_tot)) {
 
     column <- as.character(mapping_tot[kk])
-    column <- substr(column, 2, str_count(column))
+    column <- substr(column, 2, stringr::str_count(column))
     mapping_type <- names(mapping_tot)[kk]
 
 
     if (!(column %in% names(df))) {
       df <- df %>%
-        mutate(!!mapping_type := factor(eval(parse(text=column))))
+        dplyr::mutate(!!mapping_type := factor(eval(parse(text=column))))
     }
   }
 
   plot_list <- list()
   for (jj in seq_along(variables)) {
     dat <- df %>%
-      filter(var == variables[jj])
+      dplyr::filter(var == variables[jj])
 
     if (grepl(" ", arg_var)) {
-      mapping1 <- aes_string(paste0("`", arg_var, "`"), "value", group = "id")
+      mapping1 <- ggplot2::aes(!!dplyr::sym(paste0("`", arg_var, "`")), value, group = id)
     } else {
-      mapping1 <- aes_string(arg_var, "value", group = "id")
+      mapping1 <- ggplot2::aes(!!dplyr::sym(arg_var), value, group = id)
     }
+
     mapping_tot <- c(mapping1, mapping)
     class(mapping_tot) <- "uneval"
 
 
-    geom_line_obj <- geom_line(mapping = mapping_tot,
-                               data = dat,
-                               stat = stat,
-                               position = position,
-                               na.rm = na.rm,
-                               orientation = orientation,
-                               show.legend = show.legend,
-                               inherit.aes = inherit.aes,
-                               ...)
-    if (is.null(geom_line_obj$aes_params$linewidth)) {
+    geom_line_obj <- ggplot2::geom_line(mapping = mapping_tot,
+                                        data = dat,
+                                        stat = stat,
+                                        position = position,
+                                        na.rm = na.rm,
+                                        orientation = orientation,
+                                        show.legend = show.legend,
+                                        inherit.aes = inherit.aes,
+                                        ...)
+    if (is.null(geom_line_obj$aes_params$linewidth) & is.null(geom_line_obj$mapping$linewidth)) {
       geom_line_obj$aes_params$linewidth <- 0.25
     }
 
-    p <- ggplot() +
+    p <- ggplot2::ggplot() +
       geom_line_obj +
-      ylab(variables[jj]) +
-      xlab(arg_var) +
-      theme_bw() +
-      scale_linetype_discrete(drop = FALSE)
+      ggplot2::ylab(variables[jj]) +
+      ggplot2::xlab(arg_var) +
+      ggplot2::theme_bw() +
+      ggplot2::scale_linetype_discrete(drop = FALSE) +
+      ggplot2::scale_colour_discrete(drop = FALSE)
 
 
 
     if (!is.null(p$layers[[1]]$data[["colour"]])) {
       if (is.numeric(p$layers[[1]]$data$colour)) {
-        p <- p + scale_colour_continuous(limits = range(dat$colour))
+        p <- p + ggplot2::scale_colour_continuous(limits = range(dat$colour))
       } else {
-        p <- p + scale_colour_discrete(drop = FALSE)
+        p <- p + ggplot2::scale_colour_discrete(drop = FALSE)
       }
     }
     if (!is.null(p$layers[[1]]$data[["color"]])) {
       if (is.numeric(p$layers[[1]]$data$color)) {
-        p <- p + scale_color_continuous(limits = range(dat$color))
+        p <- p + ggplot2::scale_color_continuous(limits = range(dat$color))
       } else {
-        p <- p + scale_color_discrete(drop = FALSE)
+        p <- p + ggplot2::scale_color_discrete(drop = FALSE)
       }
     }
 
     if (y_lim_equal) {
-      p <- p + ylim(ylim_common)
+      p <- p + ggplot2::ylim(ylim_common)
     }
 
     plot_list[[jj]] <- p
@@ -2375,7 +2393,7 @@ lines_mfd <- function(plot_mfd_obj,
       p2[[jj]]$layers[[1]]
     if (y_lim_equal) {
       p[[jj]]$scales$scales[[2]] <- NULL
-      p[[jj]] <- p[[jj]] + ylim(ylim_common_new)
+      p[[jj]] <- p[[jj]] + ggplot2::ylim(ylim_common_new)
     }
 
   }
@@ -2423,6 +2441,8 @@ plot_bifd <- function(bifd_obj,
                       phi = 40,
                       theta = 40) {
 
+  s <- t <- value <- NULL
+
   if (!inherits(bifd_obj, "bifd")) {
     stop("bifd_obj must be an object of class bifd")
   }
@@ -2443,7 +2463,7 @@ plot_bifd <- function(bifd_obj,
   t_eval <- seq(bifd_obj$tbasis$rangeval[1],
                 bifd_obj$tbasis$rangeval[2],
                 l = 100)
-  X_eval <- eval.bifd(s_eval, t_eval, bifd_obj)
+  X_eval <- fda::eval.bifd(s_eval, t_eval, bifd_obj)
 
   variables <- bifd_obj$bifdnames[[4]]
   nvar <- length(variables)
@@ -2453,57 +2473,61 @@ plot_bifd <- function(bifd_obj,
     phi <- 40
     theta <- 40
     nr <- ceiling(sqrt(nvar))
-    par(mfrow = c(nr, nr))
+    graphics::par(mfrow = c(nr, nr))
     for (ii in seq_len(nvar)) {
-      persp(s_eval,
-            t_eval,
-            X_eval[,,1,ii],
-            phi = phi,
-            theta = theta,
-            main = variables[ii],
-            zlim = zlim,
-            xlab = "s",
-            ylab = "t",
-            zlab = "value")
+      graphics::persp(s_eval,
+                      t_eval,
+                      X_eval[,,1,ii],
+                      phi = phi,
+                      theta = theta,
+                      main = variables[ii],
+                      zlim = zlim,
+                      xlab = "s",
+                      ylab = "t",
+                      zlab = "value")
     }
-    par(mfrow = c(1, 1))
+    graphics::par(mfrow = c(1, 1))
   } else {
     plot_list <- list()
     for (ii in seq_along(variables)) {
       p <- X_eval[, , , ii] %>%
         data.frame() %>%
-        setNames(t_eval) %>%
-        mutate(s = s_eval) %>%
-        tidyr::pivot_longer(-.data$s, names_to = "t", values_to = "value") %>%
-        mutate(t = as.numeric(.data$t),
-               variable = bifd_obj$bifdnames[[4]][ii]) %>%
-        ggplot() +
-        theme_bw() +
-        theme(panel.grid.major = element_blank(),
-              panel.grid.minor = element_blank(),
-              strip.background = element_blank(),
-              panel.border = element_rect(colour = "black")) +
-        ggtitle(variables[ii])
+        stats::setNames(t_eval) %>%
+        dplyr::mutate(s = s_eval) %>%
+        tidyr::pivot_longer(-s, names_to = "t", values_to = "value") %>%
+        dplyr::mutate(t = as.numeric(t),
+                      variable = bifd_obj$bifdnames[[4]][ii]) %>%
+        ggplot2::ggplot() +
+        ggplot2::theme_bw() +
+        ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+                       panel.grid.minor = ggplot2::element_blank(),
+                       strip.background = ggplot2::element_blank(),
+                       panel.border = ggplot2::element_rect(colour = "black")) +
+        ggplot2::ggtitle(variables[ii])
 
       if (type_plot == "raster") {
         p <- p +
-          geom_tile(aes(.data$s, .data$t, fill = .data$value)) +
-          scale_fill_gradientn(
+          ggplot2::geom_tile(ggplot2::aes(s, t, fill = value)) +
+          ggplot2::scale_fill_gradientn(
             colours = c("blue", "white", "red"),
             limits = zlim)
       }
 
       if (type_plot == "contour") {
         p <- p +
-          geom_contour(aes(.data$s, .data$t, z = .data$value,
-                           colour = after_stat(get("level")))) +
-          scale_color_gradientn(
+          ggplot2::geom_contour(ggplot2::aes(
+            s,
+            t,
+            z = value,
+            colour = ggplot2::after_stat(get("level")))) +
+          ggplot2::scale_color_gradientn(
             colours = c("blue", "white", "red"),
             limits = zlim) +
-          labs(colour = 'level')
+          ggplot2::labs(colour = 'level')
       }
       plot_list[[ii]] <- p +
-        theme(plot.title = element_text(hjust = 0.5, size = 9))
+        ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5,
+                                                          size = 9))
     }
     patchwork::wrap_plots(plot_list) +
       patchwork::plot_layout(guides = "collect")
@@ -2523,7 +2547,7 @@ plot_bifd <- function(bifd_obj,
 #     bs <- X$basis
 #     rb <- bs$rangeval
 #     xseq <- seq(rb[1], rb[2], l = 300)
-#     Xeval <- eval.fd(xseq, X)
+#     Xeval <- fda::eval.fd(xseq, X)
 #     Xeval <- aperm(Xeval, c(2, 1, 3))
 #     fdnames <- X$fdnames
 #   }
@@ -2540,7 +2564,7 @@ plot_bifd <- function(bifd_obj,
 #     Xeval <- aperm(Xeval, c(2, 1, 3))
 #   }
 #
-#   coefList <- project.basis(Xeval, argvals = xseq, basisobj = basisobj)
+#   coefList <- fda::project.basis(Xeval, argvals = xseq, basisobj = basisobj)
 #   X_mfd <- mfd(coefList, basisobj = basisobj, fdnames = fdnames)
 #   X_mfd
 #

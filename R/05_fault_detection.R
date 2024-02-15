@@ -53,25 +53,25 @@ get_ooc <- function(cclist) {
 
   if (sum(grepl("contribution_T2", names(cclist))) > 0) {
     cont_T2 <- cclist %>%
-      select(contains("contribution_T2")) %>%
-      select(- contains("_lim"))
+      dplyr::select(dplyr::contains("contribution_T2")) %>%
+      dplyr::select(-dplyr::contains("_lim"))
     cont_T2_lim <- cclist %>%
-      select(contains("contribution_T2")) %>%
-      select(contains("_lim"))
+      dplyr::select(dplyr::contains("contribution_T2")) %>%
+      dplyr::select(dplyr::contains("_lim"))
     df_cont_T2 <- as.data.frame(cont_T2 > cont_T2_lim)
 
   }
   if (sum(grepl("contribution_spe", names(cclist))) > 0) {
     cont_spe <- cclist %>%
-      select(contains("contribution_spe")) %>%
-      select(- contains("_lim"))
+      dplyr::select(dplyr::contains("contribution_spe")) %>%
+      dplyr::select(-dplyr::contains("_lim"))
     cont_spe_lim <- cclist %>%
-      select(contains("contribution_spe")) %>%
-      select(contains("_lim"))
+      dplyr::select(dplyr::contains("contribution_spe")) %>%
+      dplyr::select(dplyr::contains("_lim"))
     df_cont_spe <- as.data.frame(cont_spe > cont_spe_lim)
   }
 
-  bind_cols(df, df_cont_T2, df_cont_spe)
+  dplyr::bind_cols(df, df_cont_T2, df_cont_spe)
 
 }
 
@@ -213,14 +213,17 @@ cont_plot <- function(cclist,
                       which_plot = c("T2", "spe"),
                       print_id = FALSE) {
 
+  . <- contribution <- limit <- variables <- NULL
+  type <- ooc <- x <- xend <- y <- yend <- NULL
+
   title <- paste("Observation", id_num)
   if (print_id) title <- paste(title, cclist$id[id_num])
 
   if (identical(which_plot, "all")) which_plot <- c("T2", "spe")
 
   fun_covariates <- cclist %>%
-    select(contains("contribution_T2")) %>%
-    select(- contains("_lim")) %>%
+    dplyr::select(dplyr::contains("contribution_T2")) %>%
+    dplyr::select(-dplyr::contains("_lim")) %>%
     names() %>%
     gsub("contribution_T2_", "", .)
 
@@ -230,61 +233,61 @@ cont_plot <- function(cclist,
     df_hot <- data.frame(
       variables = factor(fun_covariates, levels = fun_covariates),
       contribution = cclist %>%
-        select(contains("contribution_T2"),
-                      - contains("_lim")) %>%
-        slice(id_num) %>%
+        dplyr::select(dplyr::contains("contribution_T2"),
+                      -dplyr::contains("_lim")) %>%
+        dplyr::slice(id_num) %>%
         as.numeric(),
       limit = cclist %>%
-        select(contains("contribution_T2")) %>%
-        select(contains("_lim")) %>%
-        slice(id_num) %>%
+        dplyr::select(dplyr::contains("contribution_T2")) %>%
+        dplyr::select(dplyr::contains("_lim")) %>%
+        dplyr::slice(id_num) %>%
         as.numeric()) %>%
-      mutate(ooc = .data$contribution > .data$limit) %>%
-      mutate(type = "Contribution to T2") %>%
-      mutate(x = seq_along(.data$variables) - 0.35,
-             xend = seq_along(.data$variables) + 0.35)
+      dplyr::mutate(ooc = contribution > limit) %>%
+      dplyr::mutate(type = "Contribution to T2") %>%
+      dplyr::mutate(x = seq_along(variables) - 0.35,
+                    xend = seq_along(variables) + 0.35)
   }
 
   if ("spe" %in% which_plot) {
     df_spe <- data.frame(
       variables = factor(fun_covariates, levels = fun_covariates),
       contribution = cclist %>%
-        select(contains("contribution_spe"),
-                      - contains("_lim")) %>%
-        slice(id_num) %>%
+        dplyr::select(dplyr::contains("contribution_spe"),
+                      -dplyr::contains("_lim")) %>%
+        dplyr::slice(id_num) %>%
         as.numeric(),
       limit = cclist %>%
-        select(contains("contribution_spe")) %>%
-        select(contains("_lim")) %>%
-        slice(id_num) %>%
+        dplyr::select(dplyr::contains("contribution_spe")) %>%
+        dplyr::select(dplyr::contains("_lim")) %>%
+        dplyr::slice(id_num) %>%
         as.numeric()) %>%
-      mutate(ooc = .data$contribution > .data$limit) %>%
-      mutate(type = "Contribution to SPE") %>%
-      mutate(x = seq_along(.data$variables) - 0.35,
-             xend = seq_along(.data$variables) + 0.35)
+      dplyr::mutate(ooc = contribution > limit) %>%
+      dplyr::mutate(type = "Contribution to SPE") %>%
+      dplyr::mutate(x = seq_along(variables) - 0.35,
+                    xend = seq_along(variables) + 0.35)
   }
 
-  df <- bind_rows(df_hot, df_spe) %>%
-    mutate(type = factor(.data$type, levels = c("Contribution to T2",
-                                                "Contribution to SPE")))
-  ggplot(df) +
-    geom_col(aes(x = .data$variables,
-                 y = .data$contribution,
-                 fill = .data$ooc), width = 0.7) +
-    theme_bw() + xlab("") + ylab("") +
-    ggtitle(title) +
-    theme(plot.title = element_text(hjust = 0.5),
-          legend.position = "none") +
-    scale_fill_manual(values = c("FALSE" = "grey", "TRUE" = "tomato1")) +
-    geom_segment(aes(
-      x = .data$x,
-      xend = .data$xend,
-      y = .data$limit,
-      yend = .data$limit), col = "black") +
-    facet_wrap(~ type, scales = "free_y", ncol = 1,
-               strip.position = "left") +
-    theme(strip.background = element_blank(),
-          strip.placement = "outside")
+  df <- dplyr::bind_rows(df_hot, df_spe) %>%
+    dplyr::mutate(type = factor(type, levels = c("Contribution to T2",
+                                                       "Contribution to SPE")))
+  ggplot2::ggplot(df) +
+    ggplot2::geom_col(ggplot2::aes(x = variables,
+                                   y = contribution,
+                                   fill = ooc), width = 0.7) +
+    ggplot2::theme_bw() + ggplot2::xlab("") + ggplot2::ylab("") +
+    ggplot2::ggtitle(title) +
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5),
+                   legend.position = "none") +
+    ggplot2::scale_fill_manual(values = c("FALSE" = "grey", "TRUE" = "tomato1")) +
+    ggplot2::geom_segment(ggplot2::aes(
+      x = x,
+      xend = xend,
+      y = limit,
+      yend = limit), col = "black") +
+    ggplot2::facet_wrap(~ type, scales = "free_y", ncol = 1,
+                        strip.position = "left") +
+    ggplot2::theme(strip.background = ggplot2::element_blank(),
+                   strip.placement = "outside")
 
 }
 
@@ -359,6 +362,8 @@ plot_mon <- function(cclist,
                      plot_title = FALSE,
                      print_id = FALSE) {
 
+  id <- contribution_ooc <- NULL
+
   id_num <- if (length(fd_test$fdnames[[2]]) == 1) {
     id_num <- which(cclist$id == fd_test$fdnames[[2]])
     title <- paste("Observation", id_num)
@@ -372,41 +377,44 @@ plot_mon <- function(cclist,
   df <- data.frame(id = cclist$id)
   if (sum(grepl("contribution_T2", names(ooc))) > 0 &
       sum(grepl("contribution_spe", names(ooc)))) {
-    cont_T2 <- select(
+    cont_T2 <- dplyr::select(
       ooc,
-      contains("contribution_T2"),
-      - contains("_lim"))
-    cont_spe <- select(
+      dplyr::contains("contribution_T2"),
+      -dplyr::contains("_lim"))
+    cont_spe <- dplyr::select(
       ooc,
-      contains("contribution_spe"),
-      - contains("_lim"))
+      dplyr::contains("contribution_spe"),
+      -dplyr::contains("_lim"))
     cont_out <- data.frame(cont_T2 | cont_spe)
     names(cont_out) <- gsub("contribution_T2_", "", names(cont_T2))
-    df <- bind_cols(df, cont_out) %>%
+    df <- dplyr::bind_cols(df, cont_out) %>%
       tidyr::pivot_longer(- "id",
-                          values_to = "contribution ooc",
+                          values_to = "contribution_ooc",
                           names_to = "var")
   } else {
     df <- df %>%
-      mutate(`contribution ooc` =
-               cclist$T2 > cclist$T2_lim |
-               cclist$spe > cclist$spe_lim)
+      dplyr::mutate(contribution_ooc =
+                      cclist$T2 > cclist$T2_lim |
+                      cclist$spe > cclist$spe_lim)
   }
 
 
   p <- plot_mfd(mfdobj = fd_train, col = "grey")
   p <- lines_mfd(p,
                  mfdobj_new = fd_test,
-                 data = filter(df, .data$id %in% fd_test$fdnames[[2]]),
-            mapping = aes(col = .data$`contribution ooc`), linewidth = 1) &
-    scale_color_manual(values = c("TRUE" = "tomato1", "FALSE" = "black"))
+                 data = dplyr::filter(df, id %in% fd_test$fdnames[[2]]),
+                 mapping = ggplot2::aes(col = contribution_ooc),
+                 linewidth = 1) &
+    ggplot2::scale_color_manual(values = c("TRUE" = "tomato1", "FALSE" = "black"))
   if (plot_title) {
-    p <- p & ggtitle(title) & theme(plot.title = element_text(hjust = 0.5))
+    p <- p &
+      ggplot2::ggtitle(title) &
+      ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
     # patchwork::plot_annotation(
     #   title = title,
-    #   theme = theme(plot.title = element_text(hjust = 0.5)))
+    #   theme = ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)))
   }
 
-  p & theme(legend.position = "none")
+  p & ggplot2::theme(legend.position = "none")
 
 }

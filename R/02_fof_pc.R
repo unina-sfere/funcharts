@@ -255,9 +255,9 @@ fof_pc <- function(mfdobj_y,
   y_fml <- paste(names(df_y), collapse = ", ")
   y_fml <- paste0("cbind(", y_fml, ")")
   x_fml <- paste(names(df_x), collapse = " + ")
-  fml <- as.formula(paste(y_fml, "~ -1 +", x_fml))
+  fml <- stats::as.formula(paste(y_fml, "~ -1 +", x_fml))
 
-  mod <- lm(fml, data = data.frame(df_x, df_y))
+  mod <- stats::lm(fml, data = data.frame(df_x, df_y))
   B <- mod$coefficients
   B <- as.matrix(B)
 
@@ -286,12 +286,12 @@ fof_pc <- function(mfdobj_y,
                     y_pca$harmonics$basis$names,
                     "",
                     fdnames)
-  beta_fd <- bifd(beta_coefs,
-                  x_pca$harmonics$basis,
-                  y_pca$harmonics$basis,
-                  bifdnames)
+  beta_fd <- fda::bifd(beta_coefs,
+                       x_pca$harmonics$basis,
+                       y_pca$harmonics$basis,
+                       bifdnames)
 
-  y_scores_hat <- predict(mod)
+  y_scores_hat <- stats::predict(mod)
 
   if (!is.matrix(y_scores_hat)) {
     y_scores_hat <- matrix(y_scores_hat)
@@ -326,29 +326,29 @@ fof_pc <- function(mfdobj_y,
   if (type_residuals == "studentized") {
 
     domain <- res_original$basis$rangeval
-    bs <- create.bspline.basis(domain, 100)
-    bs$B <- inprod.bspline(fd(diag(1, bs$nbasis), bs))
+    bs <- fda::create.bspline.basis(domain, 100)
+    bs$B <- fda::inprod.bspline(fda::fd(diag(1, bs$nbasis), bs))
 
-    sd_res <- sd.fd(res_original)
-    var_res <- times.fd(sd_res, sd_res, bs)
+    sd_res <- fda::sd.fd(res_original)
+    var_res <- fda::times.fd(sd_res, sd_res, bs)
 
     sigma_M <- crossprod(mod$residuals) / n_obs
 
     # `gain` is \xi'(\xi'\xi)^(-1) \xi in Eq. (36),
     # one value for each of the n_obs.
-    gain <- hatvalues(mod)
+    gain <- stats::hatvalues(mod)
 
     # `psp_coef` is the vector of basis coefficients of the
     # function psi_M(t)' sigma_M psi_M(t) in Eq. (36).
     xseq <- seq(bs$rangeval[1], bs$rangeval[2], length.out = 1000)
-    y_pca_eval <- eval.fd(xseq, y_pca$harmonics)
-    y_pca_coef <- project.basis(y_pca_eval, xseq, bs)
+    y_pca_eval <- fda::eval.fd(xseq, y_pca$harmonics)
+    y_pca_coef <- fda::project.basis(y_pca_eval, xseq, bs)
     G <- as.numeric(y_pca_coef[, seq_len(ncomponents_y), 1])
     G <- matrix(G, ncol = ncomponents_y)
     psp_coef <- G %*% sigma_M %*% t(G)
-    bifd_obj <- bifd(psp_coef, sbasisobj = bs, tbasisobj = bs)
+    bifd_obj <- fda::bifd(psp_coef, sbasisobj = bs, tbasisobj = bs)
     psp_eval <- fda::evaldiag.bifd(xseq, bifd_obj)
-    psp_coef <- as.numeric(project.basis(psp_eval, xseq, bs))
+    psp_coef <- as.numeric(fda::project.basis(psp_eval, xseq, bs))
 
     get_studentized_residuals <- function(gain, pred_error) {
 
@@ -362,11 +362,11 @@ fof_pc <- function(mfdobj_y,
 
       # `cov_hat_sqrt` is the inverse 1 over the sqrt of the cov in the
       # denominator of Eq. (35) (one function per each of the n_obs).
-      cov_hat_sqrt_inv <- fd(cov_hat_coef, bs)^(-.5)
+      cov_hat_sqrt_inv <- fda::fd(cov_hat_coef, bs)^(-.5)
 
-      studentized <- times.fd(fd(pred_error$coefs[, , 1], basis_y),
-                      fd(cov_hat_sqrt_inv$coefs, bs),
-                      basisobj = bs)
+      studentized <- fda::times.fd(fda::fd(pred_error$coefs[, , 1], basis_y),
+                                   fda::fd(cov_hat_sqrt_inv$coefs, bs),
+                                   basisobj = bs)
 
       mfd(array(studentized$coefs, dim = c(dim(studentized$coefs), 1)),
           bs,
@@ -539,7 +539,7 @@ predict_fof_pc <- function(object,
   df_x_new <- data.frame(x_new)
   names(df_x_new) <- paste0("x.", names(df_x_new))
 
-  y_scores_hat <- predict(mod, newdata = df_x_new)
+  y_scores_hat <- stats::predict(mod, newdata = df_x_new)
   if (!is.matrix(y_scores_hat)) {
     y_scores_hat <- matrix(y_scores_hat,
                            nrow = nobs_new,

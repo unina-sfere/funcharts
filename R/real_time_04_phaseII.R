@@ -144,29 +144,31 @@ control_charts_pca_mfd_real_time <- function(pca_list,
     control_charts_out <- lapply(seq_along(pca_list), single_k)
   } else {
     if (.Platform$OS.type == "unix") {
-      control_charts_out <- mclapply(seq_along(pca_list),
-                                     single_k,
-                                     mc.cores = ncores)
+      control_charts_out <- parallel::mclapply(seq_along(pca_list),
+                                               single_k,
+                                               mc.cores = ncores)
     } else {
-      cl <- makeCluster(ncores)
-      clusterExport(cl,
-                    c("pca_list",
-                      "components_list",
-                      "mfdobj_x_test",
-                      "mfdobj_x_tuning",
-                      "alpha",
-                      "limits",
-                      "nfold",
-                      "kk_seq",
-                      "tot_variance_explained",
-                      "single_min_variance_explained",
-                      "absolute_error"),
-                    envir = environment())
-      control_charts_out <- parLapply(cl, seq_along(pca_list), single_k)
-      stopCluster(cl)
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport(cl,
+                              c("pca_list",
+                                "components_list",
+                                "mfdobj_x_test",
+                                "mfdobj_x_tuning",
+                                "alpha",
+                                "limits",
+                                "nfold",
+                                "kk_seq",
+                                "tot_variance_explained",
+                                "single_min_variance_explained",
+                                "absolute_error"),
+                              envir = environment())
+      control_charts_out <- parallel::parLapply(cl,
+                                                seq_along(pca_list),
+                                                single_k)
+      parallel::stopCluster(cl)
     }
   }
-  bind_rows(control_charts_out)
+  dplyr::bind_rows(control_charts_out)
 
 }
 
@@ -308,27 +310,29 @@ control_charts_sof_pc_real_time <- function(mod_list,
     control_charts_out <- lapply(seq_along(mod_list), single_k)
   } else {
     if (.Platform$OS.type == "unix") {
-      control_charts_out <- mclapply(seq_along(mod_list),
-                                     single_k,
-                                     mc.cores = ncores)
+      control_charts_out <- parallel::mclapply(seq_along(mod_list),
+                                               single_k,
+                                               mc.cores = ncores)
     } else {
-      cl <- makeCluster(ncores)
-      clusterExport(cl,
-                    c("mod_list",
-                      "mfdobj_x_test",
-                      "y_test",
-                      "mfdobj_x_tuning",
-                      "alpha",
-                      "limits",
-                      "nfold",
-                      "kk_seq"),
-                    envir = environment())
-      control_charts_out <- parLapply(cl, seq_along(mod_list), single_k)
-      stopCluster(cl)
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport(cl,
+                              c("mod_list",
+                                "mfdobj_x_test",
+                                "y_test",
+                                "mfdobj_x_tuning",
+                                "alpha",
+                                "limits",
+                                "nfold",
+                                "kk_seq"),
+                              envir = environment())
+      control_charts_out <- parallel::parLapply(cl,
+                                                seq_along(mod_list),
+                                                single_k)
+      parallel::stopCluster(cl)
     }
   }
   control_charts_out %>%
-    bind_rows()
+    dplyr::bind_rows()
 
 }
 
@@ -483,28 +487,30 @@ regr_cc_fof_real_time <- function(mod_list,
     control_charts_out <- lapply(seq_along(mod_list), single_k)
   } else {
     if (.Platform$OS.type == "unix") {
-      control_charts_out <- mclapply(seq_along(mod_list),
-                                     single_k,
-                                     mc.cores = ncores)
+      control_charts_out <- parallel::mclapply(seq_along(mod_list),
+                                               single_k,
+                                               mc.cores = ncores)
     } else {
-      cl <- makeCluster(ncores)
-      clusterExport(cl,
-                    c("mod_list",
-                      "mfdobj_y_new_list",
-                      "mfdobj_x_new_list",
-                      "mfdobj_y_tuning_list",
-                      "mfdobj_x_tuning_list",
-                      "alpha",
-                      "include_covariates",
-                      "absolute_error",
-                      "kk_seq"),
-                    envir = environment())
-      control_charts_out <- parLapply(cl, seq_along(mod_list), single_k)
-      stopCluster(cl)
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport(cl,
+                              c("mod_list",
+                                "mfdobj_y_new_list",
+                                "mfdobj_x_new_list",
+                                "mfdobj_y_tuning_list",
+                                "mfdobj_x_tuning_list",
+                                "alpha",
+                                "include_covariates",
+                                "absolute_error",
+                                "kk_seq"),
+                              envir = environment())
+      control_charts_out <- parallel::parLapply(cl,
+                                                seq_along(mod_list),
+                                                single_k)
+      parallel::stopCluster(cl)
     }
   }
   control_charts_out %>%
-    bind_rows()
+    dplyr::bind_rows()
 
 }
 
@@ -649,28 +655,30 @@ regr_cc_sof_real_time <- function(mod_list,
     control_charts_out <- lapply(seq_along(mod_list), single_k)
   } else {
     if (.Platform$OS.type == "unix") {
-      control_charts_out <- mclapply(seq_along(mod_list),
-                                     single_k,
-                                     mc.cores = ncores)
+      control_charts_out <- parallel::mclapply(seq_along(mod_list),
+                                               single_k,
+                                               mc.cores = ncores)
     } else {
-      cl <- makeCluster(ncores)
-      clusterExport(cl,
-                    c("mod_list",
-                      "y_new",
-                      "mfdobj_x_new_list",
-                      "y_tuning",
-                      "mfdobj_x_tuning_list",
-                      "alpha",
-                      "include_covariates",
-                      "absolute_error",
-                      "kk_seq"),
-                    envir = environment())
-      control_charts_out <- parLapply(cl, seq_along(mod_list), single_k)
-      stopCluster(cl)
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport(cl,
+                              c("mod_list",
+                                "y_new",
+                                "mfdobj_x_new_list",
+                                "y_tuning",
+                                "mfdobj_x_tuning_list",
+                                "alpha",
+                                "include_covariates",
+                                "absolute_error",
+                                "kk_seq"),
+                              envir = environment())
+      control_charts_out <- parallel::parLapply(cl,
+                                                seq_along(mod_list),
+                                                single_k)
+      parallel::stopCluster(cl)
     }
   }
   control_charts_out %>%
-    bind_rows()
+    dplyr::bind_rows()
 
 }
 
@@ -738,10 +746,16 @@ regr_cc_sof_real_time <- function(mod_list,
 #' plot_control_charts_real_time(cclist, 1)
 plot_control_charts_real_time <- function(cclist, id_num) {
 
+  id <- kk <- T2 <- T2_lim <- statistic <- NULL
+  UCL <- LCL <- ooc <- line_type <- group <- value <- NULL
+  spe <- spe_lim <- SPE <- pred_err <- pred_err_sup <- pred_err_inf <- NULL
+  `Regression residuals` <- NULL
+  T2_x <- T2_lim_x <- spe_x <- spe_lim_x <- NULL
+
   xmin <- cclist$range1[1]
   xmax <- max(cclist$range2)
 
-  cclist_id <- filter(cclist, .data$id == unique(cclist$id)[id_num])
+  cclist_id <- dplyr::filter(cclist, id == unique(cclist$id)[id_num])
 
   kk_range <- range(cclist_id$kk)
   kk_seq <- seq(kk_range[1], kk_range[2], l = 1000)
@@ -754,128 +768,136 @@ plot_control_charts_real_time <- function(cclist, id_num) {
 
   if ("T2" %in% names(cclist_id)) {
     df_hot <- cclist_id %>%
-      select(.data$id, .data$kk, statistic = .data$T2, UCL = .data$T2_lim)
-    f_hot <- approxfun(df_hot$kk, df_hot$statistic)
-    f_hot_UCL <- approxfun(df_hot$kk, df_hot$UCL)
+      dplyr::select(id,
+                    kk,
+                    statistic = T2,
+                    UCL = T2_lim)
+    f_hot <- stats::approxfun(df_hot$kk, df_hot$statistic)
+    f_hot_UCL <- stats::approxfun(df_hot$kk, df_hot$UCL)
     df_hot_plot <- data.frame(
       id = df_hot$id[1],
       kk = kk_seq,
       statistic = f_hot(kk_seq),
       UCL = f_hot_UCL(kk_seq)
     ) %>%
-      mutate(ooc = .data$statistic > .data$UCL) %>%
-      mutate(group = .data$ooc %>%
-               rle() %>%
-               unclass() %>%
-               data.frame() %>%
-               mutate(values = seq_len(n())) %>%
-               inverse.rle()) %>%
-      ungroup()
+      dplyr::mutate(ooc = statistic > UCL) %>%
+      dplyr::mutate(group = ooc %>%
+                      rle() %>%
+                      unclass() %>%
+                      data.frame() %>%
+                      dplyr::mutate(values = seq_len(dplyr::n())) %>%
+                      inverse.rle()) %>%
+      dplyr::ungroup()
 
     plot_list$p_hot <- df_hot_plot %>%
-      rename(T2 = .data$statistic) %>%
-      tidyr::pivot_longer(cols = c(.data$T2, .data$UCL),
+      dplyr::rename(T2 = statistic) %>%
+      tidyr::pivot_longer(cols = c(T2, UCL),
                    names_to = "line_type") %>%
-      mutate(
+      dplyr::mutate(
         line_type = factor(
-          x = .data$line_type,
+          x = line_type,
           levels = c("UCL", "T2")),
-        group = paste0(.data$group, .data$line_type),
-        ooc = case_when(
+        group = paste0(group, line_type),
+        ooc = dplyr::case_when(
           line_type == "T2" ~ ooc,
           line_type %in% c("UCL") ~ FALSE
         )) %>%
-      ggplot() +
-      geom_line(aes(x     = .data$kk,
-                    y     = .data$value,
-                    lty   = .data$line_type,
-                    col   = .data$ooc,
-                    group = .data$group)) +
-      scale_linetype_manual(values = c("T2" = 1, "UCL" = 2)) +
-      scale_colour_manual(values = c("FALSE" = "black", "TRUE" = "tomato1")) +
-      guides(colour = "none") +
-      geom_blank(aes(y = 0)) +
-      scale_x_continuous(limits = c(xmin, xmax),
-                         breaks = x_axis_tick,
-                         expand = c(0, 0)) +
-      theme_bw() +
-      theme(strip.background = element_blank(),
-            plot.title = element_text(hjust = 0.5)) +
-      xlab(cclist_id$arg[1]) +
-      ylab("") +
-      ggtitle(expression(HOTELLING~T^2~CONTROL~CHART)) +
-      theme(legend.title = element_blank())
+      ggplot2::ggplot() +
+      ggplot2::geom_line(ggplot2::aes(x     = kk,
+                                      y     = value,
+                                      lty   = line_type,
+                                      col   = ooc,
+                                      group = group)) +
+      ggplot2::scale_linetype_manual(values = c("T2" = 1, "UCL" = 2)) +
+      ggplot2::scale_colour_manual(values = c("FALSE" = "black",
+                                              "TRUE" = "tomato1")) +
+      ggplot2::guides(colour = "none") +
+      ggplot2::geom_blank(ggplot2::aes(y = 0)) +
+      ggplot2::scale_x_continuous(limits = c(xmin, xmax),
+                                  breaks = x_axis_tick,
+                                  expand = c(0, 0)) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(strip.background = ggplot2::element_blank(),
+                     plot.title = ggplot2::element_text(hjust = 0.5)) +
+      ggplot2::xlab(cclist_id$arg[1]) +
+      ggplot2::ylab("") +
+      ggplot2::ggtitle(expression(HOTELLING~T^2~CONTROL~CHART)) +
+      ggplot2::theme(legend.title = ggplot2::element_blank())
   }
 
   if ("spe" %in% names(cclist_id)) {
     df_spe <- cclist_id %>%
-      select(.data$id, .data$kk, statistic = .data$spe, UCL = .data$spe_lim)
-    f_spe <- approxfun(df_spe$kk, df_spe$statistic)
-    f_spe_UCL <- approxfun(df_spe$kk, df_spe$UCL)
+      dplyr::select(id,
+                    kk,
+                    statistic = spe,
+                    UCL = spe_lim)
+    f_spe <- stats::approxfun(df_spe$kk, df_spe$statistic)
+    f_spe_UCL <- stats::approxfun(df_spe$kk, df_spe$UCL)
     df_spe_plot <- data.frame(
       id = df_spe$id[1],
       kk = kk_seq,
       statistic = f_spe(kk_seq),
       UCL = f_spe_UCL(kk_seq)
     ) %>%
-      mutate(ooc = .data$statistic > .data$UCL) %>%
-      mutate(group = .data$ooc %>%
-               rle() %>%
-               unclass() %>%
-               data.frame() %>%
-               mutate(values = seq_len(n())) %>%
-               inverse.rle()) %>%
-      ungroup()
+      dplyr::mutate(ooc = statistic > UCL) %>%
+      dplyr::mutate(group = ooc %>%
+                      rle() %>%
+                      unclass() %>%
+                      data.frame() %>%
+                      dplyr::mutate(values = seq_len(dplyr::n())) %>%
+                      inverse.rle()) %>%
+      dplyr::ungroup()
 
     plot_list$p_spe <- df_spe_plot %>%
-      rename(SPE = .data$statistic) %>%
-      tidyr::pivot_longer(cols = c(.data$SPE, .data$UCL),
+      dplyr::rename(SPE = statistic) %>%
+      tidyr::pivot_longer(cols = c(SPE, UCL),
                    names_to = "line_type") %>%
-      mutate(
+      dplyr::mutate(
         line_type = factor(
-          x = .data$line_type,
+          x = line_type,
           levels = c("UCL", "SPE")),
-        group = paste0(.data$group, .data$line_type),
-        ooc = case_when(
+        group = paste0(group, line_type),
+        ooc = dplyr::case_when(
           line_type == "SPE" ~ ooc,
           line_type %in% c("UCL") ~ FALSE
         )) %>%
-      ggplot() +
-      geom_line(aes(x     = .data$kk,
-                    y     = .data$value,
-                    lty   = .data$line_type,
-                    col   = .data$ooc,
-                    group = .data$group)) +
-      scale_linetype_manual(values = c("SPE" = 1, "UCL" = 2)) +
-      scale_colour_manual(values = c("FALSE" = "black", "TRUE" = "tomato1")) +
-      guides(colour = "none") +
-      geom_blank(aes(y = 0)) +
-      scale_x_continuous(limits = c(xmin, xmax),
-                         breaks = x_axis_tick,
-                         expand = c(0, 0)) +
-      theme_bw() +
-      theme(strip.background = element_blank(),
-            plot.title = element_text(hjust = 0.5)) +
-      xlab(cclist_id$arg[1]) +
-      ylab("") +
-      ggtitle(expression(SPE~CONTROL~CHART)) +
-      theme(legend.title = element_blank())
+      ggplot2::ggplot() +
+      ggplot2::geom_line(ggplot2::aes(x     = kk,
+                                      y     = value,
+                                      lty   = line_type,
+                                      col   = ooc,
+                                      group = group)) +
+      ggplot2::scale_linetype_manual(values = c("SPE" = 1, "UCL" = 2)) +
+      ggplot2::scale_colour_manual(values = c("FALSE" = "black",
+                                              "TRUE" = "tomato1")) +
+      ggplot2::guides(colour = "none") +
+      ggplot2::geom_blank(ggplot2::aes(y = 0)) +
+      ggplot2::scale_x_continuous(limits = c(xmin, xmax),
+                                  breaks = x_axis_tick,
+                                  expand = c(0, 0)) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(strip.background = ggplot2::element_blank(),
+                     plot.title = ggplot2::element_text(hjust = 0.5)) +
+      ggplot2::xlab(cclist_id$arg[1]) +
+      ggplot2::ylab("") +
+      ggplot2::ggtitle(expression(SPE~CONTROL~CHART)) +
+      ggplot2::theme(legend.title = ggplot2::element_blank())
   }
 
   if ("pred_err" %in% names(cclist_id)) {
     df_y <- cclist_id %>%
-      select(.data$id,
-             .data$kk,
-             statistic = .data$pred_err,
-             UCL = .data$pred_err_sup,
-             LCL = .data$pred_err_inf)
+      dplyr::select(id,
+                    kk,
+                    statistic = pred_err,
+                    UCL = pred_err_sup,
+                    LCL = pred_err_inf)
     if (sum(!is.na(df_y$statistic)) > 0) {
-      f_y <- approxfun(df_y$kk, df_y$statistic)
+      f_y <- stats::approxfun(df_y$kk, df_y$statistic)
     } else {
       f_y <- function(x) NA
     }
-    f_y_UCL <- approxfun(df_y$kk, df_y$UCL)
-    f_y_LCL <- approxfun(df_y$kk, df_y$LCL)
+    f_y_UCL <- stats::approxfun(df_y$kk, df_y$UCL)
+    f_y_LCL <- stats::approxfun(df_y$kk, df_y$LCL)
     df_y_plot <- data.frame(
       id = df_y$id[1],
       kk = kk_seq,
@@ -886,184 +908,192 @@ plot_control_charts_real_time <- function(cclist, id_num) {
     )
     if (sum(!is.na(df_y$statistic)) > 0) {
       df_y_plot <- df_y_plot %>%
-        mutate(ooc = .data$statistic > .data$UCL |
-                 .data$statistic < .data$LCL) %>%
-        mutate(group = .data$ooc %>%
-                 rle() %>%
-                 unclass() %>%
-                 data.frame() %>%
-                 mutate(values = seq_len(n())) %>%
-                 inverse.rle()) %>%
-        ungroup()
+        dplyr::mutate(ooc = statistic > UCL |
+                        statistic < LCL) %>%
+        dplyr::mutate(group = ooc %>%
+                        rle() %>%
+                        unclass() %>%
+                        data.frame() %>%
+                        dplyr::mutate(values = seq_len(dplyr::n())) %>%
+                        inverse.rle()) %>%
+        dplyr::ungroup()
     } else {
       df_y_plot <- df_y_plot %>%
-        mutate(ooc = NA) %>%
-        mutate(group = 1) %>%
-        ungroup()
+        dplyr::mutate(ooc = NA) %>%
+        dplyr::mutate(group = 1) %>%
+        dplyr::ungroup()
     }
 
     plot_list$p_y <- df_y_plot %>%
-      rename(`Regression residuals` = .data$statistic) %>%
-      tidyr::pivot_longer(cols = c(.data$`Regression residuals`,
-                                   .data$UCL,
-                                   .data$LCL),
+      dplyr::rename(`Regression residuals` = statistic) %>%
+      tidyr::pivot_longer(cols = c(`Regression residuals`,
+                                   UCL,
+                                   LCL),
                    names_to = "line_type") %>%
-      mutate(
+      dplyr::mutate(
         line_type = factor(
-          x = .data$line_type,
+          x = line_type,
           levels = c("UCL", "Regression residuals", "LCL")),
-        group = paste0(.data$group, .data$line_type),
-        ooc = case_when(
+        group = paste0(group, line_type),
+        ooc = dplyr::case_when(
           line_type == "Regression residuals" ~ ooc,
           line_type %in% c("UCL", "LCL") ~ FALSE
         )) %>%
-      ggplot() +
-      geom_line(aes(x     = .data$kk,
-                    y     = .data$value,
-                    lty   = .data$line_type,
-                    col   = .data$ooc,
-                    group = .data$group)) +
-      scale_linetype_manual(values = c("Regression residuals" = 1,
-                                       "UCL" = 2,
-                                       "LCL" = 2)) +
-      scale_colour_manual(values = c("FALSE" = "black", "TRUE" = "tomato1")) +
-      guides(colour = "none") +
-      geom_blank(aes(y = 0)) +
-      scale_x_continuous(limits = c(xmin, xmax),
-                         breaks = x_axis_tick,
-                         expand = c(0, 0)) +
-      theme_bw() +
-      theme(strip.background = element_blank(),
-            plot.title = element_text(hjust = 0.5)) +
-      xlab(cclist_id$arg[1]) +
-      ylab("") +
-      ggtitle(expression(REGRESSION~CONTROL~CHART)) +
-      theme(legend.title = element_blank())
+      ggplot2::ggplot() +
+      ggplot2::geom_line(ggplot2::aes(x     = kk,
+                                      y     = value,
+                                      lty   = line_type,
+                                      col   = ooc,
+                                      group = group)) +
+      ggplot2::scale_linetype_manual(values = c("Regression residuals" = 1,
+                                                "UCL" = 2,
+                                                "LCL" = 2)) +
+      ggplot2::scale_colour_manual(values = c("FALSE" = "black",
+                                              "TRUE" = "tomato1")) +
+      ggplot2::guides(colour = "none") +
+      ggplot2::geom_blank(ggplot2::aes(y = 0)) +
+      ggplot2::scale_x_continuous(limits = c(xmin, xmax),
+                                  breaks = x_axis_tick,
+                                  expand = c(0, 0)) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(strip.background = ggplot2::element_blank(),
+                     plot.title = ggplot2::element_text(hjust = 0.5)) +
+      ggplot2::xlab(cclist_id$arg[1]) +
+      ggplot2::ylab("") +
+      ggplot2::ggtitle(expression(REGRESSION~CONTROL~CHART)) +
+      ggplot2::theme(legend.title = ggplot2::element_blank())
   }
 
   if ("T2_x" %in% names(cclist_id)) {
     df_hot_x <- cclist_id %>%
-      select(.data$id, .data$kk, statistic = .data$T2_x, UCL = .data$T2_lim_x)
-    f_hot <- approxfun(df_hot_x$kk, df_hot_x$statistic)
-    f_hot_UCL <- approxfun(df_hot_x$kk, df_hot_x$UCL)
+      dplyr::select(id,
+                    kk,
+                    statistic = T2_x,
+                    UCL = T2_lim_x)
+    f_hot <- stats::approxfun(df_hot_x$kk, df_hot_x$statistic)
+    f_hot_UCL <- stats::approxfun(df_hot_x$kk, df_hot_x$UCL)
     df_hot_x_plot <- data.frame(
       id = df_hot_x$id[1],
       kk = kk_seq,
       statistic = f_hot(kk_seq),
       UCL = f_hot_UCL(kk_seq)
     ) %>%
-      mutate(ooc = .data$statistic > .data$UCL) %>%
-      mutate(group = .data$ooc %>%
-               rle() %>%
-               unclass() %>%
-               data.frame() %>%
-               mutate(values = seq_len(n())) %>%
-               inverse.rle()) %>%
-      ungroup()
+      dplyr::mutate(ooc = statistic > UCL) %>%
+      dplyr::mutate(group = ooc %>%
+                      rle() %>%
+                      unclass() %>%
+                      data.frame() %>%
+                      dplyr::mutate(values = seq_len(dplyr::n())) %>%
+                      inverse.rle()) %>%
+      dplyr::ungroup()
 
     plot_list$p_hot_x <- df_hot_x_plot %>%
-      rename(T2 = .data$statistic) %>%
-      tidyr::pivot_longer(cols = c(.data$T2, .data$UCL),
+      dplyr::rename(T2 = statistic) %>%
+      tidyr::pivot_longer(cols = c(T2, UCL),
                           names_to = "line_type") %>%
-      mutate(
+      dplyr::mutate(
         line_type = factor(
-          x = .data$line_type,
+          x = line_type,
           levels = c("UCL", "T2")),
-        group = paste0(.data$group, .data$line_type),
-        ooc = case_when(
+        group = paste0(group, line_type),
+        ooc = dplyr::case_when(
           line_type == "T2" ~ ooc,
           line_type %in% c("UCL") ~ FALSE
         )) %>%
-      ggplot() +
-      geom_line(aes(x     = .data$kk,
-                    y     = .data$value,
-                    lty   = .data$line_type,
-                    col   = .data$ooc,
-                    group = .data$group)) +
-      scale_linetype_manual(values = c("T2" = 1, "UCL" = 2)) +
-      scale_colour_manual(values = c("FALSE" = "black", "TRUE" = "tomato1")) +
-      guides(colour = "none") +
-      geom_blank(aes(y = 0)) +
-      scale_x_continuous(limits = c(xmin, xmax),
-                         breaks = x_axis_tick,
-                         expand = c(0, 0)) +
-      theme_bw() +
-      theme(strip.background = element_blank(),
-            plot.title = element_text(hjust = 0.5)) +
-      xlab(cclist_id$arg[1]) +
-      ylab("") +
-      ggtitle(expression(HOTELLING~T^2~CONTROL~CHART~(COVARIATES))) +
-      theme(legend.title = element_blank())
+      ggplot2::ggplot() +
+      ggplot2::geom_line(ggplot2::aes(x     = kk,
+                                      y     = value,
+                                      lty   = line_type,
+                                      col   = ooc,
+                                      group = group)) +
+      ggplot2::scale_linetype_manual(values = c("T2" = 1, "UCL" = 2)) +
+      ggplot2::scale_colour_manual(values = c("FALSE" = "black", "TRUE" = "tomato1")) +
+      ggplot2::guides(colour = "none") +
+      ggplot2::geom_blank(ggplot2::aes(y = 0)) +
+      ggplot2::scale_x_continuous(limits = c(xmin, xmax),
+                                  breaks = x_axis_tick,
+                                  expand = c(0, 0)) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(strip.background = ggplot2::element_blank(),
+            plot.title = ggplot2::element_text(hjust = 0.5)) +
+      ggplot2::xlab(cclist_id$arg[1]) +
+      ggplot2::ylab("") +
+      ggplot2::ggtitle(expression(HOTELLING~T^2~CONTROL~CHART~(COVARIATES))) +
+      ggplot2::theme(legend.title = ggplot2::element_blank())
 
     if (!is.null(plot_list$p_hot)) {
       plot_list$p_hot <- plot_list$p_hot +
-        ggtitle(expression(HOTELLING~T^2~CONTROL~CHART~(RESPONSE)))
+        ggplot2::ggtitle(expression(HOTELLING~T^2~CONTROL~CHART~(RESPONSE)))
     }
   }
 
   if ("spe_x" %in% names(cclist_id)) {
     df_spe_x <- cclist_id %>%
-      select(.data$id, .data$kk, statistic = .data$spe_x, UCL = .data$spe_lim_x)
-    f_spe <- approxfun(df_spe_x$kk, df_spe_x$statistic)
-    f_spe_UCL <- approxfun(df_spe_x$kk, df_spe_x$UCL)
+      dplyr::select(id,
+                    kk,
+                    statistic = spe_x,
+                    UCL = spe_lim_x)
+    f_spe <- stats::approxfun(df_spe_x$kk, df_spe_x$statistic)
+    f_spe_UCL <- stats::approxfun(df_spe_x$kk, df_spe_x$UCL)
     df_spe_plot <- data.frame(
       id = df_spe_x$id[1],
       kk = kk_seq,
       statistic = f_spe(kk_seq),
       UCL = f_spe_UCL(kk_seq)
     ) %>%
-      mutate(ooc = .data$statistic > .data$UCL) %>%
-      mutate(group = .data$ooc %>%
-               rle() %>%
-               unclass() %>%
-               data.frame() %>%
-               mutate(values = seq_len(n())) %>%
-               inverse.rle()) %>%
-      ungroup()
+      dplyr::mutate(ooc = statistic > UCL) %>%
+      dplyr::mutate(group = ooc %>%
+                      rle() %>%
+                      unclass() %>%
+                      data.frame() %>%
+                      dplyr::mutate(values = seq_len(dplyr::n())) %>%
+                      inverse.rle()) %>%
+      dplyr::ungroup()
 
     plot_list$p_spe_x <- df_spe_plot %>%
-      rename(SPE = .data$statistic) %>%
-      tidyr::pivot_longer(cols = c(.data$SPE, .data$UCL),
+      dplyr::rename(SPE = statistic) %>%
+      tidyr::pivot_longer(cols = c(SPE, UCL),
                           names_to = "line_type") %>%
-      mutate(
+      dplyr::mutate(
         line_type = factor(
-          x = .data$line_type,
+          x = line_type,
           levels = c("UCL", "SPE")),
-        group = paste0(.data$group, .data$line_type),
-        ooc = case_when(
+        group = paste0(group, line_type),
+        ooc = dplyr::case_when(
           line_type == "SPE" ~ ooc,
           line_type %in% c("UCL") ~ FALSE
         )) %>%
-      ggplot() +
-      geom_line(aes(x     = .data$kk,
-                    y     = .data$value,
-                    lty   = .data$line_type,
-                    col   = .data$ooc,
-                    group = .data$group)) +
-      scale_linetype_manual(values = c("SPE" = 1, "UCL" = 2)) +
-      scale_colour_manual(values = c("FALSE" = "black", "TRUE" = "tomato1")) +
-      guides(colour = "none") +
-      geom_blank(aes(y = 0)) +
-      scale_x_continuous(limits = c(xmin, xmax),
-                         breaks = x_axis_tick,
-                         expand = c(0, 0)) +
-      theme_bw() +
-      theme(strip.background = element_blank(),
-            plot.title = element_text(hjust = 0.5)) +
-      xlab(cclist_id$arg[1]) +
-      ylab("") +
-        ggtitle(expression(SPE~CONTROL~CHART~(COVARIATES))) +
-      theme(legend.title = element_blank())
+      ggplot2::ggplot() +
+      ggplot2::geom_line(ggplot2::aes(x     = kk,
+                                      y     = value,
+                                      lty   = line_type,
+                                      col   = ooc,
+                                      group = group)) +
+      ggplot2::scale_linetype_manual(values = c("SPE" = 1, "UCL" = 2)) +
+      ggplot2::scale_colour_manual(values = c("FALSE" = "black",
+                                              "TRUE" = "tomato1")) +
+      ggplot2::guides(colour = "none") +
+      ggplot2::geom_blank(ggplot2::aes(y = 0)) +
+      ggplot2::scale_x_continuous(limits = c(xmin, xmax),
+                                  breaks = x_axis_tick,
+                                  expand = c(0, 0)) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(strip.background = ggplot2::element_blank(),
+                     plot.title = ggplot2::element_text(hjust = 0.5)) +
+      ggplot2::xlab(cclist_id$arg[1]) +
+      ggplot2::ylab("") +
+      ggplot2::ggtitle(expression(SPE~CONTROL~CHART~(COVARIATES))) +
+      ggplot2::theme(legend.title = ggplot2::element_blank())
 
     if (!is.null(plot_list$p_spe)) {
       plot_list$p_spe <- plot_list$p_spe +
-        ggtitle(expression(SPE~CONTROL~CHART~(RESPONSE)))
+        ggplot2::ggtitle(expression(SPE~CONTROL~CHART~(RESPONSE)))
     }
 
   }
 
   p <- patchwork::wrap_plots(plot_list, ncol = 1) &
-    theme(legend.justification = 0)
+    ggplot2::theme(legend.justification = 0)
   suppressWarnings(print(p))
 
 }

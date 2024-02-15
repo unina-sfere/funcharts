@@ -39,9 +39,9 @@ pca_mfd <- function(mfdobj, scale = TRUE, nharm = 20) {
   data_scaled <- scale_mfd(mfdobj, scale = scale)
 
   data_pca <- if (length(variables) == 1)
-    fd(data_scaled$coefs[, , 1],
-       data_scaled$basis,
-       data_scaled$fdnames) else data_scaled
+    fda::fd(data_scaled$coefs[, , 1],
+            data_scaled$basis,
+            data_scaled$fdnames) else data_scaled
 
   nobs <- length(obs_names)
   nvar <- length(variables)
@@ -139,15 +139,16 @@ plot_pca_mfd <- function(pca, harm = 0, scaled = FALSE) {
     pca$harmonics$coefs <- scaled_coefs
   }
 
-  p_functions <- plot_mfd(aes_string(col = "id"), mfdobj = pca$harmonics[harm])
+  p_functions <- plot_mfd(ggplot2::aes(col = !!dplyr::sym("id")),
+                          mfdobj = pca$harmonics[harm])
 
   components <- which(cumsum(pca$varprop) < .99)
   # p_values <- data.frame(eigenvalues = pca$values[components]) %>%
-  #   mutate(n_comp = seq_len(n())) %>%
-  #   ggplot() +
-  #   geom_col(aes(n_comp, eigenvalues)) +
-  #   theme_bw() +
-  #   xlab("Number of components")
+  #   dplyr::mutate(n_comp = seq_len(dplyr::n())) %>%
+  #   ggplot2::ggplot() +
+  #   ggplot2::geom_col(ggplot2::aes(n_comp, eigenvalues)) +
+  #   ggplot2::theme_bw() +
+  #   ggplot2::xlab("Number of components")
 
   p_functions
 
@@ -420,9 +421,9 @@ get_T2_spe <- function(pca,
   fit <- get_fit_pca_given_scores(scores, pca$harmonics[components])
 
   res_fd <- if (is.null(newdata_scaled)) {
-    minus.fd(pca$data_scaled, fit)
+    fda::minus.fd(pca$data_scaled, fit)
   } else {
-    minus.fd(newdata_scaled, fit)
+    fda::minus.fd(newdata_scaled, fit)
   }
 
   res_fd <- mfd(res_fd$coefs, res_fd$basis, res_fd$fdnames, B = res_fd$basis$B)
@@ -433,7 +434,7 @@ get_T2_spe <- function(pca,
     rg <- pca$data$basis$rangeval
     PP <- 200
     xseq <- seq(rg[1], rg[2], l = PP)
-    yy <- eval.fd(xseq, res_fd)
+    yy <- fda::eval.fd(xseq, res_fd)
     cont_spe <- apply(abs(yy), 2:3, sum) / PP
   }
 
@@ -453,12 +454,12 @@ get_T2_spe <- function(pca,
 #'
 pca.fd_inprods_faster <- function (fdobj,
                                    nharm = 2,
-                                   harmfdPar = fdPar(fdobj),
+                                   harmfdPar = fda::fdPar(fdobj),
                                    centerfns = TRUE) {
-  if (!(is.fd(fdobj) || is.fdPar(fdobj)))
+  if (!(fda::is.fd(fdobj) || fda::is.fdPar(fdobj)))
     stop("First argument is neither a functional data
          or a functional parameter object.")
-  if (is.fdPar(fdobj))
+  if (fda::is.fdPar(fdobj))
     fdobj <- fdobj$fd
 
   if (length(dim(fdobj$coefs)) == 3 & dim(fdobj$coefs)[3] == 1) {
@@ -467,9 +468,9 @@ pca.fd_inprods_faster <- function (fdobj,
                           ncol = dim(fdobj$coefs)[2])
   }
 
-  meanfd <- mean.fd(fdobj)
+  meanfd <- fda::mean.fd(fdobj)
   if (centerfns) {
-    fdobj <- center.fd(fdobj)
+    fdobj <- fda::center.fd(fdobj)
   }
   coef <- fdobj$coefs
   coefd <- dim(coef)
@@ -498,9 +499,9 @@ pca.fd_inprods_faster <- function (fdobj,
     nvar <- 1
     ctemp <- coef
   }
-  Lmat <- eval.penalty(harmbasis, 0)
+  Lmat <- fda::eval.penalty(harmbasis, 0)
   if (lambda > 0) {
-    Rmat <- eval.penalty(harmbasis, Lfdobj)
+    Rmat <- fda::eval.penalty(harmbasis, Lfdobj)
     Lmat <- Lmat + lambda * Rmat
   }
   Lmat <- (Lmat + t(Lmat))/2
@@ -512,7 +513,7 @@ pca.fd_inprods_faster <- function (fdobj,
       Jmat <- basisobj$B
     } else {
       if (basisobj$type == "bspline") {
-        Jmat <- inprod.bspline(fd(diag(basisobj$nbasis), basisobj))
+        Jmat <- fda::inprod.bspline(fda::fd(diag(basisobj$nbasis), basisobj))
       }
       if (basisobj$type == "fourier") {
         Jmat <- diag(basisobj$nbasis)
@@ -534,8 +535,8 @@ pca.fd_inprods_faster <- function (fdobj,
         Jmat[out_mat == 0] <- diff(basisobj$rangeval)
       }
       if (basisobj$type == "polygonal") {
-        Jmat <- inprod_fd(fd(diag(basisobj$nbasis), basisobj),
-                          fd(diag(basisobj$nbasis), basisobj))
+        Jmat <- inprod_fd(fda::fd(diag(basisobj$nbasis), basisobj),
+                          fda::fd(diag(basisobj$nbasis), basisobj))
       }
       if (basisobj$type == "power") {
         out_mat <- outer(basisobj$params, basisobj$params, "+") + 1
@@ -546,8 +547,8 @@ pca.fd_inprods_faster <- function (fdobj,
       }
     }
   } else {
-    Jmat <- inprod_fd(fd(diag(harmbasis$nbasis), harmbasis),
-                      fd(diag(basisobj$nbasis), basisobj))
+    Jmat <- inprod_fd(fda::fd(diag(harmbasis$nbasis), harmbasis),
+                      fda::fd(diag(basisobj$nbasis), basisobj))
   }
 
   MIJW <- crossprod(Mmatinv, Jmat)
@@ -589,10 +590,10 @@ pca.fd_inprods_faster <- function (fdobj,
     harmnames <- list(coefnames[[1]], harmnames, "values")
   if (length(coefd) == 3)
     harmnames <- list(coefnames[[1]], harmnames, coefnames[[3]])
-  harmfd <- fd(harmcoef, harmbasis, harmnames)
+  harmfd <- fda::fd(harmcoef, harmbasis, harmnames)
   if (is.null(fdobj$basis$B)) {
     if (fdobj$basis$type == "bspline") {
-      B <- inprod.bspline(fd(diag(fdobj$basis$nbasis), fdobj$basis))
+      B <- fda::inprod.bspline(fda::fd(diag(fdobj$basis$nbasis), fdobj$basis))
     }
     if (fdobj$basis$type == "fourier") {
       B <- diag(fdobj$basis$nbasis)
@@ -612,8 +613,8 @@ pca.fd_inprods_faster <- function (fdobj,
     coefarray <- fdobj$coefs
     harmcoefarray <- harmfd$coefs
     for (j in seq_len(nvar)) {
-      fdobjj <- fd(as.matrix(coefarray[, , j]), basisobj)
-      harmfdj <- fd(as.matrix(harmcoefarray[, , j]), basisobj)
+      fdobjj <- fda::fd(as.matrix(coefarray[, , j]), basisobj)
+      harmfdj <- fda::fd(as.matrix(harmcoefarray[, , j]), basisobj)
       if (identical(fdobjj$basis, harmfdj$basis)) {
         harmscr[, , j] <- t(fdobjj$coefs) %*% B %*% harmfdj$coefs
       } else harmscr[, , j] <- inprod_fd(fdobjj, harmfdj)

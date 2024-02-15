@@ -94,7 +94,7 @@ get_mfd_df_real_time <- function(
   single_k <- function(ii) {
     kk <- kk_seq[ii]
     domain_ii <- c(domain[1], kk)
-    dt_ii <- filter(dt, get(arg) <= kk)
+    dt_ii <- dplyr::filter(dt, get(arg) <= kk)
     nbasis <- max(15, round(n_basis * diff(domain_ii) / diff(domain)))
     get_mfd_df(dt = dt_ii,
                domain = domain_ii,
@@ -113,24 +113,24 @@ get_mfd_df_real_time <- function(
     mfd_list <- lapply(seq_along(kk_seq), single_k)
   } else {
     if (.Platform$OS.type == "unix") {
-      mfd_list <- mclapply(seq_along(kk_seq), single_k, mc.cores = ncores)
+      mfd_list <- parallel::mclapply(seq_along(kk_seq), single_k, mc.cores = ncores)
     } else {
-      cl <- makeCluster(ncores)
-      clusterExport(cl, c("kk_seq",
-                          "domain",
-                          "dt",
-                          "arg",
-                          "id",
-                          "variables",
-                          "n_basis",
-                          "n_order",
-                          "basisobj",
-                          "Lfdobj",
-                          "lambda",
-                          "lambda_grid"),
-                    envir = environment())
-      mfd_list <- parLapply(cl, seq_along(kk_seq), single_k)
-      stopCluster(cl)
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport(cl, c("kk_seq",
+                                    "domain",
+                                    "dt",
+                                    "arg",
+                                    "id",
+                                    "variables",
+                                    "n_basis",
+                                    "n_order",
+                                    "basisobj",
+                                    "Lfdobj",
+                                    "lambda",
+                                    "lambda_grid"),
+                              envir = environment())
+      mfd_list <- parallel::parLapply(cl, seq_along(kk_seq), single_k)
+      parallel::stopCluster(cl)
     }
   }
 
@@ -251,22 +251,22 @@ get_mfd_list_real_time <- function(
     mfd_list <- lapply(seq_along(kk_seq), single_k)
   } else {
     if (.Platform$OS.type == "unix") {
-      mfd_list <- mclapply(seq_along(kk_seq), single_k, mc.cores = ncores)
+      mfd_list <- parallel::mclapply(seq_along(kk_seq), single_k, mc.cores = ncores)
     } else {
-      cl <- makeCluster(ncores)
-      clusterExport(cl, c("kk_seq",
-                          "domain",
-                          "data_list",
-                          "n_basis",
-                          "n_order",
-                          "basisobj",
-                          "Lfdobj",
-                          "lambda",
-                          "lambda_grid",
-                          "grid"),
-                    envir = environment())
-      mfd_list <- parLapply(cl, seq_along(kk_seq), single_k)
-      stopCluster(cl)
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport(cl, c("kk_seq",
+                                    "domain",
+                                    "data_list",
+                                    "n_basis",
+                                    "n_order",
+                                    "basisobj",
+                                    "Lfdobj",
+                                    "lambda",
+                                    "lambda_grid",
+                                    "grid"),
+                              envir = environment())
+      mfd_list <- parallel::parLapply(cl, seq_along(kk_seq), single_k)
+      parallel::stopCluster(cl)
     }
   }
 
@@ -384,22 +384,22 @@ get_mfd_array_real_time <- function(
     mfd_list <- lapply(seq_along(kk_seq), single_k)
   } else {
     if (.Platform$OS.type == "unix") {
-      mfd_list <- mclapply(seq_along(kk_seq), single_k, mc.cores = ncores)
+      mfd_list <- parallel::mclapply(seq_along(kk_seq), single_k, mc.cores = ncores)
     } else {
-      cl <- makeCluster(ncores)
-      clusterExport(cl, c("kk_seq",
-                          "domain",
-                          "data_array",
-                          "n_basis",
-                          "n_order",
-                          "basisobj",
-                          "Lfdobj",
-                          "lambda",
-                          "lambda_grid",
-                          "grid"),
-                    envir = environment())
-      mfd_list <- parLapply(cl, seq_along(kk_seq), single_k)
-      stopCluster(cl)
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport(cl, c("kk_seq",
+                                    "domain",
+                                    "data_array",
+                                    "n_basis",
+                                    "n_order",
+                                    "basisobj",
+                                    "Lfdobj",
+                                    "lambda",
+                                    "lambda_grid",
+                                    "grid"),
+                              envir = environment())
+      mfd_list <- parallel::parLapply(cl, seq_along(kk_seq), single_k)
+      parallel::stopCluster(cl)
     }
   }
 

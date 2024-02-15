@@ -55,18 +55,18 @@ pca_mfd_real_time <- function(mfdobj_list,
     mod_list <- lapply(seq_along(mfdobj_list), single_k)
   } else {
     if (.Platform$OS.type == "unix") {
-      mod_list <- mclapply(seq_along(mfdobj_list),
-                           single_k,
-                           mc.cores = ncores)
+      mod_list <- parallel::mclapply(seq_along(mfdobj_list),
+                                     single_k,
+                                     mc.cores = ncores)
     } else {
-      cl <- makeCluster(ncores)
-      clusterExport(cl,
-                    c("mfdobj_list",
-                      "scale",
-                      "nharm"),
-                      envir = environment())
-      mod_list <- parLapply(cl, seq_along(mfdobj_list), single_k)
-      stopCluster(cl)
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport(cl,
+                              c("mfdobj_list",
+                                "scale",
+                                "nharm"),
+                              envir = environment())
+      mod_list <- parallel::parLapply(cl, seq_along(mfdobj_list), single_k)
+      parallel::stopCluster(cl)
     }
   }
 

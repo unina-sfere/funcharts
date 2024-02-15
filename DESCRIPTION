@@ -18,7 +18,9 @@ Description: Provides functional control charts
     Centofanti et al. (2021) <doi:10.1080/00401706.2020.1753581>.
     The package is thoroughly illustrated in the paper of 
     Capezza et al (2023) <doi:10.1080/00224065.2023.2219012>.
-Depends: R (>= 3.6.0)
+Depends: 
+    R (>= 3.6.0), 
+    robustbase
 Imports: 
     fda,
     ggplot2,
@@ -30,11 +32,15 @@ Imports:
     matrixStats,
     roahd,
     dplyr,
-    stringr
+    stringr,
+    fda.usc,
+    rrcov,
+    rofanova,
+    Matrix
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Suggests: 
     covr,
     knitr,
