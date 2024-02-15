@@ -36,7 +36,7 @@ are also used as the tuning data set, i.e. \code{tuning_data=pca$data}.
 Default is NULL.}
 
 \item{alpha}{A named list with three elements, named \code{T2}, \code{spe},
-and code{y},
+and \code{y},
 respectively, each containing
 the desired Type I error probability of the corresponding control chart
 (\code{T2} corresponds to the T2 control chart,

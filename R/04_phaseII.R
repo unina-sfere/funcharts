@@ -312,7 +312,7 @@ control_charts_pca <- function(pca,
 #' Default is NULL.
 #' @param alpha
 #' A named list with three elements, named \code{T2}, \code{spe},
-#' and code{y},
+#' and \code{y},
 #' respectively, each containing
 #' the desired Type I error probability of the corresponding control chart
 #' (\code{T2} corresponds to the T2 control chart,

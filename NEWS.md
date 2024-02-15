@@ -1,3 +1,15 @@
+# funcharts 1.4.0
+
+* `rpca_mfd()` performs multivariate functional principal component analysis as described in Capezza et al. (2022).
+* `functional_filter()` performs the functional filtering step of the robust multivariate functional control chart framework of Capezza et al. (2022).
+* `RoMFDI()` performs the robust multivariate functional data imputation step as described in Capezza et al. (2022).
+* `RoMFCC_PhaseI()` performs Phase I of the robust multivariate functional control chart framework of Capezza et al. (2022).
+* `RoMFCC_PhaseII()` performs Phase II of the robust multivariate functional control chart framework of Capezza et al. (2022).
+
+References:
+
+* Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2022) Robust Multivariate Functional Control Charts. arXiv:2207.07978v.
+
 # funcharts 1.3.2
 
 * Updated documentation with the newly published paper, which thoroughly illustrates the funcharts package:

@@ -18,8 +18,8 @@ RoMFCC_PhaseI(
 A functional filter is applied to this data set, then
 flagged functional componentwise outliers are imputed in the
 robust imputation step.
-Finally robust multivariate funcitonal principal component analysis
-is applied to the imputed data set for dimenison reduction.}
+Finally robust multivariate functional principal component analysis
+is applied to the imputed data set for dimension reduction.}
 
 \item{mfdobj_tuning}{An additional functional data object of class mfd.
 After applying the filter and imputation steps on this data set,
