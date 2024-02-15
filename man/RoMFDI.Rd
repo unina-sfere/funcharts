@@ -22,6 +22,12 @@ robust multivariate functional principal component analysis (RoMFPCA).
 See \code{\link{rpca_mfd}}.
 Default is \code{"ROBPCA"}.}
 
+\item{fev}{Number between 0 and 1 denoting the proportion
+of variability that must be explained by the
+principal components to be selected for dimension reduction after
+applying RoMFPCA on the observed components to impute the missing ones.
+Default is 0.999.}
+
 \item{n_dataset}{To take into account the increased noise due to single imputation,
 the proposed RoMFDI allows multiple imputation.
 Due to the presence of the stochastic component in the imputation,
@@ -53,12 +59,6 @@ It applies only if update is TRUE. Default value is 10.}
 RoMFPCA algorithm should resist and is used only
 if \code{method_pca} is \code{"ROBPCA"}.
 Default is 0.8.}
-
-\item{fev_imp}{Number between 0 and 1 denoting the proportion
-of variability that must be explained by the
-principal components to be selected for dimension reduction after
-applying RoMFPCA on the observed components to impute the missing ones.
-Default is 0.999.}
 }
 \value{
 A list with \code{n_dataset} elements.

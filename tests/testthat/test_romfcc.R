@@ -1,5 +1,4 @@
 data("air")
-# air <- lapply(air, function(x) x[1:10, , drop = FALSE])
 mfdobj <- get_mfd_list(air,
                        grid = 1:24,
                        n_basis = 5,
@@ -28,7 +27,7 @@ test_that("RoMFDI works", {
   mfdobj_missing <- mfdobj
   mfdobj_missing$coefs[, 1, 1] <- NA
   imputation_output <- RoMFDI(mfdobj_missing)
-  expect_is(filter_output, "list")
+  expect_is(imputation_output, "list")
 })
 
 test_that("RoMFCC works", {

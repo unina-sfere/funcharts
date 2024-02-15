@@ -2045,7 +2045,7 @@ mfd_to_df_raw <- function(mfdobj) {
     dplyr::select(dplyr::all_of(vars_to_select)) %>%
     dplyr::rename(id = !!id_var) %>%
     dplyr::filter(id %in% !!obs) %>%
-    tidyr::pivot_longer(variables, names_to = "var") %>%
+    tidyr::pivot_longer(dplyr::all_of(variables), names_to = "var") %>%
     dplyr::arrange("id", "var", !!arg_var) %>%
     tidyr::drop_na()
 }

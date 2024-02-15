@@ -54,7 +54,6 @@ It performs robust MFPCA as described in Capezza et al. (2022).
 }
 \examples{
 library(funcharts)
-library(tidyverse)
 dat <- simulate_mfd(nobs = 20, p = 1, correlation_type_x = "Bessel")
 mfdobj <- get_mfd_list(dat$X_list, n_basis = 5)
 

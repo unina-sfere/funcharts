@@ -64,7 +64,6 @@
 #'
 #' @examples
 #' library(funcharts)
-#' library(tidyverse)
 #' dat <- simulate_mfd(nobs = 20, p = 1, correlation_type_x = "Bessel")
 #' mfdobj <- get_mfd_list(dat$X_list, n_basis = 5)
 #'
@@ -292,7 +291,7 @@ rpca.fd <- function(fdobj,
   values <- svd(data_new)$d^2
   nharm <- min(nharm, sum(values > sqrt(.Machine$double.eps)))
 
-  if(method=="normal"){
+  if (method == "normal") {
     results <- list()
     X_cen <- scale(t(as.matrix(data_new)), scale = FALSE)
     mean_sc <- apply(t(as.matrix(data_new)), 2, mean)
@@ -308,7 +307,7 @@ rpca.fd <- function(fdobj,
 
     mean_fd <- mfd(coeff_mean,basisobj, B = basisobj$B)
   }
-  else if(method == "ROBPCA") {
+  else if (method == "ROBPCA") {
     results <- list()
     mod_pca <- rrcov::PcaHubert(t(as.matrix(data_new)),k=nharm,kmax=nharm,
                                 alpha = alpha,
@@ -343,7 +342,7 @@ rpca.fd <- function(fdobj,
       coeff_mean[, ,i] <- solve(MIJW) %*% mod_pca$center[indexi]
     }
 
-    mean_fd<-mfd(coeff_mean,basisobj, B = basisobj$B)
+    mean_fd <- mfd(coeff_mean,basisobj, B = basisobj$B)
 
   }
   else if(method == "Proj") {
@@ -359,7 +358,11 @@ rpca.fd <- function(fdobj,
 
     mean_fd <- mfd(coeff_mean,basisobj, B = basisobj$B)
   }
-  mfdobj_temp <- if (!is.mfd(fdobj)) funcharts::get_mfd_fd(fdobj) else fdobj
+  if (!is.mfd(fdobj)) {
+    mfdobj_temp <- funcharts::get_mfd_fd(fdobj)
+  } else {
+    mfdobj_temp <- fdobj
+  }
   fdobj_cen <- scale_mfd(mfdobj_temp, center = mean_fd, scale = FALSE)
   nharm <- dim(mod_pca$loadings)[2]
   eigvalc <- results$values
@@ -507,6 +510,8 @@ functional_filter <- function(mfdobj,
                               bivariate = TRUE,
                               max_proportion_componentwise = 0.5) {
 
+  n <- ind <- NULL
+
   nvar <- dim(mfdobj$coefs)[3]
 
   ind_out_fil_univariate <- filter_univariate(mfdobj = mfdobj,
@@ -535,7 +540,7 @@ functional_filter <- function(mfdobj,
   out_remove <- ind_out_fil %>%
     unlist() %>%
     as.data.frame() %>%
-    setNames("ind") %>%
+    stats::setNames("ind") %>%
     dplyr::count(ind) %>%
     dplyr::filter(n > nvar * max_proportion_componentwise) %>%
     dplyr::pull(ind)
@@ -615,6 +620,9 @@ filter_bivariate <- function(mfdobj,
                              fev = 0.9,
                              delta = 0.10,
                              alpha_binom = 0.99) {
+
+  jj1 <- jj2 <- NULL
+
   nvar <- dim(mfdobj$coefs)[3]
   if (nvar == 1) {
     warning("bivariate_filter does not apply to a single functional variable.")
@@ -682,9 +690,9 @@ filter_bivariate <- function(mfdobj,
       m_ii[kk] <- obs_ii %>%
         dplyr::filter(jj1 == kk | jj2 == kk) %>%
         nrow()
-      c_ii_jj <- qbinom(alpha_binom,
-                        size = length(which_jj_unflagged) - 1,
-                        prob = delta)
+      c_ii_jj <- stats::qbinom(alpha_binom,
+                               size = length(which_jj_unflagged) - 1,
+                               prob = delta)
       if (m_ii[kk] > c_ii_jj) {
         flagged_ii[kk] <- TRUE
       }
@@ -706,15 +714,15 @@ univ_fil_gse <- function(v, alpha, df) {
   n <- length(v)
   id <- (1:n)[!is.na(v)]
   v.out <- rep(NA, n)
-  v <- na.omit(v)
+  v <- stats::na.omit(v)
   n <- length(v)
   v.order <- order(v)
   v <- sort(v)
-  i0 <- which(v < qchisq(alpha, df))
+  i0 <- which(v < stats::qchisq(alpha, df))
   n0 <- 0
   if (length(i0) > 0) {
     i0 <- rev(i0)[1]
-    dn <- max(pmax(pchisq(v[i0:n], df) - (i0:n - 1)/n, 0))
+    dn <- max(pmax(stats::pchisq(v[i0:n], df) - (i0:n - 1)/n, 0))
     n0 <- round(dn * n)
   }
   v <- v[order(v.order)]
@@ -769,7 +777,7 @@ univ_fil_gse <- function(v, alpha, df) {
 #' @param niter_update
 #' The number of times the RoMFPCA is updated during the algorithm.
 #' It applies only if update is TRUE. Default value is 10.
-#' @param fev_imp
+#' @param fev
 #' Number between 0 and 1 denoting the proportion
 #' of variability that must be explained by the
 #' principal components to be selected for dimension reduction after
@@ -1235,10 +1243,10 @@ RoMFCC_PhaseI <- function(mfdobj,
         which_na <- sort(unique(which(is.na(X_imp$coefs[, , j]),
                                       arr.ind = TRUE)[, 2]))
         which_ok <- setdiff(1:dim(X_imp$coefs)[2], which_na)
-        X_fd <- fd(X_imp$coefs[, which_ok, j], X_imp$basis)
+        X_fd <- fda::fd(X_imp$coefs[, which_ok, j], X_imp$basis)
         X_fdata <- fda.usc::fdata(X_fd)
         mu_fdata <- rofanova::fusem(X_fdata)$mu
-        mu_fd <- fdata2fd(mu_fdata, nbasis = X_mfdm$basis$nbasis)
+        mu_fd <- fda.usc::fdata2fd(mu_fdata, nbasis = X_mfdm$basis$nbasis)
         X_imp$coefs[, which_na, j] <- mu_fd$coefs
       }
       X_imp <- list(X_imp)
@@ -1319,8 +1327,7 @@ RoMFCC_PhaseI <- function(mfdobj,
   K <- which(cumsum(mod_pca_final$varprop) >= pca_par$fev)[1]
 
   alpha_sid<-1-(1-alpha)^(1/2)
-  T2_lim <- qchisq(1-alpha_sid, df = K)
-  T2_lim <- qf(1 - alpha_sid, K, nobs - K) *
+  T2_lim <- stats::qf(1 - alpha_sid, K, nobs - K) *
     (K * (nobs- 1 ) * (nobs + 1)) /
     ((nobs - K) * nobs)
   values_spe <- values[(K+1):length(values)]
@@ -1329,7 +1336,7 @@ RoMFCC_PhaseI <- function(mfdobj,
   teta_3 <- sum(values_spe^3)
   h0 <- 1 - (2 * teta_1 * teta_3) / (3 * teta_2^2)
 
-  c_alpha <- sign(h0) * abs(qnorm(alpha_sid))
+  c_alpha <- sign(h0) * abs(stats::qnorm(alpha_sid))
   spe_lim <- teta_1 * (((c_alpha * sqrt(2 * teta_2 * h0^2)) / teta_1) +
                         1 +
                         (teta_2 * h0 * (h0 - 1)) / teta_1^2)^(1 / h0)
@@ -1389,10 +1396,10 @@ RoMFCC_PhaseI <- function(mfdobj,
           which_na <- sort(unique(which(is.na(X_imp_tuning$coefs[, , j]),
                                         arr.ind = TRUE)[, 2]))
           which_ok <- setdiff(1:dim(X_imp_tuning$coefs)[2], which_na)
-          X_fd <- fd(X_imp_tuning$coefs[, which_ok, j], X_imp_tuning$basis)
+          X_fd <- fda::fd(X_imp_tuning$coefs[, which_ok, j], X_imp_tuning$basis)
           X_fdata <- fda.usc::fdata(X_fd)
           mu_fdata <- rofanova::fusem(X_fdata)$mu
-          mu_fd <- fdata2fd(mu_fdata, nbasis = X_mfd_tuning_m$basis$nbasis)
+          mu_fd <- fda.usc::fdata2fd(mu_fdata, nbasis = X_mfd_tuning_m$basis$nbasis)
           X_imp_tuning$coefs[, which_na, j] <- mu_fd$coefs
         }
         X_imp_tuning <- list(X_imp_tuning)
@@ -1444,7 +1451,7 @@ RoMFCC_PhaseI <- function(mfdobj,
 
     alpha_sid<-1-(1-alpha)^(1/2)
     ntun <- length(T2_tun)
-    T2_lim <- qf(1 - alpha_sid, K, ntun - K) *
+    T2_lim <- stats::qf(1 - alpha_sid, K, ntun - K) *
       (K * (ntun- 1 ) * (ntun + 1)) /
       ((ntun - K) * ntun)
 
@@ -1461,7 +1468,7 @@ RoMFCC_PhaseI <- function(mfdobj,
     teta_3 <- sum(values_spe^3)
     h0 <- 1 - (2 * teta_1 * teta_3) / (3 * teta_2^2)
 
-    c_alpha <- sign(h0) * abs(qnorm(alpha_sid))
+    c_alpha <- sign(h0) * abs(stats::qnorm(alpha_sid))
     spe_lim <- teta_1 * (((c_alpha * sqrt(2 * teta_2 * h0^2)) / teta_1) +
                           1 +
                           (teta_2 * h0 * (h0 - 1)) / teta_1^2)^(1 / h0)
@@ -1496,8 +1503,8 @@ RoMFCC_PhaseI <- function(mfdobj,
 #' A multivariate functional data object of class mfd, containing the
 #' Phase II observations to be monitored.
 #' @param mod_phase1
-#' Output obtained by applying the function \code{RoMFCC_Phase_I}
-#' to perform Phase I. See \code{\link{RoMFCC_Phase_I}}.
+#' Output obtained by applying the function \code{RoMFCC_PhaseI}
+#' to perform Phase I. See \code{\link{RoMFCC_PhaseI}}.
 #' @return
 #' A \code{data.frame} with as many rows as the number of
 #' multivariate functional observations in the phase II data set and
@@ -1547,11 +1554,11 @@ RoMFCC_PhaseII <- function(mfdobj_new,
                               center = mod_pca$meanfd,
                               scale = mod_pca$scale_fd)
 
-  mod_T2_spe <- funcharts:::get_T2_spe(mod_pca, 1:K, mfdobj_new_std)
+  mod_T2_spe <- get_T2_spe(mod_pca, 1:K, mfdobj_new_std)
   T2 <- mod_T2_spe$T2
   SPE <- mod_T2_spe$spe
 
-  scores_new <- funcharts:::get_scores(mod_pca,
+  scores_new <- get_scores(mod_pca,
                            components = 1:dim(mod_pca$harmonics$coefs)[2],
                            newdata_scaled = mfdobj_new_std)
 

@@ -10,8 +10,8 @@ RoMFCC_PhaseII(mfdobj_new, mod_phase1)
 \item{mfdobj_new}{A multivariate functional data object of class mfd, containing the
 Phase II observations to be monitored.}
 
-\item{mod_phase1}{Output obtained by applying the function \code{RoMFCC_Phase_I}
-to perform Phase I. See \code{\link{RoMFCC_Phase_I}}.}
+\item{mod_phase1}{Output obtained by applying the function \code{RoMFCC_PhaseI}
+to perform Phase I. See \code{\link{RoMFCC_PhaseI}}.}
 }
 \value{
 A \code{data.frame} with as many rows as the number of
