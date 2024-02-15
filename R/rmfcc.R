@@ -261,7 +261,7 @@ rpca.fd <- function(fdobj,
   }
   Lmat <- fda::eval.penalty(harmbasis, 0)
   if(is.null(harmbasis$B)) harmbasis$B <- Lmat
-  if(is.null(basisobj$B)) basisobj$B <- fdobj$basis$B=Lmat
+  if(is.null(basisobj$B)) basisobj$B <- fdobj$basis$B <- Lmat
   if (lambda > 0) {
     Rmat <- fda::eval.penalty(harmbasis, Lfdobj)
     Lmat <- Lmat + lambda * Rmat
