@@ -1,3 +1,5 @@
+# funcharts (development version)
+
 # funcharts 1.4.0
 
 * `rpca_mfd()` performs multivariate functional principal component analysis as described in Capezza et al. (2022).
