@@ -31,6 +31,7 @@ test_that("RoMFDI works", {
 })
 
 test_that("RoMFCC works", {
+  mfdobj <- mfdobj[, 1:3]
   nobs <- dim(mfdobj$coefs)[2]
   set.seed(0)
   ids <- sample(1:nobs)

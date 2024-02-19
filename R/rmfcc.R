@@ -1562,7 +1562,7 @@ RoMFCC_PhaseII <- function(mfdobj_new,
                            components = 1:dim(mod_pca$harmonics$coefs)[2],
                            newdata_scaled = mfdobj_new_std)
 
-  if (mod1$tuning) {
+  if (mod_phase1$tuning) {
     scores_new_cen <- t(t(scores_new[, 1:K]) -
                           mod_phase1$mean_scores_tuning_rob_mean[1:K])
     T2 <- rowSums((scores_new_cen %*% mod_phase1$T_T2_inv) * scores_new_cen)
