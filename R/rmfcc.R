@@ -440,7 +440,7 @@ rpca.fd <- function(fdobj,
 #' @param fev Number between 0 and 1 denoting the fraction
 #' of variability that must be explained by the
 #' principal components to be selected to calculate functional distances after
-#' applying RoMFPCA on \code{mfdobj}. Default is 0.9.
+#' applying RoMFPCA on \code{mfdobj}. Default is 0.999.
 #' @param delta Number between 0 and 1 denoting the parameter of the
 #' Binomial distribution whose \code{alpha_binom}-quantile
 #' determines the threshold
@@ -504,7 +504,7 @@ rpca.fd <- function(fdobj,
 functional_filter <- function(mfdobj,
                               method_pca = "ROBPCA",
                               alpha = 0.95,
-                              fev = 0.9,
+                              fev = 0.999,
                               delta = 0.10,
                               alpha_binom = 0.99,
                               bivariate = TRUE,
@@ -583,7 +583,7 @@ functional_filter <- function(mfdobj,
 filter_univariate <- function(mfdobj,
                               method_pca = "ROBPCA",
                               alpha = 0.95,
-                              fev = 0.9) {
+                              fev = 0.999) {
 
   nvar <- dim(mfdobj$coefs)[3]
   obs_out_list <- list()
@@ -617,7 +617,7 @@ filter_bivariate <- function(mfdobj,
                              ind_out_fil,
                              method_pca = "ROBPCA",
                              alpha = 0.85,
-                             fev = 0.9,
+                             fev = 0.999,
                              delta = 0.10,
                              alpha_binom = 0.99) {
 
@@ -773,7 +773,7 @@ univ_fil_gse <- function(v, alpha, df) {
 #' be combined by averaging the robustly estimated covariance functions,
 #' thus performing a
 #' multiple imputation strategy as suggested by Van Ginkel et al. (2007).
-#' Default is 5.
+#' Default is 3.
 #' @param niter_update
 #' The number of times the RoMFPCA is updated during the algorithm.
 #' It applies only if update is TRUE. Default value is 10.
@@ -817,7 +817,7 @@ univ_fil_gse <- function(v, alpha, df) {
 RoMFDI <- function(mfdobj,
                    method_pca = "ROBPCA",
                    fev = 0.999,
-                   n_dataset = 5,
+                   n_dataset = 3,
                    update = TRUE,
                    niter_update = 10,
                    alpha = 0.8) {
@@ -1344,11 +1344,11 @@ RoMFCC_PhaseI <- function(mfdobj,
 
 
   mod_T2_spe_all <- get_T2_spe(
-    pca = mod_pca,
+    pca = mod_pca_final,
     components = 1:K,
     newdata_scaled = scale_mfd(mfdobj,
-                               center = mod_pca$meanfd,
-                               scale = mod_pca$scale_fd)
+                               center = mod_pca_final$meanfd,
+                               scale = mod_pca_final$scale_fd)
   )
   T2_all <- mod_T2_spe_all$T2
   SPE_all <- mod_T2_spe_all$spe
@@ -1417,11 +1417,11 @@ RoMFCC_PhaseI <- function(mfdobj,
     S_scores_tuning_rob2 <- list()
     for (D in seq_along(X_imp_tuning)) {
       X_imp_tuning_scaled <- scale_mfd(X_imp_tuning[[D]],
-                                       center = mod_pca$meanfd,
-                                       scale = mod_pca$scale_fd)
+                                       center = mod_pca_final$meanfd,
+                                       scale = mod_pca_final$scale_fd)
       scores_tuning[[D]] <- get_scores(
-        mod_pca,
-        components = 1:dim(mod_pca$harmonics$coefs)[2],
+        mod_pca_final,
+        components = 1:dim(mod_pca_final$harmonics$coefs)[2],
         newdata_scaled = X_imp_tuning_scaled
       )
 
@@ -1562,7 +1562,7 @@ RoMFCC_PhaseII <- function(mfdobj_new,
                            components = 1:dim(mod_pca$harmonics$coefs)[2],
                            newdata_scaled = mfdobj_new_std)
 
-  if (!is.null(mod_phase1$mfdobj_tuning)) {
+  if (mod1$tuning) {
     scores_new_cen <- t(t(scores_new[, 1:K]) -
                           mod_phase1$mean_scores_tuning_rob_mean[1:K])
     T2 <- rowSums((scores_new_cen %*% mod_phase1$T_T2_inv) * scores_new_cen)

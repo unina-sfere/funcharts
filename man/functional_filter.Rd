@@ -8,7 +8,7 @@ functional_filter(
   mfdobj,
   method_pca = "ROBPCA",
   alpha = 0.95,
-  fev = 0.9,
+  fev = 0.999,
   delta = 0.1,
   alpha_binom = 0.99,
   bivariate = TRUE,
@@ -33,7 +33,7 @@ See Capezza et al. (2022) for more details.}
 \item{fev}{Number between 0 and 1 denoting the fraction
 of variability that must be explained by the
 principal components to be selected to calculate functional distances after
-applying RoMFPCA on \code{mfdobj}. Default is 0.9.}
+applying RoMFPCA on \code{mfdobj}. Default is 0.999.}
 
 \item{delta}{Number between 0 and 1 denoting the parameter of the
 Binomial distribution whose \code{alpha_binom}-quantile

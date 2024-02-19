@@ -8,7 +8,7 @@ RoMFDI(
   mfdobj,
   method_pca = "ROBPCA",
   fev = 0.999,
-  n_dataset = 5,
+  n_dataset = 3,
   update = TRUE,
   niter_update = 10,
   alpha = 0.8
@@ -40,7 +40,7 @@ RoMFPCA models could
 be combined by averaging the robustly estimated covariance functions,
 thus performing a
 multiple imputation strategy as suggested by Van Ginkel et al. (2007).
-Default is 5.}
+Default is 3.}
 
 \item{update}{The RoMFDI performs sequential imputation of missing functional
 components.
