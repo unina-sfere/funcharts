@@ -1,4 +1,10 @@
-# funcharts (development version)
+# funcharts 1.4.1
+
+* fixed default choices of `RoMFCC_PhaseI()` to be consistent with the choices proposed in in Capezza et al. (2022).
+
+References:
+
+* Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2022) Robust Multivariate Functional Control Charts. arXiv:2207.07978v.
 
 # funcharts 1.4.0
 
