@@ -145,7 +145,7 @@ functions (7) and (8) of Capezza et al. (2024).
 the functional data are discretized before computing the AMFEWMA monitoring
 statistic and estimating all the model parameters.
 \item \code{V2_mat}: the \code{n_seq}X\code{l_seq} matrix containing,
-in each column, the AMFEMWA monitoring statistic values of each
+in each column, the AMFEWMA monitoring statistic values of each
 bootstrap sequence.
 This matrix is used to set the control chart limit \code{h} to
 ensure that the desired average run length is achieved.
@@ -197,4 +197,8 @@ plot_control_charts(cc$cc, nobsI = 100)
 Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 An Adaptive Multivariate Functional EWMA Control Chart.
 Accepted for publication in \emph{Journal of Quality Technology}.
+
+Lucas, J. M., Saccucci, M. S. (1990)
+Exponentially weighted moving average control schemes:
+properties and enhancements. \emph{Technometrics}, 32(1), 1-12.
 }

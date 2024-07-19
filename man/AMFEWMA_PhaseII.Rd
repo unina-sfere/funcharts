@@ -39,7 +39,7 @@ AMFEWMA monitoring statistic in Equation (8) of Capezza
 et al. (2024), calculated in each bootstrap sequence, until the first alarm.
 \item \code{cc}: a data frame with the information needed to plot the
 AMFEWMA control chart in Phase II, with the following columns.
-\code{id} contains the id of each multivariate funcitonal observation,
+\code{id} contains the id of each multivariate functional observation,
 \code{amfewma_monitoring_statistic} contains the AMFEWMA monitoring
 statistic values calculated on the Phase II sequence,
 \code{amfewma_monitoring_statistic_lim} is the upper control limit.

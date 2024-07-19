@@ -110,6 +110,10 @@
 #' An Adaptive Multivariate Functional EWMA Control Chart.
 #' Accepted for publication in \emph{Journal of Quality Technology}.
 #'
+#' Lucas, J. M., Saccucci, M. S. (1990)
+#' Exponentially weighted moving average control schemes:
+#' properties and enhancements. \emph{Technometrics}, 32(1), 1-12.
+#'
 #' @return
 #' A list with the following elements.
 #' \code{lambda} is the selected lambda parameter.
@@ -144,7 +148,7 @@
 #' statistic and estimating all the model parameters.
 #'
 #' * \code{V2_mat}: the \code{n_seq}X\code{l_seq} matrix containing,
-#' in each column, the AMFEMWA monitoring statistic values of each
+#' in each column, the AMFEWMA monitoring statistic values of each
 #' bootstrap sequence.
 #' This matrix is used to set the control chart limit \code{h} to
 #' ensure that the desired average run length is achieved.
@@ -539,7 +543,7 @@ AMFEWMA_PhaseI_given_pars <- function(mfdobj,
 #'
 #' * \code{cc}: a data frame with the information needed to plot the
 #' AMFEWMA control chart in Phase II, with the following columns.
-#' \code{id} contains the id of each multivariate funcitonal observation,
+#' \code{id} contains the id of each multivariate functional observation,
 #' \code{amfewma_monitoring_statistic} contains the AMFEWMA monitoring
 #' statistic values calculated on the Phase II sequence,
 #' \code{amfewma_monitoring_statistic_lim} is the upper control limit.
