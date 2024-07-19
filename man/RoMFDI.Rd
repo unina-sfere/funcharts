@@ -67,7 +67,7 @@ stochastic imputation of the missing components.
 }
 \description{
 It performs Robust Multivariate Functional Data Imputation (RoMFDI)
-as in Capezza et al. (2022).
+as in Capezza et al. (2024).
 }
 \examples{
 \dontrun{
@@ -79,9 +79,9 @@ mfdobj_imp <- RoMFDI(out$mfdobj)
 
 }
 \references{
-Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2022)
+Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 Robust Multivariate Functional Control Charts.
-\emph{arXiv:2207.07978v}
+\emph{Technometrics}, \url{doi:10.1080/00401706.2024.2327346}.
 
 Van Ginkel, J. R., Van der Ark, L. A., Sijtsma, K., and Vermunt, J. K.
 (2007). Two-way

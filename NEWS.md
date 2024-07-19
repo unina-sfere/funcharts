@@ -1,22 +1,33 @@
-# funcharts 1.4.1
+# funcharts 1.5.0
 
-* fixed default choices of `RoMFCC_PhaseI()` to be consistent with the choices proposed in in Capezza et al. (2022).
+* `AMFEWMA_PhaseI()` performs Phase I of the adaptive multivariate functional EWMA control chart of Capezza et al. (2024).
+* `AMFEWMA_PhaseII()` performs Phase II of the adaptive multivariate functional EWMA control chart of Capezza et al. (2024).
 
 References:
 
-* Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2022) Robust Multivariate Functional Control Charts. arXiv:2207.07978v.
+* Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2024)
+An Adaptive Multivariate Functional EWMA Control Chart.
+Accepted for publication in \emph{Journal of Quality Technology}.
+
+# funcharts 1.4.1
+
+* fixed default choices of `RoMFCC_PhaseI()` to be consistent with the choices proposed in in Capezza et al. (2024).
+
+References:
+
+* Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024) Robust Multivariate Functional Control Charts. Technometrics, doi:10.1080/00401706.2024.2327346.
 
 # funcharts 1.4.0
 
-* `rpca_mfd()` performs multivariate functional principal component analysis as described in Capezza et al. (2022).
-* `functional_filter()` performs the functional filtering step of the robust multivariate functional control chart framework of Capezza et al. (2022).
-* `RoMFDI()` performs the robust multivariate functional data imputation step as described in Capezza et al. (2022).
-* `RoMFCC_PhaseI()` performs Phase I of the robust multivariate functional control chart framework of Capezza et al. (2022).
-* `RoMFCC_PhaseII()` performs Phase II of the robust multivariate functional control chart framework of Capezza et al. (2022).
+* `rpca_mfd()` performs multivariate functional principal component analysis as described in Capezza et al. (2024).
+* `functional_filter()` performs the functional filtering step of the robust multivariate functional control chart framework of Capezza et al. (2024).
+* `RoMFDI()` performs the robust multivariate functional data imputation step as described in Capezza et al. (2024).
+* `RoMFCC_PhaseI()` performs Phase I of the robust multivariate functional control chart framework of Capezza et al. (2024).
+* `RoMFCC_PhaseII()` performs Phase II of the robust multivariate functional control chart framework of Capezza et al. (2024).
 
 References:
 
-* Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2022) Robust Multivariate Functional Control Charts. arXiv:2207.07978v.
+* Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024) Robust Multivariate Functional Control Charts. Technometrics, doi:10.1080/00401706.2024.2327346.
 
 # funcharts 1.3.2
 

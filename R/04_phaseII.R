@@ -628,6 +628,28 @@ plot_control_charts <- function(cclist, nobsI = 0) {
       ))
   }
 
+  df_amfewma <- NULL
+  if (!is.null(cclist$amfewma_monitoring_statistic)) {
+    df_amfewma <- data.frame(statistic = cclist$amfewma_monitoring_statistic,
+                         lcl = 0,
+                         ucl = cclist$amfewma_monitoring_statistic_lim) %>%
+      dplyr::mutate(id = seq_len(dplyr::n()),
+                    ooc = statistic > ucl,
+                    type = "AMFEWMA~CONTROL~CHART")
+
+    amfewma__range <- df_amfewma %>%
+      dplyr::select(statistic, ucl, lcl) %>%
+      range() %>%
+      diff()
+
+    df_amfewma <- df_amfewma %>%
+      dplyr::mutate(ytext = dplyr::case_when(
+        statistic < lcl ~ statistic - amfewma__range * 0.2,
+        statistic > ucl ~ statistic + amfewma__range * 0.2,
+        TRUE ~ statistic,
+      ))
+  }
+
   plot_list <- list()
 
   if (!is.null(cclist$T2)) {
@@ -740,6 +762,28 @@ plot_control_charts <- function(cclist, nobsI = 0) {
 
     plot_list$p_spe <- plot_list$p_spe +
       ggplot2::ggtitle(expression(SPE~CONTROL~CHART~(RESPONSE)))
+  }
+
+  if (!is.null(cclist$amfewma_monitoring_statistic)) {
+    plot_list$p_amfewma <- ggplot2::ggplot(df_amfewma,
+                                           ggplot2::aes(x = id,
+                                                        y = statistic)) +
+      ggplot2::geom_line() +
+      ggplot2::geom_point(ggplot2::aes(colour = ooc)) +
+      ggplot2::geom_blank(ggplot2::aes(y = 0)) +
+      ggplot2::geom_point(ggplot2::aes(y = ucl),
+                          pch = "-", size = 5) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90,
+                                                         vjust = 0.5)) +
+      ggplot2::theme(legend.position = "none",
+                     plot.title = ggplot2::element_text(hjust = 0.5)) +
+      ggplot2::geom_text(ggplot2::aes(y = ytext, label = id),
+                         data = dplyr::filter(df_amfewma, ooc),
+                         size = 3) +
+      ggplot2::xlab("Observation") +
+      ggplot2::ylab(expression(AMFEWMA~monitorng~statistic)) +
+      ggplot2::ggtitle(expression(AMFEWMA~CONTROL~CHART))
   }
 
   p <- patchwork::wrap_plots(plot_list, ncol = 1) &

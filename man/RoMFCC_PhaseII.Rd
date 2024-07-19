@@ -52,3 +52,8 @@ phase2 <- RoMFCC_PhaseII(mfdobj_new = mfdobj2,
 plot_control_charts(phase2)
 }
 }
+\references{
+Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
+Robust Multivariate Functional Control Charts.
+\emph{Technometrics}, \url{doi:10.1080/00401706.2024.2327346}.
+}

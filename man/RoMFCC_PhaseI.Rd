@@ -90,7 +90,7 @@ statistics for the Phase II observations.
 }
 \description{
 It performs Phase I of the Robust Multivariate Functional Control Chart
-(RoMFCC) as proposed by Capezza et al. (2022).
+(RoMFCC) as proposed by Capezza et al. (2024).
 }
 \examples{
 \dontrun{
@@ -110,7 +110,7 @@ plot_control_charts(phase2)
 }
 }
 \references{
-Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2022)
+Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 Robust Multivariate Functional Control Charts.
-\emph{arXiv:2207.07978v}
+\emph{Technometrics}, \url{doi:10.1080/00401706.2024.2327346}.
 }

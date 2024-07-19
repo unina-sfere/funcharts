@@ -32,7 +32,7 @@ Default is \code{"funmad"}.}
 to be calculated. Default is 20.}
 
 \item{method}{If \code{"ROBPCA"}, MFPCA uses ROBPCA of Hubert et al. (2005),
-as described in Capezza et al. (2022).
+as described in Capezza et al. (2024).
 If \code{"Locantore"}, MFPCA uses the Spherical Principal Components
 procedure proposed by Locantore et al. (1999).
 If \code{"Proj"}, MFPCA uses the Robust Principal Components based on
@@ -50,7 +50,7 @@ function when performing non robust multivariate
 functional principal component analysis.
 }
 \description{
-It performs robust MFPCA as described in Capezza et al. (2022).
+It performs robust MFPCA as described in Capezza et al. (2024).
 }
 \examples{
 library(funcharts)
@@ -67,9 +67,9 @@ rpca <- rpca_mfd(mfdobj) # robust MFPCA
 # plot_pca_mfd(rpca, harm = 1) # plot first eigenfunction in robust case
 }
 \references{
-Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2022)
+Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 Robust Multivariate Functional Control Charts.
-\emph{arXiv:2207.07978v}
+\emph{Technometrics}, \url{doi:10.1080/00401706.2024.2327346}.
 
 Centofanti, F., Colosimo, B.M., Grasso, M.L., Menafoglio, A., Palumbo, B.,
 Vantini, S. (2023)

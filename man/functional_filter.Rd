@@ -28,7 +28,7 @@ distribution, with a number of degrees of freedom equal to the number
 of principal components selected by \code{fev}, are considered
 to determine the proportion of flagged componentwise outliers.
 Default value is 0.95, as recommended by Agostinelli et al. (2015).
-See Capezza et al. (2022) for more details.}
+See Capezza et al. (2024) for more details.}
 
 \item{fev}{Number between 0 and 1 denoting the fraction
 of variability that must be explained by the
@@ -45,11 +45,11 @@ the i-th observation where the component (i, j) is involved
 is compared against this threshold to identify additional functional
 componentwise outliers to the ones found by the univariate filter.
 Default is 0.1, recommended as conservative choice by Leung et al. (2017).
-See Capezza et al. (2022) for more details.}
+See Capezza et al. (2024) for more details.}
 
 \item{alpha_binom}{Probability value such that the \code{alpha}-quantile
 of the Binomial distribution is considered as threshold
-in the bivariate filter. See \code{delta} and Capezza et al. (2022)
+in the bivariate filter. See \code{delta} and Capezza et al. (2024)
 for more details. Default value is 0.99.}
 
 \item{bivariate}{If TRUE, both univariate and bivariate filters
@@ -74,7 +74,7 @@ functional componentwise outliers for the corresponding functional variable.
 }
 \description{
 It finds functional componentwise outliers
-as described in Capezza et al. (2022).
+as described in Capezza et al. (2024).
 }
 \examples{
 \dontrun{
@@ -92,9 +92,9 @@ multivariate location and scatter in the presence of cellwise and
 casewise contamination.
 \emph{Test}, 24(3):441–461.
 
-Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2022)
+Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 Robust Multivariate Functional Control Charts.
-\emph{arXiv:2207.07978v}
+\emph{Technometrics}, \url{doi:10.1080/00401706.2024.2327346}.
 
 Leung, A., Yohai, V., and Zamar, R. (2017).
 Multivariate location and scatter matrix

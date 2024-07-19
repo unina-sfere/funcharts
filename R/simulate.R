@@ -26,7 +26,7 @@
 #' In the phase II data, the first group of observations are in control,
 #' the second group of observations contains a moderate mean shift,
 #' while the third group of observations contains a severe mean shift.
-#' The shift types are described in the paper from Capezza et al. (2022).
+#' The shift types are described in the paper from Capezza et al. (2023).
 #' @export
 #'
 #' @references
@@ -36,8 +36,9 @@
 #' \emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
 #'
 #' Capezza, C., Centofanti, F., Lepore, A., Menafoglio, A., Palumbo, B.,
-#' & Vantini, S. (2022). funcharts: Control charts for multivariate
-#' functional data in R. arXiv preprint arXiv:2207.09321.
+#' & Vantini, S. (2023). funcharts: Control charts for multivariate
+#' functional data in R. \emph{Journal of Quality Technology}, 55(5), 566--583.
+#' <doi:10.1080/00224065.2023.2219012>
 sim_funcharts <- function(nobs1 = 1000, nobs_tun = 1000, nobs2 = 60) {
 
   datI <- simulate_mfd(nobs = nobs1)

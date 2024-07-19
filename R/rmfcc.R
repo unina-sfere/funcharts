@@ -1,7 +1,7 @@
 # RoMFPCA functions -------------------------------------------------------
 #' Robust multivariate functional principal components analysis
 #'
-#' It performs robust MFPCA as described in Capezza et al. (2022).
+#' It performs robust MFPCA as described in Capezza et al. (2024).
 #'
 #' @param mfdobj A multivariate functional data object of class mfd.
 #' @param center If TRUE, it centers the data before doing MFPCA with respect
@@ -18,7 +18,7 @@
 #' to be calculated. Default is 20.
 #' @param method
 #' If \code{"ROBPCA"}, MFPCA uses ROBPCA of Hubert et al. (2005),
-#' as described in Capezza et al. (2022).
+#' as described in Capezza et al. (2024).
 #' If \code{"Locantore"}, MFPCA uses the Spherical Principal Components
 #' procedure proposed by Locantore et al. (1999).
 #' If \code{"Proj"}, MFPCA uses the Robust Principal Components based on
@@ -37,9 +37,9 @@
 #'
 #' @references
 #'
-#' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2022)
+#' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 #' Robust Multivariate Functional Control Charts.
-#' \emph{arXiv:2207.07978v}
+#' \emph{Technometrics}, <doi:10.1080/00401706.2024.2327346>.
 #'
 #' Centofanti, F., Colosimo, B.M., Grasso, M.L., Menafoglio, A., Palumbo, B.,
 #' Vantini, S. (2023)
@@ -423,7 +423,7 @@ rpca.fd <- function(fdobj,
 #' Finds functional componentwise outliers
 #'
 #' It finds functional componentwise outliers
-#' as described in Capezza et al. (2022).
+#' as described in Capezza et al. (2024).
 #'
 #' @param mfdobj A multivariate functional data object of class mfd.
 #' @param method_pca The method used in \code{rpca_mfd} to perform
@@ -436,7 +436,7 @@ rpca.fd <- function(fdobj,
 #' of principal components selected by \code{fev}, are considered
 #' to determine the proportion of flagged componentwise outliers.
 #' Default value is 0.95, as recommended by Agostinelli et al. (2015).
-#' See Capezza et al. (2022) for more details.
+#' See Capezza et al. (2024) for more details.
 #' @param fev Number between 0 and 1 denoting the fraction
 #' of variability that must be explained by the
 #' principal components to be selected to calculate functional distances after
@@ -451,10 +451,10 @@ rpca.fd <- function(fdobj,
 #' is compared against this threshold to identify additional functional
 #' componentwise outliers to the ones found by the univariate filter.
 #' Default is 0.1, recommended as conservative choice by Leung et al. (2017).
-#' See Capezza et al. (2022) for more details.
+#' See Capezza et al. (2024) for more details.
 #' @param alpha_binom Probability value such that the \code{alpha}-quantile
 #' of the Binomial distribution is considered as threshold
-#' in the bivariate filter. See \code{delta} and Capezza et al. (2022)
+#' in the bivariate filter. See \code{delta} and Capezza et al. (2024)
 #' for more details. Default value is 0.99.
 #' @param bivariate If TRUE, both univariate and bivariate filters
 #' are applied. If FALSE, only the univariate filter is used.
@@ -484,9 +484,9 @@ rpca.fd <- function(fdobj,
 #' casewise contamination.
 #' \emph{Test}, 24(3):441–461.
 #'
-#' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2022)
+#' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 #' Robust Multivariate Functional Control Charts.
-#' \emph{arXiv:2207.07978v}
+#' \emph{Technometrics}, <doi:10.1080/00401706.2024.2327346>.
 #'
 #' Leung, A., Yohai, V., and Zamar, R. (2017).
 #' Multivariate location and scatter matrix
@@ -737,11 +737,11 @@ univ_fil_gse <- function(v, alpha, df) {
 
 
 
-# # RoMFDI functions --------------------------------------------------------
+# RoMFDI functions --------------------------------------------------------
 #' Robust Multivariate Functional Data Imputation (RoMFDI)
 #'
 #' It performs Robust Multivariate Functional Data Imputation (RoMFDI)
-#' as in Capezza et al. (2022).
+#' as in Capezza et al. (2024).
 #'
 #' @param mfdobj
 #' A multivariate functional data object of class mfd.
@@ -795,9 +795,9 @@ univ_fil_gse <- function(v, alpha, df) {
 #' @export
 #' @references
 #'
-#' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2022)
+#' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 #' Robust Multivariate Functional Control Charts.
-#' \emph{arXiv:2207.07978v}
+#' \emph{Technometrics}, <doi:10.1080/00401706.2024.2327346>.
 #'
 #' Van Ginkel, J. R., Van der Ark, L. A., Sijtsma, K., and Vermunt, J. K.
 #' (2007). Two-way
@@ -1053,7 +1053,7 @@ RoMFDI <- function(mfdobj,
 #' Robust Multivariate Functional Control Charts - Phase I
 #'
 #' It performs Phase I of the Robust Multivariate Functional Control Chart
-#' (RoMFCC) as proposed by Capezza et al. (2022).
+#' (RoMFCC) as proposed by Capezza et al. (2024).
 #' @param mfdobj
 #' A multivariate functional data object of class mfd.
 #' A functional filter is applied to this data set, then
@@ -1142,9 +1142,9 @@ RoMFDI <- function(mfdobj,
 #'
 #' @references
 #'
-#' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2022)
+#' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 #' Robust Multivariate Functional Control Charts.
-#' \emph{arXiv:2207.07978v}
+#' \emph{Technometrics}, <doi:10.1080/00401706.2024.2327346>.
 #'
 #' @examples
 #' \dontrun{
@@ -1528,6 +1528,11 @@ RoMFCC_PhaseI <- function(mfdobj,
 #' * \code{spe_lim} gives the upper control limit of the SPE control chart
 #'
 #' @export
+#'
+#' @references
+#' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
+#' Robust Multivariate Functional Control Charts.
+#' \emph{Technometrics}, <doi:10.1080/00401706.2024.2327346>.
 #'
 #' @examples
 #' \dontrun{
