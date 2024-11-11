@@ -1,7 +1,7 @@
 Package: funcharts
 Type: Package
 Title: Functional Control Charts
-Version: 1.5.0
+Version: 1.5.0.9999
 Authors@R: c(
     person("Christian", "Capezza", 
       email = "christian.capezza@unina.it", 
@@ -21,9 +21,9 @@ Description: Provides functional control charts
     Capezza et al (2023) <doi:10.1080/00224065.2023.2219012>.
 Depends: 
     R (>= 3.6.0), 
-    robustbase
+    robustbase,
+    fda
 Imports: 
-    fda,
     ggplot2,
     rlang,
     parallel,
@@ -31,6 +31,7 @@ Imports:
     patchwork,
     RSpectra,
     matrixStats,
+    MASS, 
     roahd,
     dplyr,
     stringr,
@@ -41,7 +42,11 @@ Imports:
     MASS,
     mvtnorm,
     Rcpp,
-    Rfast
+    Rfast,
+    mgcv, 
+    scam, 
+    spatstat.explore, 
+    methods
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

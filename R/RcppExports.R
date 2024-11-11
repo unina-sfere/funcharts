@@ -29,3 +29,35 @@ get_RL_cpp <- function(X2, X_IC, idx2, idx_IC, lambda, k, huber, h, Values, Vect
     .Call(`_funcharts_get_RL_cpp`, X2, X_IC, idx2, idx_IC, lambda, k, huber, h, Values, Vectors)
 }
 
+der_c <- function(asn, smin, smax, der_0) {
+    .Call(`_funcharts_der_c`, asn, smin, smax, der_0)
+}
+
+loss_c <- function(z, y, z1, y1, alpha, der_h) {
+    .Call(`_funcharts_loss_c`, z, y, z1, y1, alpha, der_h)
+}
+
+eval_fd_c <- function(fd, seq) {
+    .Call(`_funcharts_eval_fd_c`, fd, seq)
+}
+
+DP <- function(N, M, l, u, range_x, range_tem, grid_t, x_fd_std, der_x_fd_std, delta_x1, template_eval, der_template_eval, smin, smax, alpha, lambda, der_0) {
+    .Call(`_funcharts_DP`, N, M, l, u, range_x, range_tem, grid_t, x_fd_std, der_x_fd_std, delta_x1, template_eval, der_template_eval, smin, smax, alpha, lambda, der_0)
+}
+
+DP3 <- function(N, M, l, u, range_x, range_tem, grid_t, x_fd_std, der_x_fd_std, delta_x, template_eval, der_template_eval, smin, smax, alpha, lambda, der_0) {
+    .Call(`_funcharts_DP3`, N, M, l, u, range_x, range_tem, grid_t, x_fd_std, der_x_fd_std, delta_x, template_eval, der_template_eval, smin, smax, alpha, lambda, der_0)
+}
+
+get_path_list1 <- function(N, M, range_x, range_tem, grid_t, ind_end1, grid_search, P) {
+    .Call(`_funcharts_get_path_list1`, N, M, range_x, range_tem, grid_t, ind_end1, grid_search, P)
+}
+
+get_path_list2 <- function(N, M, range_x, range_tem, grid_t, ind_end2, grid_search, P) {
+    .Call(`_funcharts_get_path_list2`, N, M, range_x, range_tem, grid_t, ind_end2, grid_search, P)
+}
+
+DP2 <- function(N, M, l, u, range_x, range_tem, grid_t, x_fd_std, der_x_fd_std, delta_x1, template_eval, der_template_eval, smin, smax, alpha, lambda, grid_x_new) {
+    .Call(`_funcharts_DP2`, N, M, l, u, range_x, range_tem, grid_t, x_fd_std, der_x_fd_std, delta_x1, template_eval, der_template_eval, smin, smax, alpha, lambda, grid_x_new)
+}
+
