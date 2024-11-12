@@ -21,8 +21,7 @@ Description: Provides functional control charts
     Capezza et al (2023) <doi:10.1080/00224065.2023.2219012>.
 Depends: 
     R (>= 3.6.0), 
-    robustbase,
-    fda
+    robustbase
 Imports: 
     ggplot2,
     rlang,
@@ -35,11 +34,11 @@ Imports:
     roahd,
     dplyr,
     stringr,
+    fda,
     fda.usc,
     rrcov,
     rofanova,
     Matrix,
-    MASS,
     mvtnorm,
     Rcpp,
     Rfast,

@@ -12,15 +12,15 @@ center_fd<-function(x_fd,mean=NULL){
 cut_fd_ht<-function(fd,t_i,monotone=FALSE,eval_grid=NULL){
   eval_grid<-if(is.null(eval_grid))seq(fd$basis$rangeval[1],t_i,length.out = 200)else eval_grid
   eval_fd<-eval.fd(eval_grid,fd)
-  basis<-create.bspline.basis(c(fd$basis$rangeval[1],t_i),breaks =  eval_grid,norder = 2)
+  basis<-fda::create.bspline.basis(c(fd$basis$rangeval[1],t_i),breaks =  eval_grid,norder = 2)
   out<-fd(eval_fd,basis)
   return(out)
 }
 cut_fd_xt<-function(fd,t_i,monotone=FALSE,eval_grid=NULL){
   eval_grid<-if(is.null(eval_grid))seq(fd$basis$rangeval[1],t_i,length.out = 200)else eval_grid
   eval_fd<-eval.fd(eval_grid,fd)
-  basis<-create.bspline.basis(c(fd$basis$rangeval[1],t_i),nbasis = min(length(eval_grid),fd$basis$nbasis),norder = min(length(eval_grid),fd$basis$nbasis-length(fd$basis$params),fd$basis$nbasis))
-  out<-smooth.basis(eval_grid,eval_fd,basis)$fd
+  basis<-fda::create.bspline.basis(c(fd$basis$rangeval[1],t_i),nbasis = min(length(eval_grid),fd$basis$nbasis),norder = min(length(eval_grid),fd$basis$nbasis-length(fd$basis$params),fd$basis$nbasis))
+  out<-fda::smooth.basis(eval_grid,eval_fd,basis)$fd
   return(out)
 }
 cut_fd_x<-function(x_fd,h_fd,t_x,seq_t){
@@ -34,11 +34,11 @@ cut_fd_x<-function(x_fd,h_fd,t_x,seq_t){
   npoints<-length(eval_seq_new)
   if(length(eval_h_new)>1){
     if(npoints<4)
-      basis_x_r<-create.bspline.basis(range(eval_seq_new),nbasis =npoints,norder = npoints)
+      basis_x_r<-fda::create.bspline.basis(range(eval_seq_new),nbasis =npoints,norder = npoints)
     else
-      basis_x_r<-create.bspline.basis(range(eval_seq_new),nbasis = max(4,round(0.5*npoints)))
-    x_fd_r<-smooth.basis(eval_seq_new,eval_x_new,basis_x_r)$fd
-    basis_h_r<-create.bspline.basis(range(eval_seq_new),breaks = eval_seq_new,norder = 2)
+      basis_x_r<-fda::create.bspline.basis(range(eval_seq_new),nbasis = max(4,round(0.5*npoints)))
+    x_fd_r<-fda::smooth.basis(eval_seq_new,eval_x_new,basis_x_r)$fd
+    basis_h_r<-fda::create.bspline.basis(range(eval_seq_new),breaks = eval_seq_new,norder = 2)
     h_fd_r<-fd(eval_h_new,basis_h_r)
   }
   else{
@@ -58,8 +58,8 @@ new_sd.fd<-function (e1) {
   seq_eval<-seq(range[1],range[2],length.out = 400)
   eval_fd<-eval.fd(seq_eval,e1)
   eval_fde2<-apply(eval_fd,1,stats::sd)
-  basis<-create.bspline.basis(range,nbasis = min(60,e1$basis$nbasis*3))
-  fd<-smooth.basis(seq_eval,eval_fde2,basis)$fd
+  basis<-fda::create.bspline.basis(range,nbasis = min(60,e1$basis$nbasis*3))
+  fd<-fda::smooth.basis(seq_eval,eval_fde2,basis)$fd
   return(fd)
 }
 new_mul.fd<-function (e1,e2) {
@@ -69,7 +69,7 @@ new_mul.fd<-function (e1,e2) {
   eval_fd2<-eval.fd(seq_eval,e2)
   if(dim(eval_fd1)[2]>dim(eval_fd2)[2]) eval_fd2<-matrix(rep(eval_fd2,dim(eval_fd1)[2]),dim(eval_fd1)[1],dim(eval_fd1)[2])
   eval_fde2<-eval_fd1*eval_fd2
-  fd<-smooth.basis(seq_eval,eval_fde2,e1$basis)$fd
+  fd<-fda::smooth.basis(seq_eval,eval_fde2,e1$basis)$fd
   return(fd)
 }
 new_mul.fd2<-function (e1,e2) {
@@ -79,8 +79,8 @@ new_mul.fd2<-function (e1,e2) {
   eval_fd2<-abs(eval.fd(seq_eval,e2))
   if(dim(eval_fd1)[2]>dim(eval_fd2)[2]) eval_fd2<-matrix(rep(eval_fd2,dim(eval_fd1)[2]),dim(eval_fd1)[1],dim(eval_fd1)[2])
   eval_fde2<-if(dim(eval_fd1)[1]==dim(eval_fd2)[1]&dim(eval_fd1)[2]==dim(eval_fd2)[2])eval_fd1*abs(eval_fd2) else if(dim(eval_fd2)[2]==1)eval_fd1*matrix(eval_fd2,dim(eval_fd1)[1],dim(eval_fd1)[2])
-  basis<-create.bspline.basis(range,nbasis = 60)
-  fd<-smooth.basis(seq_eval,eval_fde2,basis)$fd
+  basis<-fda::create.bspline.basis(range,nbasis = 60)
+  fd<-fda::smooth.basis(seq_eval,eval_fde2,basis)$fd
   return(fd)
 }
 new_mul.fd3<-function (e1,e2) {
@@ -94,7 +94,7 @@ new_mul.fd3<-function (e1,e2) {
   eval_fde2<-eval_fd2
   eval_fde2[ind_0,]<-eval_fd1[ind_0,]*1/matrix(eval_fd2[ind_0,],length(ind_0),dim(eval_fd1)[2])
   eval_fde2[-ind_0,]=10^-6
-  fd<-smooth.basis(seq_eval,eval_fde2,e1$basis)$fd
+  fd<-fda::smooth.basis(seq_eval,eval_fde2,e1$basis)$fd
   return(fd)
 }
 new_sqrt.fd<-function (e1, e2=1/2,eval_fd=NULL,seq_eval=NULL,c=1) {
@@ -103,7 +103,7 @@ new_sqrt.fd<-function (e1, e2=1/2,eval_fd=NULL,seq_eval=NULL,c=1) {
   eval_fd<-if(is.null(eval_fd))eval.fd(seq_eval,e1) else eval_fd
   if(e2==1/2)eval_fd=abs(eval_fd)
   eval_fde2<-(eval_fd/c)^e2
-  fd<-smooth.basis(seq_eval,eval_fde2,e1$basis)$fd
+  fd<-fda::smooth.basis(seq_eval,eval_fde2,e1$basis)$fd
   return(fd)
 }
 inprod2<-function (fdobj1, fdobj2 = NULL, Lfdobj1 = int2Lfd(0), Lfdobj2 = int2Lfd(0),
@@ -122,7 +122,7 @@ inprod2<-function (fdobj1, fdobj2 = NULL, Lfdobj1 = int2Lfd(0), Lfdobj2 = int2Lf
     temptype <- tempbasis$type
     temprng <- tempbasis$rangeval
     if (temptype == "bspline") {
-      basis2 <- create.bspline.basis(temprng, 1, 1)
+      basis2 <- fda::create.bspline.basis(temprng, 1, 1)
     }
     else {
       if (temptype == "fourier")

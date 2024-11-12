@@ -2280,7 +2280,7 @@ plot_mfd <- function(mfdobj,
     plot_list[[jj]] <- p
   }
 
-  patchwork::wrap_plots(plot_list) + patchwork::plot_layout(guides = "collect")
+  patchwork::wrap_plots(plot_list) #+ patchwork::plot_layout(guides = "collect")
 
 }
 

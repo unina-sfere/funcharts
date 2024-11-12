@@ -1,17 +1,17 @@
 
 #' @title Plot the results of the  Phase I and the Phase II of the FRTM
 #' @description This function provides plots of the Hotelling's \eqn{T^{2}} and SPE control charts.
-#' @param x The output of  either `Phase_I_FRTM` or `Phase_II_FRTM`.
+#' @param x The output of  either `FRTM_PhaseI` or `FRTM_PhaseII`.
 #' @param ... A variable \code{ind_sel} could be provided to select some observations from either the tuning or monitoring set.
 #' @return No return value, called for side effects.
-#' @rdname plot.Phase_I_FRTM
-#' @method plot Phase_I_FRTM
+#' @rdname plot.FRTM_PhaseI
+#' @method plot FRTM_PhaseI
 #' @export
-#' @inherit Phase_I_FRTM return examples
-plot.Phase_I_FRTM<-function(x,...){
+#' @inherit FRTM_PhaseI return examples
+plot.FRTM_PhaseI<-function(x,...){
   aa<-list(...)
   mod=x
-  seq_x= if(methods::is(mod,"Phase_I_FRTM"))mod$par_reg$par.rtr$seq_x else mod$mod_phaseI$par_reg$par.rtr$seq_x
+  seq_x= if(methods::is(mod,"FRTM_PhaseI"))mod$par_reg$par.rtr$seq_x else mod$mod_phaseI$par_reg$par.rtr$seq_x
   oldpar <- graphics::par(no.readonly = TRUE)
 if(is.null(aa$ind_sel))ind_sel=1:length(mod$T2_fd) else ind_sel=aa$ind_sel
   base::on.exit( graphics::par(oldpar))
@@ -30,12 +30,12 @@ if(is.null(aa$ind_sel))ind_sel=1:length(mod$T2_fd) else ind_sel=aa$ind_sel
 
 
 }
-#' @rdname plot.Phase_I_FRTM
-#' @method plot Phase_II_FRTM
+#' @rdname plot.FRTM_PhaseI
+#' @method plot FRTM_PhaseII
 #' @export
 #'
-plot.Phase_II_FRTM<-function(x,...){
-  plot.Phase_I_FRTM(x,...)
+plot.FRTM_PhaseII<-function(x,...){
+  plot.FRTM_PhaseI(x,...)
 }
 
 

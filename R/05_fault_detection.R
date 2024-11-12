@@ -410,9 +410,9 @@ plot_mon <- function(cclist,
     p <- p &
       ggplot2::ggtitle(title) &
       ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
-    # patchwork::plot_annotation(
-    #   title = title,
-    #   theme = ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)))
+    patchwork::plot_annotation(
+      title = title,
+      theme = ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)))
   }
 
   p & ggplot2::theme(legend.position = "none")
