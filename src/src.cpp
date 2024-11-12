@@ -225,93 +225,95 @@ double loss_c(double z, double y, double z1,double y1,double alpha, double der_h
   double out= pow( alpha*(z-y),2 )+pow((1-alpha)*(z1*der_h-y1),2);
   return(out);
 }
+// // [[Rcpp::export]]
+// arma::vec eval_fd_c(List fd,arma::vec seq Rcpp::Function eval_fd){
+//   Rcpp::Environment base("package:fda");
+//   Rcpp::Function eval_fd_c = base["eval.fd"];
+//   arma::vec out=Rcpp :: as < arma :: vec >(eval_fd_c(seq,fd));
+//   return(out);
+//
+// }
+
+// // [[Rcpp::export]]
+// List DP(int N,int M,arma::vec l, arma::vec u,arma::mat range_x,arma::mat range_tem,arma::mat grid_t, List x_fd_std,
+//         List der_x_fd_std,double delta_x1,arma::vec template_eval,arma::vec der_template_eval,
+//         double smin,double smax,double alpha,double lambda,double der_0, Rcpp::Function eval_fd_c){
+//   // Rcpp::Environment base("package:fda");
+//   // Rcpp::Function eval_fd_c = base["eval.fd"];
+//   arma::mat D(N,M), P(N,M), L(N,M),x_eval(M,1), der_x_eval(M,1);
+//
+//   D.fill(arma::datum::inf);
+//   P.fill(arma::datum::inf);
+//   L.zeros();
+//   arma::field<arma::vec> grid_search(N);
+//   double delta_t=grid_t(1)-grid_t(0);
+//   arma::mat matrepr=arma::repmat(range_x,1,M);
+//   if (u(0)!=range_x(0)){
+//     grid_search[0]=arma::linspace( l(0), u(0), M );
+//   }   else{
+//     arma::vec zee(M);
+//     zee.zeros();
+//     grid_search(0)=zee;
+//   }
+//   int sta=min(find(grid_t<=(range_tem(0)+delta_x1)));
+//   int end=max(find(grid_t<=(range_tem(0)+delta_x1)));
+//   arma::mat zeros(end+1,1);
+//   zeros.zeros();
+//   D.submat(sta,0,end,0)=zeros;
+//   L.submat(sta,0,end,0)=zeros;
+//
+//   arma::mat zeros2(1,M);
+//   zeros2.zeros();
+//   if(u(0)!=range_x(0)){
+//
+//     D.row(0)=zeros2;
+//   }
+//   L.row(0)=zeros2;
+//   arma::vec start_jj= arma::conv_to <arma::vec>::from(l==range_x(0));
+//   double derr;
+//   int ind_min,start_ll,end_ll;
+//   List grid_2_list(M);
+//   arma::vec grid_search_i,grid_search_im1,grid_search2,div,start_ll_r,end_ll_r;
+//   for (int i=1;i<N;++i){
+//     grid_search[i]=  arma::linspace<arma::colvec>( l(i), u(i), M );
+//     x_eval.col(0)= Rcpp :: as < arma :: mat >(eval_fd_c(grid_search[i],x_fd_std));
+//     der_x_eval.col(0)=Rcpp :: as < arma :: mat >(eval_fd_c(grid_search[i],der_x_fd_std));
+//     grid_search_i=grid_search(i);
+//     grid_search_im1=grid_search(i-1);
+//     for (int j=start_jj(i);j<M;++j){
+//       grid_search2=(grid_search_im1).elem(arma::find(grid_search_im1<=grid_search_i(j)&&grid_search_im1>=(smax+pow(10,-6))*grid_t(i-1)+grid_search_i(j)-(smax+pow(10,-6))*grid_t(i)));
+//       grid_2_list[j]=grid_search2;
+//       start_ll_r=arma::conv_to<arma::vec>::from(arma::find(grid_search_im1==grid_search2(0)));
+//       end_ll_r=arma::conv_to<arma::vec>::from(arma::find(grid_search_im1==grid_search2(grid_search2.n_rows-1)));
+//       start_ll=start_ll_r(0);
+//       end_ll=end_ll_r(0);
+//       arma::vec cost_ij(grid_search2.n_rows),l_ij(grid_search2.n_rows),derr_ii(grid_search2.n_rows);
+//       for (int l=start_ll;l<end_ll+1;++l){
+//
+//         derr=((grid_search_i(j)-grid_search2(l-start_ll))/(grid_t(i)-grid_t(i-1)))/der_0;
+//         derr_ii(l-start_ll)=derr;
+//         cost_ij(l-start_ll)=(delta_t*(loss_c(x_eval(j),template_eval(i),der_x_eval(j),der_template_eval(i),alpha,derr))+lambda*delta_t*der_c((grid_search_i(j)-grid_search2(l-start_ll))/(grid_t(i)-grid_t(i-1)),smin,smax,der_0)+D(i-1,l));
+//         l_ij(l-start_ll)=L(i-1,l)+delta_t;
+//       }
+//       div=cost_ij/l_ij;
+//       // double min_ij=min(div);
+//       ind_min=div.index_min();
+//       D(i,j)=cost_ij(ind_min);
+//       P(i,j)=grid_search2(ind_min);
+//       L(i,j)=l_ij(ind_min);
+//     }
+//   }
+//   List out=List::create(grid_search,D,P,L);
+//   return(out);
+// }
+//
+
+
+
 // [[Rcpp::export]]
-arma::vec eval_fd_c(List fd,arma::vec seq ){
-  Rcpp::Environment base("package:fda");
-  Rcpp::Function eval_fd_c = base["eval.fd"];
-  arma::vec out=Rcpp :: as < arma :: vec >(eval_fd_c(seq,fd));
-  return(out);
-
-}
-
-// [[Rcpp::export]]
-List DP(int N,int M,arma::vec l, arma::vec u,arma::mat range_x,arma::mat range_tem,arma::mat grid_t, List x_fd_std,List der_x_fd_std,double delta_x1,arma::vec template_eval,arma::vec der_template_eval,double smin,double smax,double alpha,double lambda,double der_0){
-  Rcpp::Environment base("package:fda");
-  Rcpp::Function eval_fd_c = base["eval.fd"];
-  arma::mat D(N,M), P(N,M), L(N,M),x_eval(M,1), der_x_eval(M,1);
-
-  D.fill(arma::datum::inf);
-  P.fill(arma::datum::inf);
-  L.zeros();
-  arma::field<arma::vec> grid_search(N);
-  double delta_t=grid_t(1)-grid_t(0);
-  arma::mat matrepr=arma::repmat(range_x,1,M);
-  if (u(0)!=range_x(0)){
-    grid_search[0]=arma::linspace( l(0), u(0), M );
-  }   else{
-    arma::vec zee(M);
-    zee.zeros();
-    grid_search(0)=zee;
-  }
-  int sta=min(find(grid_t<=(range_tem(0)+delta_x1)));
-  int end=max(find(grid_t<=(range_tem(0)+delta_x1)));
-  arma::mat zeros(end+1,1);
-  zeros.zeros();
-  D.submat(sta,0,end,0)=zeros;
-  L.submat(sta,0,end,0)=zeros;
-
-  arma::mat zeros2(1,M);
-  zeros2.zeros();
-  if(u(0)!=range_x(0)){
-
-    D.row(0)=zeros2;
-  }
-  L.row(0)=zeros2;
-  arma::vec start_jj= arma::conv_to <arma::vec>::from(l==range_x(0));
-  double min_ij,derr;
-  int ind_min,start_ll,end_ll;
-  List grid_2_list(M);
-  arma::vec grid_search_i,grid_search_im1,grid_search2,div,start_ll_r,end_ll_r;
-  for (int i=1;i<N;++i){
-    grid_search[i]=  arma::linspace<arma::colvec>( l(i), u(i), M );
-    x_eval.col(0)= Rcpp :: as < arma :: mat >(eval_fd_c(grid_search[i],x_fd_std));
-    der_x_eval.col(0)=Rcpp :: as < arma :: mat >(eval_fd_c(grid_search[i],der_x_fd_std));
-    grid_search_i=grid_search(i);
-    grid_search_im1=grid_search(i-1);
-    for (int j=start_jj(i);j<M;++j){
-      grid_search2=(grid_search_im1).elem(arma::find(grid_search_im1<=grid_search_i(j)&&grid_search_im1>=(smax+pow(10,-6))*grid_t(i-1)+grid_search_i(j)-(smax+pow(10,-6))*grid_t(i)));
-      grid_2_list[j]=grid_search2;
-      start_ll_r=arma::conv_to<arma::vec>::from(arma::find(grid_search_im1==grid_search2(0)));
-      end_ll_r=arma::conv_to<arma::vec>::from(arma::find(grid_search_im1==grid_search2(grid_search2.n_rows-1)));
-      start_ll=start_ll_r(0);
-      end_ll=end_ll_r(0);
-      arma::vec cost_ij(grid_search2.n_rows),l_ij(grid_search2.n_rows),derr_ii(grid_search2.n_rows);
-      for (int l=start_ll;l<end_ll+1;++l){
-
-        derr=((grid_search_i(j)-grid_search2(l-start_ll))/(grid_t(i)-grid_t(i-1)))/der_0;
-        derr_ii(l-start_ll)=derr;
-        cost_ij(l-start_ll)=(delta_t*(loss_c(x_eval(j),template_eval(i),der_x_eval(j),der_template_eval(i),alpha,derr))+lambda*delta_t*der_c((grid_search_i(j)-grid_search2(l-start_ll))/(grid_t(i)-grid_t(i-1)),smin,smax,der_0)+D(i-1,l));
-        l_ij(l-start_ll)=L(i-1,l)+delta_t;
-      }
-      div=cost_ij/l_ij;
-      min_ij=min(div);
-      ind_min=div.index_min();
-      D(i,j)=cost_ij(ind_min);
-      P(i,j)=grid_search2(ind_min);
-      L(i,j)=l_ij(ind_min);
-    }
-  }
-  List out=List::create(grid_search,D,P,L);
-  return(out);
-}
-
-
-
-
-// [[Rcpp::export]]
-List DP3(int N,int M,arma::vec l, arma::vec u,arma::mat range_x,arma::mat range_tem,arma::mat grid_t, List x_fd_std,List der_x_fd_std,double delta_x,arma::vec template_eval,arma::vec der_template_eval,double smin,double smax,double alpha,double lambda,double der_0){
-  Rcpp::Environment base("package:fda");
-  Rcpp::Function eval_fd_c = base["eval.fd"];
+List DP3(int N,int M,arma::vec l, arma::vec u,arma::mat range_x,arma::mat range_tem,arma::mat grid_t, List x_fd_std,List der_x_fd_std,double delta_x,arma::vec template_eval,arma::vec der_template_eval,double smin,double smax,double alpha,double lambda,double der_0, Rcpp::Function eval_fd_c){
+  // Rcpp::Environment base("package:fda");
+  // Rcpp::Function eval_fd_c = base["eval.fd"];
   arma::mat D(N,M), P(N,M), L(N,M),x_eval(M,1), der_x_eval(M,1);
 
   D.fill(arma::datum::inf);
@@ -340,7 +342,7 @@ List DP3(int N,int M,arma::vec l, arma::vec u,arma::mat range_x,arma::mat range_
   }
   L.row(0)=zeros2;
   arma::vec start_jj= arma::conv_to <arma::vec>::from(l==range_x(0));
-  double min_ij,derr;
+  double derr;
   int ind_min,start_ll,end_ll;
   arma::field<arma::vec> grid_2_list(M);
   arma::vec grid_search_im1,grid_search2,div,start_ll_r,end_ll_r,pp2,x_eval_i,der_x_eval_i,grid_search_i,pp3;
@@ -378,7 +380,7 @@ List DP3(int N,int M,arma::vec l, arma::vec u,arma::mat range_x,arma::mat range_
       }
       cost_ij.replace(arma::datum::nan, arma::datum::inf);
       div=cost_ij/l_ij;
-      min_ij=min(div);
+      // min_ij=min(div);
       ind_min=div.index_min();
       D(i,j)=cost_ij(ind_min);
       P(i,j)=grid_search2(ind_min);
@@ -400,8 +402,8 @@ arma::field<arma::mat> get_path_list1(int N,int M,arma::mat range_x,arma::mat ra
   double P_i,grid_t2,im12;
   arma::vec aa2, aa3,grid_im1,cc,ind_p_r;
   arma::mat aa;
-  for (int j=0;j<ind_end1.n_rows;++j){
-    cc={grid_t(ind_end1(j)-1),range_x(1)};;
+  for (int j=0;j< static_cast<int>(ind_end1.n_rows);++j){
+    cc={grid_t(ind_end1(j)-1),range_x(1)};
     ind.row(0)=trans(cc);
     P_i =P(ind_end1(j)-1,M-1);
     arma::vec grid_im1=grid_search(ind_end1(j)-2);
@@ -448,7 +450,7 @@ arma::field<arma::mat> get_path_list2(int N,int M,arma::mat range_x,arma::mat ra
   double P_i,grid_t2,im12;
   arma::vec ind_p_r,aa2, aa3,grid_im1,cc;
   arma::mat aa;
-  for (int j=0;j<ind_end2.n_rows;++j){
+  for (int j=0;j<static_cast<int>(ind_end2.n_rows);++j){
     arma::vec grid_im11=grid_search(N-1);
     cc={grid_t(N-1),grid_im11(ind_end2(j)-1)};;
     ind.row(0)=trans(cc);
@@ -484,78 +486,80 @@ arma::field<arma::mat> get_path_list2(int N,int M,arma::mat range_x,arma::mat ra
   }
   return(path_list2);
 }
-// [[Rcpp::export]]
-List DP2(int N,int M,arma::vec l, arma::vec u,arma::mat range_x,arma::mat range_tem,arma::mat grid_t, List x_fd_std,List der_x_fd_std,
-         double delta_x1,arma::vec template_eval,arma::vec der_template_eval,double smin,double smax,double alpha,double lambda, arma::vec grid_x_new){
-  Rcpp::Environment base("package:fda");
-  Rcpp::Function eval_fd_c = base["eval.fd"];
-  arma::vec x_eval_tot= Rcpp :: as < arma :: colvec >(eval_fd_c(grid_x_new,x_fd_std));
-  arma::vec der_x_eval_tot=Rcpp :: as < arma :: colvec >(eval_fd_c(grid_x_new,der_x_fd_std));
-  arma::vec x_eval,der_x_eval;
-  arma::field<arma::vec> D(N), P(N), L(N), grid_search(N);
-  for (int i=0;i<N;++i){
-
-    arma::vec zeros3(arma::size(arma::find(grid_x_new<=u(i)&&grid_x_new>=l(i))));
-    zeros3.zeros();
-    L(i)=zeros3;
-    zeros3.replace( 0,arma::datum::inf);
-    D(i)=zeros3;
-    P(i)=zeros3;
-  }
-  double delta_t=grid_t(1)-grid_t(0);
-  double der_0=arma::conv_to <double>::from(arma::range(range_x)/arma::range(range_tem));
-  if (u(0)!=range_x(0)){
-    grid_search(0)=arma::linspace( l(0), u(0), D(0).n_rows);
-  }   else{
-    grid_search(0)(0)=0;
-  }
-  int sta=min(find(grid_t<=(range_tem(0)+delta_x1)));
-  int end=max(find(grid_t<=(range_tem(0)+delta_x1)));
-  if(l(0)==range_x(0)){
-    for (int i=sta;i<end+1;++i){
-      D[i](0)=0;
-      L[i](0)=0;
-    }
-  }
-  arma::vec zeros2(arma::size(arma::find(grid_x_new<=u(0)&&grid_x_new>=l(0))));
-  zeros2.zeros();
-  if(u(0)!=range_x(0)){
-    D[0]=zeros2;
-  }
-  L(0)=zeros2;
-
-  arma::vec start_jj= arma::conv_to <arma::vec>::from(l==range_x(0));
-  double min_ij;
-  int ind_min;
-  double derr;
-  arma::vec grid_search_i;
-  arma::vec  grid_search2;
-  for (int i=1;i<N;++i){
-    arma::umat ind_ii_x=arma::find(grid_x_new<=u(i)&&grid_x_new>=l(i));
-    grid_search_i=(grid_x_new).elem(ind_ii_x);
-    grid_search[i]=grid_search_i;
-    x_eval=x_eval_tot.elem(ind_ii_x);
-    der_x_eval=der_x_eval_tot.elem(ind_ii_x);
-    arma::vec grid_search_im1= grid_search[i-1];
-    for (int j=start_jj(i);j<grid_search_i.n_rows;++j){
-      grid_search2=(grid_search_im1).elem(arma::find(grid_search_im1<=grid_search_i(j)));
-      arma::vec cost_ij(grid_search2.n_rows),l_ij(grid_search2.n_rows);
-      for (int l=0;l<grid_search2.n_rows;++l){
-        derr=((grid_search_i(j)-grid_search2(l))/(grid_t(i)-grid_t(i-1))*pow(der_0,-1));
-        cost_ij(l)=(delta_t*(loss_c(x_eval(j),template_eval(i),der_x_eval(j),der_template_eval(i),alpha,derr))+lambda*delta_t*der_c((grid_search_i(j)-grid_search2(l))/(grid_t(i)-grid_t(i-1)),smin,smax,der_0)+D[i-1](l));
-        l_ij(l)=L[i-1](l)+delta_t;
-
-      }
-      arma::vec div=cost_ij/l_ij;
-      min_ij=min(div);
-      ind_min=div.index_min();
-      D[i](j)=cost_ij(ind_min);
-      P[i](j)=grid_search2(ind_min);
-      L[i](j)=l_ij(ind_min);
-
-    }
-
-  }
-  List out=List::create(grid_search,D,P,L,grid_search2);
-  return(out);
-}
+// // [[Rcpp::export]]
+// List DP2(int N,int M,arma::vec l, arma::vec u,arma::mat range_x,arma::mat range_tem,arma::mat grid_t, List x_fd_std,List der_x_fd_std,
+//          double delta_x1,arma::vec template_eval,arma::vec der_template_eval,
+//          double smin,double smax,double alpha,double lambda,
+//          arma::vec grid_x_new, Rcpp::Function eval_fd_c){
+//   // Rcpp::Environment base("package:fda");
+//   // Rcpp::Function eval_fd_c = base["eval.fd"];
+//   arma::vec x_eval_tot= Rcpp :: as < arma :: colvec >(eval_fd_c(grid_x_new,x_fd_std));
+//   arma::vec der_x_eval_tot=Rcpp :: as < arma :: colvec >(eval_fd_c(grid_x_new,der_x_fd_std));
+//   arma::vec x_eval,der_x_eval;
+//   arma::field<arma::vec> D(N), P(N), L(N), grid_search(N);
+//   for (int i=0;i<N;++i){
+//
+//     arma::vec zeros3(arma::size(arma::find(grid_x_new<=u(i)&&grid_x_new>=l(i))));
+//     zeros3.zeros();
+//     L(i)=zeros3;
+//     zeros3.replace( 0,arma::datum::inf);
+//     D(i)=zeros3;
+//     P(i)=zeros3;
+//   }
+//   double delta_t=grid_t(1)-grid_t(0);
+//   double der_0=arma::conv_to <double>::from(arma::range(range_x)/arma::range(range_tem));
+//   if (u(0)!=range_x(0)){
+//     grid_search(0)=arma::linspace( l(0), u(0), D(0).n_rows);
+//   }   else{
+//     grid_search(0)(0)=0;
+//   }
+//   int sta=min(find(grid_t<=(range_tem(0)+delta_x1)));
+//   int end=max(find(grid_t<=(range_tem(0)+delta_x1)));
+//   if(l(0)==range_x(0)){
+//     for (int i=sta;i<end+1;++i){
+//       D[i](0)=0;
+//       L[i](0)=0;
+//     }
+//   }
+//   arma::vec zeros2(arma::size(arma::find(grid_x_new<=u(0)&&grid_x_new>=l(0))));
+//   zeros2.zeros();
+//   if(u(0)!=range_x(0)){
+//     D[0]=zeros2;
+//   }
+//   L(0)=zeros2;
+//
+//   arma::vec start_jj= arma::conv_to <arma::vec>::from(l==range_x(0));
+//   // double min_ij;
+//   int ind_min;
+//   double derr;
+//   arma::vec grid_search_i;
+//   arma::vec  grid_search2;
+//   for (int i=1;i<N;++i){
+//     arma::umat ind_ii_x=arma::find(grid_x_new<=u(i)&&grid_x_new>=l(i));
+//     grid_search_i=(grid_x_new).elem(ind_ii_x);
+//     grid_search[i]=grid_search_i;
+//     x_eval=x_eval_tot.elem(ind_ii_x);
+//     der_x_eval=der_x_eval_tot.elem(ind_ii_x);
+//     arma::vec grid_search_im1= grid_search[i-1];
+//     for (int j=start_jj(i);j<static_cast<int>(grid_search_i.n_rows);++j){
+//       grid_search2=(grid_search_im1).elem(arma::find(grid_search_im1<=grid_search_i(j)));
+//       arma::vec cost_ij(grid_search2.n_rows),l_ij(grid_search2.n_rows);
+//       for (int l=0;l<static_cast<int>(grid_search2.n_rows);++l){
+//         derr=((grid_search_i(j)-grid_search2(l))/(grid_t(i)-grid_t(i-1))*pow(der_0,-1));
+//         cost_ij(l)=(delta_t*(loss_c(x_eval(j),template_eval(i),der_x_eval(j),der_template_eval(i),alpha,derr))+lambda*delta_t*der_c((grid_search_i(j)-grid_search2(l))/(grid_t(i)-grid_t(i-1)),smin,smax,der_0)+D[i-1](l));
+//         l_ij(l)=L[i-1](l)+delta_t;
+//
+//       }
+//       arma::vec div=cost_ij/l_ij;
+//       // min_ij=min(div);
+//       ind_min=div.index_min();
+//       D[i](j)=cost_ij(ind_min);
+//       P[i](j)=grid_search2(ind_min);
+//       L[i](j)=l_ij(ind_min);
+//
+//     }
+//
+//   }
+//   List out=List::create(grid_search,D,P,L,grid_search2);
+//   return(out);
+// }
