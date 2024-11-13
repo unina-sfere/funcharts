@@ -1,3 +1,19 @@
+
+# funcharts 1.6.0
+
+
+* `simulate_data_FRTM()` simulates data for real-time monitoring of univariate functional data.
+* `OEBFDTW()` performs Open-end/Open-begin Functional Dynamic Time Warping (OEB-FDTW).
+* `mFPCA()` performs Mixed Functional Principal Component Analysis (mFPCA).
+* `FRTM_PhaseI()` performs Phase I of the FRTM method.
+* `FRTM_PhaseII()` performs Phase II of the FRTM method.
+
+References:
+
+* Centofanti, F., Lepore, A., Kulahci, M., and Spooner, M. P. (2024).
+  Real-time monitoring of functional data.
+  Accepted for publication in \emph{Journal of Quality Technology}.
+
 # funcharts 1.5.0
 
 * `AMFEWMA_PhaseI()` performs Phase I of the adaptive multivariate functional EWMA control chart of Capezza et al. (2024).
