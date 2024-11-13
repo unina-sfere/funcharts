@@ -72,3 +72,6 @@ A general optimization framework for dynamic time warping.
 \seealso{
 \code{\link{FRTM_PhaseI}}
 }
+\author{
+F. Centofanti
+}

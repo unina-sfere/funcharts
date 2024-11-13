@@ -430,7 +430,7 @@ scam2<-function (formula, family = stats::gaussian(), data = list(), gamma = 1,
   if (nrow(mf) < 2)
     stop("Not enough (non-NA) data to do anything meaningful")
   terms <- attr(mf, "terms")
-  vars <- all.vars1(gp$fake.formula[-2])
+  vars <- all_vars1(gp$fake.formula[-2])
   inp <- parse(text = paste("list(", paste(vars, collapse = ","),
                             ")"))
   if (!is.list(data) && !is.data.frame(data))
@@ -796,7 +796,7 @@ DnotExp<-function (x)
   f
 }
 
-all.vars1<-function (form)
+all_vars1<-function (form)
 {
   vars <- all.vars(form)
   vn <- all.names(form)

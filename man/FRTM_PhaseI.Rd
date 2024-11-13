@@ -78,10 +78,10 @@ This function implements the design phase (Phase I) of FRTM method.
 }
 \examples{
 library(funcharts)
-data <- simulate_data(n_obs = 20)
+data <- simulate_data_FRTM(n_obs = 20)
 
 data_oc <-
-  simulate_data(
+  simulate_data_FRTM(
     n_obs = 2,
     scenario = "1",
     shift = "OC_h",
@@ -112,6 +112,7 @@ seq_x <- seq(0.1, max_x, length.out = 10)
   plot(mod_phaseI_FRTM)
   plot(mod_phaseII_FRTM)
 }
+
 }
 \references{
 Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
@@ -120,4 +121,7 @@ Accepted for publication in \emph{Journal of Quality Technology}.
 }
 \seealso{
 \code{\link{FRTM_PhaseI}}
+}
+\author{
+F. Centofanti
 }

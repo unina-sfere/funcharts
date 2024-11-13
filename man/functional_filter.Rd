@@ -94,7 +94,7 @@ casewise contamination.
 
 Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 Robust Multivariate Functional Control Charts.
-\emph{Technometrics}, \url{doi:10.1080/00401706.2024.2327346}.
+\emph{Technometrics}, 66(4):531--547, \url{doi:10.1080/00401706.2024.2327346}.
 
 Leung, A., Yohai, V., and Zamar, R. (2017).
 Multivariate location and scatter matrix

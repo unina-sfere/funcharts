@@ -57,7 +57,7 @@ This function implements the mFPCA.
 \examples{
 library(funcharts)
 
-data <- simulate_data(n_obs = 100)
+data <- simulate_data_FRTM(n_obs = 100)
 X <- sapply(1:100, function(ii)
   data$x_true[[ii]])
 x_fd <-
@@ -72,6 +72,7 @@ h_fd <-
                     fda::create.bspline.basis(c(0, 1), 30))$fd
 mod_mFPCA <- mFPCA(x_fd, h_fd, ncom = "ptv", par_ncom = 0.95)
 plot(mod_mFPCA)
+
 }
 \references{
 Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
@@ -79,5 +80,5 @@ Real-time monitoring of functional data.
 Accepted for publication in \emph{Journal of Quality Technology}.
 }
 \author{
-Fabio Centofanti, Antonio Lepore
+F. Centofanti
 }

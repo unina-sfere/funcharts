@@ -36,9 +36,9 @@
 #' @export
 #' @examples
 #' library(funcharts)
-#' data<-simulate_data(n_obs=20)
+#' data<-simulate_data_FRTM(n_obs=20)
 #' @import fda
-simulate_data <-
+simulate_data_FRTM <-
   function(n_obs = 100,
            scenario = "1",
            shift = "IC",
@@ -603,7 +603,7 @@ FDTW_group <-
 #' @examples
 #'
 #' set.seed(1)
-#' data <- simulate_data(n_obs = 100)
+#' data <- simulate_data_FRTM(n_obs = 100)
 #'
 #' dom <- c(0, 1)
 #' basis_x <- fda::create.bspline.basis(c(0, 1), nbasis = 30)
@@ -620,7 +620,8 @@ FDTW_group <-
 #' Deriso, D. and S. Boyd (2022).
 #'  A general optimization framework for dynamic time warping.
 #'  \emph{Optimization and Engineering, 1-22}.
-
+#'
+#' @author F. Centofanti
 OEBFDTW <-
   function(x_fd,
            template_fd,
@@ -1426,7 +1427,7 @@ get_ul <- function(h_fd,
                                         2)
     u_fd <- fda::smooth.basis(eval, grid[ind], new_basis)$fd
   }
-  # plot.lfd(h_inv,xlim=c(0,100))
+  # plot_lfd(h_inv,xlim=c(0,100))
   # graphics::lines(l_fd,col=1,lwd=3)
   # graphics::lines(u_fd,col=2,lwd=3)
 
@@ -1854,11 +1855,11 @@ tra_warp <- function(h_fd, type = "clog") {
 
 #' \code{ind_var} Additional parameter  used in \code{FRTM_PhaseI}.
 #' @export
-#' @author Fabio Centofanti, Antonio Lepore
+#' @author F. Centofanti
 #' @examples
 #' library(funcharts)
 #'
-#' data <- simulate_data(n_obs = 100)
+#' data <- simulate_data_FRTM(n_obs = 100)
 #' X <- sapply(1:100, function(ii)
 #'   data$x_true[[ii]])
 #' x_fd <-
@@ -1873,6 +1874,7 @@ tra_warp <- function(h_fd, type = "clog") {
 #'                     fda::create.bspline.basis(c(0, 1), 30))$fd
 #' mod_mFPCA <- mFPCA(x_fd, h_fd, ncom = "ptv", par_ncom = 0.95)
 #' plot(mod_mFPCA)
+#'
 mFPCA <-
   function(x_fd,
            h_fd = NULL,
@@ -2651,6 +2653,8 @@ get_T2SPE_fd <- function(T_2_mat, SPE_2_mat, seq_x) {
 #' Deriso, D. and S. Boyd (2022).
 #'  A general optimization framework for dynamic time warping.
 #'  \emph{Optimization and Engineering, 1-22}.
+#'
+#' @author F. Centofanti
 par.FDTW <-
   function(N = 100,
            M = 50,
@@ -2703,6 +2707,8 @@ par.FDTW <-
 #' @examples
 #' library(funcharts)
 #' par.rtr()
+#'
+#' @author F. Centofanti
 par.rtr <-
   function(seq_x = NULL,
            delta_d = 0.05,
@@ -2802,10 +2808,10 @@ par.mFPCA <-
 #' @export
 #' @examples
 #' library(funcharts)
-#' data <- simulate_data(n_obs = 20)
+#' data <- simulate_data_FRTM(n_obs = 20)
 #'
 #' data_oc <-
-#'   simulate_data(
+#'   simulate_data_FRTM(
 #'     n_obs = 2,
 #'     scenario = "1",
 #'     shift = "OC_h",
@@ -2836,6 +2842,8 @@ par.mFPCA <-
 #'   plot(mod_phaseI_FRTM)
 #'   plot(mod_phaseII_FRTM)
 #' }
+#'
+#' @author F. Centofanti
 FRTM_PhaseI <-
   function(data_tra,
            data_tun = NULL,
@@ -3682,6 +3690,8 @@ FRTM_PhaseI <-
 #'
 #' @export
 #' @inherit FRTM_PhaseI return examples
+#'
+#' @author F. Centofanti
 FRTM_PhaseII<-function(data_oc,mod_phaseI,ncores=1){
 
   if(!methods::is(mod_phaseI, "FRTM_PhaseI"))

@@ -22,10 +22,10 @@ This function provides plots of the Hotelling's \eqn{T^{2}} and SPE control char
 }
 \examples{
 library(funcharts)
-data <- simulate_data(n_obs = 20)
+data <- simulate_data_FRTM(n_obs = 20)
 
 data_oc <-
-  simulate_data(
+  simulate_data_FRTM(
     n_obs = 2,
     scenario = "1",
     shift = "OC_h",
@@ -56,4 +56,5 @@ seq_x <- seq(0.1, max_x, length.out = 10)
   plot(mod_phaseI_FRTM)
   plot(mod_phaseII_FRTM)
 }
+
 }

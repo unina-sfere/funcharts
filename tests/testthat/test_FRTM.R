@@ -1,10 +1,10 @@
 skip_on_cran()
 set.seed(1)
 cores <- 1
-data <- simulate_data(n_obs = 20)
+data <- simulate_data_FRTM(n_obs = 20)
 
 data_oc <-
-  simulate_data(
+  simulate_data_FRTM(
     n_obs = 2,
     scenario = "1",
     shift = "OC_h",

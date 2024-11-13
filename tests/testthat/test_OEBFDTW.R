@@ -1,6 +1,6 @@
 
 set.seed(1)
-data<-simulate_data(n_obs=100)
+data<-simulate_data_FRTM(n_obs=100)
 
 dom=c(0,1)
 basis_x<-create.bspline.basis(c(0,1),nbasis =30)

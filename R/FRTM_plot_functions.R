@@ -19,13 +19,13 @@ if(is.null(aa$ind_sel))ind_sel=1:length(mod$T2_fd) else ind_sel=aa$ind_sel
     # par(mfrow=c(1,3))
   T_2_mat<-sapply(1:length(ind_sel),function(ii)eval.fd(seq(mod$T2_fd[[ind_sel[ii]]]$basis$rangeval[1],mod$T2_fd[[ind_sel[ii]]]$basis$rangeval[2],l=30),mod$T2_fd[[ind_sel[ii]]]))
   SPE_mat<-sapply(1:length(ind_sel),function(ii)eval.fd(seq(mod$SPE_fd[[ind_sel[ii]]]$basis$rangeval[1],mod$SPE_fd[[ind_sel[ii]]]$basis$rangeval[2],l=30),mod$SPE_fd[[ind_sel[ii]]]))
-    plot.lfd(mod$T2_fd[ind_sel],ylim=c(0,max(T_2_mat,na.rm = T)+1),xlim=c(0,max(seq_x)),ylab=expression("T"^{"2"}),xlab="t")
+    plot_lfd(mod$T2_fd[ind_sel],ylim=c(0,max(T_2_mat,na.rm = T)+1),xlim=c(0,max(seq_x)),ylab=expression("T"^{"2"}),xlab="t")
     graphics::legend("topleft",lty=c(1),lwd=2,col=2,legend = c("CL"))
     graphics::lines(mod$CL_T2,lwd=2,col=2)
-    plot.lfd(mod$SPE_fd[ind_sel],ylim=c(0,max(SPE_mat,na.rm = T)+1),xlim=c(0,max(seq_x)),ylab="SPE",xlab="t")
+    plot_lfd(mod$SPE_fd[ind_sel],ylim=c(0,max(SPE_mat,na.rm = T)+1),xlim=c(0,max(seq_x)),ylab="SPE",xlab="t")
     graphics::lines(mod$CL_SPE,lwd=2,col=2)
     graphics::legend("topleft",lty=c(1),lwd=2,col=2,legend = c("CL"))
-    plot.lfd(mod$x_list_smooth[ind_sel],xlim=range(unlist(mod$grid_i)),ylim=range(unlist(mod$x_err)),ylab="X",xlab="t" )
+    plot_lfd(mod$x_list_smooth[ind_sel],xlim=range(unlist(mod$grid_i)),ylim=range(unlist(mod$x_err)),ylab="X",xlab="t" )
     # sapply((2:length(data_tuning$grid_i)),function(ii)lines(data_tuning$grid_i[[ii]],data_tuning$x_err[[ii]],col=ii))
 
 
@@ -39,7 +39,7 @@ plot.FRTM_PhaseII<-function(x,...){
 }
 
 
-plot.lfd<-function(x_fd_list,...){
+plot_lfd<-function(x_fd_list,...){
   n_obs<-length(x_fd_list)
   cols=1:n_obs
   lty=1:n_obs
@@ -48,13 +48,12 @@ plot.lfd<-function(x_fd_list,...){
     graphics::lines(x_fd_list[[ii]],col=cols[ii],lty=lty[1],...)
 }
 
-
-lines.lfd<-function(x_fd_list,...){
-  n_obs<-length(x_fd_list)
-  graphics::lines(x_fd_list[[1]],type="l",...)
-  for(ii in 1:n_obs)
-    graphics::lines(x_fd_list[[ii]],...)
-}
+# lines.lfd<-function(x_fd_list,...){
+#   n_obs<-length(x_fd_list)
+#   graphics::lines(x_fd_list[[1]],type="l",...)
+#   for(ii in 1:n_obs)
+#     graphics::lines(x_fd_list[[ii]],...)
+# }
 
 #' @title Plot the results of the  Mixed Functional Principal Component Analysis (mFPCA)
 #' @description This function provides plots of the principal components of the mFPCA.
@@ -119,7 +118,7 @@ plot_pcahy.fit<-function(mod,K=NULL,type="single"){
   if(!is.null(mod$eigvect_sc)) graphics::layout(matrix(1:((nvar+1)),1,nvar+1,byrow=TRUE), widths = c(rep(1,nvar),0.4)) else  graphics::layout(matrix(1:((nvar)),1,nvar,byrow=TRUE), widths = rep(1,nvar))
 
   for(kk in 1:nvar){
-   plot.lfd(mod$fit$fit_fd[kk],ylab="",xlab="")
+   plot_lfd(mod$fit$fit_fd[kk],ylab="",xlab="")
   }
   if(!is.null(mod$eigvect_sc)) {
     plot(c(0, 1), c(0, 1), ann = F,type="n",  xaxt = 'n' ,xlim=c(-0.5,1.5),ylim=c(-0.25+min(mod$fit$fit_sc),max(mod$fit$fit_sc)+0.25))# plot( rep(0,length(mod$eigvect_sc[,1])),mod$eigvect_sc[,1],xlim=c(-0.1,0.1))

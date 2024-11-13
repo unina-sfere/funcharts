@@ -83,7 +83,7 @@ plot_control_charts(cc$cc, nobsI = 100)
 \references{
 Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 An Adaptive Multivariate Functional EWMA Control Chart.
-Accepted for publication in \emph{Journal of Quality Technology}.
+To appear in \emph{Journal of Quality Technology}, \url{doi:10.1080/00224065.2024.2383674}.
 }
 \author{
 C. Capezza, F. Centofanti

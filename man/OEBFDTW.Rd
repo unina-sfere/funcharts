@@ -106,7 +106,7 @@ This function implements the OEB-FDTW.
 \examples{
 
 set.seed(1)
-data <- simulate_data(n_obs = 100)
+data <- simulate_data_FRTM(n_obs = 100)
 
 dom <- c(0, 1)
 basis_x <- fda::create.bspline.basis(c(0, 1), nbasis = 30)
@@ -128,4 +128,7 @@ Accepted for publication in \emph{Journal of Quality Technology}.
 Deriso, D. and S. Boyd (2022).
 A general optimization framework for dynamic time warping.
 \emph{Optimization and Engineering, 1-22}.
+}
+\author{
+F. Centofanti
 }

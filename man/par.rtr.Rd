@@ -43,7 +43,11 @@ This is an internal function of package \code{FRTM} which allows controlling the
 \examples{
 library(funcharts)
 par.rtr()
+
 }
 \seealso{
 \code{\link{FRTM_PhaseI}}
+}
+\author{
+F. Centofanti
 }

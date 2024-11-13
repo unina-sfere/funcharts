@@ -1,7 +1,7 @@
 
 set.seed(1)
 
-data<-simulate_data(n_obs=100)
+data<-simulate_data_FRTM(n_obs=100)
 X<-sapply(1:100,function(ii) data$x_true[[ii]])
 x_fd<-smooth.basis(y = X,argvals =  data$grid,create.bspline.basis(c(0,1),30))$fd
 

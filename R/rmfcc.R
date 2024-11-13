@@ -39,7 +39,7 @@
 #'
 #' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 #' Robust Multivariate Functional Control Charts.
-#' \emph{Technometrics}, <doi:10.1080/00401706.2024.2327346>.
+#' \emph{Technometrics}, 66(4):531--547, <doi:10.1080/00401706.2024.2327346>.
 #'
 #' Centofanti, F., Colosimo, B.M., Grasso, M.L., Menafoglio, A., Palumbo, B.,
 #' Vantini, S. (2023)
@@ -488,7 +488,7 @@ rpca.fd <- function(fdobj,
 #'
 #' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 #' Robust Multivariate Functional Control Charts.
-#' \emph{Technometrics}, <doi:10.1080/00401706.2024.2327346>.
+#' \emph{Technometrics}, 66(4):531--547, <doi:10.1080/00401706.2024.2327346>.
 #'
 #' Leung, A., Yohai, V., and Zamar, R. (2017).
 #' Multivariate location and scatter matrix
@@ -800,7 +800,7 @@ univ_fil_gse <- function(v, alpha, df) {
 #'
 #' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 #' Robust Multivariate Functional Control Charts.
-#' \emph{Technometrics}, <doi:10.1080/00401706.2024.2327346>.
+#' \emph{Technometrics}, 66(4):531--547, <doi:10.1080/00401706.2024.2327346>.
 #'
 #' Van Ginkel, J. R., Van der Ark, L. A., Sijtsma, K., and Vermunt, J. K.
 #' (2007). Two-way
@@ -977,7 +977,7 @@ RoMFDI <- function(mfdobj,
       x_new_com <- as.numeric(fd_new$coefs)
 
       x_new_com[mvar] <- x_new_com[mvar] +
-        mvtnorm::rmvnorm(1, mean = rep(0, length(x_new)), new_cov_err)
+        MASS::mvrnorm(1, mean = rep(0, length(x_new)), new_cov_err)
 
       coef_list[[inn]] <- matrix(x_new_com, nrow = nbasis, ncol = nvar)
 
@@ -1148,7 +1148,7 @@ RoMFDI <- function(mfdobj,
 #'
 #' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 #' Robust Multivariate Functional Control Charts.
-#' \emph{Technometrics}, <doi:10.1080/00401706.2024.2327346>.
+#' \emph{Technometrics}, 66(4):531--547, <doi:10.1080/00401706.2024.2327346>.
 #'
 #' @examples
 #' \dontrun{
@@ -1538,7 +1538,7 @@ RoMFCC_PhaseI <- function(mfdobj,
 #' @references
 #' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 #' Robust Multivariate Functional Control Charts.
-#' \emph{Technometrics}, <doi:10.1080/00401706.2024.2327346>.
+#' \emph{Technometrics}, 66(4):531--547, <doi:10.1080/00401706.2024.2327346>.
 #'
 #' @examples
 #' \dontrun{

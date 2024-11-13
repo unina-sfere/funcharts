@@ -70,7 +70,7 @@ rpca <- rpca_mfd(mfdobj) # robust MFPCA
 \references{
 Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 Robust Multivariate Functional Control Charts.
-\emph{Technometrics}, \url{doi:10.1080/00401706.2024.2327346}.
+\emph{Technometrics}, 66(4):531--547, \url{doi:10.1080/00401706.2024.2327346}.
 
 Centofanti, F., Colosimo, B.M., Grasso, M.L., Menafoglio, A., Palumbo, B.,
 Vantini, S. (2023)

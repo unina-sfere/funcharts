@@ -29,13 +29,14 @@ See the [`vignette("mfd", package = "funcharts")`](https://unina-sfere.github.io
 
 In particular:
 
-* Colosimo and Pacella (2010) proposed control charts for monitoring functional data based on functional principal component analysis. [`vignette("colosimo2010", package = "funcharts")`](https://unina-sfere.github.io/funcharts/articles/colosimo2010.html)
-* Capezza et al. (2020) proposed control charts for monitoring a scalar response variable and functional covariates
+* Colosimo and Pacella (2010) propose control charts for monitoring functional data based on functional principal component analysis. [`vignette("colosimo2010", package = "funcharts")`](https://unina-sfere.github.io/funcharts/articles/colosimo2010.html)
+* Capezza et al. (2020) propose control charts for monitoring a scalar response variable and functional covariates
 using scalar-on-function regression. See the [`vignette("capezza2020", package = "funcharts")`](https://unina-sfere.github.io/funcharts/articles/capezza2020.html).
-* Centofanti et al. (2021) proposed the functional regression control chart, i.e. control charts for monitoring a functional response variable conditionally on multivariate functional covariates. 
+* Centofanti et al. (2021) propose the functional regression control chart (FRCC), i.e. control charts for monitoring a functional response variable conditionally on multivariate functional covariates. 
 See the [`vignette("centofanti2021", package = "funcharts")`](https://unina-sfere.github.io/funcharts/articles/centofanti2021.html).
-* Capezza et al. (2024a) proposed the adaptive multivariate functional EWMA control chart.
-* Capezza et al. (2024b) proposed the robust multivariate functional control chart.
+* Capezza et al. (2024a) propose the adaptive multivariate functional EWMA (AMFEWMA) control chart.
+* Capezza et al. (2024b) propose the robust multivariate functional control chart (RoMFCC).
+* Centofanti et al. (2024) propose the functional real-time monitoring (FRTM) control chart.
 
 ## Installation
 
@@ -56,11 +57,12 @@ devtools::install_github("unina-sfere/funcharts")
 
 # References
 
-* Capezza C, Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2023) funcharts: control charts for multivariate functional data in R. *Journal of Quality Technology*, doi:10.1080/00224065.2023.2219012
-* Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020) Control charts for monitoring ship operating conditions and CO<sub>2</sub> emissions based on scalar-on-function regression.
-*Applied Stochastic Models in Business and Industry*, 36(3):477--500, doi:10.1002/asmb.2507
-* Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2024a) An Adaptive Multivariate Functional EWMA Control Chart. Accepted for publication in *Journal of Quality Technology*.
-* Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024b)  Robust Multivariate Functional Control Charts. *Technometrics*, doi:10.1080/00401706.2024.2327346
-* Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021) Functional Regression Control Chart. *Technometrics*, 63(3), 281--294. doi:10.1080/00401706.2020.1753581
-* Colosimo BM, Pacella, M. (2010) A comparison study of control charts for statistical monitoring of functional data. *International Journal of Production Research*, 48(6), 1575-1601. doi:10.1080/00207540802662888
+* Capezza C, Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2023) funcharts: control charts for multivariate functional data in R. *Journal of Quality Technology*, doi:10.1080/00224065.2023.2219012.
+* Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020) Control charts for monitoring ship operating conditions and CO<sub>2</sub> emissions based on scalar-on-function regression. *Applied Stochastic Models in Business and Industry*, 36(3):477--500, doi:10.1002/asmb.2507
+* Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2024a) An Adaptive Multivariate Functional EWMA Control Chart. 
+To appear in *Journal of Quality Technology*, doi:https://doi.org/10.1080/00224065.2024.2383674.
+* Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024b)  Robust Multivariate Functional Control Charts. *Technometrics*, 66(4):531--547, doi:10.1080/00401706.2024.2327346.
+* Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021) Functional Regression Control Chart. *Technometrics*, 63(3), 281--294, doi:10.1080/00401706.2020.1753581.
+* Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024). Real-time monitoring of functional data. Accepted for publication in *Journal of Quality Technology*.
+* Colosimo BM, Pacella, M. (2010) A comparison study of control charts for statistical monitoring of functional data. *International Journal of Production Research*, 48(6), 1575-1601, doi:10.1080/00207540802662888.
 
