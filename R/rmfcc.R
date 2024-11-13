@@ -977,7 +977,7 @@ RoMFDI <- function(mfdobj,
       x_new_com <- as.numeric(fd_new$coefs)
 
       x_new_com[mvar] <- x_new_com[mvar] +
-        MASS::mvrnorm(1, mean = rep(0, length(x_new)), new_cov_err)
+        MASS::mvrnorm(1,  rep(0, length(x_new)), new_cov_err)
 
       coef_list[[inn]] <- matrix(x_new_com, nrow = nbasis, ncol = nvar)
 
