@@ -124,3 +124,6 @@ on scalar-on-function regression.
 36(3):477--500.
 \url{doi:10.1002/asmb.2507}
 }
+\author{
+C. Capezza
+}

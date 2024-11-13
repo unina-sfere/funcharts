@@ -1,7 +1,7 @@
 
 # Simulate data -----------------------------------------------------------
 #' @title Simulate data for real-time monitoring of univariate functional data
-#' @description Generate synthetic data as in the simulation study of Centofanti et al. (2024)..
+#' @description Generate synthetic data as in the simulation study of Centofanti et al. (2024).
 #' @param n_obs Number of curves generated.
 #' @param scenario A  character string indicating the scenario considered. It could be "1",  and "2".
 #' @param shift A  character string indicating the shift considered.

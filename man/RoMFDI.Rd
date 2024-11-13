@@ -89,3 +89,6 @@ imputation: a bayesian method for estimating missing scores in tests
 and questionnaires, and an accurate approximation.
 \emph{Computational Statistics & Data Analysis}, 51(8):4013–-4027.
 }
+\author{
+C. Capezza, F. Centofanti
+}

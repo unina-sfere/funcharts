@@ -46,3 +46,6 @@ mod_list <- pca_mfd_real_time(mfdobj_list)
 \seealso{
 \code{\link{pca_mfd}}
 }
+\author{
+C. Capezza
+}

@@ -59,6 +59,7 @@
 #'                                         k_seq = c(0.5, 0.75, 1))
 #' mod_list <- fof_pc_real_time(mfdobj_y_list, mfdobj_x_list)
 #'
+#' @author C. Capezza, F. Centofanti
 fof_pc_real_time <- function(mfdobj_y_list,
                              mfdobj_x_list,
                              tot_variance_explained_x = 0.95,

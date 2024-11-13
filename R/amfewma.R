@@ -195,6 +195,8 @@
 #' plot_control_charts(cc$cc, nobsI = 100)
 #' }
 #'
+#'
+#' @author C. Capezza, F. Centofanti
 AMFEWMA_PhaseI <- function(mfdobj,
                            mfdobj_tuning,
                            lambda = NULL,
@@ -579,7 +581,7 @@ AMFEWMA_PhaseI_given_pars <- function(mfdobj,
 #' plot_control_charts(cc$cc, nobsI = 100)
 #' }
 #'
-#'
+#' @author C. Capezza, F. Centofanti
 AMFEWMA_PhaseII <- function (mfdobj_2,
                              mod_1,
                              n_seq_2 = 1,

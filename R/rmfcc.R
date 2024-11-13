@@ -75,6 +75,8 @@
 #' rpca <- rpca_mfd(mfdobj) # robust MFPCA
 #' # plot_pca_mfd(pca, harm = 1) # plot first eigenfunction, affected by outlier
 #' # plot_pca_mfd(rpca, harm = 1) # plot first eigenfunction in robust case
+#'
+#' @author C. Capezza, F. Centofanti
 rpca_mfd <- function(mfdobj,
                      center = "fusem", # TRUE, or fusem
                      scale = "funmad", # TRUE, FALSE, or funmad
@@ -501,6 +503,7 @@ rpca.fd <- function(fdobj,
 #' out <- functional_filter(mfdobj)
 #' }
 #'
+#' @author C. Capezza, F. Centofanti
 functional_filter <- function(mfdobj,
                               method_pca = "ROBPCA",
                               alpha = 0.95,
@@ -814,6 +817,7 @@ univ_fil_gse <- function(v, alpha, df) {
 #' mfdobj_imp <- RoMFDI(out$mfdobj)
 #' }
 #'
+#' @author C. Capezza, F. Centofanti
 RoMFDI <- function(mfdobj,
                    method_pca = "ROBPCA",
                    fev = 0.999,
@@ -1162,6 +1166,8 @@ RoMFDI <- function(mfdobj,
 #'                          mod_phase1 = mod_phase1)
 #' plot_control_charts(phase2)
 #' }
+#'
+#' @author C. Capezza, F. Centofanti
 RoMFCC_PhaseI <- function(mfdobj,
                           mfdobj_tuning = NULL,
                           functional_filter_par = list(filter = TRUE),
@@ -1550,6 +1556,8 @@ RoMFCC_PhaseI <- function(mfdobj,
 #'                          mod_phase1 = mod_phase1)
 #' plot_control_charts(phase2)
 #' }
+#'
+#' @author C. Capezza, F. Centofanti
 RoMFCC_PhaseII <- function(mfdobj_new,
                            mod_phase1) {
 

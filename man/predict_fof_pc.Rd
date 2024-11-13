@@ -50,9 +50,13 @@ mod <- fof_pc(mfdobj_y, mfdobj_x)
 predict_fof_pc(mod,
                mfdobj_y_new = mfdobj_y,
                mfdobj_x_new = mfdobj_x)
+
 }
 \references{
 Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 Functional Regression Control Chart.
 \emph{Technometrics}, 63(3), 281--294. \url{doi:10.1080/00401706.2020.1753581}
+}
+\author{
+C. Capezza, F. Centofanti
 }

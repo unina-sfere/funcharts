@@ -168,6 +168,7 @@ cclist <- control_charts_pca(pca = pca,
                              newdata = mfdobj_x2)
 plot_control_charts(cclist)
 
+
 }
 \references{
 Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)

@@ -39,6 +39,7 @@
 #'                                       k_seq = seq(0.25, 1, length = 5))
 #' mod_list <- pca_mfd_real_time(mfdobj_list)
 #'
+#' @author C. Capezza
 pca_mfd_real_time <- function(mfdobj_list,
                               scale = TRUE,
                               nharm = 20,

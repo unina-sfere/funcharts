@@ -119,6 +119,7 @@
 #' y <- rowMeans(air$NO2)
 #' mod <- sof_pc(y, mfdobj_x)
 #'
+#' @author C. Capezza
 sof_pc <- function(y,
                    mfdobj_x,
                    tot_variance_explained = 0.9,
@@ -295,6 +296,7 @@ sof_pc <- function(y,
 #' mod <- sof_pc(y, mfdobj_x)
 #' predict_sof_pc(mod)
 #'
+#' @author C. Capezza
 predict_sof_pc <- function(object,
                            y_new = NULL,
                            mfdobj_x_new = NULL,
@@ -430,6 +432,7 @@ predict_sof_pc <- function(object,
 #' mod <- sof_pc(y, mfdobj_x)
 #' plot_bootstrap_sof_pc(mod, nboot = 5)
 #'
+#' @author C. Capezza
 plot_bootstrap_sof_pc <- function(mod, nboot = 25, ncores = 1) {
 
   variables <- mod$beta_fd$fdnames[[3]]

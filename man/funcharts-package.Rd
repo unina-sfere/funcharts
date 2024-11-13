@@ -23,9 +23,13 @@ Authors:
 \itemize{
   \item Fabio Centofanti
   \item Antonio Lepore
-  \item Alessandra Menafoglio
   \item Biagio Palumbo
-  \item Simone Vantini
+}
+
+Other contributors:
+\itemize{
+  \item Alessandra Menafoglio [contributor]
+  \item Simone Vantini [contributor]
 }
 
 }

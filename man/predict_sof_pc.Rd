@@ -70,3 +70,6 @@ mod <- sof_pc(y, mfdobj_x)
 predict_sof_pc(mod)
 
 }
+\author{
+C. Capezza
+}

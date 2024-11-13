@@ -125,3 +125,6 @@ Functional Regression Control Chart.
 \seealso{
 \code{\link{control_charts_pca}}
 }
+\author{
+F. Centofanti
+}

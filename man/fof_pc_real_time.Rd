@@ -76,3 +76,6 @@ mod_list <- fof_pc_real_time(mfdobj_y_list, mfdobj_x_list)
 \code{\link{get_mfd_df_real_time}},
 \code{\link{get_mfd_list_real_time}}
 }
+\author{
+C. Capezza, F. Centofanti
+}

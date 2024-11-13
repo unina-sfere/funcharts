@@ -41,3 +41,6 @@ mod <- sof_pc(y, mfdobj_x)
 plot_bootstrap_sof_pc(mod, nboot = 5)
 
 }
+\author{
+C. Capezza
+}

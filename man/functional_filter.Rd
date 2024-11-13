@@ -101,3 +101,6 @@ Multivariate location and scatter matrix
 estimation under cellwise and casewise contamination.
 \emph{Computational Statistics & Data Analysis}, 111:59–76.
 }
+\author{
+C. Capezza, F. Centofanti
+}

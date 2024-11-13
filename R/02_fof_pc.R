@@ -148,6 +148,7 @@
 #' mfdobj_x <- mfdobj[, fun_covariates]
 #' mod <- fof_pc(mfdobj_y, mfdobj_x)
 #'
+#' @author C. Capezza, F. Centofanti
 fof_pc <- function(mfdobj_y,
                    mfdobj_x,
                    tot_variance_explained_x = 0.95,
@@ -467,6 +468,8 @@ fof_pc <- function(mfdobj_y,
 #' predict_fof_pc(mod,
 #'                mfdobj_y_new = mfdobj_y,
 #'                mfdobj_x_new = mfdobj_x)
+#'
+#' @author C. Capezza, F. Centofanti
 predict_fof_pc <- function(object,
                            mfdobj_y_new,
                            mfdobj_x_new) {

@@ -8,9 +8,9 @@ Authors@R: c(
       role = c("cre","aut")),
     person("Fabio", "Centofanti", role = c("aut")), 
     person("Antonio", "Lepore", role = c("aut")), 
-    person("Alessandra", "Menafoglio", role = c("aut")),
     person("Biagio", "Palumbo", role = c("aut")),
-    person("Simone", "Vantini", role = c("aut"))
+    person("Alessandra", "Menafoglio", role = c("ctb")),
+    person("Simone", "Vantini", role = c("ctb"))
     )
 Description: Provides functional control charts 
     for statistical process monitoring of functional data, 

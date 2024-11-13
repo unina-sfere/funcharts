@@ -162,3 +162,6 @@ plot_control_charts(cclist)
 \seealso{
 \code{\link{control_charts_pca}}, \code{\link{regr_cc_sof}}
 }
+\author{
+C. Capezza
+}

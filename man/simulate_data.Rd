@@ -50,7 +50,7 @@ A list containing the following arguments:
 \code{out_control_t}: Time of the change point.
 }
 \description{
-Generate synthetic data as in the simulation study of Centofanti et al. (2024)..
+Generate synthetic data as in the simulation study of Centofanti et al. (2024).
 }
 \examples{
 library(funcharts)

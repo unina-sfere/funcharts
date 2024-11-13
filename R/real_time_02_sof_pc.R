@@ -57,6 +57,7 @@
 #' y <- rowMeans(air$NO2)
 #' mod_list <- sof_pc_real_time(y, mfdobj_list)
 #'
+#' @author C. Capezza
 sof_pc_real_time <- function(y,
                              mfd_real_time_list,
                              single_min_variance_explained = 0,
