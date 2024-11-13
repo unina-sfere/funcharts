@@ -113,6 +113,11 @@ seq_x <- seq(0.1, max_x, length.out = 10)
   plot(mod_phaseII_FRTM)
 }
 }
+\references{
+Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
+Real-time monitoring of functional data.
+Accepted for publication in \emph{Journal of Quality Technology}.
+}
 \seealso{
 \code{\link{FRTM_PhaseI}}
 }

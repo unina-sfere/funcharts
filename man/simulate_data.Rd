@@ -50,9 +50,14 @@ A list containing the following arguments:
 \code{out_control_t}: Time of the change point.
 }
 \description{
-Generate synthetic data as in the simulation study of XXX.
+Generate synthetic data as in the simulation study of Centofanti et al. (2024)..
 }
 \examples{
 library(funcharts)
 data<-simulate_data(n_obs=20)
+}
+\references{
+Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
+Real-time monitoring of functional data.
+Accepted for publication in \emph{Journal of Quality Technology}.
 }

@@ -121,6 +121,10 @@ mod <-
   OEBFDTW(x_fd, template_fd, der_x_fd , der_template_fd, get_fd = "x_reg")
 }
 \references{
+Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
+Real-time monitoring of functional data.
+Accepted for publication in \emph{Journal of Quality Technology}.
+
 Deriso, D. and S. Boyd (2022).
 A general optimization framework for dynamic time warping.
 \emph{Optimization and Engineering, 1-22}.

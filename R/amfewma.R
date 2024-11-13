@@ -195,7 +195,6 @@
 #' plot_control_charts(cc$cc, nobsI = 100)
 #' }
 #'
-#'
 AMFEWMA_PhaseI <- function(mfdobj,
                            mfdobj_tuning,
                            lambda = NULL,

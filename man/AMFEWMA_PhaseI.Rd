@@ -191,7 +191,6 @@ cc <- AMFEWMA_PhaseII(mfdobj_2 = rbind_mfd(mfdobj_I[1:100], mfdobj_II),
 plot_control_charts(cc$cc, nobsI = 100)
 }
 
-
 }
 \references{
 Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2024)

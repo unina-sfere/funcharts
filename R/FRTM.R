@@ -1,7 +1,7 @@
 
 # Simulate data -----------------------------------------------------------
 #' @title Simulate data for real-time monitoring of univariate functional data
-#' @description Generate synthetic data as in the simulation study of XXX.
+#' @description Generate synthetic data as in the simulation study of Centofanti et al. (2024)..
 #' @param n_obs Number of curves generated.
 #' @param scenario A  character string indicating the scenario considered. It could be "1",  and "2".
 #' @param shift A  character string indicating the shift considered.
@@ -10,6 +10,12 @@
 #' @param t_out_type If "0.3", change point at the 30% of the process.  If "0.6", change point at the 60% of the process.
 #' @param severity Severity level.
 #' @param grid Grid of evaluation points.
+#'
+#' @references
+#' Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
+#' Real-time monitoring of functional data.
+#' Accepted for publication in \emph{Journal of Quality Technology}.
+#'
 #' @return   A list containing the following arguments:
 #'
 #'  \code{x_err}: A list containing the discrete observations for each curve.
@@ -443,7 +449,7 @@ get_lambda_new <-
       ind_lambda_opt  <-  1
     }
     lambda_opt <- lambda[ind_lambda_opt]
-    print(paste0("lambda_opt= 10^", log10(lambda_opt)))
+    print(paste0("lambda_opt = 10^", log10(lambda_opt)))
     align_output_IC <-
       FDTW_group(
         x_fd_list,
@@ -563,6 +569,12 @@ FDTW_group <-
 #' @param n_basis_x  Number of basis to obtain the  registered function. If NULL, it is set as 0.5 the length of the optimal path.
 #' @inheritParams par.FDTW
 #' @inheritParams par.rtr
+#'
+#' @references
+#' Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
+#' Real-time monitoring of functional data.
+#' Accepted for publication in \emph{Journal of Quality Technology}.
+#'
 #' @return   A list containing the following arguments:
 #'
 #' \code{mod} that is a list composed by
@@ -1352,7 +1364,7 @@ get_ul <- function(h_fd,
     den_list <- apply(eval_h, 2, stats::density)
     lim_mat <-
       t(sapply(1:length(den_list), function(ii)
-        spatstat.explore::quantile.density(den_list[[ii]], c(perc, 1 - perc))))
+        spatstat.univar::quantile.density(den_list[[ii]], c(perc, 1 - perc))))
     lim_mat[lim_mat < 0] = 0
     lim_mat[lim_mat > 1] = 1
     ind_w <- which(lim_mat[1:10, 2] > 0.4)
@@ -1800,10 +1812,15 @@ tra_warp <- function(h_fd, type = "clog") {
 #' @description This function implements the mFPCA.
 #' @param x_fd  An object of class fd corresponding to the registered functions.
 #' @param h_fd   An object of class fd corresponding to the warping functions.
-#' @param k_weights The vector of the four constants in the inner product computation. If "equal", the  choice of XXX is used.
+#' @param k_weights The vector of the four constants in the inner product computation. If "equal", the  choice of Centofanti et al. (2024) is used.
 #' @param ncom It is the way to select the number of principal components. If "ptv", it is selected considering the  percentage of the total variability explained.
 #' If "kaiserrule", it is  selected considering the Kaiser rule. The number of principal components may be indicated directly as an integer as well.
 #' @param par_ncom If \code{ncom="ptv"}, the threshold for the percentage of the total variability explained. If \code{ncom="kaiserrule"}, the threshold for the Kaiser rule. Otherwise, this parameter is not considered.
+#' @references
+#' Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
+#' Real-time monitoring of functional data.
+#' Accepted for publication in \emph{Journal of Quality Technology}.
+#'
 #' @return   A list containing the following arguments:
 #'
 #' \code{eigfun_fd} A List of functions corresponding to the functional part of the principal components.
@@ -1837,6 +1854,7 @@ tra_warp <- function(h_fd, type = "clog") {
 
 #' \code{ind_var} Additional parameter  used in \code{FRTM_PhaseI}.
 #' @export
+#' @author Fabio Centofanti, Antonio Lepore
 #' @examples
 #' library(funcharts)
 #'
@@ -2437,7 +2455,7 @@ CL_T2SPE <- function(mat, alpha, type = "pointwise") {
                               bw = "SJ",
                               adjust = 0.25)
 
-        CL[ii] <- spatstat.explore::quantile.density(den, 1 - alpha)
+        CL[ii] <- spatstat.univar::quantile.density(den, 1 - alpha)
       }
       else if (length(mat_i) == 1) {
         CL[ii] <- mat_i
@@ -2458,7 +2476,7 @@ CL_T2SPE <- function(mat, alpha, type = "pointwise") {
                               bw = "SJ",
                               adjust = 0.25)
 
-        CL[ii] <- spatstat.explore::quantile.density(den, 1 - alpha)
+        CL[ii] <- spatstat.univar::quantile.density(den, 1 - alpha)
       }
       else if (length(mat_i) == 1) {
         CL[ii] <- mat_i
@@ -2519,7 +2537,7 @@ CL_T2SPE_fd <- function(fd, alpha, type = "pointwise", seq_x) {
         ;
         if (methods::is(den, "try-error"))
           den <- stats::density(mat_i, na.rm = TRUE)
-        CL[ii] <- spatstat.explore::quantile.density(den, 1 - alpha)
+        CL[ii] <- spatstat.univar::quantile.density(den, 1 - alpha)
       }
       else if (length(mat_i) == 1) {
         CL[ii] <- mat_i
@@ -2540,7 +2558,7 @@ CL_T2SPE_fd <- function(fd, alpha, type = "pointwise", seq_x) {
                               bw = "SJ",
                               adjust = 0.25)
 
-        CL[ii] <- spatstat.explore::quantile.density(den, 1 - alpha)
+        CL[ii] <- spatstat.univar::quantile.density(den, 1 - alpha)
       }
       else if (length(mat_i) == 1) {
         CL[ii] <- mat_i
@@ -2740,6 +2758,12 @@ par.mFPCA <-
 #' @param ncores If \code{ncores}>1, then parallel computing is used, with \code{ncores} cores. Default is 1.
 #' @param print If TRUE, some information are printed. Default is TRUE.
 #' @seealso \code{\link{FRTM_PhaseI}}
+#'
+#' @references
+#' Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
+#' Real-time monitoring of functional data.
+#' Accepted for publication in \emph{Journal of Quality Technology}.
+#'
 #' @return   A list containing the following arguments:
 #'
 #' \code{T2_fd} List of \eqn{T^{2}} functions for each observation in the tuning set.
@@ -3634,6 +3658,10 @@ FRTM_PhaseI <-
 #' @param data_oc  A list containing the following arguments: \code{x_err} a list containing the discrete observations for each curve to be monitored; \code{grid_i} a list of vector of time points where the curves to be monitored are sampled.
 #' @param mod_phaseI  An object of class \code{mod_phaseI_FRTM} obtained as output of the function  \code{FRTM_PhaseI}.
 #' @param ncores If \code{ncores}>1, then parallel computing is used, with \code{ncores} cores. Default is 1.
+#' @references
+#' Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
+#' Real-time monitoring of functional data.
+#' Accepted for publication in \emph{Journal of Quality Technology}.
 #' @return   A list containing the following arguments:
 #'
 #' \code{T2_fd} List of \eqn{T^{2}} functions for each observation.

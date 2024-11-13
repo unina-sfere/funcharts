@@ -11,7 +11,7 @@ mFPCA(x_fd, h_fd = NULL, k_weights = "equal", ncom = "ptv", par_ncom = 0.9)
 
 \item{h_fd}{An object of class fd corresponding to the warping functions.}
 
-\item{k_weights}{The vector of the four constants in the inner product computation. If "equal", the  choice of XXX is used.}
+\item{k_weights}{The vector of the four constants in the inner product computation. If "equal", the  choice of Centofanti et al. (2024) is used.}
 
 \item{ncom}{It is the way to select the number of principal components. If "ptv", it is selected considering the  percentage of the total variability explained.
 If "kaiserrule", it is  selected considering the Kaiser rule. The number of principal components may be indicated directly as an integer as well.}
@@ -72,4 +72,12 @@ h_fd <-
                     fda::create.bspline.basis(c(0, 1), 30))$fd
 mod_mFPCA <- mFPCA(x_fd, h_fd, ncom = "ptv", par_ncom = 0.95)
 plot(mod_mFPCA)
+}
+\references{
+Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
+Real-time monitoring of functional data.
+Accepted for publication in \emph{Journal of Quality Technology}.
+}
+\author{
+Fabio Centofanti, Antonio Lepore
 }
