@@ -1,18 +1,3 @@
-<<<<<<< HEAD
-# funcharts 1.6.0
-
-* `FRTM_PhaseI()` performs the design phase (Phase I) of the functional real-time monitoring method if Centofanti et al. (2024).
-* `FRTM_PhaseII()` performs the monitoring phase (Phase I) of the functional real-time monitoring method if Centofanti et al. (2024).
-* `simulate_data_FRTM()` generates synthetic data as in the simulation study of Centofanti et al. (2024).
-* `OEBFDTW()` implements the Open-end/open-begin Functional Dynamic Time Warping (OEB-FDTW) in Centofanti et al. (2024).
-* `par.FDTW()` sets open-end/open-begin functional dynamic time warping (OEB-FDTW) defaults in Centofanti et al. (2024).
-
-References: 
-
-* Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024). 
-Real-time monitoring of functional data. Accepted for publication in \emph{Journal of Quality Technology}.
-=======
-
 # funcharts 1.6.0
 
 
