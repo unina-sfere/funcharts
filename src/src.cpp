@@ -415,7 +415,7 @@ arma::field<arma::mat> get_path_list1(int N,int M,arma::mat range_x,arma::mat ra
     ind.row(1)=trans(cc);
     i=1;
     ind_ind=i;
-    while ((ind(i,0)!=range_tem(0))&(ind(i,1)!=range_x(0))) {
+    while ((ind(i,0)!=range_tem(0))&&(ind(i,1)!=range_x(0))) {
       i++;
 
       P_i =P(ind_end1(j)-2-i+2,ind_p);
@@ -464,7 +464,7 @@ arma::field<arma::mat> get_path_list2(int N,int M,arma::mat range_x,arma::mat ra
     ind.row(1)=trans(cc);
     i=1;
     ind_ind=i;
-    while ((ind(i,0)!=range_tem(0))&(ind(i,1)!=range_x(0))) {
+    while ((ind(i,0)!=range_tem(0))&&(ind(i,1)!=range_x(0))) {
       i++;
       P_i =P(N-i,ind_p);
       arma::vec grid_im1=grid_search(N-1-i);

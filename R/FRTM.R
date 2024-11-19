@@ -2864,7 +2864,7 @@ FRTM_PhaseI <-
     template <- par.FDTW$template
     grid_tem <- par.FDTW$grid_tem
     frac_oeob <- par.FDTW$frac_oeob
-    index_tem <- par.FDTW$par.FDTW
+    index_tem <- par.FDTW$index_tem
     if (is.null(par.FDTW$smin))
       par.FDTW$smin <- abs(diff(range(par.rtr$seq_x))) / abs(diff(range(par.FDTW$seq_t))) *
       0.001
