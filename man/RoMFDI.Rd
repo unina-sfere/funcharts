@@ -85,7 +85,7 @@ Robust Multivariate Functional Control Charts.
 
 Van Ginkel, J. R., Van der Ark, L. A., Sijtsma, K., and Vermunt, J. K.
 (2007). Two-way
-imputation: a bayesian method for estimating missing scores in tests
+imputation: a Bayesian method for estimating missing scores in tests
 and questionnaires, and an accurate approximation.
 \emph{Computational Statistics & Data Analysis}, 51(8):4013–-4027.
 }
