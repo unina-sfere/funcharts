@@ -12,7 +12,6 @@ References:
 * Centofanti, F., Lepore, A., Kulahci, M., and Spooner, M. P. (2024).
   Real-time monitoring of functional data.
   Accepted for publication in \emph{Journal of Quality Technology}.
->>>>>>> 68475e80c51e94cd08e05d6085487b3c7957babe
 
 # funcharts 1.5.0
 
