@@ -213,7 +213,7 @@ double der_c(double asn, double smin, double smax, double der_0){
 
   double out;
   if (asn>=(smin-pow(10,-10)) and	 asn<=(smax+pow(10,-10))){
-    out=pow(abs(der_0-asn),2);
+    out=pow(std::abs(der_0-asn),2);
   } else {
     out=R_PosInf;
   }
