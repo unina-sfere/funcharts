@@ -2536,6 +2536,138 @@ plot_bifd <- function(bifd_obj,
 
 }
 
+#' Mean Function for Multivariate Functional Data
+#'
+#' Computes the mean function for a multivariate functional data object of class `mfd`.
+#'
+#' @param mfdobj An object of class `mfd` representing the multivariate functional data.
+#'   It contains \eqn{N} observations of a \eqn{p}-dimensional multivariate functional variable.
+#'
+#' @return An `mfd` object representing the mean function of the input data. The output contains
+#'   one observation, representing the mean function for each dimension of the multivariate functional variable.
+#'
+#' @details
+#' This function calculates the mean function for each dimension of the multivariate functional data
+#' by averaging the coefficients across all observations. The resulting object is a single observation
+#' containing the mean function for each dimension.
+#'
+#' @examples
+#' \dontrun{
+#' library(funcharts)
+#' data(air)
+#' mfdobj <- get_mfd_list(air)
+#' mean_result <- mean_mfd(mfdobj)
+#' plot_mfd(mean_result)
+#' }
+#'
+#' @export
+mean_mfd <- function(mfdobj) {
+  x <- mfdobj
+  coef_mean <- apply(x$coefs, c(1, 3), mean)
+  coef_mean <- array(coef_mean, dim = c(nrow(coef_mean), 1, ncol(coef_mean)))
+  fdnames <- list(x$fdnames[[1]], "sample mean", x$fdnames[[3]])
+  mfd(coef_mean, x$basis, fdnames)
+}
+
+
+#' Covariance Function for Multivariate Functional Data
+#'
+#' Computes the covariance function for two multivariate functional data objects of class `mfd`.
+#'
+#' @param mfdobj1 An object of class `mfd` representing the first multivariate functional data set.
+#'   It contains \eqn{N} observations of a \eqn{p}-dimensional multivariate functional variable.
+#' @param mfdobj2 An object of class `mfd` representing the second multivariate functional data set.
+#'   Defaults to `mfdobj1`. If provided, it must also contain \eqn{N} observations of a \eqn{p}-dimensional
+#'   multivariate functional variable.
+#'
+#' @return A bifd object representing the covariance function of the two input objects. The output
+#'   is a collection of \eqn{p^2} functional surfaces, each corresponding to the covariance between
+#'   two components of the multivariate functional data.
+#'
+#' @details
+#' The function calculates the covariance between all pairs of dimensions from the two multivariate
+#' functional data objects. Each covariance is represented as a functional surface in the resulting
+#' bifd object. The covariance function is useful for analyzing relationships between functional variables.
+#'
+#' @examples
+#' \dontrun{
+#' library(funcharts)
+#' data("air")
+#' x <- get_mfd_list(air[1:3])
+#' cov_result <- cov_mfd(x)
+#' plot_bifd(cov_result)
+#' }
+#'
+#' @export
+cov_mfd <- function(mfdobj1, mfdobj2 = mfdobj1) {
+  fdobj1 <- mfdobj1
+  fdobj2 <- mfdobj2
+  coefx <- fdobj1$coefs
+  coefy <- fdobj2$coefs
+  coefdobj1 <- dim(coefx)
+  coefdobj2 <- dim(coefy)
+  basisx <- fdobj1$basis
+  basisy <- fdobj2$basis
+  nbasisx <- basisx$nbasis
+  nbasisy <- basisy$nbasis
+
+  nvar <- coefdobj1[3]
+  coefvar <- array(0, c(nbasisx, nbasisx, 1, nvar^2))
+  varnames <- fdobj1$fdnames[[3]]
+  m <- 0
+  bivarnames <- vector("character", nvar^2)
+  for (i in 1:nvar) for (j in 1:nvar) {
+    m <- m + 1
+    coefvar[, , 1, m] <- var(t(coefx[, , i]), t(coefx[, , j]))
+    bivarnames[m] <- paste(varnames[i], "vs", varnames[j])
+  }
+  bifdnames <- list()
+  bifdnames[[1]] <- fdobj1$names
+  bifdnames[[2]] <- fdobj2$names
+  bifdnames[[3]] <- "covariance"
+  bifdnames[[4]] <- bivarnames
+
+  varbifd <- fda::bifd(coefvar, basisx, basisx, bifdnames)
+  return(varbifd)
+}
+
+#' Correlation Function for Multivariate Functional Data
+#'
+#' Computes the correlation function for two multivariate functional data objects of class `mfd`.
+#'
+#' @param mfdobj1 An object of class `mfd` representing the first multivariate functional data set.
+#'   It contains \eqn{N} observations of a \eqn{p}-dimensional multivariate functional variable.
+#' @param mfdobj2 An object of class `mfd` representing the second multivariate functional data set.
+#'   Defaults to `mfdobj1`. If provided, it must also contain \eqn{N} observations of a \eqn{p}-dimensional
+#'   multivariate functional variable.
+#'
+#' @return A bifd object representing the correlation function of the two input objects. The output
+#'   is a collection of \eqn{p^2} functional surfaces, each corresponding to the correlation between
+#'   two components of the multivariate functional data.
+#'
+#' @details
+#' The function calculates the correlation between all pairs of dimensions from the two multivariate
+#' functional data objects. The data is first scaled using \code{\link{scale_mfd}}, and the correlation
+#' is then computed as the covariance of the scaled data using \code{\link{cov_mfd}}.
+#'
+#' @examples
+#' \dontrun{
+#' library(funcharts)
+#' data("air")
+#' x <- get_mfd_list(air[1:3])
+#' cor_result <- cor_mfd(x)
+#' plot_bifd(cor_result)
+#' }
+#'
+#' @export
+cor_mfd <- function(mfdobj1, mfdobj2 = mfdobj1) {
+  mfdobj1_scaled <- scale_mfd(mfdobj1)
+  mfdobj2_scaled <- scale_mfd(mfdobj2)
+  cor_result <- cov_mfd(mfdobj1_scaled, mfdobj2_scaled)
+  cor_result$bifdnames[[3]] <- "correlation"
+  return(cor_result)
+}
+
 
 #' @noRd
 #'

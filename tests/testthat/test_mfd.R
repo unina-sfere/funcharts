@@ -215,3 +215,15 @@ test_that("norm_mfd works", {
   expect_no_error(norm.mfd(mfdobj1))
 })
 
+
+test_that("cov_mfd and cor_mfd functions work", {
+  mfdobj1 <- data_sim_mfd()
+  mfdobj2 <- data_sim_mfd()
+  expect_is(cov_mfd(mfdobj1, mfdobj2), "bifd")
+  expect_is(cor_mfd(mfdobj1, mfdobj2), "bifd")
+})
+
+test_that("mean_mfd works", {
+  mfdobj <- data_sim_mfd()
+  expect_is(mean_mfd(mfdobj), "mfd")
+})

@@ -6,6 +6,9 @@
 * `mFPCA()` performs Mixed Functional Principal Component Analysis (mFPCA).
 * `FRTM_PhaseI()` performs Phase I of the FRTM method.
 * `FRTM_PhaseII()` performs Phase II of the FRTM method.
+* `cov_mfd()` calculates the covariance of multivariate functional data returning a `bifd` object.
+* `cor_mfd()` calculates the correlation of multivariate functional data returning a `bifd` object.
+* `mean_mfd()` calculates the mean of multivariate functional data, returing an `mfd` object.
 
 References:
 
