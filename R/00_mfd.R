@@ -2618,7 +2618,7 @@ cov_mfd <- function(mfdobj1, mfdobj2 = mfdobj1) {
   bivarnames <- vector("character", nvar^2)
   for (i in 1:nvar) for (j in 1:nvar) {
     m <- m + 1
-    coefvar[, , 1, m] <- var(t(coefx[, , i]), t(coefx[, , j]))
+    coefvar[, , 1, m] <- stats::var(t(coefx[, , i]), t(coefx[, , j]))
     bivarnames[m] <- paste(varnames[i], "vs", varnames[j])
   }
   bifdnames <- list()
