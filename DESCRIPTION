@@ -18,7 +18,7 @@ Description: Provides functional control charts
     Centofanti et al. (2021) <doi:10.1080/00401706.2020.1753581>,
     Capezza et al. (2024) <doi:10.1080/00401706.2024.2327346>,
     Capezza et al. (2024) <doi:10.1080/00224065.2024.2383674>,
-    Centofanti et al. (2022) <doi.org/10.48550/arXiv.2205.06256>.
+    Centofanti et al. (2022) <doi:10.48550/arXiv.2205.06256>.
     The package is thoroughly illustrated in the paper of 
     Capezza et al (2023) <doi:10.1080/00224065.2023.2219012>.
 Depends: 
