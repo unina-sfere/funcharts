@@ -183,10 +183,9 @@ AMFCC_PhaseI <- function(data_tra,
     for (jj in 1:N_tra) {
       coef_mat[, jj, ] <- X_mfd_list_1[[jj]]$coefs[, ii, ]
     }
-    coeff_mfd <- abind::abind(coef_mat, along = 2)
-    dimnames(coeff_mfd)[[3]] <- as.character(1:p_var)
+    dimnames(coef_mat)[[3]] <- as.character(1:p_var)
     X_mfd_list_tra[[ii]] <- mfd(
-      coeff_mfd,
+      coef_mat,
       basis,
       fdnames = list("arg", as.character(1:N_tra), as.character(1:p_var)),
       raw = data.frame(
@@ -226,10 +225,9 @@ AMFCC_PhaseI <- function(data_tra,
     for (jj in 1:N_tun) {
       coef_mat[, jj, ] <- X_mfd_list_1[[jj]]$coefs[, ii, ]
     }
-    coeff_mfd <- abind::abind(coef_mat, along = 2)
-    dimnames(coeff_mfd)[[3]] <- as.character(1:p_var)
+    dimnames(coef_mat)[[3]] <- as.character(1:p_var)
     X_mfd_list_tun[[ii]] <- mfd(
-      coeff_mfd,
+      coef_mat,
       basis,
       fdnames = list("arg", as.character(1:N_tun), as.character(1:p_var)),
       raw = data.frame(
@@ -514,10 +512,9 @@ AMFCC_PhaseII <- function(data = NULL,
     for (jj in 1:N) {
       coef_mat[, jj, ] <- X_mfd_list_1[[jj]]$coefs[, ii, ]
     }
-    coeff_mfd <- abind::abind(coef_mat, along = 2)
-    dimnames(coeff_mfd)[[3]] <- as.character(1:p_var)
+    dimnames(coef_mat)[[3]] <- as.character(1:p_var)
     X_mfd_list[[ii]] <- mfd(
-      coeff_mfd,
+      coef_mat,
       basis,
       fdnames = list("arg", as.character(1:N), as.character(1:p_var)),
       raw = data.frame(
@@ -814,10 +811,9 @@ get_mfd2 <- function(data,
     }
   }
 
-  coeff_mfd <- abind::abind(coef_mat_0, along = 2)
-  dimnames(coeff_mfd)[[3]] <- as.character(1:p_var)
+  dimnames(coef_mat_0)[[3]] <- as.character(1:p_var)
   X_mfd_0 <- mfd(
-    coeff_mfd,
+    coef_mat_0,
     basis,
     fdnames = list("arg", as.character(1:N_data), as.character(1:p_var)),
     raw = data.frame(
@@ -829,10 +825,9 @@ get_mfd2 <- function(data,
     ),
     id_var = "id"
   )
-  coeff_mfd <- abind::abind(coef_mat, along = 2)
-  dimnames(coeff_mfd)[[3]] <- as.character(1:p_var)
+  dimnames(coef_mat)[[3]] <- as.character(1:p_var)
   X_mfd <- mfd(
-    coeff_mfd,
+    coef_mat,
     basis,
     fdnames = list("arg", as.character(1:N_data), as.character(1:p_var)),
     raw = data.frame(
