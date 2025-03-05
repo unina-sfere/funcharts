@@ -1,5 +1,14 @@
-# funcharts 1.6.0
+# funcharts 1.6.0.9999
 
+* `AMFCC_PhaseI()` performs Phase I of the Adaptive Multivariate Functional Control Chart of Centofanti et al. (2025).
+* `AMFCC_PhaseII()` performs Phase II of the Adaptive Multivariate Functional Control Chart of Centofanti et al. (2025).
+
+References:
+
+* Centofanti, F., Lepore, A., Palumbo, B. (2025) Adaptive Multivariate Functional Control Chart. 
+Accepted for publication in \emph{Technometrics}.
+
+# funcharts 1.6.0
 
 * `simulate_data_FRTM()` simulates data for real-time monitoring of univariate functional data.
 * `OEBFDTW()` performs Open-end/Open-begin Functional Dynamic Time Warping (OEB-FDTW).
