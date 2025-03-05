@@ -19,11 +19,11 @@ on scalar-on-function regression.
 
 Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 Functional Regression Control Chart.
-\emph{Technometrics}, 63(3), 281--294. \url{doi:10.1080/00401706.2020.1753581}
+\emph{Technometrics}, 63(3):281--294. \url{doi:10.1080/00401706.2020.1753581}
 
 Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
-Robust Multivariate Functional Control Charts.
-\emph{Technometrics}, \url{doi:10.1080/00401706.2024.2327346}.
+Robust Multivariate Functional Control Chart.
+\emph{Technometrics}, 66(4):531--547, \url{doi:10.1080/00401706.2024.2327346}.
 
 Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2025)
 An Adaptive Multivariate Functional EWMA Control Chart.

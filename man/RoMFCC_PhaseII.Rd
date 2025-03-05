@@ -55,7 +55,7 @@ plot_control_charts(phase2)
 }
 \references{
 Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
-Robust Multivariate Functional Control Charts.
+Robust Multivariate Functional Control Chart.
 \emph{Technometrics}, 66(4):531--547, \url{doi:10.1080/00401706.2024.2327346}.
 }
 \author{

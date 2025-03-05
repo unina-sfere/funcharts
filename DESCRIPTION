@@ -46,7 +46,8 @@ Imports:
     mgcv, 
     scam, 
     spatstat.univar, 
-    methods
+    methods,
+    abind
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

@@ -35,21 +35,23 @@ X_II <-
     var = rep(1:p, each = l_grid * N)
   )
 
+mod_phaseI_AMFCC <- AMFCC_PhaseI(
+  data_tra = X_tra,
+  data_tun =
+    NULL,
+  grid = grid,
+  ncores = 1
+)
+
+mod_phaseII_AMFCC <- AMFCC_PhaseII(data = X_II,
+                                   mod_Phase_I = mod_phaseI_AMFCC,
+                                   ncores = 1)
+
 test_that("AMFCC_PhaseI works", {
-  mod_phaseI_AMFCC <- AMFCC_PhaseI(
-    data_tra = X_tra,
-    data_tun =
-      NULL,
-    grid = grid,
-    ncores = 1
-  )
   expect_is(mod_phaseI_AMFCC, "AMFCC_PhaseI")
 })
 
 test_that("AMFCC_PhaseII works", {
-  mod_phaseII_AMFCC <- AMFCC_PhaseII(data = X_II,
-                                     mod_Phase_I = mod_phaseI_AMFCC,
-                                     ncores = 1)
   expect_is(mod_phaseII_AMFCC, "AMFCC_PhaseII")
 })
 

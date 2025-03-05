@@ -120,7 +120,7 @@ plot_control_charts(cclist)
 \references{
 Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 Functional Regression Control Chart.
-\emph{Technometrics}, 63(3), 281--294. \url{doi:10.1080/00401706.2020.1753581}
+\emph{Technometrics}, 63(3):281--294. \url{doi:10.1080/00401706.2020.1753581}
 }
 \seealso{
 \code{\link{control_charts_pca}}

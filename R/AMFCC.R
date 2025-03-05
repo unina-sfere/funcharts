@@ -661,6 +661,9 @@ AMFCC_PhaseII <- function(data = NULL,
 #' @export
 #' @inherit AMFCC_PhaseI return examples
 plot.AMFCC_PhaseI <- function(x, ...) {
+
+  variables <- NULL
+
   aa <- list(...)
   mod <- x
   if (is.null(aa$combining_function)) {
@@ -690,8 +693,8 @@ plot.AMFCC_PhaseI <- function(x, ...) {
       pch = 16,
       cex = 0.3
     )
-    lines(mod$p_values_combined[[ind_comb]], , lwd = 0.6)
-    abline(h = mod$CL[ind_comb], lty = 2)
+    graphics::lines(mod$p_values_combined[[ind_comb]], , lwd = 0.6)
+    graphics::abline(h = mod$CL[ind_comb], lty = 2)
   }
   if (type == "cont") {
     if (is.null(aa$ind_obs))
@@ -720,10 +723,10 @@ plot.AMFCC_PhaseI <- function(x, ...) {
     df <- dplyr::mutate(df, variables = factor(variables, levels = paste0("X", 1:p)))
     plot <- ggplot2::ggplot(df) +
       ggplot2::geom_col(ggplot2::aes(
-        x = .data$variables,
-        y = .data$contribution,
-        fill = .data$ooc,
-        alpha = I(.data$alpha_vec)
+        x = df$variables,
+        y = df$contribution,
+        fill = df$ooc,
+        alpha = I(df$alpha_vec)
       ),
       width = 0.7) +
       ggplot2::theme_bw() + ggplot2::xlab("") +
@@ -733,10 +736,10 @@ plot.AMFCC_PhaseI <- function(x, ...) {
             legend.position = "none") +
       ggplot2::scale_fill_manual(values = c("FALSE" = "grey", "TRUE" = "tomato1")) +
       ggplot2::geom_segment(ggplot2::aes(
-        x = .data$x,
-        xend = .data$xend,
-        y = .data$limit,
-        yend = .data$limit
+        x = df$x,
+        xend = df$xend,
+        y = df$limit,
+        yend = df$limit
       ),
       col = "black") +
       ggplot2::scale_x_discrete(labels = sss) +
@@ -884,14 +887,14 @@ get_CL <- function(p_values_combined, ARL_0) {
     ind_out <- list()
     for (ww in 1:length(p_values_combined)) {
       # CL[ww] <- quantile(p_values_combined[[ww]], 1 - (1 / ARL_0))
-      CL[ww] = spatstat.univar::quantile.density(density(p_values_combined[[ww]], bw = "SJ"), 1 -
+      CL[ww] = spatstat.univar::quantile.density(stats::density(p_values_combined[[ww]], bw = "SJ"), 1 -
                                                    (1 / ARL_0))
       x_q <- c(p_values_combined[[ww]])
       ind_out[[ww]] <- which(x_q >= CL[ww])
     }
   }
   else{
-    CL <- quantile(p_values_combined, 1 - (1 / ARL_0))
+    CL <- stats::quantile(p_values_combined, 1 - (1 / ARL_0))
     x_q <- c(p_values_combined)
     ind_out <- which(x_q >= CL)
   }

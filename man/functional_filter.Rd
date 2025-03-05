@@ -93,7 +93,7 @@ casewise contamination.
 \emph{Test}, 24(3):441–461.
 
 Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
-Robust Multivariate Functional Control Charts.
+Robust Multivariate Functional Control Chart.
 \emph{Technometrics}, 66(4):531--547, \url{doi:10.1080/00401706.2024.2327346}.
 
 Leung, A., Yohai, V., and Zamar, R. (2017).
