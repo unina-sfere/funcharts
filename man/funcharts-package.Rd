@@ -25,9 +25,10 @@ Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 Robust Multivariate Functional Control Charts.
 \emph{Technometrics}, \url{doi:10.1080/00401706.2024.2327346}.
 
-Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2024)
+Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2025)
 An Adaptive Multivariate Functional EWMA Control Chart.
-To appear in \emph{Journal of Quality Technology}, \url{doi:10.1080/00224065.2024.2383674}.
+\emph{Journal of Quality Technology},  57(1):1--15,
+doi:https://doi.org/10.1080/00224065.2024.2383674.
 
 Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
 Real-time monitoring of functional data.

@@ -194,9 +194,10 @@ plot_control_charts(cc$cc, nobsI = 100)
 
 }
 \references{
-Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2024)
+Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2025)
 An Adaptive Multivariate Functional EWMA Control Chart.
-To appear in \emph{Journal of Quality Technology}, \url{doi:10.1080/00224065.2024.2383674}.
+\emph{Journal of Quality Technology},  57(1):1--15,
+doi:https://doi.org/10.1080/00224065.2024.2383674.
 
 Lucas, J. M., Saccucci, M. S. (1990)
 Exponentially weighted moving average control schemes:

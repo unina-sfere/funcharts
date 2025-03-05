@@ -59,10 +59,10 @@ devtools::install_github("unina-sfere/funcharts")
 
 * Capezza C, Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2023) funcharts: control charts for multivariate functional data in R. *Journal of Quality Technology*, doi:10.1080/00224065.2023.2219012.
 * Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020) Control charts for monitoring ship operating conditions and CO<sub>2</sub> emissions based on scalar-on-function regression. *Applied Stochastic Models in Business and Industry*, 36(3):477--500, doi:10.1002/asmb.2507
-* Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2024a) An Adaptive Multivariate Functional EWMA Control Chart. 
-To appear in *Journal of Quality Technology*, doi:https://doi.org/10.1080/00224065.2024.2383674.
-* Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024b)  Robust Multivariate Functional Control Charts. *Technometrics*, 66(4):531--547, doi:10.1080/00401706.2024.2327346.
-* Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021) Functional Regression Control Chart. *Technometrics*, 63(3), 281--294, doi:10.1080/00401706.2020.1753581.
+* Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2025) An Adaptive Multivariate Functional EWMA Control Chart. 
+*Journal of Quality Technology*,  57(1):1--15, doi:https://doi.org/10.1080/00224065.2024.2383674.
+* Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024b)  Robust Multivariate Functional Control Chart. *Technometrics*, 66(4):531--547, doi:10.1080/00401706.2024.2327346.
+* Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021) Functional Regression Control Chart. *Technometrics*, 63(3):281--294, doi:10.1080/00401706.2020.1753581.
 * Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024). Real-time monitoring of functional data. Accepted for publication in *Journal of Quality Technology*.
 * Colosimo BM, Pacella, M. (2010) A comparison study of control charts for statistical monitoring of functional data. *International Journal of Production Research*, 48(6), 1575-1601, doi:10.1080/00207540802662888.
 

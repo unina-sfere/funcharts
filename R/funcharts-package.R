@@ -10,15 +10,16 @@
 #'
 #' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 #' Functional Regression Control Chart.
-#' \emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
+#' \emph{Technometrics}, 63(3):281--294. <doi:10.1080/00401706.2020.1753581>
 #'
 #' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
-#' Robust Multivariate Functional Control Charts.
-#' \emph{Technometrics}, <doi:10.1080/00401706.2024.2327346>.
+#' Robust Multivariate Functional Control Chart.
+#' \emph{Technometrics}, 66(4):531--547, <doi:10.1080/00401706.2024.2327346>.
 #'
-#' Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2024)
+#' Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2025)
 #' An Adaptive Multivariate Functional EWMA Control Chart.
-#' To appear in \emph{Journal of Quality Technology}, <doi:10.1080/00224065.2024.2383674>.
+#' \emph{Journal of Quality Technology},  57(1):1--15,
+#' doi:https://doi.org/10.1080/00224065.2024.2383674.
 #'
 #' Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
 #' Real-time monitoring of functional data.

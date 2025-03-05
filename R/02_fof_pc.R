@@ -455,7 +455,7 @@ fof_pc <- function(mfdobj_y,
 #' @references
 #' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 #' Functional Regression Control Chart.
-#' \emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
+#' \emph{Technometrics}, 63(3):281--294. <doi:10.1080/00401706.2020.1753581>
 #'
 #' @examples
 #' library(funcharts)

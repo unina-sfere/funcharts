@@ -76,7 +76,7 @@ devtools::install_github("unina-sfere/funcharts")
   Multivariate Functional Control Charts. *Technometrics*,
   66(4):531–547, <doi:10.1080/00401706.2024.2327346>.
 - Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
-  Functional Regression Control Chart. *Technometrics*, 63(3), 281–294,
+  Functional Regression Control Chart. *Technometrics*, 63(3):281--294,
   <doi:10.1080/00401706.2020.1753581>.
 - Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
   Real-time monitoring of functional data. Accepted for publication in

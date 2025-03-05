@@ -32,9 +32,10 @@ References:
 
 References:
 
-* Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2024)
-An Adaptive Multivariate Functional EWMA Control Chart.
-Accepted for publication in \emph{Journal of Quality Technology}.
+* Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2025)
+ An Adaptive Multivariate Functional EWMA Control Chart.
+ \emph{Journal of Quality Technology},  57(1):1--15,
+ doi:https://doi.org/10.1080/00224065.2024.2383674.
 
 # funcharts 1.4.1
 
@@ -42,7 +43,10 @@ Accepted for publication in \emph{Journal of Quality Technology}.
 
 References:
 
-* Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024) Robust Multivariate Functional Control Charts. Technometrics, doi:10.1080/00401706.2024.2327346.
+* Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024) 
+Robust Multivariate Functional Control Chart. 
+\emph{Technometrics}, , 66(4):531--547, doi:10.1080/00401706.2024.2327346.
+
 
 # funcharts 1.4.0
 
@@ -54,8 +58,9 @@ References:
 
 References:
 
-* Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024) Robust Multivariate Functional Control Charts. Technometrics, doi:10.1080/00401706.2024.2327346.
-
+* Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024) 
+Robust Multivariate Functional Control Chart. 
+\emph{Technometrics}, , 66(4):531--547, doi:10.1080/00401706.2024.2327346.
 # funcharts 1.3.2
 
 * Updated documentation with the newly published paper, which thoroughly illustrates the funcharts package:

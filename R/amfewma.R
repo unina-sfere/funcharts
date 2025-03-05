@@ -106,9 +106,10 @@
 #' are excluded from the calculation of the run length.
 #' Default value is 100.
 #' @references
-#' Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2024)
+#' Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2025)
 #' An Adaptive Multivariate Functional EWMA Control Chart.
-#' To appear in \emph{Journal of Quality Technology}, <doi:10.1080/00224065.2024.2383674>.
+#' \emph{Journal of Quality Technology},  57(1):1--15,
+#' doi:https://doi.org/10.1080/00224065.2024.2383674.
 #'
 #' Lucas, J. M., Saccucci, M. S. (1990)
 #' Exponentially weighted moving average control schemes:
@@ -522,9 +523,10 @@ AMFEWMA_PhaseI_given_pars <- function(mfdobj,
 #' length of each bootstrap sequence to be generated.
 #' Default value is 2000 (which is ignored if the default value
 #' @references
-#' Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2024)
+#' Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2025)
 #' An Adaptive Multivariate Functional EWMA Control Chart.
-#' To appear in \emph{Journal of Quality Technology}, <doi:10.1080/00224065.2024.2383674>.
+#' \emph{Journal of Quality Technology},  57(1):1--15,
+#' doi:https://doi.org/10.1080/00224065.2024.2383674.
 #'
 #' @return
 #' A list with the following elements.

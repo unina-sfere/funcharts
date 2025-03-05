@@ -33,7 +33,7 @@
 #'
 #' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 #' Functional Regression Control Chart.
-#' \emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
+#' \emph{Technometrics}, 63(3):281--294. <doi:10.1080/00401706.2020.1753581>
 #'
 #' Capezza, C., Centofanti, F., Lepore, A., Menafoglio, A., Palumbo, B.,
 #' & Vantini, S. (2023). funcharts: Control charts for multivariate
@@ -262,7 +262,7 @@ sim_funcharts <- function(nobs1 = 1000, nobs_tun = 1000, nobs2 = 60) {
 #'
 #' Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
 #' Functional Regression Control Chart.
-#' \emph{Technometrics}, 63(3), 281--294. <doi:10.1080/00401706.2020.1753581>
+#' \emph{Technometrics}, 63(3):281--294. <doi:10.1080/00401706.2020.1753581>
 simulate_mfd <- function(nobs = 1000,
                          p = 3,
                          R2 = 0.97,
