@@ -17,7 +17,7 @@ one-dimensional intervals. The package is thoroughly illustrated in the
 paper of Capezza et al. (2023). The package provides the methodologies
 proposed in Colosimo and Pacella (2010), Capezza et al. (2020),
 Centofanti et al. (2021), Capezza et al. (2024), Centofanti et al. (2024), Capezza et
-al. (2025), and Centofanti et al. (2025),. Moreover, this package provides a new class `mfd` for
+al. (2025), and Centofanti et al. (2025). Moreover, this package provides a new class `mfd` for
 multivariate functional data that is a wrapper of the class `fd` of the
 package `fda`. See the
 [`vignette("mfd", package = "funcharts")`](https://unina-sfere.github.io/funcharts/articles/mfd.html).
