@@ -16,8 +16,8 @@ process monitoring of multivariate functional data densely observed on
 one-dimensional intervals. The package is thoroughly illustrated in the
 paper of Capezza et al. (2023). The package provides the methodologies
 proposed in Colosimo and Pacella (2010), Capezza et al. (2020),
-Centofanti et al. (2021), Capezza et al. (2024a), and Capezza et
-al. (2024b). Moreover, this package provides a new class `mfd` for
+Centofanti et al. (2021), Capezza et al. (2024), Centofanti et al. (2024), Capezza et
+al. (2025), and Centofanti et al. (2025),. Moreover, this package provides a new class `mfd` for
 multivariate functional data that is a wrapper of the class `fd` of the
 package `fda`. See the
 [`vignette("mfd", package = "funcharts")`](https://unina-sfere.github.io/funcharts/articles/mfd.html).
@@ -35,12 +35,13 @@ In particular:
   chart (FRCC), i.e. control charts for monitoring a functional response
   variable conditionally on multivariate functional covariates. See the
   [`vignette("centofanti2021", package = "funcharts")`](https://unina-sfere.github.io/funcharts/articles/centofanti2021.html).
-- Capezza et al. (2024a) propose the adaptive multivariate functional
+- Capezza et al. (2025) propose the adaptive multivariate functional
   EWMA (AMFEWMA) control chart.
-- Capezza et al. (2024b) propose the robust multivariate functional
+- Capezza et al. (2024) propose the robust multivariate functional
   control chart (RoMFCC).
 - Centofanti et al. (2024) propose the functional real-time monitoring
   (FRTM) control chart.
+- Centofanti et al. (2025) propose the Adaptive Multivariate Functional Control Chart (AMFCC).
 
 ## Installation
 
@@ -59,28 +60,31 @@ devtools::install_github("unina-sfere/funcharts")
 
 # References
 
-- Capezza C, Centofanti F, Lepore A, Menafoglio A, Palumbo B,
+- Capezza C., Centofanti F., Lepore A., Menafoglio A., Palumbo B.,
   Vantini S. (2023) funcharts: control charts for multivariate
   functional data in R. *Journal of Quality Technology*,
   <doi:10.1080/00224065.2023.2219012>.
-- Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)
+- Capezza C., Lepore A., Menafoglio A., Palumbo B., Vantini S. (2020)
   Control charts for monitoring ship operating conditions and
   CO<sub>2</sub> emissions based on scalar-on-function regression.
   *Applied Stochastic Models in Business and Industry*, 36(3):477–500,
   <doi:10.1002/asmb.2507>
-- Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B.
-  (2024a) An Adaptive Multivariate Functional EWMA Control Chart. To
-  appear in *Journal of Quality Technology*,
+- Capezza C., Capizzi G., Centofanti F., Lepore A., Palumbo B.
+  (2025) An Adaptive multivariate functional EWMA control chart.
+   *Journal of Quality Technology*, 57(1), 1-15,
   <doi:https://doi.org/10.1080/00224065.2024.2383674>.
-- Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024b) Robust
-  Multivariate Functional Control Charts. *Technometrics*,
+- Capezza C., Centofanti F., Lepore A., Palumbo B. (2024) Robust
+  multivariate functional control charts. *Technometrics*,
   66(4):531–547, <doi:10.1080/00401706.2024.2327346>.
-- Centofanti F, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2021)
-  Functional Regression Control Chart. *Technometrics*, 63(3):281--294,
+- Centofanti F., Lepore A., Menafoglio A., Palumbo B., Vantini S. (2021)
+  Functional regression control chart. *Technometrics*, 63(3):281--294,
   <doi:10.1080/00401706.2020.1753581>.
-- Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
+- Centofanti F., Lepore A., Kulahci M., and Spooner M. P. (2024).
   Real-time monitoring of functional data. Accepted for publication in
-  *Journal of Quality Technology*.
+  *Journal of Quality Technology*, <doi:10.1080/00224065.2024.2430978>.
+- Centofanti F., Lepore A., and Palumbo B. (2025).
+  An adaptive multivariate functional control chart. Accepted for publication in
+  *Technometrics*.
 - Colosimo BM, Pacella, M. (2010) A comparison study of control charts
   for statistical monitoring of functional data. *International Journal
   of Production Research*, 48(6), 1575-1601,
