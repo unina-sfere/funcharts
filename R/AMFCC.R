@@ -720,10 +720,10 @@ plot.AMFCC_PhaseI <- function(x, ...) {
     df <- dplyr::mutate(df, variables = factor(variables, levels = paste0("X", 1:p)))
     plot <- ggplot2::ggplot(df) +
       ggplot2::geom_col(ggplot2::aes(
-        x = df$variables,
-        y = df$contribution,
-        fill = df$ooc,
-        alpha = I(df$alpha_vec)
+        x = variables,
+        y = contribution,
+        fill = ooc,
+        alpha = I(alpha_vec)
       ),
       width = 0.7) +
       ggplot2::theme_bw() + ggplot2::xlab("") +
@@ -733,10 +733,10 @@ plot.AMFCC_PhaseI <- function(x, ...) {
             legend.position = "none") +
       ggplot2::scale_fill_manual(values = c("FALSE" = "grey", "TRUE" = "tomato1")) +
       ggplot2::geom_segment(ggplot2::aes(
-        x = df$x,
-        xend = df$xend,
-        y = df$limit,
-        yend = df$limit
+        x = x,
+        xend = xend,
+        y = limit,
+        yend = limit
       ),
       col = "black") +
       ggplot2::scale_x_discrete(labels = sss) +
