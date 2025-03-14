@@ -482,7 +482,7 @@ rpca.fd <- function(fdobj,
 #'
 #' Agostinelli, C., Leung, A., Yohai, V. J., and Zamar, R. H. (2015).
 #' Robust estimation of
-#' multivariate location and scatter in the presence of cellwise and
+#' multivariate location and scatter in the presence of componentwise and
 #' casewise contamination.
 #' \emph{Test}, 24(3):441–461.
 #'
@@ -492,7 +492,7 @@ rpca.fd <- function(fdobj,
 #'
 #' Leung, A., Yohai, V., and Zamar, R. (2017).
 #' Multivariate location and scatter matrix
-#' estimation under cellwise and casewise contamination.
+#' estimation under componentwise and casewise contamination.
 #' \emph{Computational Statistics & Data Analysis}, 111:59–76.
 #'
 #' @examples
