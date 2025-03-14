@@ -347,7 +347,7 @@ AMFCC_PhaseI <- function(data_tra,
 
 
 
-#' @title Phase II of the daptive Multivariate Functional Control Chart (AMFCC).
+#' @title Phase II of the Adaptive Multivariate Functional Control Chart (AMFCC).
 #' @description This function implements the monitoring phase (Phase II) of the
 #' Adaptive Multivariate Functional Control Chart.
 #'

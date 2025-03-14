@@ -17,7 +17,7 @@ Accepted for publication in \emph{Technometrics}.
 * `FRTM_PhaseII()` performs Phase II of the FRTM method.
 * `cov_mfd()` calculates the covariance of multivariate functional data returning a `bifd` object.
 * `cor_mfd()` calculates the correlation of multivariate functional data returning a `bifd` object.
-* `mean_mfd()` calculates the mean of multivariate functional data, returing an `mfd` object.
+* `mean_mfd()` calculates the mean of multivariate functional data, returning an `mfd` object.
 
 References:
 

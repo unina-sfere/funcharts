@@ -1836,7 +1836,7 @@ tra_warp <- function(h_fd, type = "clog") {
 #'
 #' \code{k_weights} The vector of the four constants in the inner product computation.
 #'
-#' \code{x_fd_list} A List of two elements: the list of the registered functions and the list of the centred log-ratio transformation of
+#' \code{x_fd_list} A List of two elements: the list of the registered functions and the list of the centered log-ratio transformation of
 #'  the first derivatives of the normalized warping functions.
 #'
 #' \code{sc_mat} Two column matrix corresponding to the scalar part of the observations used.
