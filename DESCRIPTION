@@ -1,7 +1,7 @@
 Package: funcharts
 Type: Package
 Title: Functional Control Charts
-Version: 1.6.0.9999
+Version: 1.7.0
 Authors@R: c(
     person("Christian", "Capezza", 
       email = "christian.capezza@unina.it", 

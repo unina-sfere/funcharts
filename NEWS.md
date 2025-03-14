@@ -1,4 +1,4 @@
-# funcharts 1.6.0.9999
+# funcharts 1.7.0
 
 * `AMFCC_PhaseI()` performs Phase I of the Adaptive Multivariate Functional Control Chart of Centofanti et al. (2025).
 * `AMFCC_PhaseII()` performs Phase II of the Adaptive Multivariate Functional Control Chart of Centofanti et al. (2025).
