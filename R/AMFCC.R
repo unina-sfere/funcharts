@@ -659,7 +659,11 @@ AMFCC_PhaseII <- function(data = NULL,
 #' @inherit AMFCC_PhaseI return examples
 plot.AMFCC_PhaseI <- function(x, ...) {
 
-  variables <- NULL
+  if (missing(variables)) variables <- NULL
+  if (missing(contribution)) contribution <- NULL
+  if (missing(ooc)) ooc <- NULL
+  if (missing(xend)) xend <- NULL
+  if (missing(limit)) limit <- NULL
 
   aa <- list(...)
   mod <- x
