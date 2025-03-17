@@ -2,7 +2,7 @@
 % Please edit documentation in R/AMFCC.R
 \name{AMFCC_PhaseII}
 \alias{AMFCC_PhaseII}
-\title{Phase II of the daptive Multivariate Functional Control Chart (AMFCC).}
+\title{Phase II of the Adaptive Multivariate Functional Control Chart (AMFCC).}
 \usage{
 AMFCC_PhaseII(data = NULL, mod_Phase_I, ncores = 1)
 }
