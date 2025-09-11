@@ -777,7 +777,7 @@ get_mfd2 <- function(data,
   q <- basis$nbasis
   p_var <- max(data$var)
   N_data <- length(unique(data$curve))
-  W_der <- eval.penalty(basis, 2)
+  W_der <- fda::eval.penalty(basis, 2)
   coef_mat <-
     coef_mat_0 <- array(0, c(q, length(lambda_s_seq), p_var))
 
@@ -787,7 +787,7 @@ get_mfd2 <- function(data,
                                 data$var == jj]
     grid_i_list[[jj]] <-
       grid[data$timeindex[data$curve == ind_obs & data$var == jj]]
-    S_list[[jj]] <- eval.basis(grid_i_list[[jj]], basis)
+    S_list[[jj]] <- fda::eval.basis(grid_i_list[[jj]], basis)
   }
 
   for (ii in 1:length(lambda_s_seq)) {

@@ -98,6 +98,112 @@ pca_mfd <- function(mfdobj, scale = TRUE, nharm = 20) {
 
 }
 
+#' Predict from a multivariate functional PCA
+#'
+#' Computes either the scores of new observations on selected principal
+#' components, or their reconstruction from the selected components,
+#' given a PCA fitted by \code{\link{pca_mfd}}.
+#'
+#' This function is an S3 method for objects of class \code{"pca_mfd"}.
+#' It is usually called via the generic \code{\link{predict}} function.
+#'
+#' @name predict.pca_mfd
+#' @method predict pca_mfd
+#'
+#' @param object An object of class \code{"pca_mfd"}, typically the output of
+#'   \code{\link{pca_mfd}}.
+#' @param newdata An object of class \code{"mfd"} containing the new
+#'   multivariate functional data to be projected. If \code{NULL}, the training
+#'   data used to fit \code{object} are used.
+#' @param components Integer vector specifying the indices of the principal
+#'   components to use. Defaults to all available components.
+#' @param type Character string: either \code{"scores"} (default) to return the
+#'   scores of \code{newdata}, or \code{"reconstruction"} to return the data
+#'   reconstructed from the selected components.
+#' @param ... Further arguments passed to or from other methods (not used).
+#'
+#' @details
+#' The new data are first centered and (optionally) scaled using the functional
+#' center and scale stored in the PCA object.
+#' * If \code{type = "scores"}, inner products with the selected eigenfunctions
+#'   are computed and summed across basis functions.
+#' * If \code{type = "reconstruction"}, the predicted functional data are
+#'   reconstructed from the scores and harmonics, and then (if applicable)
+#'   \code{\link{descale_mfd}} is used to undo centering and scaling.
+#'
+#' @return
+#' * If \code{type = "scores"}, a numeric matrix of dimension
+#'   \eqn{nobs \times length(components)}.
+#' * If \code{type = "reconstruction"}, an object of class \code{"mfd"}.
+#'
+#' @seealso \code{\link{pca_mfd}}, \code{\link{scale_mfd}}, \code{\link{descale_mfd}}
+#'
+#' @examples
+#' \dontrun{
+#' fit <- pca_mfd(mfdobj, nharm = 5)
+#' # Scores for new data:
+#' scores_new <- predict(fit, new_mfd, components = 1:3, type = "scores")
+#' # Reconstruction:
+#' recon_new  <- predict(fit, new_mfd, components = 1:3, type = "reconstruction")
+#'
+#' # If newdata = NULL, use the training data stored in the PCA object:
+#' scores_train <- predict(fit, NULL, components = 1:3, type = "scores")
+#' }
+#'
+#' @export
+predict.pca_mfd <- function(object, newdata = NULL,
+                            components = seq_len(ncol(object$pcscores)),
+                            type = c("scores", "reconstruction"), ...) {
+  type <- match.arg(type)
+
+  # Use training data if newdata is missing or NULL
+  if (is.null(newdata)) {
+    if (is.null(object$data)) {
+      stop("'newdata' is NULL and no training data were stored in the 'pca' object.")
+    }
+    newdata <- object$data
+  }
+
+  # checks
+  if (!is.mfd(newdata)) {
+    stop("'newdata' must be an object of class 'mfd'.")
+  }
+  if (!identical(newdata$basis, object$data$basis)) {
+    stop("The basis of 'newdata' must be identical to that used in 'object'.")
+  }
+  if (nvar(newdata) != dim(object$center_fd$coefs)[3]) {
+    stop("The number of variables in 'newdata' does not match 'object'.")
+  }
+  if (any(components < 1 | components > length(object$values))) {
+    stop("Invalid 'components' index: must be between 1 and the number of components in 'object'.")
+  }
+
+  # center and scale
+  newdata_scaled <- scale_mfd(
+    newdata,
+    center = object$center_fd,
+    scale  = if (object$scale) object$scale_fd else FALSE
+  )
+
+  # scores
+  inprods <- get_pre_scores(object, components, newdata_scaled)
+  scores <- apply(inprods, 1:2, sum)
+
+  if (type == "scores") {
+    return(scores)
+  } else {
+    # reconstruction
+    yhat <- get_fit_pca_given_scores(scores, object$harmonics[components])
+    if (object$scale) {
+      yhat <- descale_mfd(yhat, center = object$center_fd, scale = object$scale_fd)
+    }
+    return(yhat)
+  }
+}
+
+
+
+
 #' Plot the harmonics of a \code{pca_mfd} object
 #'
 #' @param pca

@@ -3,7 +3,7 @@
 \name{times_mfd}
 \alias{times_mfd}
 \alias{*.mfd}
-\title{Pointwise product of multivariate functional data}
+\title{Pointwise product of multivariate functional data (and scalar multiplication)}
 \usage{
 times_mfd(mfdobj1, mfdobj2)
 
@@ -25,6 +25,8 @@ replication (one observation) and the other contains multiple, the single
 replication is recycled across observations before multiplication.
 }
 \details{
+Alternatively, it also compute the product of an \code{mfd} object with a numeric scalar.
+
 Let coefficient arrays have dimensions \eqn{(nbasis, nobs, nvar)}.
 The function:
 \itemize{
@@ -42,11 +44,9 @@ the common basis so that the result is re-expanded on the same basis.
 }
 \examples{
 # Assuming mfdobj_a and mfdobj_b are 'mfd' objects on the same basis:
-# Elementwise product:
-# prod_ab <- times_mfd(mfdobj_a, mfdobj_b)
-
-# Broadcasting a single observation across multiple:
-# prod_bcast <- times_mfd(mfdobj_a[ ,1, , drop = FALSE], mfdobj_b)
+# mfdobj_a * mfdobj_b   # elementwise product
+# 2 * mfdobj_a          # scalar multiplication
+# mfdobj_a * 0.5        # scalar multiplication
 
 }
 \seealso{

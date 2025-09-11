@@ -78,7 +78,7 @@ plot.mFPCA<-function(x,...){
     if(!is.null(mod$eigvect_sc)) graphics::layout(matrix(1:(K*(nvar+1)),K,nvar+1,byrow=TRUE), widths = c(rep(1,nvar),0.4)) else  graphics::layout(matrix(1:(K*(nvar)),K,nvar,byrow=TRUE), widths = rep(1,nvar))
     tot_var<-round(mod$varprop*100,digits = 2)
     for (ii in 1:K) {
-      per_fd<-sapply(1:nvar,function(iii)inprod(mod$eigfun_fd[[iii]][ii],mod$eigfun_fd[[iii]][ii])*weights[iii])
+      per_fd<-sapply(1:nvar,function(iii)fda::inprod(mod$eigfun_fd[[iii]][ii],mod$eigfun_fd[[iii]][ii])*weights[iii])
       per_sc<-if(!is.null(mod$eigvect_sc))diag(mod$eigvect_sc[,ii]%*%t(mod$eigvect_sc[,ii])%*%diag(weights[(nvar+1):length(weights)])) else NULL
       per<-round(c(per_fd,per_sc)/sum(c(per_fd,per_sc))*100,digits = 2)
       for(kk in 1:nvar){

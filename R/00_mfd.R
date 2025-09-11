@@ -284,8 +284,26 @@ plus_mfd <- function(mfdobj1, mfdobj2) {
 #' @rdname plus_mfd
 #' @export
 `+.mfd` <- function(mfdobj1, mfdobj2) {
-  plus_mfd(mfdobj1, mfdobj2)
+  # Case: scalar + mfd
+  if (is.numeric(mfdobj1) && length(mfdobj1) == 1 && is.mfd(mfdobj2)) {
+    out <- mfdobj2
+    out$coefs <- out$coefs + mfdobj1
+    return(out)
+  }
+  # Case: mfd + scalar
+  if (is.mfd(mfdobj1) && is.numeric(mfdobj2) && length(mfdobj2) == 1) {
+    out <- mfdobj1
+    out$coefs <- out$coefs + mfdobj2
+    return(out)
+  }
+  # Case: both mfd → original behavior
+  if (is.mfd(mfdobj1) && is.mfd(mfdobj2)) {
+    return(plus_mfd(mfdobj1, mfdobj2))
+  }
+  # Otherwise → error
+  stop("At least one of the operands must be an 'mfd' object, and the other either 'mfd' or scalar numeric.")
 }
+
 
 
 #' Subtract multivariate functional data (and unary negation)
@@ -323,17 +341,43 @@ minus_mfd <- function(mfdobj1, mfdobj2) {
 #' @rdname minus_mfd
 #' @export
 `-.mfd` <- function(mfdobj1, mfdobj2) {
-  minus_mfd(mfdobj1, mfdobj2)
+  # Unary minus
+  if (missing(mfdobj2)) {
+    out <- mfdobj1
+    out$coefs <- -out$coefs
+    return(out)
+  }
+  # Case: scalar - mfd
+  if (is.numeric(mfdobj1) && length(mfdobj1) == 1 && is.mfd(mfdobj2)) {
+    out <- mfdobj2
+    out$coefs <- mfdobj1 - out$coefs
+    return(out)
+  }
+  # Case: mfd - scalar
+  if (is.mfd(mfdobj1) && is.numeric(mfdobj2) && length(mfdobj2) == 1) {
+    out <- mfdobj1
+    out$coefs <- out$coefs - mfdobj2
+    return(out)
+  }
+  # Case: both mfd → original behavior
+  if (is.mfd(mfdobj1) && is.mfd(mfdobj2)) {
+    return(minus_mfd(mfdobj1, mfdobj2))
+  }
+  # Otherwise → error
+  stop("At least one of the operands must be an 'mfd' object, and the other either 'mfd' or scalar numeric.")
 }
 
 
 
-#' Pointwise product of multivariate functional data
+
+#' Pointwise product of multivariate functional data (and scalar multiplication)
 #'
 #' Computes the elementwise (pointwise) product of two objects of class `mfd`,
 #' returning an `mfd` on the same basis. If one object contains a single
 #' replication (one observation) and the other contains multiple, the single
 #' replication is recycled across observations before multiplication.
+#'
+#' Alternatively, it also compute the product of an `mfd` object with a numeric scalar.
 #'
 #' @param mfdobj1,mfdobj2 Objects of class `mfd` defined on the same basis.
 #'
@@ -364,11 +408,9 @@ minus_mfd <- function(mfdobj1, mfdobj2) {
 #'
 #' @examples
 #' # Assuming mfdobj_a and mfdobj_b are 'mfd' objects on the same basis:
-#' # Elementwise product:
-#' # prod_ab <- times_mfd(mfdobj_a, mfdobj_b)
-#'
-#' # Broadcasting a single observation across multiple:
-#' # prod_bcast <- times_mfd(mfdobj_a[ ,1, , drop = FALSE], mfdobj_b)
+#' # mfdobj_a * mfdobj_b   # elementwise product
+#' # 2 * mfdobj_a          # scalar multiplication
+#' # mfdobj_a * 0.5        # scalar multiplication
 #'
 #' @export
 times_mfd <- function(mfdobj1, mfdobj2) {
@@ -419,7 +461,24 @@ times_mfd <- function(mfdobj1, mfdobj2) {
 #' @rdname times_mfd
 #' @export
 `*.mfd` <- function(mfdobj1, mfdobj2) {
-  times_mfd(mfdobj1, mfdobj2)
+  # Case: scalar * mfd
+  if (is.numeric(mfdobj1) && length(mfdobj1) == 1 && is.mfd(mfdobj2)) {
+    out <- mfdobj2
+    out$coefs <- out$coefs * mfdobj1
+    return(out)
+  }
+  # Case: mfd * scalar
+  if (is.mfd(mfdobj1) && is.numeric(mfdobj2) && length(mfdobj2) == 1) {
+    out <- mfdobj1
+    out$coefs <- out$coefs * mfdobj2
+    return(out)
+  }
+  # Case: both mfd → use times_mfd
+  if (is.mfd(mfdobj1) && is.mfd(mfdobj2)) {
+    return(times_mfd(mfdobj1, mfdobj2))
+  }
+  # Otherwise → error
+  stop("At least one of the operands must be an 'mfd' object, and the other either 'mfd' or scalar numeric.")
 }
 
 

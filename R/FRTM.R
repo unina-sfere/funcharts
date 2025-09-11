@@ -969,9 +969,9 @@ OEBFDTW_c <-
                              nbasis = max(4, n_basis_x),
                              norder = 4)
     }
-    h_fd <- fd(h_opt[, 2], basis_h)
+    h_fd <- fda::fd(h_opt[, 2], basis_h)
     if (get_fd == "x_reg") {
-      x_tilde <- eval.fd(h_opt[, 2], x_fd)
+      x_tilde <- fda::eval.fd(h_opt[, 2], x_fd)
       x_reg <- fda::smooth.basis(h_opt[, 1], x_tilde, basis_x)$fd
       der_reg = r_reg = der_tilde = x_fd_std = template_fd_std = der_x_fd_std =
         der_template_fd_std = x_fd_reg_std = der_x_reg_std = NULL
@@ -1038,10 +1038,10 @@ obj_function <-
 
     if (is.null(der_0))
       der_0 <- dom_x / dom_tem
-    eval_x_fd_st <- eval.fd(h[, 2], x_fd_std)
-    eval_tem_fd_st <- eval.fd(h[, 1], template_fd_std)
-    eval_der_x_fd_st <- eval.fd(h[, 2], der_x_fd_std)
-    eval_der_tem_fd_st <- eval.fd(h[, 1], der_template_fd_std)
+    eval_x_fd_st <- fda::eval.fd(h[, 2], x_fd_std)
+    eval_tem_fd_st <- fda::eval.fd(h[, 1], template_fd_std)
+    eval_der_x_fd_st <- fda::eval.fd(h[, 2], der_x_fd_std)
+    eval_der_tem_fd_st <- fda::eval.fd(h[, 1], der_template_fd_std)
     loss_dtw <- quad_sum <- der_sum <- der <- numeric(N)
     loss_dtw[1] <- 0
     quad_sum[1] <- der_sum[1] <- der[1] <- 0
@@ -1088,7 +1088,7 @@ completion_fd <- function(x_fd, h_fd, template_fd, seq_t) {
   }
   basis_h_r <-
     fda::create.bspline.basis(range_t, breaks = eval_seq_h, norder = 2)
-  h_fd_com <- fd(eval_h_mat, basis_h_r)
+  h_fd_com <- fda::fd(eval_h_mat, basis_h_r)
   basis_x_r <-
     fda::create.bspline.basis(range_t, nbasis = x_fd[[1]]$basis$nbasis)
   eval_x_mat <- matrix(0, length(eval_seq_x), length(h_fd))
@@ -1149,7 +1149,7 @@ complete_h <-
         fda::smooth.basis(eval_h, eval_seq, basis_h_r_inv)$fd
     else
       NULL
-    h_fd_com <- fd(eval_h, basis_h_i)
+    h_fd_com <- fda::fd(eval_h, basis_h_i)
     out <- list(
       eval_h = eval_h,
       eval_seq = eval_seq,
@@ -1319,7 +1319,7 @@ get_template <-
                       align_output_IC$h_fd,
                       template_fd,
                       seq_t = seq_t)
-      template_fd <- mean.fd(complete_fd$x_fd_com)
+      template_fd <- fda::mean.fd(complete_fd$x_fd_com)
       der_template_fd <- fda::deriv.fd(template_fd)
     }
     out <- list(
@@ -1386,7 +1386,7 @@ get_ul <- function(h_fd,
       grid_x[-ind_del]
     basis_l <-
       fda::create.bspline.basis(range(grid_l_t), breaks = grid_l_t , norder = 2)
-    l_fd <- fd(l_t_r, basis_l)
+    l_fd <- fda::fd(l_t_r, basis_l)
     u_t_r1 <- lim_mat[, 2]
     ind_del <-
       c(which(u_t_r1 <= 0)[-length(which(u_t_r1 <= 0))], which(u_t_r1 >= 1)[-1])
@@ -1400,7 +1400,7 @@ get_ul <- function(h_fd,
       grid_x[-ind_del]
     basis_u <-
       fda::create.bspline.basis(range(grid_u_t), breaks = grid_u_t , norder = 2)
-    u_fd <- fd(u_t_r, basis_u)
+    u_fd <- fda::fd(u_t_r, basis_u)
     fdp <- fdm <- NULL
   }
   else if (type == "band") {
@@ -1884,12 +1884,12 @@ mFPCA <-
     if (!is.null(h_fd)) {
       F_0 <- fda::eval.fd(range[1], h_fd)
       F_1 <- fda::eval.fd(range[2], h_fd)
-      F_0_fd <- fd(F_0, create.constant.basis(range))
-      F_1_fd <- fd(F_1, create.constant.basis(range))
+      F_0_fd <- fda::fd(F_0, fda::create.constant.basis(range))
+      F_1_fd <- fda::fd(F_1, fda::create.constant.basis(range))
       diff <- (F_1 - F_0)
       diff[which(diff == 0)]  <-  1
-      F_10inv_fd <- fd((diff) ^ -1, create.constant.basis(range))
-      F_10_fd <- fd((F_1 - F_0), create.constant.basis(range))
+      F_10inv_fd <- fda::fd((diff) ^ -1, fda::create.constant.basis(range))
+      F_10_fd <- fda::fd((F_1 - F_0), fda::create.constant.basis(range))
 
       max_h  <-  max(F_1 - F_0)
       delta_xamp  <-  max(x_fd$coefs) - min(x_fd$coefs)
@@ -1949,7 +1949,7 @@ fpc_hy <-
            ncom = "kaiserrule",
            par_ncom = 0.25) {
     type  <-  "std"
-    if (is.fd(x_fd_list))
+    if (fda::is.fd(x_fd_list))
       x_fd_list <- list(x_fd_list)
     n_fd_var <- length(x_fd_list)
     if (n_fd_var > 1)
@@ -1963,7 +1963,7 @@ fpc_hy <-
     nobs <- dim(x_fd_list[[1]]$coefs)[2]
     mean_fd_list <-
       lapply(1:n_fd_var, function(ii)
-        mean.fd(x_fd_list[[ii]]))
+        fda::mean.fd(x_fd_list[[ii]]))
     sd_fd_list <-
       lapply(1:n_fd_var, function(ii)
         new_sd.fd(x_fd_list[[ii]]))
@@ -2001,7 +2001,7 @@ fpc_hy <-
       sd_sc_mat <- rep(1, length(sd_sc_mat))
     x_fd_list <-
       lapply(1:n_fd_var, function(ii)
-        new_mul.fd(center.fd(x_fd_list[[ii]]), new_sqrt.fd(sd_fd_list[[ii]], -1)))
+        new_mul.fd(fda::center.fd(x_fd_list[[ii]]), new_sqrt.fd(sd_fd_list[[ii]], -1)))
     if (!is.null(sc_mat)) {
       sc_mat_n <- scale(sc_mat, scale = TRUE)
       if (sum(is.na(sc_mat_n)) != 0)
@@ -2049,7 +2049,7 @@ fpc_hy <-
       x_fd_list[[ii]]$basis)
     W_list <-
       lapply(1:n_fd_var, function(ii)
-        eval.penalty(basis_list[[ii]]))
+        fda::eval.penalty(basis_list[[ii]]))
     nbasis_i <- sapply(1:n_fd_var, function(ii)
       dim(W_list[[ii]])[1])
     nbasis <- sum(nbasis_i)
@@ -2120,7 +2120,7 @@ fpc_hy <-
     }
     eigfun_fd_list <-
       lapply(1:n_fd_var, function(ii)
-        fd(eigvect_fd_list[[ii]], basis_list[[ii]]))
+        fda::fd(eigvect_fd_list[[ii]], basis_list[[ii]]))
     eigvect_sc <-
       if (!is.null(sc_mat))
         eigvect[(nbasis + 1):dim_aug, 1:K]
@@ -2198,7 +2198,7 @@ fit_pca_hy <-
     if (is.null(mean_fd_list))
       mean_fd_list <-
       lapply(1:n_fd_var, function(ii)
-        mean.fd(x_fd_list[[ii]]))
+        fda::mean.fd(x_fd_list[[ii]]))
     if (is.null(mean_sc_mat))
       if (!is.null(sc_mat))
         mean_sc_mat <- colMeans(sc_mat)
@@ -2225,7 +2225,7 @@ fit_pca_hy <-
       score_fd
     fit_list_norm <-
       lapply(1:n_fd_var, function(ii)
-        fd(eigfun_fd_list[[ii]]$coefs %*% t(scores), eigfun_fd_list[[ii]]$basis))
+        fda::fd(eigfun_fd_list[[ii]]$coefs %*% t(scores), eigfun_fd_list[[ii]]$basis))
     fit_list = fit_list_norm
     if (!is.null(sc_mat)) {
       sc_fit_norm <-
@@ -2255,7 +2255,7 @@ fit_pca_hy <-
     }
     for (ii in 1:n_fd_var) {
       fit_list[[ii]] <-
-        fd(matrix(rep(mean_fd_list[[ii]]$coefs, dim(scores)[1]), ncol = dim(scores)[1]), mean_fd_list[[ii]]$basis) +
+        fda::fd(matrix(rep(mean_fd_list[[ii]]$coefs, dim(scores)[1]), ncol = dim(scores)[1]), mean_fd_list[[ii]]$basis) +
         new_mul.fd(fit_list[[ii]], sd_fd_list[[ii]])
     }
     if (!is.null(sc_mat)) {
@@ -2294,10 +2294,10 @@ get_scores_pcahy <- function(x_fd,
     eval_seq <- seq(range[1], range[2], length.out = 200)
     F_0 <- fda::eval.fd(range[1], h_fd)
     F_1 <- fda::eval.fd(range[2], h_fd)
-    F_0_fd <- fd(F_0, create.constant.basis(range))
-    F_1_fd <- fd(F_1, create.constant.basis(range))
-    F_10inv_fd <- fd((F_1 - F_0) ^ -1, create.constant.basis(range))
-    F_10_fd <- fd((F_1 - F_0), create.constant.basis(range))
+    F_0_fd <- fda::fd(F_0, fda::create.constant.basis(range))
+    F_1_fd <- fda::fd(F_1, fda::create.constant.basis(range))
+    F_10inv_fd <- fda::fd((F_1 - F_0) ^ -1, fda::create.constant.basis(range))
+    F_10_fd <- fda::fd((F_1 - F_0), fda::create.constant.basis(range))
     h_fd_s <-  (h_fd - F_0_fd) * F_10inv_fd
     h_s_tr <- tra_warp(fda::deriv.fd(h_fd_s), type = "clog")
     sc_mat <- cbind(t(F_0), t(log10(F_1 - F_0)))
@@ -2358,7 +2358,9 @@ get_scores_pcahy <- function(x_fd,
       score_sc<-sc_mat_cen%*%diag(we_sc)%*%eigvect_sc
   }
   scores<-if(!is.null(sc_mat))  score_fd+score_sc else score_fd
-  fit_list_norm<-lapply(1:n_fd_var, function(ii)fd(eigfun_fd_list[[ii]]$coefs%*%t(scores),eigfun_fd_list[[ii]]$basis))
+  fit_list_norm<-lapply(1:n_fd_var, function(ii) {
+    fda::fd(eigfun_fd_list[[ii]]$coefs%*%t(scores),eigfun_fd_list[[ii]]$basis)
+  })
   fit_list=fit_list_norm
   if(!is.null(sc_mat)){
     sc_fit_norm<- if(is.null(dim(eigvect_sc)))scores%*%eigvect_sc else scores%*%t(eigvect_sc)
@@ -2382,7 +2384,7 @@ get_scores_pcahy <- function(x_fd,
   }
 
   for(ii in 1:n_fd_var){
-    fit_list[[ii]]<-fd(matrix(rep(mean_fd_list[[ii]]$coefs,dim(scores)[1]),ncol=dim(scores)[1]),mean_fd_list[[ii]]$basis)+new_mul.fd(fit_list[[ii]],sd_fd_list[[ii]])
+    fit_list[[ii]]<-fda::fd(matrix(rep(mean_fd_list[[ii]]$coefs,dim(scores)[1]),ncol=dim(scores)[1]),mean_fd_list[[ii]]$basis)+new_mul.fd(fit_list[[ii]],sd_fd_list[[ii]])
 
   }
   if(!is.null(sc_mat)){
@@ -2606,13 +2608,13 @@ get_T2SPE_fd <- function(T_2_mat, SPE_2_mat, seq_x) {
     seq_i <- seq_x[ind]
     if (length(seq_i) > 1) {
       basis <- fda::create.bspline.basis(range(seq_i), breaks = seq_i, norder = 2)
-      T2_fd[[ii]] <- fd(values, basis)
-      SPE_fd[[ii]] <- fd(values_spe, basis)
+      T2_fd[[ii]] <- fda::fd(values, basis)
+      SPE_fd[[ii]] <- fda::fd(values_spe, basis)
     }
     else{
       print("seq_x too short!!")
       T2_fd[[ii]] <- SPE_fd[[ii]] <- NULL
-      # SPE_fd[[ii]]<-fd(values_spe,basis)
+      # SPE_fd[[ii]]<-fda::fd(values_spe,basis)
     }
 
   }
@@ -3320,9 +3322,7 @@ FRTM_PhaseI <-
       envir = environment()
     )
     parallel::clusterEvalQ(cl,  library(funcharts))
-    pca_list <-
-      parallel::parLapply(cl, 1:length(seq_t), function(ii)
-        parr_pca(ii))
+    pca_list <- parallel::parLapply(cl, 1:length(seq_t), function(ii) parr_pca(ii))
     parallel::stopCluster(cl)
   }
 

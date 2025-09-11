@@ -225,5 +225,5 @@ test_that("cov_mfd and cor_mfd functions work", {
 
 test_that("mean_mfd works", {
   mfdobj <- data_sim_mfd()
-  expect_is(mean_mfd(mfdobj), "mfd")
+  expect_is(mean(mfdobj), "mfd")
 })
