@@ -3,7 +3,7 @@ l_grid <- 10
 p <- 2
 grid <- seq(0, 1, l = l_grid)
 
-
+set.seed(123)
 Xall_tra <- funcharts::simulate_mfd(
   nobs = N,
   p = p,

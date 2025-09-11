@@ -1857,11 +1857,13 @@ get_mfd_fd <- function(fdobj) {
 #' Number of observations in a multivariate functional data object
 #'
 #' @param object An object of class `mfd`.
+#' @param ... Further arguments passed to methods (not used).
 #' @return An integer: the number of observations.
 #' @examples
 #' # nobs(mfdobj)
 #' @export
-nobs.mfd <- function(object) {
+#' @importFrom stats nobs
+nobs.mfd <- function(object, ...) {
   dim(object$coefs)[2]
 }
 
@@ -1870,38 +1872,31 @@ nobs.mfd <- function(object) {
 #' Generic function to extract the number of basis functions from an object.
 #'
 #' @param object An object from which to extract the number of basis functions.
-#' @return An integer: the number of basis functions.
+#' @param ... Further arguments passed to methods (not used).
 #' @export
-nbasis <- function(object) {
+nbasis <- function(object, ...) {
   UseMethod("nbasis")
 }
 
-#' @describeIn nbasis Method for `mfd` objects
-#' @param object An object of class `mfd`.
-#' @examples
-#' # nbasis(mfdobj)
 #' @export
-nbasis.mfd <- function(object) {
+nbasis.mfd <- function(object, ...) {
   dim(object$coefs)[1]
 }
+
 
 #' Number of variables
 #'
 #' Generic function to extract the number of variables from an object.
 #'
 #' @param object An object from which to extract the number of variables.
-#' @return An integer: the number of variables.
+#' @param ... Further arguments passed to methods (not used).
 #' @export
-nvar <- function(object) {
+nvar <- function(object, ...) {
   UseMethod("nvar")
 }
 
-#' @describeIn nvar Method for `mfd` objects
-#' @param object An object of class `mfd`.
-#' @examples
-#' # nvar(mfdobj)
 #' @export
-nvar.mfd <- function(object) {
+nvar.mfd <- function(object, ...) {
   dim(object$coefs)[3]
 }
 
@@ -2902,8 +2897,8 @@ plot.mfd <- function(x, y, add = FALSE, common_ylim = TRUE, ...) {
   if (!add) {
     if (is.null(args$mar)) args$mar <- c(4, 4, 0.5, 0.5)
 
-    oldpar <- par(c("mar", "mgp"))
-    on.exit(par(oldpar), add = TRUE)
+    oldpar <- graphics::par(c("mar", "mgp"))
+    on.exit(graphics::par(oldpar), add = TRUE)
 
     graphics::par(mfrow = c(nrow, ncol), mar = args$mar, mgp = c(2.5, 1, 0))
 
@@ -2924,7 +2919,7 @@ plot.mfd <- function(x, y, add = FALSE, common_ylim = TRUE, ...) {
       graphics::box()
 
       per_var_ylims[[ii]] <- ylim_ii
-      per_var_usrs[[ii]]  <- par("usr")  # save panel usr
+      per_var_usrs[[ii]]  <- graphics::par("usr")  # save panel usr
     }
 
     options(
@@ -3015,7 +3010,7 @@ lines.mfd <- function(x, ...) {
 #'
 #' @export
 abline_mfd <- function(a = NULL, b = NULL, h = NULL, v = NULL, ...) {
-  mf <- par("mfrow")
+  mf <- graphics::par("mfrow")
   ncol <- mf[2]
 
   nvar  <- getOption("last_mfd_nvar")
@@ -3025,8 +3020,8 @@ abline_mfd <- function(a = NULL, b = NULL, h = NULL, v = NULL, ...) {
     stop("No stored panel limits found. Call plot.mfd(..., add=FALSE) first.")
   }
 
-  oldpar <- par(c("mar", "mgp", "mfg"))
-  on.exit(par(oldpar), add = TRUE)
+  oldpar <- graphics::par(c("mar", "mgp", "mfg"))
+  on.exit(graphics::par(oldpar), add = TRUE)
 
   ii_row <- 1
   ii_col <- 1

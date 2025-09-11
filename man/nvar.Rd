@@ -2,27 +2,15 @@
 % Please edit documentation in R/00_mfd.R
 \name{nvar}
 \alias{nvar}
-\alias{nvar.mfd}
 \title{Number of variables}
 \usage{
-nvar(object)
-
-\method{nvar}{mfd}(object)
+nvar(object, ...)
 }
 \arguments{
-\item{object}{An object of class \code{mfd}.}
-}
-\value{
-An integer: the number of variables.
+\item{object}{An object from which to extract the number of variables.}
+
+\item{...}{Further arguments passed to methods (not used).}
 }
 \description{
 Generic function to extract the number of variables from an object.
-}
-\section{Methods (by class)}{
-\itemize{
-\item \code{nvar(mfd)}: Method for \code{mfd} objects
-
-}}
-\examples{
-# nvar(mfdobj)
 }

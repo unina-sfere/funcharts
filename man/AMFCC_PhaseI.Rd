@@ -76,6 +76,7 @@ This function implements the design phase (Phase I) of the
 Adaptive Multivariate Functional Control Chart.
 }
 \examples{
+\dontrun{
 library(funcharts)
 N <- 10
 l_grid <- 10
@@ -131,6 +132,7 @@ ncores = 1)
 
 plot(mod_phaseII_AMFCC)
 plot(mod_phaseII_AMFCC,type='cont',ind_obs=1)
+}
 
 }
 \references{

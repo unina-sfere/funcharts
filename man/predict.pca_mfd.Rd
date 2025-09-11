@@ -7,7 +7,7 @@
 \method{predict}{pca_mfd}(
   object,
   newdata = NULL,
-  components = seq_len(length(object$values)),
+  components = seq_len(ncol(object$pcscores)),
   type = c("scores", "reconstruction"),
   ...
 )
@@ -51,8 +51,7 @@ center and scale stored in the PCA object.
 \item If \code{type = "scores"}, inner products with the selected eigenfunctions
 are computed and summed across basis functions.
 \item If \code{type = "reconstruction"}, the predicted functional data are
-reconstructed from the scores and harmonics, and then (if applicable)
-\code{\link{descale_mfd}} is used to undo centering and scaling.
+reconstructed from the scores and harmonics.
 }
 }
 \examples{
@@ -69,5 +68,5 @@ scores_train <- predict(fit, NULL, components = 1:3, type = "scores")
 
 }
 \seealso{
-\code{\link{pca_mfd}}, \code{\link{scale_mfd}}, \code{\link{descale_mfd}}
+\code{\link{pca_mfd}}, \code{\link{scale_mfd}}
 }

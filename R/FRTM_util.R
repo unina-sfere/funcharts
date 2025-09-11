@@ -126,8 +126,8 @@ inprod2<-function (fdobj1, fdobj2 = NULL, Lfdobj1 = fda::int2Lfd(0), Lfdobj2 = f
     }
     else {
       if (temptype == "fourier")
-        basis2 <- create.fourier.basis(temprng, 1)
-      else basis2 <- create.constant.basis(temprng)
+        basis2 <- fda::create.fourier.basis(temprng, 1)
+      else basis2 <- fda::create.constant.basis(temprng)
     }
     fdobj2 <- fda::fd(1, basis2)
   }
@@ -141,7 +141,7 @@ inprod2<-function (fdobj1, fdobj2 = NULL, Lfdobj1 = fda::int2Lfd(0), Lfdobj2 = f
   if (rng[1] < range1[1] || rng[2] > range1[2])
     stop("Limits of integration are inadmissible.")
   if (fda::is.fd(fdobj1) && fda::is.fd(fdobj2) && type1 == "bspline" &&
-      type2 == "bspline" && fda:::is.eqbasis(basisobj1, basisobj2) &&
+      type2 == "bspline" && is.eqbasis(basisobj1, basisobj2) &&
       is.integer(Lfdobj1) && is.integer(Lfdobj2) && length(basisobj1$dropind) ==
       0 && length(basisobj1$dropind) == 0 && wtfd == 0 &&
       all(rng == range1)) {

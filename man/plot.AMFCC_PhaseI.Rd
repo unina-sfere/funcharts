@@ -27,6 +27,7 @@ This function provides plots of either the monitoring statistics
 or the contribution plot for a given observation.
 }
 \examples{
+\dontrun{
 library(funcharts)
 N <- 10
 l_grid <- 10
@@ -82,5 +83,6 @@ ncores = 1)
 
 plot(mod_phaseII_AMFCC)
 plot(mod_phaseII_AMFCC,type='cont',ind_obs=1)
+}
 
 }

@@ -128,15 +128,14 @@ pca_mfd <- function(mfdobj, scale = TRUE, nharm = 20) {
 #' * If \code{type = "scores"}, inner products with the selected eigenfunctions
 #'   are computed and summed across basis functions.
 #' * If \code{type = "reconstruction"}, the predicted functional data are
-#'   reconstructed from the scores and harmonics, and then (if applicable)
-#'   \code{\link{descale_mfd}} is used to undo centering and scaling.
+#'   reconstructed from the scores and harmonics.
 #'
 #' @return
 #' * If \code{type = "scores"}, a numeric matrix of dimension
 #'   \eqn{nobs \times length(components)}.
 #' * If \code{type = "reconstruction"}, an object of class \code{"mfd"}.
 #'
-#' @seealso \code{\link{pca_mfd}}, \code{\link{scale_mfd}}, \code{\link{descale_mfd}}
+#' @seealso \code{\link{pca_mfd}}, \code{\link{scale_mfd}}
 #'
 #' @examples
 #' \dontrun{

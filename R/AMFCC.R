@@ -68,6 +68,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' library(funcharts)
 #' N <- 10
 #' l_grid <- 10
@@ -123,6 +124,7 @@
 #'
 #' plot(mod_phaseII_AMFCC)
 #' plot(mod_phaseII_AMFCC,type='cont',ind_obs=1)
+#' }
 #'
 #' @author F. Centofanti
 #' @references

@@ -4,10 +4,12 @@
 \alias{nobs.mfd}
 \title{Number of observations in a multivariate functional data object}
 \usage{
-\method{nobs}{mfd}(object)
+\method{nobs}{mfd}(object, ...)
 }
 \arguments{
 \item{object}{An object of class \code{mfd}.}
+
+\item{...}{Further arguments passed to methods (not used).}
 }
 \value{
 An integer: the number of observations.

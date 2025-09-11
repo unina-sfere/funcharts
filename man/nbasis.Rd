@@ -2,27 +2,15 @@
 % Please edit documentation in R/00_mfd.R
 \name{nbasis}
 \alias{nbasis}
-\alias{nbasis.mfd}
 \title{Number of basis functions}
 \usage{
-nbasis(object)
-
-\method{nbasis}{mfd}(object)
+nbasis(object, ...)
 }
 \arguments{
-\item{object}{An object of class \code{mfd}.}
-}
-\value{
-An integer: the number of basis functions.
+\item{object}{An object from which to extract the number of basis functions.}
+
+\item{...}{Further arguments passed to methods (not used).}
 }
 \description{
 Generic function to extract the number of basis functions from an object.
-}
-\section{Methods (by class)}{
-\itemize{
-\item \code{nbasis(mfd)}: Method for \code{mfd} objects
-
-}}
-\examples{
-# nbasis(mfdobj)
 }
