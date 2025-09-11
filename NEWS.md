@@ -1,3 +1,9 @@
+# funcharts 1.7.0.9000
+
+* Added `plot()` and `lines()` methods for `mfd` objects.
+* Added `abline_mfd()` function to add lines to every panel in `mfd` plots.
+* Added functions that allow to do standard mathematics with `mfd` objects: `+`, `-`, `*`.
+
 # funcharts 1.7.0
 
 * `AMFCC_PhaseI()` performs Phase I of the Adaptive Multivariate Functional Control Chart of Centofanti et al. (2025).

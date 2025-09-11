@@ -204,6 +204,225 @@ mfd <- function(coef,
 #'
 is.mfd <- function(mfdobj) if (inherits(mfdobj, "mfd")) TRUE else FALSE
 
+#' Add multivariate functional data
+#'
+#' Adds two objects of class `mfd` (elementwise on their coefficient arrays).
+#' The two objects must share the same basis system and number of variables.
+#' If one object contains a single replication (i.e., one observation) and the
+#' other contains multiple, the single replication is replicated across
+#' observations before addition.
+#'
+#' If \code{mfdobj2} is missing, the function returns \code{mfdobj1} unchanged
+#' (i.e., unary plus).
+#'
+#' @param mfdobj1,mfdobj2 Objects of class `mfd`. If \code{mfdobj2} is missing,
+#'   unary plus is applied.
+#'
+#' @details
+#' Let the coefficient arrays have dimensions \eqn{(nbasis, nobs, nvar)}.
+#' The following checks/rules are enforced:
+#' \itemize{
+#'   \item Both inputs must be `mfd` objects; otherwise an error is thrown.
+#'   \item The basis systems must be identical (checked via \code{identical()}).
+#'   \item The number of variables must match.
+#'   \item For the number of observations: if both \eqn{nobs_1} and \eqn{nobs_2}
+#'         are greater than one, they must be equal; otherwise, the object with
+#'         \eqn{nobs = 1} is replicated to match the other.
+#' }
+#'
+#' @return An object of class `mfd` with coefficients equal to the (possibly
+#'   replicated) sum of the inputs. The \code{fdnames} are taken from the input
+#'   providing the observation indexing after replication (if any), otherwise
+#'   from \code{mfdobj1}.
+#'
+#' @seealso \code{\link{nobs}}, \code{\link{nbasis}}, \code{\link{nvar}}, \code{\link{mfd}}
+#'
+#' @examples
+#' # Assuming mfdobj_a and mfdobj_b are 'mfd' objects on the same basis:
+#' # mfdobj_a + mfdobj_b
+#' # plus_mfd(mfdobj_a, mfdobj_b)
+#'
+#' @export
+plus_mfd <- function(mfdobj1, mfdobj2) {
+  if (missing(mfdobj2)) {
+    return(mfdobj1)
+  }
+  if (!is.mfd(mfdobj1) | !is.mfd(mfdobj2)) {
+    stop("Both arguments must be of class 'mfd'.")
+  }
+  if (!identical(mfdobj1$basis, mfdobj2$basis)) {
+    stop("The basis systems of the two objects are different.")
+  }
+  bs <- mfdobj1$basis
+  n1 <- nobs(mfdobj1)
+  n2 <- nobs(mfdobj2)
+  if (n1 != n2 & n1 > 1 & n2 > 1) {
+    stop("The number of replications in the two objects are different.")
+  }
+  p1 <- nvar(mfdobj1)
+  p2 <- nvar(mfdobj2)
+  if (p1 != p2) {
+    stop("The number of variables in the two objects are different.")
+  }
+  A1 <- mfdobj1$coefs
+  A2 <- mfdobj2$coefs
+  if (n1 == n2) {
+    A <- A1 + A2
+    fdnames <- mfdobj1$fdnames
+  }
+  if (n1 == 1 & n2 > 1) {
+    A <- A1[, rep(1, n2), ] + A2
+    fdnames <- mfdobj2$fdnames
+  }
+  if (n1 > 1 & n2 == 1) {
+    A <- A1 + A2[, rep(1, n1), ]
+    fdnames <- mfdobj1$fdnames
+  }
+  mfd(A, bs, fdnames)
+}
+
+#' @rdname plus_mfd
+#' @export
+`+.mfd` <- function(mfdobj1, mfdobj2) {
+  plus_mfd(mfdobj1, mfdobj2)
+}
+
+
+#' Subtract multivariate functional data (and unary negation)
+#'
+#' Subtracts two objects of class `mfd` (elementwise on their coefficient arrays).
+#' The same basis, variable-count, and observation-replication rules as in
+#' \code{\link{plus_mfd}} apply. If \code{mfdobj2} is missing, returns the
+#' unary negation of \code{mfdobj1}.
+#'
+#' @param mfdobj1,mfdobj2 Objects of class `mfd`. If \code{mfdobj2} is missing,
+#'   unary minus is applied to \code{mfdobj1}.
+#'
+#' @return An object of class `mfd` with coefficients equal to the (possibly
+#'   replicated) difference \code{mfdobj1 - mfdobj2}, or the negation of
+#'   \code{mfdobj1} for unary minus.
+#'
+#' @seealso \code{\link{plus_mfd}}, \code{\link{nobs}}, \code{\link{nbasis}}, \code{\link{nvar}}, \code{\link{mfd}}
+#'
+#' @examples
+#' # mfdobj_a - mfdobj_b
+#' # minus_mfd(mfdobj_a, mfdobj_b)
+#' # Unary minus:
+#' # -mfdobj_a
+#'
+#' @export
+minus_mfd <- function(mfdobj1, mfdobj2) {
+  if (missing(mfdobj2)) {
+    mfdobj1$coefs <- -mfdobj1$coefs
+    return(mfdobj1)
+  }
+  mfdobj2$coefs <- -mfdobj2$coefs
+  plus_mfd(mfdobj1, mfdobj2)
+}
+
+#' @rdname minus_mfd
+#' @export
+`-.mfd` <- function(mfdobj1, mfdobj2) {
+  minus_mfd(mfdobj1, mfdobj2)
+}
+
+
+
+#' Pointwise product of multivariate functional data
+#'
+#' Computes the elementwise (pointwise) product of two objects of class `mfd`,
+#' returning an `mfd` on the same basis. If one object contains a single
+#' replication (one observation) and the other contains multiple, the single
+#' replication is recycled across observations before multiplication.
+#'
+#' @param mfdobj1,mfdobj2 Objects of class `mfd` defined on the same basis.
+#'
+#' @details
+#' Let coefficient arrays have dimensions \eqn{(nbasis, nobs, nvar)}.
+#' The function:
+#' \itemize{
+#'   \item requires both inputs to be `mfd` objects;
+#'   \item requires identical basis systems (checked with \code{identical()});
+#'   \item requires the same number of variables;
+#'   \item for observations: if both \eqn{nobs_1} and \eqn{nobs_2} are greater
+#'         than one, they must be equal; otherwise, the object with
+#'         \eqn{nobs = 1} is replicated to match the other.
+#' }
+#'
+#' Internally, coefficient arrays are converted to \code{\link[fda]{fd}} objects
+#' and multiplied via \code{\link[fda]{times.fd}}, with \code{basisobj} set to
+#' the common basis so that the result is re-expanded on the same basis.
+#'
+#' @return An object of class `mfd` whose coefficients are the pointwise product
+#'   of the inputs (with recycling if needed). The basis is the common input
+#'   basis. The \code{fdnames} are inherited from the input that supplies the
+#'   observation indexing after any replication.
+#'
+#' @seealso \code{\link{plus_mfd}}, \code{\link{minus_mfd}},
+#'   \code{\link[stats]{nobs}}, \code{\link{nvar}}, \code{\link{nbasis}},
+#'   \code{\link[fda]{times.fd}}, \code{\link{mfd}}
+#'
+#' @examples
+#' # Assuming mfdobj_a and mfdobj_b are 'mfd' objects on the same basis:
+#' # Elementwise product:
+#' # prod_ab <- times_mfd(mfdobj_a, mfdobj_b)
+#'
+#' # Broadcasting a single observation across multiple:
+#' # prod_bcast <- times_mfd(mfdobj_a[ ,1, , drop = FALSE], mfdobj_b)
+#'
+#' @export
+times_mfd <- function(mfdobj1, mfdobj2) {
+  if (!is.mfd(mfdobj1) | !is.mfd(mfdobj2)) {
+    stop("Both arguments must be of class 'mfd'.")
+  }
+  if (!identical(mfdobj1$basis, mfdobj2$basis)) {
+    stop("The basis systems of the two objects are different.")
+  }
+  bs <- mfdobj1$basis
+  n1 <- nobs(mfdobj1)
+  n2 <- nobs(mfdobj2)
+  if (n1 != n2 & n1 > 1 & n2 > 1) {
+    stop("The number of replications in the two objects are different.")
+  }
+  p1 <- nvar(mfdobj1)
+  p2 <- nvar(mfdobj2)
+  if (p1 != p2) {
+    stop("The number of variables in the two objects are different.")
+  }
+  A1 <- mfdobj1$coefs
+  A2 <- mfdobj2$coefs
+  if (n1 == n2) {
+    fdobj1 <- fda::fd(A1, bs)
+    fdobj2 <- fda::fd(A2, bs)
+    fdprod <- fda::times.fd(fdobj1, fdobj2, basisobj = bs)
+    fdnames <- mfdobj1$fdnames
+  }
+  if (n1 == 1 & n2 > 1) {
+    A1 <- A1[, rep(1, n2), ]
+    fdobj1 <- fda::fd(A1, bs)
+    fdobj2 <- fda::fd(A2, bs)
+    fdprod <- fda::times.fd(fdobj1, fdobj2, basisobj = bs)
+    fdnames <- mfdobj2$fdnames
+  }
+  if (n1 > 1 & n2 == 1) {
+    A2 <- A2[, rep(1, n1), ]
+    fdobj1 <- fda::fd(A1, bs)
+    fdobj2 <- fda::fd(A2, bs)
+    fdprod <- fda::times.fd(fdobj1, fdobj2, basisobj = bs)
+    fdnames <- mfdobj1$fdnames
+  }
+  A <- fdprod$coefs
+  out <- mfd(A, bs, fdnames)
+  return(out)
+}
+
+#' @rdname times_mfd
+#' @export
+`*.mfd` <- function(mfdobj1, mfdobj2) {
+  times_mfd(mfdobj1, mfdobj2)
+}
+
+
 
 #' Simulate multivariate functional data
 #'
@@ -1576,6 +1795,58 @@ get_mfd_fd <- function(fdobj) {
       fdobj$fdnames)
 }
 
+#' Number of observations in a multivariate functional data object
+#'
+#' @param object An object of class `mfd`.
+#' @return An integer: the number of observations.
+#' @examples
+#' # nobs(mfdobj)
+#' @export
+nobs.mfd <- function(object) {
+  dim(object$coefs)[2]
+}
+
+#' Number of basis functions
+#'
+#' Generic function to extract the number of basis functions from an object.
+#'
+#' @param object An object from which to extract the number of basis functions.
+#' @return An integer: the number of basis functions.
+#' @export
+nbasis <- function(object) {
+  UseMethod("nbasis")
+}
+
+#' @describeIn nbasis Method for `mfd` objects
+#' @param object An object of class `mfd`.
+#' @examples
+#' # nbasis(mfdobj)
+#' @export
+nbasis.mfd <- function(object) {
+  dim(object$coefs)[1]
+}
+
+#' Number of variables
+#'
+#' Generic function to extract the number of variables from an object.
+#'
+#' @param object An object from which to extract the number of variables.
+#' @return An integer: the number of variables.
+#' @export
+nvar <- function(object) {
+  UseMethod("nvar")
+}
+
+#' @describeIn nvar Method for `mfd` objects
+#' @param object An object of class `mfd`.
+#' @examples
+#' # nvar(mfdobj)
+#' @export
+nvar.mfd <- function(object) {
+  dim(object$coefs)[3]
+}
+
+
 
 
 #' Standardize Multivariate Functional Data.
@@ -2536,38 +2807,239 @@ plot_bifd <- function(bifd_obj,
 
 }
 
-#' Mean Function for Multivariate Functional Data
+#' Plot multivariate functional data
 #'
-#' Computes the mean function for a multivariate functional data object of class `mfd`.
+#' @method plot mfd
+#' @param x An `mfd` object.
+#' @param y Ignored.
+#' @param add Logical; if TRUE, add curves to an existing `mfd` plot
+#'   (using \code{matlines}) instead of creating a new one.
+#' @param common_ylim Logical; if TRUE, all panels share the same y-limits,
+#'   otherwise each panel adapts its own scale.
+#' @param ... Graphical arguments passed to \code{matplot} (if
+#'   \code{add=FALSE}) or to \code{matlines} (if \code{add=TRUE}).
+#' @export
+plot.mfd <- function(x, y, add = FALSE, common_ylim = TRUE, ...) {
+  args <- list(...)
+  domain  <- x$basis$rangeval
+  evalarg <- seq(domain[1], domain[2], length.out = 200)
+  X <- fda::eval.fd(evalarg, x)
+  y_range <- range(X)
+  nvar     <- dim(X)[3]
+  varnames <- x$fdnames[[3]]
+  tvar     <- x$fdnames[[1]]
+
+  ncol <- ceiling(sqrt(nvar))
+  nrow <- ceiling(nvar / ncol)
+
+  if (is.null(args$col)) args$col <- "black"
+  if (is.null(args$lty)) args$lty <- 1
+  if (!is.null(args$ylim)) {
+    y_range <- args$ylim
+    common_ylim <- TRUE
+    args$ylim <- NULL
+  }
+
+  if (!add) {
+    if (is.null(args$mar)) args$mar <- c(4, 4, 0.5, 0.5)
+
+    oldpar <- par(c("mar", "mgp"))
+    on.exit(par(oldpar), add = TRUE)
+
+    graphics::par(mfrow = c(nrow, ncol), mar = args$mar, mgp = c(2.5, 1, 0))
+
+    per_var_ylims <- vector("list", nvar)
+    per_var_usrs  <- vector("list", nvar)
+
+    for (ii in 1:nvar) {
+      ylim_ii <- if (common_ylim) y_range else range(X[,,ii])
+
+      graphics::plot.new()
+      graphics::plot.window(xlim = range(evalarg), ylim = ylim_ii)
+
+      do.call(graphics::matlines,
+              c(list(x = evalarg, y = X[,,ii]), args))
+
+      graphics::axis(1); graphics::axis(2)
+      graphics::title(xlab = tvar, ylab = varnames[ii])
+      graphics::box()
+
+      per_var_ylims[[ii]] <- ylim_ii
+      per_var_usrs[[ii]]  <- par("usr")  # save panel usr
+    }
+
+    options(
+      last_mfd_nvar  = nvar,
+      last_mfd_xlim  = range(evalarg),
+      last_mfd_ylims = per_var_ylims,
+      last_mfd_common_ylim = common_ylim
+    )
+
+  } else {
+    nvar_layout <- getOption("last_mfd_nvar")
+    ylims       <- getOption("last_mfd_ylims")
+    if (is.null(nvar_layout) || is.null(ylims)) {
+      stop("No existing mfd plot found. Call plot.mfd(..., add=FALSE) first.")
+    }
+
+    ii_row <- 1
+    ii_col <- 1
+    ylims <- options()$last_mfd_ylims
+    xlim <- options()$last_mfd_xlim
+    for (ii in 1:nvar) {
+      if (ii_col > ncol) {
+        ii_col <- 1
+        ii_row <- ii_row + 1
+      }
+      graphics::par(mfg = c(ii_row, ii_col))
+      if (is.null(args$mar)) args$mar <- c(4, 4, 0.5, 0.5)
+      graphics::par(mar = args$mar, mgp = c(2.5, 1, 0))
+
+      graphics::plot.window(xlim = xlim, ylim = ylims[[ii]])
+
+      do.call(graphics::matlines,
+              c(list(x = evalarg, y = X[,,ii]), args))
+      ii_col <- ii_col + 1
+    }
+  }
+  invisible(NULL)
+}
+
+
+#' Add curves to an existing multivariate functional data plot
 #'
-#' @param mfdobj An object of class `mfd` representing the multivariate functional data.
-#'   It contains \eqn{N} observations of a \eqn{p}-dimensional multivariate functional variable.
+#' Adds new curves from an `mfd` object to an existing plot created by
+#' \code{\link{plot.mfd}}. Each variable is added to its corresponding panel,
+#' using the same scales and layout as the original plot.
 #'
-#' @return An `mfd` object representing the mean function of the input data. The output contains
-#'   one observation, representing the mean function for each dimension of the multivariate functional variable.
+#' @param x An `mfd` object.
+#' @param ... Graphical arguments passed to \code{\link{plot.mfd}} with
+#'   \code{add=TRUE}.
+#'
+#' @return Invisibly returns \code{NULL}.
+#'
+#' @seealso \code{\link{plot.mfd}}, \code{\link{abline_mfd}}
+#'
+#' @examples
+#' \dontrun{
+#' plot(x)               # first object
+#' lines(y, col=2, lty=2) # add second object
+#' }
+#'
+#' @method lines mfd
+#' @export
+lines.mfd <- function(x, ...) {
+  plot.mfd(x, add = TRUE, ...)
+}
+
+
+
+#' Add reference lines to all panels of the current multi-panel plot
+#'
+#' Calls \code{\link[graphics]{abline}} in every panel actually used by the most
+#' recent call to \code{\link{plot.mfd}}.
+#'
+#' @inheritParams graphics::abline
+#' @param ... Further graphical parameters (e.g., \code{col}, \code{lty}, \code{lwd}).
 #'
 #' @details
-#' This function calculates the mean function for each dimension of the multivariate functional data
-#' by averaging the coefficients across all observations. The resulting object is a single observation
-#' containing the mean function for each dimension.
+#' The function relies on \code{plot.mfd} having stored the number of variables
+#' in \code{options("last_mfd_nvar")}. It then loops over exactly that many
+#' panels in the current layout.
+#'
+#' Calls \code{\link[graphics]{abline}} in every panel actually used by the most
+#' recent call to \code{\link{plot.mfd}}. Vertical and horizontal lines span
+#' the full x- or y-range of each panel, even when scales differ.
+#'
+#' @inheritParams graphics::abline
+#' @param ... Further graphical parameters (e.g., \code{col}, \code{lty}, \code{lwd}).
+#'
+#' @export
+abline_mfd <- function(a = NULL, b = NULL, h = NULL, v = NULL, ...) {
+  mf <- par("mfrow")
+  ncol <- mf[2]
+
+  nvar  <- getOption("last_mfd_nvar")
+  ylims <- getOption("last_mfd_ylims")
+  xlim  <- getOption("last_mfd_xlim")
+  if (is.null(nvar) || is.null(ylims) || is.null(xlim)) {
+    stop("No stored panel limits found. Call plot.mfd(..., add=FALSE) first.")
+  }
+
+  oldpar <- par(c("mar", "mgp", "mfg"))
+  on.exit(par(oldpar), add = TRUE)
+
+  ii_row <- 1
+  ii_col <- 1
+  for (ii in 1:nvar) {
+    if (ii_col > ncol) {
+      ii_col <- 1
+      ii_row <- ii_row + 1
+    }
+    graphics::par(mfg = c(ii_row, ii_col))
+
+    usr <- c(xlim[1], xlim[2], ylims[[ii]][1], ylims[[ii]][2])
+    graphics::plot.window(xlim = usr[1:2], ylim = usr[3:4])
+
+    # horizontal lines
+    if (!is.null(h)) {
+      for (y in h) graphics::segments(usr[1], y, usr[2], y, ...)
+    }
+    # vertical lines
+    if (!is.null(v)) {
+      for (x in v) graphics::segments(x, usr[3], x, usr[4], ...)
+    }
+    # slope/intercept lines
+    if (!is.null(a) || !is.null(b)) {
+      graphics::abline(a = a, b = b, ...)
+    }
+
+    ii_col <- ii_col + 1
+  }
+  invisible(NULL)
+}
+
+
+
+
+
+
+#' Mean Function for Multivariate Functional Data
+#'
+#' Computes the mean function for an object of class \code{mfd}.
+#'
+#' @method mean mfd
+#' @param x An object of class \code{mfd}, containing \eqn{N} observations of a
+#'   \eqn{p}-dimensional multivariate functional variable.
+#' @param ... Further arguments are ignored (required for S3 consistency).
+#'
+#' @return An object of class \code{mfd} representing the mean function. The
+#'   output contains a single observation, corresponding to the mean function
+#'   for each variable.
+#'
+#' @details
+#' The method averages the coefficient array across the observation dimension,
+#' resulting in a new \code{mfd} object with one observation (the sample mean).
 #'
 #' @examples
 #' \dontrun{
 #' library(funcharts)
 #' data(air)
 #' mfdobj <- get_mfd_list(air)
-#' mean_result <- mean_mfd(mfdobj)
-#' plot_mfd(mean_result)
+#' mean_result <- mean(mfdobj)
+#' plot(mean_result)
 #' }
 #'
+#' @seealso \code{\link{mfd}}, \code{\link{plot.mfd}}
+#'
 #' @export
-mean_mfd <- function(mfdobj) {
-  x <- mfdobj
+mean.mfd <- function(x, ...) {
   coef_mean <- apply(x$coefs, c(1, 3), mean)
   coef_mean <- array(coef_mean, dim = c(nrow(coef_mean), 1, ncol(coef_mean)))
   fdnames <- list(x$fdnames[[1]], "sample mean", x$fdnames[[3]])
   mfd(coef_mean, x$basis, fdnames)
 }
+
 
 
 #' Covariance Function for Multivariate Functional Data

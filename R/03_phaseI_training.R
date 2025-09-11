@@ -116,6 +116,16 @@ calculate_limits <- function(pca,
   T2_lim <- apply(T2, 2, function(x) stats::quantile(x, 1 - alpha$T2))
   spe_lim <- apply(spe, 2, function(x) stats::quantile(x, 1 - alpha$spe))
 
+  # kde_quantile <- function(x, prob = 0.95, n = 512) {
+  #   d <- density(x, n = n)
+  #   cdf <- cumsum(d$y) / sum(d$y)  # Approximate CDF
+  #   idx <- which.min(abs(cdf - prob))
+  #   return(d$x[idx])
+  # }
+  # T2_lim <- apply(T2, 2, function(x) kde_quantile(x, prob = 1 - alpha$T2))
+  # spe_lim <- apply(spe, 2, function(x) kde_quantile(x, prob = 1 - alpha$spe))
+
+
   T2_lim <- as.data.frame(t(T2_lim))
   spe_lim <- as.data.frame(t(spe_lim))
 

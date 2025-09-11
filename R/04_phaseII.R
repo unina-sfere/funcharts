@@ -1279,8 +1279,9 @@ regr_cc_fof <- function(object,
   }
 
   if (is.numeric(alpha)) {
-      alpha_y <- list(T2 = alpha / 4, spe = alpha / 4)
+      alpha_y <- list(T2 = alpha / 2, spe = alpha / 2)
     if (include_covariates) {
+      alpha_y <- list(T2 = alpha / 4, spe = alpha / 4)
       alpha_x <- list(T2_x = alpha / 4, spe_x = alpha / 4)
     }
   }

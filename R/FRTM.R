@@ -37,7 +37,6 @@
 #' @examples
 #' library(funcharts)
 #' data<-simulate_data_FRTM(n_obs=20)
-#' @import fda
 simulate_data_FRTM <-
   function(n_obs = 100,
            scenario = "1",
@@ -1112,8 +1111,8 @@ complete_h <-
     basis_h_i <-
       fda::create.bspline.basis(range_eval, breaks =  eval_seq, norder = 2)
     eval_h <-
-      eval.fd(eval_seq[which(eval_seq >= range_h[1] &
-                               eval_seq <= range_h[2])], h_fd_i)
+      fda::eval.fd(eval_seq[which(eval_seq >= range_h[1] &
+                                    eval_seq <= range_h[2])], h_fd_i)
     if (range_h[1] != range_eval[1]) {
       x <- eval_seq[which(eval_seq < range_h[1])]
       a <- abs(diff(range(eval_h)) / diff(range_h))
@@ -1172,14 +1171,14 @@ complete_x <-
         norder = min(length(eval_seq), 4, x_fd_i$basis$nbasis)
       )
     eval_x <-
-      eval.fd(eval_seq[which(eval_seq >= range_x[1] &
-                               eval_seq <= range_x[2])], x_fd_i)
+      fda::eval.fd(eval_seq[which(eval_seq >= range_x[1] &
+                                    eval_seq <= range_x[2])], x_fd_i)
     if (range_x[1] != range_eval[1]) {
       x <- eval_seq[which(eval_seq < range_x[1])]
       x_con <- eval_seq[which(eval_seq >= range_x[1])][1]
-      y <- eval.fd(x, template_fd)
+      y <- fda::eval.fd(x, template_fd)
       eval_x_c1 <-
-        y + as.numeric(eval.fd(x_con, x_fd_i) - eval.fd(x_con, template_fd))
+        y + as.numeric(fda::eval.fd(x_con, x_fd_i) - fda::eval.fd(x_con, template_fd))
     }
     else{
       eval_x_c1  <-  NULL
@@ -1189,9 +1188,9 @@ complete_x <-
       x_con <-
         eval_seq[which(eval_seq <= range_x[2])][length(eval_seq[which(eval_seq <=
                                                                         range_x[2])])]
-      y <- eval.fd(x, template_fd)
+      y <- fda::eval.fd(x, template_fd)
       eval_x_c2 <-
-        y + as.numeric(eval.fd(x_con, x_fd_i) - eval.fd(x_con, template_fd))
+        y + as.numeric(fda::eval.fd(x_con, x_fd_i) - fda::eval.fd(x_con, template_fd))
     }
     else{
       eval_x_c2  <-  NULL
@@ -1340,7 +1339,7 @@ get_ul <- function(h_fd,
   length_t <- 100
   n_obs <- dim(h_fd$coefs)[2]
   grid <- seq(0, 1, length.out = length_t)
-  eval <- eval.fd(grid, h_fd)
+  eval <- fda::eval.fd(grid, h_fd)
   basis_list <-
     lapply(1:n_obs, function(ii)
       fda::create.bspline.basis(c(min(eval[, ii]), max(eval[, ii])), nbasis = 30, norder = 3))
@@ -1359,7 +1358,7 @@ get_ul <- function(h_fd,
         else if (grid_x[ii] > range_h[2])
           1
         else
-          eval.fd(grid_x[ii], h_inv[[kk]])
+          fda::eval.fd(grid_x[ii], h_inv[[kk]])
       }
     }
     den_list <- apply(eval_h, 2, stats::density)
@@ -1405,21 +1404,21 @@ get_ul <- function(h_fd,
     fdp <- fdm <- NULL
   }
   else if (type == "band") {
-    end <- stats::median(eval.fd(1, h_fd))
-    start <- stats::median(eval.fd(0, h_fd))
+    end <- stats::median(fda::eval.fd(1, h_fd))
+    start <- stats::median(fda::eval.fd(0, h_fd))
     basis <- fda::create.bspline.basis(c(0, 1), nbasis = 2, norder = 2)
     fd <- fda::smooth.basis(c(0, 1), c(start, end), basis)$fd
     fdp <- fd + bandp
     fdm <- fd - bandm
     grid <- seq(0, 1, length.out = 200)
-    eval <- eval.fd(grid, fdp)
+    eval <- fda::eval.fd(grid, fdp)
     eval[abs(eval) < 10 ^ -6] = 0
     ind <- which(eval >= 0)
     eval <- eval[ind]
     new_basis <- fda::create.bspline.basis(range(eval), nbasis = 2, norder =
                                         2)
     l_fd <- fda::smooth.basis(eval, grid[ind], new_basis)$fd
-    eval <- eval.fd(grid, fdm)
+    eval <- fda::eval.fd(grid, fdm)
     eval[abs(eval) < 10 ^ -6] = 0
     ind <- which(eval >= 0)
     eval <- eval[ind]
@@ -1440,8 +1439,8 @@ get_ul <- function(h_fd,
   return(out)
 }
 get_point_pen <- function(h_fd) {
-  point_y <- base::mean(eval.fd(0, h_fd))
-  point_end <- base::mean(eval.fd(1, h_fd))
+  point_y <- base::mean(fda::eval.fd(0, h_fd))
+  point_end <- base::mean(fda::eval.fd(1, h_fd))
   x_new <- -point_y * (1) / (point_end - point_y)
   if (point_y > 0) {
     point <- c(x_new, 0)
@@ -1521,7 +1520,7 @@ Phase_I_OEBFDTW_rt<-function(x_i,template_fd,seq_x=seq(0.1,5,length.out = 5),u_f
         else if (t_x > range_u[2])
           1
         else
-          as.numeric(eval.fd(t_x, u_fd))
+          as.numeric(fda::eval.fd(t_x, u_fd))
         range_l <- l_fd$basis$rangeval
         l_ti <-
           if (t_x < range_l[1])
@@ -1529,7 +1528,7 @@ Phase_I_OEBFDTW_rt<-function(x_i,template_fd,seq_x=seq(0.1,5,length.out = 5),u_f
         else if (t_x > range_l[2])
           1
         else
-          as.numeric(eval.fd(t_x, l_fd))
+          as.numeric(fda::eval.fd(t_x, l_fd))
         if (u_ti <= min(seq_t))
           u_ti  <-  seq_t[2]
         if (start == 0) {
@@ -1570,7 +1569,7 @@ Phase_I_OEBFDTW_rt<-function(x_i,template_fd,seq_x=seq(0.1,5,length.out = 5),u_f
                                          seq_t <= end)][seq(1, length(seq_t[which(seq_t >= st &
                                                                                     seq_t <= end)]), length.out = length_grid)])
         if (is.na(seq_t_tem)[1])
-          seq_t_tem  <-  eval.fd(max(x_i[[2]][which(x_i[[2]] <= t_x)]), u_fd)
+          seq_t_tem  <-  fda::eval.fd(max(x_i[[2]][which(x_i[[2]] <= t_x)]), u_fd)
         mod_rt <-
           OEBFDTW_rt_iter(
             x_i = x_i,
@@ -1593,7 +1592,7 @@ Phase_I_OEBFDTW_rt<-function(x_i,template_fd,seq_x=seq(0.1,5,length.out = 5),u_f
 
         eval_poi <- unique(eval_poi)
         den <- abs(eval_poi[1] - eval_poi[2:length(eval_poi)])
-        eval_diff <- eval.fd(eval_poi, mod_rt$mod_opt$mod$h_fd)
+        eval_diff <- fda::eval.fd(eval_poi, mod_rt$mod_opt$mod$h_fd)
         diff <- abs(eval_diff[1] - eval_diff[2:length(eval_diff)])
         der_h_i <- diff / den
         der_h  <-  stats::median(der_h_i)
@@ -1788,7 +1787,7 @@ tra_warp <- function(h_fd, type = "clog") {
     fda::create.bspline.basis(range,
                          norder = min(4, h_fd$basis$nbasis),
                          nbasis = h_fd$basis$nbasis)
-  eval_fd <- eval.fd(grid_eval, h_fd)
+  eval_fd <- fda::eval.fd(grid_eval, h_fd)
   eval_fd[eval_fd < 0] = 10 ^ -8
   if (type == "log")
     tr_eval <- log10(eval_fd)
@@ -1883,8 +1882,8 @@ mFPCA <-
            par_ncom = 0.9) {
     range <- x_fd$basis$rangeval
     if (!is.null(h_fd)) {
-      F_0 <- eval.fd(range[1], h_fd)
-      F_1 <- eval.fd(range[2], h_fd)
+      F_0 <- fda::eval.fd(range[1], h_fd)
+      F_1 <- fda::eval.fd(range[2], h_fd)
       F_0_fd <- fd(F_0, create.constant.basis(range))
       F_1_fd <- fd(F_1, create.constant.basis(range))
       diff <- (F_1 - F_0)
@@ -2015,8 +2014,8 @@ fpc_hy <-
       x_fd_list[[2]] <- new_mul.fd2(x_fd_list[[2]], weight_fun)
       if (!is.null(sc_mat)) {
         sc_mat  <-  sc_mat * matrix(c(
-          eval.fd(weight_fun$basis$rangeval[1], weight_fun),
-          eval.fd(weight_fun$basis$rangeval[2], weight_fun)
+          fda::eval.fd(weight_fun$basis$rangeval[1], weight_fun),
+          fda::eval.fd(weight_fun$basis$rangeval[2], weight_fun)
         ),
         dim(sc_mat)[1],
         dim(sc_mat)[2],
@@ -2024,8 +2023,8 @@ fpc_hy <-
       }
       weight_new <- new_sd.fd(x_fd_list[[2]])
       new_sc_mat_sd  <-  c(
-        eval.fd(weight_fun$basis$rangeval[1], weight_fun),
-        eval.fd(weight_fun$basis$rangeval[2], weight_fun)
+        fda::eval.fd(weight_fun$basis$rangeval[1], weight_fun),
+        fda::eval.fd(weight_fun$basis$rangeval[2], weight_fun)
       )
     }
     else{
@@ -2293,8 +2292,8 @@ get_scores_pcahy <- function(x_fd,
   if (!is.null(h_fd)) {
     range <- h_fd$basis$rangeval
     eval_seq <- seq(range[1], range[2], length.out = 200)
-    F_0 <- eval.fd(range[1], h_fd)
-    F_1 <- eval.fd(range[2], h_fd)
+    F_0 <- fda::eval.fd(range[1], h_fd)
+    F_1 <- fda::eval.fd(range[2], h_fd)
     F_0_fd <- fd(F_0, create.constant.basis(range))
     F_1_fd <- fd(F_1, create.constant.basis(range))
     F_10inv_fd <- fd((F_1 - F_0) ^ -1, create.constant.basis(range))
@@ -2343,7 +2342,7 @@ get_scores_pcahy <- function(x_fd,
   if(!is.null(weight_fun)){
     x_fd_list_cen[[2]]<-new_mul.fd2(x_fd_list_cen[[2]],weight_fun)
     if(!is.null(sc_mat)){
-      sc_mat_cen=sc_mat_cen*matrix(c(eval.fd(weight_fun$basis$rangeval[1],weight_fun),eval.fd(weight_fun$basis$rangeval[2],weight_fun)),dim(sc_mat)[1],dim(sc_mat)[2],byrow=TRUE)
+      sc_mat_cen=sc_mat_cen*matrix(c(fda::eval.fd(weight_fun$basis$rangeval[1],weight_fun),fda::eval.fd(weight_fun$basis$rangeval[2],weight_fun)),dim(sc_mat)[1],dim(sc_mat)[2],byrow=TRUE)
     }
   }
   scores_list<-list()
@@ -2519,7 +2518,7 @@ CL_T2SPE_fd <- function(fd, alpha, type = "pointwise", seq_x) {
     grid_eval[ind_list[[ii]]])
   eval_list <-
     lapply(1:n_obs, function(ii)
-      eval.fd(grid_list[[ii]], fd[[ii]]))
+      fda::eval.fd(grid_list[[ii]], fd[[ii]]))
   mat <- matrix(NA, n_obs, length(grid_eval))
   for (ii in 1:n_obs) {
     mat[ii, ind_list[[ii]]] <- eval_list[[ii]]
@@ -3020,7 +3019,7 @@ FRTM_PhaseI <-
     u_fd <- ul_fd$u_fd
     l_fd <- ul_fd$l_fd
     frac_end <- frac_oeob
-    delta_xs <- eval.fd(ul_fd$u_fd$basis$rangeval[1], ul_fd$u_fd)
+    delta_xs <- fda::eval.fd(ul_fd$u_fd$basis$rangeval[1], ul_fd$u_fd)
     delta_ys <- ul_fd$l_fd$basis$rangeval[1]
 
 
@@ -3236,8 +3235,8 @@ FRTM_PhaseI <-
         x_fd_i <- cut_fd_xt(x_fd_i , t_t, eval_grid = eval_seq_x)
         nbasish[jj] <- h_fd_i$basis$nbasis
         nbasisx[jj] <- x_fd_i$basis$nbasis
-        eval_x[, jj] <- eval.fd(eval_seq_x, x_fd_i)
-        eval_h[, jj] <- eval.fd(eval_seq_h, h_fd_i)
+        eval_x[, jj] <- fda::eval.fd(eval_seq_x, x_fd_i)
+        eval_h[, jj] <- fda::eval.fd(eval_seq_h, h_fd_i)
       }
       basis_x_r <-
         fda::create.bspline.basis(c(range_t[1], t_t),
@@ -3483,8 +3482,8 @@ FRTM_PhaseI <-
                   cut_fd_ht(h_fd_i , seq_t[ind_i], eval_grid = eval_seq_h, monotone = FALSE)
                 x_fd_i <-
                   cut_fd_xt(x_fd_i , seq_t[ind_i], eval_grid = eval_seq_x)
-                eval_x <- eval.fd(eval_seq_x, x_fd_i)
-                eval_h <- eval.fd(eval_seq_h, h_fd_i)
+                eval_x <- fda::eval.fd(eval_seq_x, x_fd_i)
+                eval_h <- fda::eval.fd(eval_seq_h, h_fd_i)
                 basis_x_r <-
                   fda::create.bspline.basis(
                     c(range_t[1], seq_t[ind_i]),
@@ -3844,8 +3843,8 @@ FRTM_PhaseII<-function(data_oc,mod_phaseI,ncores=1){
                         monotone = FALSE)
             x_fd_i <-
               cut_fd_xt(x_fd_i , seq_t[ind_i], eval_grid = eval_seq_x)
-            eval_x <- eval.fd(eval_seq_x, x_fd_i)
-            eval_h <- eval.fd(eval_seq_h, h_fd_i)
+            eval_x <- fda::eval.fd(eval_seq_x, x_fd_i)
+            eval_h <- fda::eval.fd(eval_seq_h, h_fd_i)
             basis_x_r <-
               fda::create.bspline.basis(
                 c(range_t[1], seq_t[ind_i]),
