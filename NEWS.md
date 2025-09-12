@@ -3,6 +3,8 @@
 * Added `plot()` and `lines()` methods for `mfd` objects.
 * Added `abline_mfd()` function to add lines to every panel in `mfd` plots.
 * Added functions that allow to do standard mathematics with `mfd` objects: `+`, `-`, `*`.
+* Added `predict()` method for `pca_mfd` objects, it predicts scores or reconstructs curves for new data.
+* `simulate_data_RoMFCC()` simulates data for the robust multivariate functional control chart of Capezza et al. (2024).
 
 # funcharts 1.7.0
 
