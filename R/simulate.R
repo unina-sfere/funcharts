@@ -878,7 +878,7 @@ simulate_data_RoMFCC <- function(nobs = 1000,
   meigenvalues <- e$values[1:n_comp_x] * w
   meigenvalues[meigenvalues < 0] <- 0
 
-  csi_X <- rnorm(
+  csi_X <- stats::rnorm(
     n = length(meigenvalues) * nobs,
     mean = 0,
     sd = sqrt(rep(meigenvalues, each = nobs))
@@ -921,7 +921,7 @@ simulate_data_RoMFCC <- function(nobs = 1000,
   }
 
   if (outlier == "no") {
-    cont_function <- function(n_g, p_g, M_g, T_exp)
+    cont_function <- function(nobs, p_g, M_g, T_exp)
       0
   } else if (outlier == "outlier_M") {
     cont_function <- function(nobs, p_g, M_g, T_exp) {
@@ -959,7 +959,7 @@ simulate_data_RoMFCC <- function(nobs = 1000,
     }
   }
   if (OC == "no") {
-    out_function <- function(n_g, p_g, M_g, T_exp)
+    out_function <- function(nobs, p_g, M_g, T_exp)
       rep(0, P)
   }
   else if (OC == "OC_M") {
@@ -991,7 +991,7 @@ simulate_data_RoMFCC <- function(nobs = 1000,
   }
   else if (OC == "OC_P") {
     out_function <-
-      function(n_g, M_g, T_exp)
+      function(n_obs, M_g, T_exp)
         fun_phase(x_seq, M_g) - f1_m(x_seq, M_g)
   }
   cont_cell_mat <- matrix(0, nobs, P * p)
@@ -1064,7 +1064,7 @@ simulate_data_RoMFCC <- function(nobs = 1000,
   for (ii in 1:p) {
     X1_scaled <- csi_X %*% t(meig[[ii]])
     X_mat_list[[ii]] <-
-      t(f1_m(x_seq, M_OC) + t(X1_scaled) * sd) + rnorm(prod(dim(X1_scaled)), sd = sd_e) + cont_list[[ii]] + oc_list[[ii]]
+      t(f1_m(x_seq, M_OC) + t(X1_scaled) * sd) + stats::rnorm(prod(dim(X1_scaled)), sd = sd_e) + cont_list[[ii]] + oc_list[[ii]]
   }
   names(X_mat_list) <- paste0("X", sprintf(1:p, fmt = "%02d"))
   out <- list(X_mat_list = X_mat_list, ind_out = ind_out)

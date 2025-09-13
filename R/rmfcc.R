@@ -1108,6 +1108,9 @@ RoMFDI <- function(mfdobj,
 #' The overall nominal type-I error probability used to set
 #' control chart limits.
 #' Default value is 0.05.
+#' @param verbose
+#' If TRUE, it prints messages about the steps of the algorithm.
+#' Default is FALSE.
 #'
 #' @return
 #' A list of the following elements that are needed in Phase II:
@@ -1173,7 +1176,8 @@ RoMFCC_PhaseI <- function(mfdobj,
                           functional_filter_par = list(filter = TRUE),
                           imputation_par = list(method_imputation = "RoMFDI"),
                           pca_par = list(fev = 0.7),
-                          alpha = 0.05) {
+                          alpha = 0.05,
+                          verbose = FALSE) {
 
   # filter default arguments
   if (!is.list(functional_filter_par)) {
@@ -1204,6 +1208,9 @@ RoMFCC_PhaseI <- function(mfdobj,
 
   # Functional filter
   if (functional_filter_par$filter) {
+    if (verbose) {
+      print("Training set: functional filtering...")
+    }
 
     functional_filter_default <- formals(functional_filter)
     functional_filter_args <- functional_filter_par
@@ -1226,6 +1233,9 @@ RoMFCC_PhaseI <- function(mfdobj,
 
   # Imputation
   if (anyNA(X_mfdm$coefs)) {
+    if (verbose) {
+      print("Training set: imputation step...")
+    }
 
     if (!(imputation_par$method_imputation %in% c("RoMFDI", "mean"))) {
       stop("method_imputation must be either \"RoMFDI\" or \"mean\"")
@@ -1264,6 +1274,9 @@ RoMFCC_PhaseI <- function(mfdobj,
   n_dataset <- length(X_imp)
 
   # Robust PCA
+  if (verbose) {
+    print("Training set: dimension reduction step...")
+  }
   pca_default <- formals(rpca_mfd)
   pca_args <- pca_par
   pca_args$fev <- NULL
@@ -1328,7 +1341,9 @@ RoMFCC_PhaseI <- function(mfdobj,
                         scale_fd = scale_fd,
                         varprop = varprop)
 
-
+  if (verbose) {
+    print("Training set: calculating monitoring statistics...")
+  }
   # T2 SPE statistics
   K <- which(cumsum(mod_pca_final$varprop) >= pca_par$fev)[1]
 
@@ -1372,6 +1387,9 @@ RoMFCC_PhaseI <- function(mfdobj,
     nobs_tuning <- dim(mfdobj_tuning$coefs)[2]
 
     # Functional filter
+    if (verbose) {
+      print("Tuning set: functional filtering...")
+    }
     if (functional_filter_par$filter) {
 
       functional_filter_args$mfdobj <- mfdobj_tuning
@@ -1388,6 +1406,9 @@ RoMFCC_PhaseI <- function(mfdobj,
 
     # Imputation
     if (anyNA(X_mfd_tuning_m$coefs)) {
+      if (verbose) {
+        print("Tuning set: imputation step...")
+      }
 
       if (imputation_par$method_imputation == "RoMFDI") {
         imputation_args$mfdobj <- rbind_mfd(X_imp[[1]], X_mfd_tuning_m)
@@ -1438,6 +1459,10 @@ RoMFCC_PhaseI <- function(mfdobj,
       S_scores_tuning_rob[[D]] <- mod$cov
       S_scores_tuning_rob2[[D]] <- mod2$cov
 
+    }
+
+    if (verbose) {
+      print("Tuning set: calculating monitoring statistics and control chart limits...")
     }
 
     mean_scores_tuning_rob <- do.call(cbind, mean_scores_tuning_rob)

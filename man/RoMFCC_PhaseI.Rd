@@ -10,7 +10,8 @@ RoMFCC_PhaseI(
   functional_filter_par = list(filter = TRUE),
   imputation_par = list(method_imputation = "RoMFDI"),
   pca_par = list(fev = 0.7),
-  alpha = 0.05
+  alpha = 0.05,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -63,6 +64,9 @@ Default value is \code{list(fev = 0.7)}.}
 \item{alpha}{The overall nominal type-I error probability used to set
 control chart limits.
 Default value is 0.05.}
+
+\item{verbose}{If TRUE, it prints messages about the steps of the algorithm.
+Default is FALSE.}
 }
 \value{
 A list of the following elements that are needed in Phase II:
