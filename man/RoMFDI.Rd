@@ -70,11 +70,11 @@ It performs Robust Multivariate Functional Data Imputation (RoMFDI)
 as in Capezza et al. (2024).
 }
 \examples{
-\dontrun{
+\donttest{
 library(funcharts)
-mfdobj <- get_mfd_list(air, grid = 1:24, n_basis = 13, lambda = 1e-2)
-out <- functional_filter(mfdobj)
-mfdobj_imp <- RoMFDI(out$mfdobj)
+mfdobj <- get_mfd_list(air[1:3], grid = 1:24, n_basis = 13, lambda = 1e-2)
+out <- functional_filter(mfdobj, bivariate = FALSE)
+mfdobj_imp <- RoMFDI(out$mfdobj, n_dataset = 1, update = FALSE)
 }
 
 }
@@ -88,7 +88,4 @@ Van Ginkel, J. R., Van der Ark, L. A., Sijtsma, K., and Vermunt, J. K.
 imputation: a Bayesian method for estimating missing scores in tests
 and questionnaires, and an accurate approximation.
 \emph{Computational Statistics & Data Analysis}, 51(8):4013–-4027.
-}
-\author{
-C. Capezza, F. Centofanti
 }

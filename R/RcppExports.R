@@ -49,3 +49,15 @@ get_path_list2 <- function(N, M, range_x, range_tem, grid_t, ind_end2, grid_sear
     .Call(`_funcharts_get_path_list2`, N, M, range_x, range_tem, grid_t, ind_end2, grid_search, P)
 }
 
+computeSigma <- function(x, y, B, z, model_Sigma, sing, p, k, n) {
+    .Call(`_funcharts_computeSigma`, x, y, B, z, model_Sigma, sing, p, k, n)
+}
+
+dmvn <- function(X, mu, sigma) {
+    .Call(`_funcharts_dmvn`, X, mu, sigma)
+}
+
+computeComp <- function(x, y, B, Sigma, prop) {
+    .Call(`_funcharts_computeComp`, x, y, B, Sigma, prop)
+}
+

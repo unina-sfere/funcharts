@@ -28,7 +28,7 @@ functional data objects. Each covariance is represented as a functional surface 
 bifd object. The covariance function is useful for analyzing relationships between functional variables.
 }
 \examples{
-\dontrun{
+\donttest{
 library(funcharts)
 data("air")
 x <- get_mfd_list(air[1:3])

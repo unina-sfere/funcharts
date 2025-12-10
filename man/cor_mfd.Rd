@@ -28,7 +28,7 @@ functional data objects. The data is first scaled using \code{\link{scale_mfd}},
 is then computed as the covariance of the scaled data using \code{\link{cov_mfd}}.
 }
 \examples{
-\dontrun{
+\donttest{
 library(funcharts)
 data("air")
 x <- get_mfd_list(air[1:3])

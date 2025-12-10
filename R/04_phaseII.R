@@ -405,7 +405,7 @@ control_charts_pca <- function(pca,
 #' @seealso \code{\link{control_charts_pca}}, \code{\link{regr_cc_sof}}
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' #' library(funcharts)
 #' data("air")
 #' air <- lapply(air, function(x) x[201:300, , drop = FALSE])
@@ -427,7 +427,6 @@ control_charts_pca <- function(pca,
 #' plot_control_charts(cclist)
 #' }
 #'
-#' @author C. Capezza
 control_charts_sof_pc <- function(mod,
                                   y_test,
                                   mfdobj_x_test,
@@ -956,7 +955,6 @@ plot_control_charts <- function(cclist, nobsI = 0) {
 #'                       mfdobj_x_new = mfdobj_x2)
 #' plot_control_charts(cclist)
 #'
-#' @author C. Capezza
 regr_cc_sof <- function(object,
                         y_new,
                         mfdobj_x_new,
@@ -1209,7 +1207,6 @@ regr_cc_sof <- function(object,
 #'                       mfdobj_x_tuning = NULL)
 #' plot_control_charts(cclist)
 #'
-#' @author F. Centofanti
 regr_cc_fof <- function(object,
                         mfdobj_y_new,
                         mfdobj_x_new,

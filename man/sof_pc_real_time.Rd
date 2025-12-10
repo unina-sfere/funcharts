@@ -73,6 +73,3 @@ based on scalar-on-function regression.
 \code{\link{get_mfd_df_real_time}},
 \code{\link{get_mfd_list_real_time}}
 }
-\author{
-C. Capezza
-}

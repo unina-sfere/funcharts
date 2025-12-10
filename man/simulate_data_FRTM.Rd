@@ -58,6 +58,6 @@ data<-simulate_data_FRTM(n_obs=20)
 }
 \references{
 Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
-Real-time monitoring of functional data.
-Accepted for publication in \emph{Journal of Quality Technology}.
+Real-time monitoring of functional data. \emph{Journal of Quality Technology}, 57(2):135--152,
+doi:https://doi.org/10.1080/00224065.2024.2430978.
 }

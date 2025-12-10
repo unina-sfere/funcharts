@@ -112,7 +112,7 @@ Capezza et al. (2024) where RoMFCC was benchmarked against competing
 control charts under various contamination scenarios.
 }
 \examples{
-\dontrun{
+\donttest{
 # Simulate uncontaminated data (Phase I)
 sim <- simulate_data_RoMFCC(nobs = 200, p = 3, outlier = "no", OC = "no")
 str(sim$X_mat_list)

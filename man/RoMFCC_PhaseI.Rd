@@ -97,7 +97,7 @@ It performs Phase I of the Robust Multivariate Functional Control Chart
 (RoMFCC) as proposed by Capezza et al. (2024).
 }
 \examples{
-\dontrun{
+\donttest{
 library(funcharts)
 mfdobj <- get_mfd_list(air, n_basis = 5)
 nobs <- dim(mfdobj$coefs)[2]
@@ -107,7 +107,8 @@ mfdobj1 <- mfdobj[ids[1:100]]
 mfdobj_tuning <- mfdobj[ids[101:300]]
 mfdobj2 <- mfdobj[ids[-(1:300)]]
 mod_phase1 <- RoMFCC_PhaseI(mfdobj = mfdobj1,
-                            mfdobj_tuning = mfdobj_tuning)
+                            mfdobj_tuning = mfdobj_tuning,
+                            functional_filter_par = list(filter = FALSE))
 phase2 <- RoMFCC_PhaseII(mfdobj_new = mfdobj2,
                          mod_phase1 = mod_phase1)
 plot_control_charts(phase2)
@@ -118,7 +119,4 @@ plot_control_charts(phase2)
 Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
 Robust Multivariate Functional Control Chart.
 \emph{Technometrics}, 66(4):531--547, \url{doi:10.1080/00401706.2024.2327346}.
-}
-\author{
-C. Capezza, F. Centofanti
 }

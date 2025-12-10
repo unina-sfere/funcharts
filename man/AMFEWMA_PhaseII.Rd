@@ -51,29 +51,33 @@ Adaptive Multivariate Functional EWMA (AMFEWMA) control chart proposed
 by Capezza et al. (2024)
 }
 \examples{
-\dontrun{set.seed(0)
+\donttest{
+set.seed(0)
 library(funcharts)
-dat_I <- simulate_mfd(nobs = 1000,
+dat_I <- simulate_mfd(nobs = 200,
                       correlation_type_x = c("Bessel", "Bessel", "Bessel"),
                       sd_x = c(0.3, 0.3, 0.3))
-dat_tun <- simulate_mfd(nobs = 1000,
+dat_tun <- simulate_mfd(nobs = 200,
                         correlation_type_x = c("Bessel", "Bessel", "Bessel"),
                         sd_x = c(0.3, 0.3, 0.3))
-dat_II <- simulate_mfd(nobs = 200,
+dat_II <- simulate_mfd(nobs = 20,
                        correlation_type_x = c("Bessel", "Bessel", "Bessel"),
                        shift_type_x = c("C", "C", "C"),
                        d_x = c(2, 2, 2),
                        sd_x = c(0.3, 0.3, 0.3))
-mfdobj_I <- get_mfd_list(dat_I$X_list)
-mfdobj_tun <- get_mfd_list(dat_tun$X_list)
-mfdobj_II <- get_mfd_list(dat_II$X_list)
+mfdobj_I <- get_mfd_list(dat_I$X_list, lambda = 1e-2)
+mfdobj_tun <- get_mfd_list(dat_tun$X_list, lambda = 1e-2)
+mfdobj_II <- get_mfd_list(dat_II$X_list, lambda = 1e-2)
 
-p <- plot_mfd(mfdobj_I[1:100])
-lines_mfd(p, mfdobj_II, col = "red")
+# p <- plot_mfd(mfdobj_I[1:100])
+# lines_mfd(p, mfdobj_II, col = "red")
 
-mod <- AMFEWMA_PhaseI(mfdobj = mfdobj_I, mfdobj_tuning = mfdobj_tun)
-print(mod$lambda)
-print(mod$k)
+
+mod <- AMFEWMA_PhaseI(mfdobj = mfdobj_I,
+                      mfdobj_tuning = mfdobj_tun,
+                      lambda = 0.1,
+                      k = c(1, 2))
+
 cc <- AMFEWMA_PhaseII(mfdobj_2 = rbind_mfd(mfdobj_I[1:100], mfdobj_II),
                       mod_1 = mod)
 plot_control_charts(cc$cc, nobsI = 100)
@@ -85,7 +89,4 @@ Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2025)
 An Adaptive Multivariate Functional EWMA Control Chart.
 \emph{Journal of Quality Technology},  57(1):1--15,
 doi:https://doi.org/10.1080/00224065.2024.2383674.
-}
-\author{
-C. Capezza, F. Centofanti
 }

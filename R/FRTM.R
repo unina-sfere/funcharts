@@ -13,8 +13,8 @@
 #'
 #' @references
 #' Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
-#' Real-time monitoring of functional data.
-#' Accepted for publication in \emph{Journal of Quality Technology}.
+#' Real-time monitoring of functional data. \emph{Journal of Quality Technology}, 57(2):135--152,
+#' doi:https://doi.org/10.1080/00224065.2024.2430978.
 #'
 #' @return   A list containing the following arguments:
 #'
@@ -571,8 +571,8 @@ FDTW_group <-
 #'
 #' @references
 #' Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
-#' Real-time monitoring of functional data.
-#' Accepted for publication in \emph{Journal of Quality Technology}.
+#' Real-time monitoring of functional data. \emph{Journal of Quality Technology}, 57(2):135--152,
+#' doi:https://doi.org/10.1080/00224065.2024.2430978.
 #'
 #' @return   A list containing the following arguments:
 #'
@@ -620,7 +620,6 @@ FDTW_group <-
 #'  A general optimization framework for dynamic time warping.
 #'  \emph{Optimization and Engineering, 1-22}.
 #'
-#' @author F. Centofanti
 OEBFDTW <-
   function(x_fd,
            template_fd,
@@ -1818,8 +1817,8 @@ tra_warp <- function(h_fd, type = "clog") {
 #' @param par_ncom If \code{ncom="ptv"}, the threshold for the percentage of the total variability explained. If \code{ncom="kaiserrule"}, the threshold for the Kaiser rule. Otherwise, this parameter is not considered.
 #' @references
 #' Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
-#' Real-time monitoring of functional data.
-#' Accepted for publication in \emph{Journal of Quality Technology}.
+#' Real-time monitoring of functional data. \emph{Journal of Quality Technology}, 57(2):135--152,
+#' doi:https://doi.org/10.1080/00224065.2024.2430978.
 #'
 #' @return   A list containing the following arguments:
 #'
@@ -1854,7 +1853,6 @@ tra_warp <- function(h_fd, type = "clog") {
 
 #' \code{ind_var} Additional parameter  used in \code{FRTM_PhaseI}.
 #' @export
-#' @author F. Centofanti
 #' @examples
 #' library(funcharts)
 #'
@@ -2655,7 +2653,6 @@ get_T2SPE_fd <- function(T_2_mat, SPE_2_mat, seq_x) {
 #'  A general optimization framework for dynamic time warping.
 #'  \emph{Optimization and Engineering, 1-22}.
 #'
-#' @author F. Centofanti
 par.FDTW <-
   function(N = 100,
            M = 50,
@@ -2709,7 +2706,6 @@ par.FDTW <-
 #' library(funcharts)
 #' par.rtr()
 #'
-#' @author F. Centofanti
 par.rtr <-
   function(seq_x = NULL,
            delta_d = 0.05,
@@ -2768,8 +2764,8 @@ par.mFPCA <-
 #'
 #' @references
 #' Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
-#' Real-time monitoring of functional data.
-#' Accepted for publication in \emph{Journal of Quality Technology}.
+#' Real-time monitoring of functional data. \emph{Journal of Quality Technology}, 57(2):135--152,
+#' doi:https://doi.org/10.1080/00224065.2024.2430978.
 #'
 #' @return   A list containing the following arguments:
 #'
@@ -2825,7 +2821,7 @@ par.mFPCA <-
 #' seq_x <- seq(0.1, max_x, length.out = 10)
 #'
 #'
-#' \dontrun{
+#' \donttest{
 #'   mod_phaseI_FRTM <- FRTM_PhaseI(
 #'     data_tra =  data,
 #'     control.FDTW = list(
@@ -2844,7 +2840,6 @@ par.mFPCA <-
 #'   plot(mod_phaseII_FRTM)
 #' }
 #'
-#' @author F. Centofanti
 FRTM_PhaseI <-
   function(data_tra,
            data_tun = NULL,
@@ -3667,8 +3662,8 @@ FRTM_PhaseI <-
 #' @param ncores If \code{ncores}>1, then parallel computing is used, with \code{ncores} cores. Default is 1.
 #' @references
 #' Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
-#' Real-time monitoring of functional data.
-#' Accepted for publication in \emph{Journal of Quality Technology}.
+#' Real-time monitoring of functional data. \emph{Journal of Quality Technology}, 57(2):135--152,
+#' doi:https://doi.org/10.1080/00224065.2024.2430978.
 #' @return   A list containing the following arguments:
 #'
 #' \code{T2_fd} List of \eqn{T^{2}} functions for each observation.
@@ -3690,7 +3685,6 @@ FRTM_PhaseI <-
 #' @export
 #' @inherit FRTM_PhaseI return examples
 #'
-#' @author F. Centofanti
 FRTM_PhaseII<-function(data_oc,mod_phaseI,ncores=1){
 
   if(!methods::is(mod_phaseI, "FRTM_PhaseI"))

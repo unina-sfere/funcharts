@@ -209,6 +209,53 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// computeSigma
+Rcpp::List computeSigma(const arma::mat& x, const arma::mat& y, const Rcpp::List& B, const arma::mat& z, const std::string& model_Sigma, int& sing, int p, int k, int n);
+RcppExport SEXP _funcharts_computeSigma(SEXP xSEXP, SEXP ySEXP, SEXP BSEXP, SEXP zSEXP, SEXP model_SigmaSEXP, SEXP singSEXP, SEXP pSEXP, SEXP kSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type B(BSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type z(zSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type model_Sigma(model_SigmaSEXP);
+    Rcpp::traits::input_parameter< int& >::type sing(singSEXP);
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(computeSigma(x, y, B, z, model_Sigma, sing, p, k, n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dmvn
+arma::vec dmvn(const arma::mat& X, const arma::rowvec& mu, const arma::mat& sigma);
+RcppExport SEXP _funcharts_dmvn(SEXP XSEXP, SEXP muSEXP, SEXP sigmaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::rowvec& >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma(sigmaSEXP);
+    rcpp_result_gen = Rcpp::wrap(dmvn(X, mu, sigma));
+    return rcpp_result_gen;
+END_RCPP
+}
+// computeComp
+std::vector<arma::vec> computeComp(const arma::mat& x, const arma::mat& y, const Rcpp::List& B, const Rcpp::List& Sigma, const arma::vec& prop);
+RcppExport SEXP _funcharts_computeComp(SEXP xSEXP, SEXP ySEXP, SEXP BSEXP, SEXP SigmaSEXP, SEXP propSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type B(BSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type prop(propSEXP);
+    rcpp_result_gen = Rcpp::wrap(computeComp(x, y, B, Sigma, prop));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_funcharts_score", (DL_FUNC) &_funcharts_score, 4},
@@ -223,6 +270,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_funcharts_DP3", (DL_FUNC) &_funcharts_DP3, 18},
     {"_funcharts_get_path_list1", (DL_FUNC) &_funcharts_get_path_list1, 8},
     {"_funcharts_get_path_list2", (DL_FUNC) &_funcharts_get_path_list2, 8},
+    {"_funcharts_computeSigma", (DL_FUNC) &_funcharts_computeSigma, 9},
+    {"_funcharts_dmvn", (DL_FUNC) &_funcharts_dmvn, 3},
+    {"_funcharts_computeComp", (DL_FUNC) &_funcharts_computeComp, 5},
     {NULL, NULL, 0}
 };
 

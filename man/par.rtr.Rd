@@ -48,6 +48,3 @@ par.rtr()
 \seealso{
 \code{\link{FRTM_PhaseI}}
 }
-\author{
-F. Centofanti
-}

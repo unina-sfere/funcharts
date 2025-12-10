@@ -235,7 +235,7 @@ control_charts_pca_mfd_real_time <- function(pca_list,
 #' @seealso \code{\link{sof_pc_real_time}}, \code{\link{control_charts_sof_pc}}
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(funcharts)
 #' data("air")
 #' air1 <- lapply(air, function(x) x[1:8, , drop = FALSE])

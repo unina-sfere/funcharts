@@ -25,7 +25,7 @@ The method averages the coefficient array across the observation dimension,
 resulting in a new \code{mfd} object with one observation (the sample mean).
 }
 \examples{
-\dontrun{
+\donttest{
 library(funcharts)
 data(air)
 mfdobj <- get_mfd_list(air)

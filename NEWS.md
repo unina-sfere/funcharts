@@ -1,10 +1,22 @@
-# funcharts 1.7.0.9000
+# funcharts 1.8.0
 
+* `FMRCC_PhaseI()` performs Phase I of the Functional Mixture Regression Control Chart (FMRCC) of Capezza et al. (2025).
+* `FMRCC_PhaseII()` performs Phase II of the FMRCC of Capezza et al. (2025).
+* `simulate_data_fmrcc()` simulates functional data under the FMRCC model.
+* `estimate_mixture()` fits Gaussian mixture regression models with multiple covariance parametrizations.
 * Added `plot()` and `lines()` methods for `mfd` objects.
 * Added `abline_mfd()` function to add lines to every panel in `mfd` plots.
 * Added functions that allow to do standard mathematics with `mfd` objects: `+`, `-`, `*`.
 * Added `predict()` method for `pca_mfd` objects, it predicts scores or reconstructs curves for new data.
 * `simulate_data_RoMFCC()` simulates data for the robust multivariate functional control chart of Capezza et al. (2024).
+
+References:
+
+* Capezza, C., Centofanti, F., Forcina, D., Lepore, A., and Palumbo, B. (2025) 
+  Functional Mixture Regression Control Chart. Accepted for publication in \emph{Annals of Applied Statistics}.
+* Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024) Robust Multivariate Functional Control Chart. 
+\emph{Technometrics}, 66(4):531--547, doi:10.1080/00401706.2024.2327346.
+
 
 # funcharts 1.7.0
 
@@ -30,8 +42,11 @@ Accepted for publication in \emph{Technometrics}.
 References:
 
 * Centofanti, F., Lepore, A., Kulahci, M., and Spooner, M. P. (2024).
-  Real-time monitoring of functional data.
-  Accepted for publication in \emph{Journal of Quality Technology}.
+  Real-time monitoring of functional data. \emph{Journal of Quality Technology}.
+  
+* Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024). 
+Real-time monitoring of functional data. \emph{Journal of Quality Technology}, 57(2):135--152, 
+doi:https://doi.org/10.1080/00224065.2024.2430978.
 
 # funcharts 1.5.0
 
@@ -53,7 +68,7 @@ References:
 
 * Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024) 
 Robust Multivariate Functional Control Chart. 
-\emph{Technometrics}, , 66(4):531--547, doi:10.1080/00401706.2024.2327346.
+\emph{Technometrics}, 66(4):531--547, doi:10.1080/00401706.2024.2327346.
 
 
 # funcharts 1.4.0

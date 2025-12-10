@@ -137,17 +137,6 @@ pca_mfd <- function(mfdobj, scale = TRUE, nharm = 20) {
 #'
 #' @seealso \code{\link{pca_mfd}}, \code{\link{scale_mfd}}
 #'
-#' @examples
-#' \dontrun{
-#' fit <- pca_mfd(mfdobj, nharm = 5)
-#' # Scores for new data:
-#' scores_new <- predict(fit, new_mfd, components = 1:3, type = "scores")
-#' # Reconstruction:
-#' recon_new  <- predict(fit, new_mfd, components = 1:3, type = "reconstruction")
-#'
-#' # If newdata = NULL, use the training data stored in the PCA object:
-#' scores_train <- predict(fit, NULL, components = 1:3, type = "scores")
-#' }
 #'
 #' @export
 predict.pca_mfd <- function(object, newdata = NULL,

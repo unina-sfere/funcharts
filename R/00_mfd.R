@@ -2535,13 +2535,21 @@ plot_mfd <- function(mfdobj,
   for (kk in seq_along(mapping_tot)) {
 
     column <- as.character(mapping_tot[kk])
-    column <- substr(column, 2, stringr::str_count(column))
+    column <- substr(column, 2, nchar(column))
     mapping_type <- names(mapping_tot)[kk]
 
 
     if (!(column %in% names(df))) {
-      df <- df %>%
-        dplyr::mutate(!!mapping_type := factor(eval(parse(text=column))))
+
+      val <- eval(parse(text = column))
+      ids <- unique(df$id)
+      if (length(val) != length(ids)) {
+        stop("The aesthetic ", column,
+             " must have length equal to the number of observations nobs(mfdobj).")
+      }
+      df_map <- data.frame(id = ids, tmp = val)
+      names(df_map)[names(df_map) == "tmp"] <- column
+      df <- dplyr::inner_join(df, df_map, by = "id")
     }
   }
 
@@ -2974,11 +2982,6 @@ plot.mfd <- function(x, y, add = FALSE, common_ylim = TRUE, ...) {
 #'
 #' @seealso \code{\link{plot.mfd}}, \code{\link{abline_mfd}}
 #'
-#' @examples
-#' \dontrun{
-#' plot(x)               # first object
-#' lines(y, col=2, lty=2) # add second object
-#' }
 #'
 #' @method lines mfd
 #' @export
@@ -3076,7 +3079,7 @@ abline_mfd <- function(a = NULL, b = NULL, h = NULL, v = NULL, ...) {
 #' resulting in a new \code{mfd} object with one observation (the sample mean).
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(funcharts)
 #' data(air)
 #' mfdobj <- get_mfd_list(air)
@@ -3116,7 +3119,7 @@ mean.mfd <- function(x, ...) {
 #' bifd object. The covariance function is useful for analyzing relationships between functional variables.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(funcharts)
 #' data("air")
 #' x <- get_mfd_list(air[1:3])
@@ -3177,7 +3180,7 @@ cov_mfd <- function(mfdobj1, mfdobj2 = mfdobj1) {
 #' is then computed as the covariance of the scaled data using \code{\link{cov_mfd}}.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(funcharts)
 #' data("air")
 #' x <- get_mfd_list(air[1:3])

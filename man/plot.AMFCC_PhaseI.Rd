@@ -27,7 +27,7 @@ This function provides plots of either the monitoring statistics
 or the contribution plot for a given observation.
 }
 \examples{
-\dontrun{
+\donttest{
 library(funcharts)
 N <- 10
 l_grid <- 10

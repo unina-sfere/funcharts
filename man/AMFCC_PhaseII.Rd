@@ -113,6 +113,3 @@ Centofanti, F., A. Lepore, and B. Palumbo (2025).
 An Adaptive Multivariate Functional Control Chart.
 Accepted for publication in \emph{Technometrics}.
 }
-\author{
-F. Centofanti
-}

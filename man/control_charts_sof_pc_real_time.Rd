@@ -73,7 +73,7 @@ a scalar quality characteristic adjusted for
 by the effect of multivariate functional covariates.
 }
 \examples{
-\dontrun{
+\donttest{
 library(funcharts)
 data("air")
 air1 <- lapply(air, function(x) x[1:8, , drop = FALSE])

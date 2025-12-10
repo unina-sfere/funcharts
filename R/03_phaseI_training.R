@@ -329,7 +329,7 @@ calculate_cv_limits <- function(pca,
 #' signaled as possibly anomalous.
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(funcharts)
 #' data("air")
 #' air <- lapply(air, function(x) x[1:10, , drop = FALSE])

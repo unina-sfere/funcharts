@@ -119,7 +119,6 @@
 #' y <- rowMeans(air$NO2)
 #' mod <- sof_pc(y, mfdobj_x)
 #'
-#' @author C. Capezza
 sof_pc <- function(y,
                    mfdobj_x,
                    tot_variance_explained = 0.9,
@@ -170,9 +169,9 @@ sof_pc <- function(y,
   XtX_diag <- colSums(scores^2)
   X2 <- scores^2
   beta_scores <- c(mean(y), crossprod(scores, y) / XtX_diag)
-  yhat <- matrixStats::rowCumsums(t(t(cbind(1, scores)) * beta_scores))
+  yhat <- t(Rfast::colCumSums(t(cbind(1, scores)) * beta_scores))
   res2 <- (y - yhat)^2
-  H <- matrixStats::rowCumsums(cbind(1 / length(y), t(t(scores^2) / XtX_diag)))
+  H <- t(Rfast::colCumSums(rbind(1 / length(y), t(scores^2) / XtX_diag)))
   PRESS <- colSums(res2 / (1 - H)^2)
   gcv <- colMeans(t(t(res2 / (1 - colMeans(H)^2))))
 
@@ -296,7 +295,6 @@ sof_pc <- function(y,
 #' mod <- sof_pc(y, mfdobj_x)
 #' predict_sof_pc(mod)
 #'
-#' @author C. Capezza
 predict_sof_pc <- function(object,
                            y_new = NULL,
                            mfdobj_x_new = NULL,
@@ -432,7 +430,6 @@ predict_sof_pc <- function(object,
 #' mod <- sof_pc(y, mfdobj_x)
 #' plot_bootstrap_sof_pc(mod, nboot = 5)
 #'
-#' @author C. Capezza
 plot_bootstrap_sof_pc <- function(mod, nboot = 25, ncores = 1) {
 
   variables <- mod$beta_fd$fdnames[[3]]

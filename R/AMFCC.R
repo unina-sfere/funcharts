@@ -68,7 +68,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(funcharts)
 #' N <- 10
 #' l_grid <- 10
@@ -126,7 +126,6 @@
 #' plot(mod_phaseII_AMFCC,type='cont',ind_obs=1)
 #' }
 #'
-#' @author F. Centofanti
 #' @references
 #' Centofanti, F., A. Lepore, and B. Palumbo (2025).
 #' An Adaptive Multivariate Functional Control Chart.
@@ -456,7 +455,6 @@ AMFCC_PhaseI <- function(data_tra,
 #' plot(mod_phaseII_AMFCC)
 #' plot(mod_phaseII_AMFCC,type='cont',ind_obs=1)
 #'
-#' @author F. Centofanti
 #' @references
 #' Centofanti, F., A. Lepore, and B. Palumbo (2025).
 #' An Adaptive Multivariate Functional Control Chart.

@@ -20,13 +20,6 @@ Adds new curves from an \code{mfd} object to an existing plot created by
 \code{\link{plot.mfd}}. Each variable is added to its corresponding panel,
 using the same scales and layout as the original plot.
 }
-\examples{
-\dontrun{
-plot(x)               # first object
-lines(y, col=2, lty=2) # add second object
-}
-
-}
 \seealso{
 \code{\link{plot.mfd}}, \code{\link{abline_mfd}}
 }

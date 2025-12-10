@@ -53,7 +53,7 @@ seq_t_tot <- seq(0, 1, length.out = 30)[-1]
 seq_x <- seq(0.1, max_x, length.out = 10)
 
 
-\dontrun{
+\donttest{
   mod_phaseI_FRTM <- FRTM_PhaseI(
     data_tra =  data,
     control.FDTW = list(
@@ -75,9 +75,6 @@ seq_x <- seq(0.1, max_x, length.out = 10)
 }
 \references{
 Centofanti, F., A. Lepore, M. Kulahci, and M. P. Spooner (2024).
-Real-time monitoring of functional data.
-Accepted for publication in \emph{Journal of Quality Technology}.
-}
-\author{
-F. Centofanti
+Real-time monitoring of functional data. \emph{Journal of Quality Technology}, 57(2):135--152,
+doi:https://doi.org/10.1080/00224065.2024.2430978.
 }

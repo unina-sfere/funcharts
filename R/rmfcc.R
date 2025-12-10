@@ -76,7 +76,6 @@
 #' # plot_pca_mfd(pca, harm = 1) # plot first eigenfunction, affected by outlier
 #' # plot_pca_mfd(rpca, harm = 1) # plot first eigenfunction in robust case
 #'
-#' @author C. Capezza, F. Centofanti
 rpca_mfd <- function(mfdobj,
                      center = "fusem", # TRUE, or fusem
                      scale = "funmad", # TRUE, FALSE, or funmad
@@ -337,7 +336,7 @@ rpca.fd <- function(fdobj,
                                      kmax = min(nharm, 200))
     }
     results$vectors <- mod_pca$loadings
-    results$values <- matrixStats::colMads(mod_pca$scores)^2
+    results$values <- Rfast::colMads(mod_pca$scores)^2
     coeff_mean <- array(0,c(nbasis,1,nvar))
     for (i in 1:nvar) {
       indexi <- 1:nbasis + (i - 1) * nbasis
@@ -496,14 +495,13 @@ rpca.fd <- function(fdobj,
 #' \emph{Computational Statistics & Data Analysis}, 111:59–76.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(funcharts)
 #' mfdobj <- get_mfd_list(air, grid = 1:24, n_basis = 13, lambda = 1e-2)
 #' plot_mfd(mfdobj)
-#' out <- functional_filter(mfdobj)
+#' out <- functional_filter(mfdobj, bivariate = FALSE)
 #' }
 #'
-#' @author C. Capezza, F. Centofanti
 functional_filter <- function(mfdobj,
                               method_pca = "ROBPCA",
                               alpha = 0.95,
@@ -810,14 +808,13 @@ univ_fil_gse <- function(v, alpha, df) {
 #'
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(funcharts)
-#' mfdobj <- get_mfd_list(air, grid = 1:24, n_basis = 13, lambda = 1e-2)
-#' out <- functional_filter(mfdobj)
-#' mfdobj_imp <- RoMFDI(out$mfdobj)
+#' mfdobj <- get_mfd_list(air[1:3], grid = 1:24, n_basis = 13, lambda = 1e-2)
+#' out <- functional_filter(mfdobj, bivariate = FALSE)
+#' mfdobj_imp <- RoMFDI(out$mfdobj, n_dataset = 1, update = FALSE)
 #' }
 #'
-#' @author C. Capezza, F. Centofanti
 RoMFDI <- function(mfdobj,
                    method_pca = "ROBPCA",
                    fev = 0.999,
@@ -1154,7 +1151,7 @@ RoMFDI <- function(mfdobj,
 #' \emph{Technometrics}, 66(4):531--547, <doi:10.1080/00401706.2024.2327346>.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(funcharts)
 #' mfdobj <- get_mfd_list(air, n_basis = 5)
 #' nobs <- dim(mfdobj$coefs)[2]
@@ -1164,13 +1161,13 @@ RoMFDI <- function(mfdobj,
 #' mfdobj_tuning <- mfdobj[ids[101:300]]
 #' mfdobj2 <- mfdobj[ids[-(1:300)]]
 #' mod_phase1 <- RoMFCC_PhaseI(mfdobj = mfdobj1,
-#'                             mfdobj_tuning = mfdobj_tuning)
+#'                             mfdobj_tuning = mfdobj_tuning,
+#'                             functional_filter_par = list(filter = FALSE))
 #' phase2 <- RoMFCC_PhaseII(mfdobj_new = mfdobj2,
 #'                          mod_phase1 = mod_phase1)
 #' plot_control_charts(phase2)
 #' }
 #'
-#' @author C. Capezza, F. Centofanti
 RoMFCC_PhaseI <- function(mfdobj,
                           mfdobj_tuning = NULL,
                           functional_filter_par = list(filter = TRUE),
@@ -1309,7 +1306,8 @@ RoMFCC_PhaseI <- function(mfdobj,
   }
 
   corr_coef_mean <- apply(simplify2array(corr_coef_list), 1:2, mean)
-  W <- as.matrix(Matrix::bdiag(rep(list(mod_pca$harmonics$basis$B), nvars)))
+  # W <- as.matrix(Matrix::bdiag(rep(list(mod_pca$harmonics$basis$B), nvars)))
+  W <- kronecker(diag(nvars), mod_pca$harmonics$basis$B)
   W_sqrt <- chol(W)
   W_sqrt_inv <- solve(W_sqrt)
   VCOV <- W_sqrt %*% corr_coef_mean %*% t(W_sqrt)
@@ -1566,7 +1564,7 @@ RoMFCC_PhaseI <- function(mfdobj,
 #' \emph{Technometrics}, 66(4):531--547, <doi:10.1080/00401706.2024.2327346>.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(funcharts)
 #' mfdobj <- get_mfd_list(air, n_basis = 5)
 #' nobs <- dim(mfdobj$coefs)[2]
@@ -1576,13 +1574,13 @@ RoMFCC_PhaseI <- function(mfdobj,
 #' mfdobj_tuning <- mfdobj[ids[101:300]]
 #' mfdobj2 <- mfdobj[ids[-(1:300)]]
 #' mod_phase1 <- RoMFCC_PhaseI(mfdobj = mfdobj1,
-#'                             mfdobj_tuning = mfdobj_tuning)
+#'                             mfdobj_tuning = mfdobj_tuning,
+#'                             functional_filter_par = list(filter = FALSE))
 #' phase2 <- RoMFCC_PhaseII(mfdobj_new = mfdobj2,
 #'                          mod_phase1 = mod_phase1)
 #' plot_control_charts(phase2)
 #' }
 #'
-#' @author C. Capezza, F. Centofanti
 RoMFCC_PhaseII <- function(mfdobj_new,
                            mod_phase1) {
 
@@ -1616,8 +1614,6 @@ RoMFCC_PhaseII <- function(mfdobj_new,
                     spe = SPE,
                     T2_lim = mod_phase1$T2_lim,
                     spe_lim = mod_phase1$spe_lim)
-
-
 
   return(out)
 }

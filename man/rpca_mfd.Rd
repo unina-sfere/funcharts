@@ -93,6 +93,3 @@ K. (1999),
 Robust principal components for functional data.
 \emph{Test}, 8, 1-28. \url{doi:10.1007/BF02595862}
 }
-\author{
-C. Capezza, F. Centofanti
-}

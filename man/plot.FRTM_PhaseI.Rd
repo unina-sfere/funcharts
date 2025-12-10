@@ -38,7 +38,7 @@ seq_t_tot <- seq(0, 1, length.out = 30)[-1]
 seq_x <- seq(0.1, max_x, length.out = 10)
 
 
-\dontrun{
+\donttest{
   mod_phaseI_FRTM <- FRTM_PhaseI(
     data_tra =  data,
     control.FDTW = list(

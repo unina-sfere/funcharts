@@ -77,11 +77,11 @@ It finds functional componentwise outliers
 as described in Capezza et al. (2024).
 }
 \examples{
-\dontrun{
+\donttest{
 library(funcharts)
 mfdobj <- get_mfd_list(air, grid = 1:24, n_basis = 13, lambda = 1e-2)
 plot_mfd(mfdobj)
-out <- functional_filter(mfdobj)
+out <- functional_filter(mfdobj, bivariate = FALSE)
 }
 
 }
@@ -100,7 +100,4 @@ Leung, A., Yohai, V., and Zamar, R. (2017).
 Multivariate location and scatter matrix
 estimation under componentwise and casewise contamination.
 \emph{Computational Statistics & Data Analysis}, 111:59–76.
-}
-\author{
-C. Capezza, F. Centofanti
 }

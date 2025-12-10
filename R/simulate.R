@@ -753,7 +753,7 @@ generate_cov_str_RoMFCC <- function(p = 3,
     corr_mat[[ii]] <- do.call("cbind", corr_mat[[ii]])
   }
   corr_mat <- do.call("rbind", corr_mat)
-  e <- eigen(corr_mat, n_comp_x * p)
+  e <- eigen(corr_mat)
 
   list(e = e, P = P)
 }
@@ -829,7 +829,7 @@ generate_cov_str_RoMFCC <- function(p = 3,
 #' \emph{Technometrics}, 66(4):531--547, <doi:10.1080/00401706.2024.2327346>.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Simulate uncontaminated data (Phase I)
 #' sim <- simulate_data_RoMFCC(nobs = 200, p = 3, outlier = "no", OC = "no")
 #' str(sim$X_mat_list)
@@ -959,7 +959,7 @@ simulate_data_RoMFCC <- function(nobs = 1000,
     }
   }
   if (OC == "no") {
-    out_function <- function(nobs, p_g, M_g, T_exp)
+    out_function <- function(nobs, M_g, T_exp)
       rep(0, P)
   }
   else if (OC == "OC_M") {
@@ -968,7 +968,7 @@ simulate_data_RoMFCC <- function(nobs = 1000,
     }
   }
   else if (OC == "OC_E") {
-    out_function <- function(nobs,  M_g, T_exp) {
+    out_function <- function(nobs, M_g, T_exp) {
       out_values <- rep(0 , P)
       grid <- 1:P
       grid_new <- (grid - min(grid)) / (max(grid) - min(grid))
@@ -990,9 +990,9 @@ simulate_data_RoMFCC <- function(nobs = 1000,
     }
   }
   else if (OC == "OC_P") {
-    out_function <-
-      function(n_obs, M_g, T_exp)
-        fun_phase(x_seq, M_g) - f1_m(x_seq, M_g)
+    out_function <- function(nobs, M_g, T_exp) {
+      fun_phase(x_seq, M_g) - f1_m(x_seq, M_g)
+    }
   }
   cont_cell_mat <- matrix(0, nobs, P * p)
   for (ii in 1:p) {

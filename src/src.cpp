@@ -563,3 +563,160 @@ arma::field<arma::mat> get_path_list2(int N,int M,arma::mat range_x,arma::mat ra
 //   List out=List::create(grid_search,D,P,L,grid_search2);
 //   return(out);
 // }
+
+
+// Functions for MFRCC
+
+// [[Rcpp::export]]
+Rcpp::List computeSigma(
+    const arma::mat& x,
+    const arma::mat& y,
+    const Rcpp::List& B,
+    const arma::mat& z,
+    const std::string& model_Sigma,
+    int& sing,
+    int p,
+    int k,
+    int n
+) {
+  Rcpp::List Sigma(k + 1);
+  sing = 0;
+
+  if (model_Sigma == "EEE") {
+    arma::mat s = arma::zeros(p, p);
+
+    for (int kk = 0; kk < k; ++kk) {
+      arma::mat Bk = Rcpp::as<arma::mat>(B[kk]);
+      arma::mat yhat = x * Bk;
+      arma::mat res = y - yhat;
+      s += res.t() * (res.each_col() % z.col(kk));
+
+    }
+    s /= n;
+    // s = (s.t()+ s) / 2;
+
+    if (arma::cond(s) < 3e-17) {
+      sing = 1;
+      s.fill(arma::datum::nan);
+      Rcpp::Rcout << "\nrcond(Sigma is less than 3e-17!\n";
+    }
+
+    for (int kk = 0; kk < k; ++kk) {
+      Sigma[kk] = s;
+    }
+
+  } else if (model_Sigma == "VVV") {
+    for (int kk = 0; kk < k; ++kk) {
+      arma::mat Bk = Rcpp::as<arma::mat>(B[kk]);
+      arma::mat yhat = x * Bk;
+      arma::mat res = y - yhat;
+      arma::mat ss = res.t() * (res.each_col() % z.col(kk)) / arma::accu(z.col(kk));
+
+      if (arma::cond(ss) < 3e-17) {
+        sing = 1;
+        ss.fill(arma::datum::nan);
+        Rcpp::Rcout << "\nrcond(Sigma is less than 3e-17!\n";
+
+      }
+      Sigma[kk] = ss;
+    }
+
+  } else if (model_Sigma == "VII") {
+    for (int kk = 0; kk < k; ++kk) {
+      arma::mat Bk = Rcpp::as<arma::mat>(B[kk]);
+      arma::mat yhat = x * Bk;
+      arma::mat res = y - yhat;
+      arma::mat ss = arma::trace((res.t() * (res.each_col() % z.col(kk))) / (arma::accu(z.col(kk)) * p)) * arma::eye(p, p);
+
+      if (arma::cond(ss) < 3e-17) {
+        sing = 1;
+        ss.fill(arma::datum::nan);
+        Rcpp::Rcout << "\nrcond(Sigma is less than 3e-17!\n";
+
+      }
+      Sigma[kk] = ss;
+    }
+
+  } else if (model_Sigma == "EII") {
+    arma::mat s = arma::zeros(p, p);
+
+    for (int kk = 0; kk < k; ++kk) {
+      arma::mat Bk = Rcpp::as<arma::mat>(B[kk]);
+      arma::mat yhat = x * Bk;
+      arma::mat res = y - yhat;
+
+      s += res.t() * (res.each_col() % z.col(kk));
+    }
+    s = arma::trace(s) / (n * p) * arma::eye(p, p);
+
+    if (arma::cond(s) < 3e-17) {
+      sing = 1;
+      s.fill(arma::datum::nan);
+      Rcpp::Rcout << "\nrcond(Sigma is less than 3e-17!\n";
+    }
+
+    for (int kk = 0; kk < k; ++kk) {
+      Sigma[kk] = s;
+    }
+  }
+  Sigma[k] = sing;
+  return Sigma;
+}
+
+
+// [[Rcpp::export]]
+arma::vec dmvn(const arma::mat& X, const arma::rowvec& mu, const arma::mat& sigma) {
+  int n = X.n_rows;
+  int d = X.n_cols;
+  arma::vec result(n);
+
+  // Precompute constants
+  double logDetSigma;
+  double sign;
+  arma::log_det(logDetSigma, sign, sigma); // Log determinant and sign
+  arma::mat sigmaInv = arma::inv_sympd(sigma); // Inverse of sigma
+
+  double log2pi = std::log(2.0 * M_PI);
+
+  for (int i = 0; i < n; ++i) {
+    arma::rowvec diff = X.row(i) - mu;
+    double quadForm = arma::as_scalar(diff * sigmaInv * diff.t());
+    result[i] = -0.5 * (d * log2pi + logDetSigma + quadForm);
+  }
+
+  // Convert to density
+  return arma::exp(result);
+}
+
+// [[Rcpp::export]]
+std::vector<arma::vec> computeComp(
+    const arma::mat& x,
+    const arma::mat& y,
+    const Rcpp::List& B,
+    const Rcpp::List& Sigma,
+    const arma::vec& prop
+) {
+  int k = B.size();
+  int n = y.n_rows;
+
+  // Result container
+  std::vector<arma::vec> comp(k);
+
+  for (int i = 0; i < k; ++i) {
+    arma::mat Bk = Rcpp::as<arma::mat>(B[i]);        // Coefficients matrix for component i
+    arma::mat yhat = x * Bk;                        // Predicted values
+    arma::mat Sigma_k = Rcpp::as<arma::mat>(Sigma[i]); // Covariance matrix for component i
+
+    // Compute densities
+    arma::vec lk(n);
+    for (int j = 0; j < n; ++j) {
+      lk[j] = dmvn(y.row(j), yhat.row(j), Sigma_k)[0];
+    }
+
+    // Scale by proportion
+    comp[i] = prop[i] * lk;
+  }
+
+  return comp;
+}
+

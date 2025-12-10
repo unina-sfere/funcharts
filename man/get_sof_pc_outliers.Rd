@@ -30,7 +30,7 @@ This is only an empirical approach. It is advised to use methods
 appropriately designed for phase I monitoring to identify outliers.
 }
 \examples{
-\dontrun{
+\donttest{
 library(funcharts)
 data("air")
 air <- lapply(air, function(x) x[1:10, , drop = FALSE])

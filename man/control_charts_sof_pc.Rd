@@ -136,7 +136,7 @@ A phase II data set contains the observations to be monitored
 with the control charts.
 }
 \examples{
-\dontrun{
+\donttest{
 #' library(funcharts)
 data("air")
 air <- lapply(air, function(x) x[201:300, , drop = FALSE])
@@ -161,7 +161,4 @@ plot_control_charts(cclist)
 }
 \seealso{
 \code{\link{control_charts_pca}}, \code{\link{regr_cc_sof}}
-}
-\author{
-C. Capezza
 }
