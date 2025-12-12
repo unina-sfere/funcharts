@@ -18,3 +18,4 @@
 ^data-raw$
 ^CRAN-SUBMISSION$
 ^codecov\.yml$
+^funcharts-manual\.tex$

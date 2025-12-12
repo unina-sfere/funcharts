@@ -6,7 +6,7 @@
 \alias{funcharts-package}
 \title{funcharts: Functional Control Charts}
 \description{
-Provides functional control charts for statistical process monitoring of functional data, using the methods of Capezza et al. (2020) \doi{10.1002/asmb.2507}, Centofanti et al. (2021) \doi{10.1080/00401706.2020.1753581}, Capezza et al. (2024) \doi{10.1080/00224065.2024.2383674}, Capezza et al. (2024) \doi{10.1080/00401706.2024.2327346}, Centofanti et al. (2025) \doi{10.1080/00224065.2024.2430978}, Capezza et al. (2025) \doi{arXiv:2410.20138}. The package is thoroughly illustrated in the paper of Capezza et al (2023) \doi{10.1080/00224065.2023.2219012}.
+Provides functional control charts for statistical process monitoring of functional data, using the methods of Capezza et al. (2020) \doi{10.1002/asmb.2507}, Centofanti et al. (2021) \doi{10.1080/00401706.2020.1753581}, Capezza et al. (2024) \doi{10.1080/00224065.2024.2383674}, Capezza et al. (2024) \doi{10.1080/00401706.2024.2327346}, Centofanti et al. (2025) \doi{10.1080/00224065.2024.2430978}, Capezza et al. (2025) \doi{10.48550/arXiv.2410.20138}. The package is thoroughly illustrated in the paper of Capezza et al (2023) \doi{10.1080/00224065.2023.2219012}.
 }
 \references{
 Capezza C, Lepore A, Menafoglio A, Palumbo B, Vantini S. (2020)

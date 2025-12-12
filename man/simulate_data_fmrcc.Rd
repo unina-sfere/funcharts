@@ -36,7 +36,7 @@ Default is 4.}
 and shape of the mean shift:
 \itemize{
 \item Numeric vector: Coefficients c(a3, a2, a1, a0) for polynomial shift:
-Shift(t) = severity × (a3×t³ + a2×t² + a1×t + a0)
+\eqn{Shift(t) = severity \times (a_3 t^3 + a_2 t^2 + a_1 t + a_0)}
 \item 'low': Applies a "low" shift pattern based on RSW dynamic resistance curves
 \item 'high': Applies a "high" shift pattern based on RSW dynamic resistance curves
 }
@@ -63,24 +63,24 @@ error added to both X and Y. Default is 0 (no measurement error).}
 
 \item{fun_noise}{Character. Distribution for functional error term. Options:
 \itemize{
-\item 'normal': Gaussian errors (default)
-\item 't': Student's t-distribution errors with df degrees of freedom
-\item 'skewnormal': Skew-normal distribution with skewness parameter alphasn
+\item \code{'normal'}: Gaussian errors (default)
+\item \code{'t'}: Student's t-distribution errors with df degrees of freedom
+\item \code{'skewnormal'}: Skew-normal distribution with skewness parameter alphasn
 }}
 
 \item{df}{Numeric. Degrees of freedom for Student's t-distribution when
-fun_noise = 't'. Default is 3.}
+\code{fun_noise = 't'}. Default is 3.}
 
 \item{alphasn}{Numeric. Skewness parameter for skew-normal distribution when
-fun_noise = 'skewnormal'. Default is 4.}
+\code{fun_noise = 'skewnormal'}. Default is 4.}
 }
 \value{
 A list containing:
-\item{X}{Matrix (len_grid × n_obs) of functional covariate observations.}
-\item{Y}{Matrix (len_grid × n_obs) of shifted functional response observations.}
+\item{X}{Matrix (\code{len_grid} \eqn{\times} \code{n_obs}) of functional covariate observations.}
+\item{Y}{Matrix (\code{len_grid} \eqn{\times} \code{n_obs}) of shifted functional response observations.}
 \item{Eps_1, Eps_2, Eps_3}{Matrices of functional error terms for each cluster.}
-\item{beta_matrix_1, beta_matrix_2, beta_matrix_3}{Matrices (len_grid × len_grid)
-containing the bivariate regression coefficient functions β^X_k(s,t) for k=1,2,3.}
+\item{beta_matrix_1, beta_matrix_2, beta_matrix_3}{Matrices (\code{len_grid} \eqn{\times} \code{len_grid})
+containing the bivariate regression coefficient functions \eqn{\beta^X_k(s,t)} for k=1,2,3.}
 }
 \description{
 #' @description
@@ -96,23 +96,23 @@ The data generation follows Equation (18) in the paper:
 
 The three clusters are characterized by:
 \itemize{
-\item Different functional intercepts β^0_k(t) (inspired by dynamic resistance
+\item Different functional intercepts \eqn{\beta^0_k(t)} (inspired by dynamic resistance
 curves in RSW processes)
-\item Different bivariate regression coefficient functions β^X_k(s,t)
+\item Different bivariate regression coefficient functions \eqn{\beta^X_k(s,t)}
 \item Functional errors with variance adjusted to achieve the specified SNR
 }
 
-Moreover, when when \code{severity} != 0, it applies a controlled shift to the functional response Y to
+Moreover, when when \code{severity != 0}, it applies a controlled shift to the functional response Y to
 simulate out-of-control conditions. The shift types include:
 
-\strong{Polynomial shifts:} When shift_coef is numeric, a polynomial of degree 3 is
-applied: Shift(t) = severity × (a3×t³ + a2×t² + a1×t + a0)
+\strong{Polynomial shifts:} When \code{shift_coef} is numeric, a polynomial of degree 3 is
+applied: \eqn{Shift(t) = severity \times (a_3 t^3 + a_2 t^2 + a_1 t + a_0)}
 
-\strong{Linear shift example:} shift_coef = c(0, 0, 1, 0) produces a linear shift
+\strong{Linear shift example:} \code{shift_coef = c(0, 0, 1, 0)} produces a linear shift
 
-\strong{Quadratic shift example:} shift_coef = c(0, 1, 0, 0) produces a quadratic shift
+\strong{Quadratic shift example:} \code{shift_coef = c(0, 1, 0, 0)} produces a quadratic shift
 
-\strong{RSW-specific shifts:} When shift_coef = 'low' or 'high', the function applies
+\strong{RSW-specific shifts:} When \code{shift_coef = 'low'} or \code{'high'}, the function applies
 shifts based on modifications to the dynamic resistance curve (DRC) parameters,
 simulating realistic fault patterns in resistance spot welding processes.
 The functional covariate X is generated using functional principal component analysis
