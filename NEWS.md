@@ -1,3 +1,7 @@
+# funcharts 1.8.1
+
+* Dependency on `rofanova` now works.
+
 # funcharts 1.8.0
 
 * `FMRCC_PhaseI()` performs Phase I of the Functional Mixture Regression Control Chart (FMRCC) of Capezza et al. (2025).
