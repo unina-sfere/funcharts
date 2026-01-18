@@ -271,11 +271,11 @@ plus_mfd <- function(mfdobj1, mfdobj2) {
     fdnames <- mfdobj1$fdnames
   }
   if (n1 == 1 & n2 > 1) {
-    A <- A1[, rep(1, n2), ] + A2
+    A <- A1[, rep(1, n2), , drop = FALSE] + A2
     fdnames <- mfdobj2$fdnames
   }
   if (n1 > 1 & n2 == 1) {
-    A <- A1 + A2[, rep(1, n1), ]
+    A <- A1 + A2[, rep(1, n1), , drop = FALSE]
     fdnames <- mfdobj1$fdnames
   }
   mfd(A, bs, fdnames)
