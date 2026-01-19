@@ -2206,6 +2206,7 @@ RoMFCC_PhaseII_casewise <- function(mfdobj_all_imp,
 #' see the value of \code{\link{RoMFCC_PhaseII_casewise}} for a full
 #' description of its component;
 #'
+#' @export
 #'
 #' @references
 #' Capezza, C., Centofanti, F., Lepore, A., Palumbo, B. (2024)
@@ -2603,6 +2604,7 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
 #' statistic values calculated on the Phase II sequence,
 #' \code{amfewma_monitoring_statistic_lim} is the upper control limit.
 #'
+#' @export
 #'
 #' @references
 #' Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2025)
