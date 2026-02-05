@@ -63,11 +63,13 @@ through \code{RoAMFEWMA_PhaseI}.
 set.seed(0)
 dat_phaseI <- simulate_data_RoMFCC(p_cellwise = 0.05,
                             p_casewise = 0.05,
+                            p = 10,
                             outlier = "outlier_E",
                             M_outlier_cell = 0.03,
                             M_outlier_case = 0.01,
                             max_n_cellwise = 10)
 dat_phaseII <- simulate_data_RoMFCC(OC = "OC_E",
+                                    p = 10,
                                     M_OC = 0.01,
                                     which_OC = 5)
 mfdobj_phaseI <- get_mfd_list(dat_phaseI$X_mat_list, n_basis = 5)
