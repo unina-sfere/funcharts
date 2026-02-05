@@ -2098,9 +2098,9 @@ RoMFCC_PhaseII_casewise <- function(mfdobj_all_imp,
 
 
 
-#' Robust Adaptive Multivariate Functional EWMA Control Chart - Phase I
+# Robust Adaptive Multivariate Functional EWMA Control Chart - Phase I
 #'
-#' It performs Phase I of the Robust Adaptive Multivariate
+#' It performs Phase I of a robust version of the Adaptive Multivariate
 #' Functional EWMA control chart (RoAMFEWMA).
 #' The procedure combines:
 #' \enumerate{
@@ -2116,7 +2116,7 @@ RoMFCC_PhaseII_casewise <- function(mfdobj_all_imp,
 #'   on cellwise and casewise clean data.
 #' }
 #' The resulting object can be directly used as \code{mod_1} argument
-#' in \code{\link{AMFEWMA_PhaseII}}
+#' in \code{\link{RoAMFEWMA_PhaseII}}
 #'
 #' @details
 #' Among the multiple imputed datasets, the first one is used to build
@@ -2143,6 +2143,26 @@ RoMFCC_PhaseII_casewise <- function(mfdobj_all_imp,
 #' Functional Control Chart to estimate tuning quantities and control limits.
 #' After casewise cleaning, the resulting clean tuning set is employed in the
 #' Phase I calibration of the Adaptive Multivariate Functional EWMA control chart.
+#' @param lambda
+#' Lambda parameter to be used in the scoring function present in AMFEWMA.
+#' See equation (7) or (8) of Capezza et al., 2024.
+#' If supplied, it must be a number between 0 and 1. This is passed to
+#' \code{\link{AMFEWMA_PhaseI}} and used as a fixed input, skipping the internal
+#' optimization step.
+#' If NULL, it is automatically selected within \code{\link{AMFEWMA_PhaseI}}
+#' according to the optimization procedure presented in Section 2.4 of
+#' Capezza et al. (2024).
+#' The default value is NULL.
+#' @param k
+#' Parameter k to be used in the scoring function present in AMFEWMA.
+#' See equation (7) or (8) of Capezza et al., 2024.
+#' If supplied, it must be a number greater than zero. This is passed to
+#' \code{\link{AMFEWMA_PhaseI}} and used as a fixed input, skipping the internal
+#'  optimization step.
+#' If NULL, it is automatically selected within \code{\link{AMFEWMA_PhaseI}}
+#' according to the optimization procedure in Section 2.4 of
+#' Capezza et al. (2024).
+#' The default value is \code{NULL}.
 #' @param functional_filter_par
 #' A list with an argument \code{filter} that can be TRUE or FALSE depending
 #' on if the functional filter step must be performed or not.
@@ -2219,7 +2239,7 @@ RoMFCC_PhaseII_casewise <- function(mfdobj_all_imp,
 #' doi:https://doi.org/10.1080/00224065.2024.2383674.
 #'
 #' @examples
-#' \dontrun{
+#' \dontrun {
 #' set.seed(0)
 #' dat_phaseI <- simulate_data_RoMFCC(p_cellwise = 0.05,
 #'                             p_casewise = 0.05,
@@ -2242,8 +2262,10 @@ RoMFCC_PhaseII_casewise <- function(mfdobj_all_imp,
 #' }
 RoAMFEWMA_PhaseI <- function(mfdobj,
                              mfdobj_tuning,
+                             lambda = NULL,
+                             k = NULL,
                              functional_filter_par = list(filter = TRUE),
-                             imputation_par = list(method_imputation = "RoMFDI", n_dataset = 1),
+                             imputation_par = list(method_imputation = "RoMFDI"),
                              verbose = FALSE) {
 
   # -------------------------
@@ -2268,6 +2290,20 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
 
   if (is.null(imputation_par$method_imputation)) {
     imputation_par$method_imputation <- "RoMFDI"
+  }
+
+  # Lambda e k dafult arguments
+
+  if (!is.null(lambda)) {
+    if (!is.numeric(lambda) || length(lambda) != 1 || is.na(lambda) || lambda <= 0 || lambda > 1) {
+      stop("lambda must be a single numeric value in (0, 1].")
+    }
+  }
+
+  if (!is.null(k)) {
+    if (!is.numeric(k) || length(k) != 1 || is.na(k) || k <= 0) {
+      stop("k must be a single positive numeric value.")
+    }
   }
 
   nvar <- dim(mfdobj$coefs)[3]
@@ -2512,7 +2548,9 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
 
   AMFEWMA_args <- list(
     mfdobj = mfd_clean_training,
-    mfdobj_tuning = mfd_clean_tuning
+    mfdobj_tuning = mfd_clean_tuning,
+    lambda = lambda,
+    k = k
   )
 
   AMFEWMA_args <- c(
@@ -2544,6 +2582,7 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
   return(out)
 
 }
+
 
 
 
@@ -2617,11 +2656,13 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
 #' set.seed(0)
 #' dat_phaseI <- simulate_data_RoMFCC(p_cellwise = 0.05,
 #'                             p_casewise = 0.05,
+#'                             p = 10,
 #'                             outlier = "outlier_E",
 #'                             M_outlier_cell = 0.03,
 #'                             M_outlier_case = 0.01,
 #'                             max_n_cellwise = 10)
 #' dat_phaseII <- simulate_data_RoMFCC(OC = "OC_E",
+#'                                     p = 10,
 #'                                     M_OC = 0.01,
 #'                                     which_OC = 5)
 #' mfdobj_phaseI <- get_mfd_list(dat_phaseI$X_mat_list, n_basis = 5)
