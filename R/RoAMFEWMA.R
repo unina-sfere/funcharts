@@ -1606,15 +1606,15 @@ RoAMFEWMA_PhaseII <- function(mfdobj_2,
   mod_1 <- mod_1$mod_1
   nobs_2 <- dim(mfdobj_2$coefs)[2]
   nvar <- dim(mfdobj_2$coefs)[3]
-  grid_points <- mod_1$mod_1$grid_points
-  mean_mfdobj <- mod_1$mod_1$mean_mfdobj
-  vectors <- mod_1$mod_1$vectors
-  values <- mod_1$mod_1$values
-  lambda <- mod_1$mod_1$lambda
-  k <- mod_1$mod_1$k
-  h <- mod_1$mod_1$h
-  huber <- mod_1$mod_1$huber
-  c <- mod_1$mod_1$c
+  grid_points <- mod_1$grid_points
+  mean_mfdobj <- mod_1$mean_mfdobj
+  vectors <- mod_1$vectors
+  values <- mod_1$values
+  lambda <- mod_1$lambda
+  k <- mod_1$k
+  h <- mod_1$h
+  huber <- mod_1$huber
+  c <- mod_1$c
 
   RL <- numeric(n_seq_2)
 
@@ -1676,7 +1676,7 @@ RoAMFEWMA_PhaseII <- function(mfdobj_2,
   cc <- data.frame(
     id = mfdobj_2$fdnames[[2]],
     amfewma_monitoring_statistic = output$T2[, 1],
-    amfewma_monitoring_statistic_lim = mod_1$mod_1$h
+    amfewma_monitoring_statistic_lim = mod_1$h
   )
 
   return(list(
