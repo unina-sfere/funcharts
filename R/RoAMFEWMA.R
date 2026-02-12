@@ -615,7 +615,7 @@ RoMFCC_PhaseII_casewise <- function(mfdobj_all_imp,
 #' doi:https://doi.org/10.1080/00224065.2024.2383674.
 #'
 #' @examples
-#' \dontrun {
+#' \dontrun{
 #' set.seed(0)
 #' dat_phaseI <- simulate_data_RoMFCC(p_cellwise = 0.05,
 #'                             p_casewise = 0.05,
@@ -1036,7 +1036,7 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
 #' doi:https://doi.org/10.1080/00224065.2024.2383674.
 #'
 #' @examples
-#' \dontrun {
+#' \dontrun{
 #' set.seed(0)
 #' dat_phaseI <- simulate_data_RoMFCC(p_cellwise = 0.05,
 #'                             p_casewise = 0.05,
@@ -1342,7 +1342,7 @@ RoAMFEWMA_PhaseII <- function(mfdobj_2,
 #' properties and enhancements. \emph{Technometrics}, 32(1), 1-12.
 #'
 #' @examples
-#' \dontrun {
+#' \dontrun{
 #' set.seed(0)
 #' library(funcharts)
 #' dat_I <- simulate_mfd(nobs = 1000,

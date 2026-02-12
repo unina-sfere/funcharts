@@ -186,7 +186,7 @@ via soft-thresholding. In particular, standardized squared PCA scores
 contribute only through their excess over a threshold c.
 }
 \examples{
-\dontrun {
+\dontrun{
 set.seed(0)
 library(funcharts)
 dat_I <- simulate_mfd(nobs = 1000,

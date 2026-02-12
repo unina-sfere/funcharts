@@ -422,7 +422,7 @@ scam2<-function (formula, family = stats::gaussian(), data = list(), gamma = 1,
   cl <- match.call()
   mf <- match.call(expand.dots = FALSE)
   mf$formula <- gp$fake.formula
-  mf$family <- mf$control <- mf$scale <- mf$knots <- mf$sp <- mf$min.sp <- mf$H <- mf$select <- mf$drop.intercept <- mf$gamma <- mf$method <- mf$fit <- mf$paraPen <- mf$G <- mf$optimizer <- mf$optim.method <- mf$not.exp <- mf$in.out <- mf$AR1.rho <- mf$devtol.fit <- mf$steptol.fit <- mf$del <- mf$... <- NULL
+  mf$family <- mf$control <- mf$scale <- mf$knots <- mf$sp <- mf$min.sp <- mf$H <- mf$select <- mf$drop.intercept <- mf$gamma <- mf$method <- mf$fit <- mf$paraPen <- mf$G <- mf$optimizer <- mf$optim.method <- mf$not.exp <- mf$in.out <- mf$AR1.rho <- mf$devtol.fit <- mf$steptol.fit <- mf$del <- mf[["..."]] <- NULL
   mf$drop.unused.levels <- drop.unused.levels
   mf[[1]] <- quote(stats::model.frame)
   pmf <- mf

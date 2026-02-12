@@ -155,7 +155,7 @@ Among the multiple imputed datasets, the first one is used to build
 the cleaned training and tuning sets for AMFEWMA.
 }
 \examples{
-\dontrun {
+\dontrun{
 set.seed(0)
 dat_phaseI <- simulate_data_RoMFCC(p_cellwise = 0.05,
                             p_casewise = 0.05,
