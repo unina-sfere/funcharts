@@ -2,30 +2,14 @@
 % Please edit documentation in R/RoAMFEWMA.R
 \name{RoAMFEWMA_PhaseI}
 \alias{RoAMFEWMA_PhaseI}
-\title{It performs Phase I of a robust version of the Adaptive Multivariate
-Functional EWMA control chart (RoAMFEWMA).
-The procedure combines:
-\enumerate{
-\item Functional cellwise outlier detection via
-\code{\link{functional_filter}},
-\item Robust Multivariate Functional Data Imputation (RoMFDI) via
-\code{\link{RoMFDI}},
-\item Casewise outliers detection via RoMFCC
-(\code{\link{RoMFCC_PhaseI_casewise}} and
-\code{\link{RoMFCC_PhaseII_casewise}}),
-on the imputed Phase I data,
-\item AMFEWMA Phase I (soft-thresholding) calibration
-(\code{\link{AMFEWMA_PhaseI_ST}}) on cellwise and casewise clean data.
-}
-The resulting object can be directly used as \code{mod_1} argument
-in \code{\link{RoAMFEWMA_PhaseII}}}
+\title{Robust Adaptive Multivariate Functional EWMA Control Chart - Phase I}
 \usage{
 RoAMFEWMA_PhaseI(
   mfdobj,
   mfdobj_tuning,
   lambda = NULL,
   k = NULL,
-  c = NULL,
+  c = 0,
   functional_filter_par = list(filter = TRUE),
   imputation_par = list(method_imputation = "RoMFDI"),
   verbose = FALSE
@@ -74,8 +58,8 @@ Capezza et al. (2024).
 The default value is \code{NULL}.}
 
 \item{c}{Non-negative soft-thresholding constant passed to
-\code{\link{AMFEWMA_PhaseI_ST}}. If NULL (default), it is internally
-set to 0, corresponding to no soft-thresholding. If a non-negative
+\code{\link{AMFEWMA_PhaseI_ST}}. Default value is 0,
+corresponding to no soft-thresholding. If a non-negative
 value is provided, it is used in the AMFEWMA Phase I (soft-thresholding)
 calibration step.}
 
@@ -155,7 +139,7 @@ Among the multiple imputed datasets, the first one is used to build
 the cleaned training and tuning sets for AMFEWMA.
 }
 \examples{
-\dontrun{
+\donttest{
 set.seed(0)
 dat_phaseI <- simulate_data_RoMFCC(p_cellwise = 0.05,
                             p_casewise = 0.05,

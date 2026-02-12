@@ -79,7 +79,7 @@
 #' \emph{Technometrics}, 66(4):531--547, <doi:10.1080/00401706.2024.2327346>.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(funcharts)
 #' set.seed(0)
 #' dat <- simulate_data_RoMFCC(p_cellwise = 0.05,
@@ -395,7 +395,7 @@ RoMFCC_PhaseI_casewise <- function(mfdobj_imp,
 #' \emph{Technometrics}, 66(4):531--547, <doi:10.1080/00401706.2024.2327346>.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(funcharts)
 #' set.seed(0)
 #' dat <- simulate_data_RoMFCC(p_cellwise = 0.05,
@@ -659,7 +659,7 @@ RoMFCC_PhaseII_casewise <- function(mfdobj_all_imp,
 #' properties and enhancements. \emph{Technometrics}, 32(1), 1-12.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' set.seed(0)
 #' library(funcharts)
 #' dat_I <- simulate_mfd(nobs = 1000,
@@ -708,7 +708,7 @@ AMFEWMA_PhaseI_ST <- function(mfdobj,
                               discrete_grid_length = 25,
                               score_function = "huber",
                               fev = 0.99,
-                              c = NULL,
+                              c = 0,
                               n_skip = 100) {
 
   if (!is.null(lambda)) {
@@ -885,7 +885,7 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
                                          discrete_grid_length = 25,
                                          score_function = "huber",
                                          fev = 0.99,
-                                         c,
+                                         c = 0,
                                          n_skip = 100) {
 
   nobs <- dim(mfdobj$coefs)[2]
@@ -1009,7 +1009,7 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 
 
 
-# Robust Adaptive Multivariate Functional EWMA Control Chart - Phase I
+#' Robust Adaptive Multivariate Functional EWMA Control Chart - Phase I
 #'
 #' It performs Phase I of a robust version of the Adaptive Multivariate
 #' Functional EWMA control chart (RoAMFEWMA).
@@ -1076,8 +1076,8 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 #' The default value is \code{NULL}.
 #' @param c
 #' Non-negative soft-thresholding constant passed to
-#' \code{\link{AMFEWMA_PhaseI_ST}}. If NULL (default), it is internally
-#' set to 0, corresponding to no soft-thresholding. If a non-negative
+#' \code{\link{AMFEWMA_PhaseI_ST}}. Default value is 0,
+#' corresponding to no soft-thresholding. If a non-negative
 #' value is provided, it is used in the AMFEWMA Phase I (soft-thresholding)
 #' calibration step.
 #' @param functional_filter_par
@@ -1156,7 +1156,7 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 #' doi:https://doi.org/10.1080/00224065.2024.2383674.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' set.seed(0)
 #' dat_phaseI <- simulate_data_RoMFCC(p_cellwise = 0.05,
 #'                             p_casewise = 0.05,
@@ -1181,7 +1181,7 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
                              mfdobj_tuning,
                              lambda = NULL,
                              k = NULL,
-                             c = NULL,
+                             c = 0,
                              functional_filter_par = list(filter = TRUE),
                              imputation_par = list(method_imputation = "RoMFDI"),
                              verbose = FALSE) {
@@ -1577,7 +1577,7 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
 #' doi:https://doi.org/10.1080/00224065.2024.2383674.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' set.seed(0)
 #' dat_phaseI <- simulate_data_RoMFCC(p_cellwise = 0.05,
 #'                             p_casewise = 0.05,
@@ -1606,15 +1606,15 @@ RoAMFEWMA_PhaseII <- function(mfdobj_2,
   mod_1 <- mod_1$mod_1
   nobs_2 <- dim(mfdobj_2$coefs)[2]
   nvar <- dim(mfdobj_2$coefs)[3]
-  grid_points <- mod_1$grid_points
-  mean_mfdobj <- mod_1$mean_mfdobj
-  vectors <- mod_1$vectors
-  values <- mod_1$values
-  lambda <- mod_1$lambda
-  k <- mod_1$k
-  h <- mod_1$h
-  huber <- mod_1$huber
-  c <- mod_1$c
+  grid_points <- mod_1$mod_1$grid_points
+  mean_mfdobj <- mod_1$mod_1$mean_mfdobj
+  vectors <- mod_1$mod_1$vectors
+  values <- mod_1$mod_1$values
+  lambda <- mod_1$mod_1$lambda
+  k <- mod_1$mod_1$k
+  h <- mod_1$mod_1$h
+  huber <- mod_1$mod_1$huber
+  c <- mod_1$mod_1$c
 
   RL <- numeric(n_seq_2)
 
@@ -1676,7 +1676,7 @@ RoAMFEWMA_PhaseII <- function(mfdobj_2,
   cc <- data.frame(
     id = mfdobj_2$fdnames[[2]],
     amfewma_monitoring_statistic = output$T2[, 1],
-    amfewma_monitoring_statistic_lim = mod_1$h
+    amfewma_monitoring_statistic_lim = mod_1$mod_1$h
   )
 
   return(list(

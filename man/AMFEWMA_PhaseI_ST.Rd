@@ -17,7 +17,7 @@ AMFEWMA_PhaseI_ST(
   discrete_grid_length = 25,
   score_function = "huber",
   fev = 0.99,
-  c = NULL,
+  c = 0,
   n_skip = 100
 )
 }
@@ -186,7 +186,7 @@ via soft-thresholding. In particular, standardized squared PCA scores
 contribute only through their excess over a threshold c.
 }
 \examples{
-\dontrun{
+\donttest{
 set.seed(0)
 library(funcharts)
 dat_I <- simulate_mfd(nobs = 1000,

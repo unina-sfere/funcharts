@@ -39,7 +39,7 @@ monitoring statistics according to the methodology proposed by
 Capezza et al. (2024).
 }
 \examples{
-\dontrun{
+\donttest{
 library(funcharts)
 set.seed(0)
 dat <- simulate_data_RoMFCC(p_cellwise = 0.05,

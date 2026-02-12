@@ -60,7 +60,7 @@ remain unchanged, but the input model must be the robust one obtained
 through \code{RoAMFEWMA_PhaseI}.
 }
 \examples{
-\dontrun{
+\donttest{
 set.seed(0)
 dat_phaseI <- simulate_data_RoMFCC(p_cellwise = 0.05,
                             p_casewise = 0.05,

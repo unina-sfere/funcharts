@@ -81,7 +81,7 @@ data free of cellwise outliers (casewise outliers may still be present).
 }
 }
 \examples{
-\dontrun{
+\donttest{
 library(funcharts)
 set.seed(0)
 dat <- simulate_data_RoMFCC(p_cellwise = 0.05,
