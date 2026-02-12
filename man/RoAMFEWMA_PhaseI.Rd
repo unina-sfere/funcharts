@@ -157,7 +157,7 @@ mfdobj_tuning_phaseI <- mfdobj_phaseI[334:1000, ]
 out_phaseI <- RoAMFEWMA_PhaseI(mfdobj = mfdobj_training_phaseI,
                                mfdobj_tuning = mfdobj_tuning_phaseI)
 out_phaseII <- RoAMFEWMA_PhaseII(mfdobj_2 = mfdobj_phaseII,
-                                 mod_1 = out_phaseI)
+                                 mod_1 = out_phaseI$mod_1)
 plot_control_charts(out_phaseII$cc)
 }
 }

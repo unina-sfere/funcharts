@@ -1174,7 +1174,7 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 #' out_phaseI <- RoAMFEWMA_PhaseI(mfdobj = mfdobj_training_phaseI,
 #'                                mfdobj_tuning = mfdobj_tuning_phaseI)
 #' out_phaseII <- RoAMFEWMA_PhaseII(mfdobj_2 = mfdobj_phaseII,
-#'                                  mod_1 = out_phaseI)
+#'                                  mod_1 = out_phaseI$mod_1)
 #' plot_control_charts(out_phaseII$cc)
 #' }
 RoAMFEWMA_PhaseI <- function(mfdobj,
@@ -1595,7 +1595,7 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
 #' out_phaseI <- RoAMFEWMA_PhaseI(mfdobj = mfdobj_training_phaseI,
 #'                                mfdobj_tuning = mfdobj_tuning_phaseI)
 #' out_phaseII <- RoAMFEWMA_PhaseII(mfdobj_2 = mfdobj_phaseII,
-#'                                  mod_1 = out_phaseI)
+#'                                  mod_1 = out_phaseI$mod_1)
 #' plot_control_charts(out_phaseII$cc)
 #' }
 RoAMFEWMA_PhaseII <- function(mfdobj_2,
