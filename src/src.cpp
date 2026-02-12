@@ -117,22 +117,26 @@ arma::mat statisticY_EWMA_cpp(const arma::mat& X,
 
 
 // [[Rcpp::export]]
-double calculate_T2(const arma::vec& Y, const arma::mat& Vectors, const arma::vec& Values) {
-  // Check dimensions
+double calculate_T2(const arma::vec& Y,
+                    const arma::mat& Vectors,
+                    const arma::vec& Values,
+                    double c = 0.0) {
+
+  // Dimension checks
   if (Y.n_elem != Vectors.n_rows || Values.n_elem != Vectors.n_cols) {
-    throw std::runtime_error("Dimension mismatch");
+    throw std::runtime_error("Dimension mismatch: Y length must equal nrow(Vectors) and "
+                               "length(Values) must equal ncol(Vectors).");
   }
 
-  // Perform the optimized calculation
-  arma::vec temp = Vectors.t() * Y; // This is t(Vectors) %*% Y in R
-  temp = temp % temp; // Element-wise squaring, equivalent to square each element of the vector
-  temp = temp / Values; // Element-wise division by Values, equivalent to each element of the vector divided by corresponding element in Values
+  // Compute standardized squared scores
+  arma::vec temp = Vectors.t() * Y;  // projections
+  temp %= temp;                     // square
+  temp /= Values;                   // divide by eigenvalues
 
-  // Sum up the elements for the final result
-  double result = sum(temp);
+  // Soft-threshold: pmax(temp - c, 0)
+  temp = arma::clamp(temp - c, 0.0, arma::datum::inf);
 
-  // Return the result
-  return result;
+  return arma::accu(temp);
 }
 
 
@@ -161,7 +165,8 @@ List get_RL_cpp(const arma::mat& X2,
                 bool huber,
                 double h,
                 const arma::vec& Values,
-                const arma::mat& Vectors) {
+                const arma::mat& Vectors,
+                double c = 0.0) {
 
   arma::uword nvars = X2.n_cols;
   arma::uword nmax = idx2.n_elem;
@@ -176,14 +181,14 @@ List get_RL_cpp(const arma::mat& X2,
     arma::vec Xkk = X_IC.row(idx_IC(kk) - 1).t();
     Y = statisticY_EWMA_vec(Xkk, Y, lambda, k, huber);
 
-    T2_IC(kk) = calculate_T2(Y, Vectors, Values);
+    T2_IC(kk) = calculate_T2(Y, Vectors, Values, c);
 
   }
 
   for (arma::uword kk = 0; kk < nmax; ++kk) {
     arma::vec Xkk = X2.row(idx2(kk) - 1).t();
     Y = statisticY_EWMA_vec(Xkk, Y, lambda, k, huber);
-    T2(kk) = calculate_T2(Y, Vectors, Values);
+    T2(kk) = calculate_T2(Y, Vectors, Values, c);
     if (T2(kk) > h) {
       T2.resize(kk + 1);
       T2_out = T2;
