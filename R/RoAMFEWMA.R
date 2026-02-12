@@ -1374,7 +1374,6 @@ RoAMFEWMA_PhaseII <- function(mfdobj_2,
 #' plot_control_charts(cc$cc, nobsI = 100)
 #' }
 #'
-#' @author
 AMFEWMA_PhaseI_ST <- function(mfdobj,
                               mfdobj_tuning,
                               lambda = NULL,
