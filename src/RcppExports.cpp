@@ -70,15 +70,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // calculate_T2
-double calculate_T2(const arma::vec& Y, const arma::mat& Vectors, const arma::vec& Values);
-RcppExport SEXP _funcharts_calculate_T2(SEXP YSEXP, SEXP VectorsSEXP, SEXP ValuesSEXP) {
+double calculate_T2(const arma::vec& Y, const arma::mat& Vectors, const arma::vec& Values, double c);
+RcppExport SEXP _funcharts_calculate_T2(SEXP YSEXP, SEXP VectorsSEXP, SEXP ValuesSEXP, SEXP cSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::vec& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Vectors(VectorsSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type Values(ValuesSEXP);
-    rcpp_result_gen = Rcpp::wrap(calculate_T2(Y, Vectors, Values));
+    Rcpp::traits::input_parameter< double >::type c(cSEXP);
+    rcpp_result_gen = Rcpp::wrap(calculate_T2(Y, Vectors, Values, c));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -96,8 +97,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // get_RL_cpp
-List get_RL_cpp(const arma::mat& X2, const arma::mat& X_IC, const arma::vec& idx2, const arma::vec& idx_IC, double lambda, const arma::vec& k, bool huber, double h, const arma::vec& Values, const arma::mat& Vectors);
-RcppExport SEXP _funcharts_get_RL_cpp(SEXP X2SEXP, SEXP X_ICSEXP, SEXP idx2SEXP, SEXP idx_ICSEXP, SEXP lambdaSEXP, SEXP kSEXP, SEXP huberSEXP, SEXP hSEXP, SEXP ValuesSEXP, SEXP VectorsSEXP) {
+List get_RL_cpp(const arma::mat& X2, const arma::mat& X_IC, const arma::vec& idx2, const arma::vec& idx_IC, double lambda, const arma::vec& k, bool huber, double h, const arma::vec& Values, const arma::mat& Vectors, double c);
+RcppExport SEXP _funcharts_get_RL_cpp(SEXP X2SEXP, SEXP X_ICSEXP, SEXP idx2SEXP, SEXP idx_ICSEXP, SEXP lambdaSEXP, SEXP kSEXP, SEXP huberSEXP, SEXP hSEXP, SEXP ValuesSEXP, SEXP VectorsSEXP, SEXP cSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -111,7 +112,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type Values(ValuesSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Vectors(VectorsSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_RL_cpp(X2, X_IC, idx2, idx_IC, lambda, k, huber, h, Values, Vectors));
+    Rcpp::traits::input_parameter< double >::type c(cSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_RL_cpp(X2, X_IC, idx2, idx_IC, lambda, k, huber, h, Values, Vectors, c));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -262,9 +264,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_funcharts_score2", (DL_FUNC) &_funcharts_score2, 4},
     {"_funcharts_statisticY_EWMA_vec", (DL_FUNC) &_funcharts_statisticY_EWMA_vec, 5},
     {"_funcharts_statisticY_EWMA_cpp", (DL_FUNC) &_funcharts_statisticY_EWMA_cpp, 5},
-    {"_funcharts_calculate_T2", (DL_FUNC) &_funcharts_calculate_T2, 3},
+    {"_funcharts_calculate_T2", (DL_FUNC) &_funcharts_calculate_T2, 4},
     {"_funcharts_calculate_T2_vec", (DL_FUNC) &_funcharts_calculate_T2_vec, 3},
-    {"_funcharts_get_RL_cpp", (DL_FUNC) &_funcharts_get_RL_cpp, 10},
+    {"_funcharts_get_RL_cpp", (DL_FUNC) &_funcharts_get_RL_cpp, 11},
     {"_funcharts_der_c", (DL_FUNC) &_funcharts_der_c, 4},
     {"_funcharts_loss_c", (DL_FUNC) &_funcharts_loss_c, 6},
     {"_funcharts_DP3", (DL_FUNC) &_funcharts_DP3, 18},
