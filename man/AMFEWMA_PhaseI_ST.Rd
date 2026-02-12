@@ -213,7 +213,7 @@ mod <- AMFEWMA_PhaseI_ST(mfdobj = mfdobj_I,
                       mfdobj_tuning = mfdobj_tun)
 print(mod$lambda)
 print(mod$k)
-cc <- AMFEWMA_PhaseII_ST(mfdobj_2 = rbind_mfd(mfdobj_I[1:100], mfdobj_II),
+cc <- RoAMFEWMA_PhaseII(mfdobj_2 = rbind_mfd(mfdobj_I[1:100], mfdobj_II),
                       mod_1 = mod)
 plot_control_charts(cc$cc, nobsI = 100)
 }
