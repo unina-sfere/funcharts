@@ -1009,7 +1009,7 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 
 
 
-#' Robust Adaptive Multivariate Functional EWMA Control Chart - Phase I
+# Robust Adaptive Multivariate Functional EWMA Control Chart - Phase I
 #'
 #' It performs Phase I of a robust version of the Adaptive Multivariate
 #' Functional EWMA control chart (RoAMFEWMA).
@@ -1068,18 +1068,23 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 #' Parameter k to be used in the scoring function present in AMFEWMA.
 #' See equation (7) or (8) of Capezza et al., 2024.
 #' If supplied, it must be a number greater than zero. This is passed to
-#' \code{\link{AMFEWMA_PhaseI_ST}} and used as a fixed input, skipping the internal
-#' optimization step.
+#' \code{\link{AMFEWMA_PhaseI_ST}} and used as a fixed input, skipping the
+#' internal optimization step.
 #' If NULL, it is automatically selected within \code{\link{AMFEWMA_PhaseI_ST}}
 #' according to the optimization procedure in Section 2.4 of
 #' Capezza et al. (2024).
 #' The default value is \code{NULL}.
+#' @param fev
+#' Number between 0 and 1 denoting the fraction of variability to be
+#' explained by the retained principal components in the multivariate
+#' functional PCA step performed inside
+#' \code{\link{AMFEWMA_PhaseI_ST}}.
+#' Default is 0.9.
 #' @param c
 #' Non-negative soft-thresholding constant passed to
-#' \code{\link{AMFEWMA_PhaseI_ST}}. Default value is 0,
-#' corresponding to no soft-thresholding. If a non-negative
-#' value is provided, it is used in the AMFEWMA Phase I (soft-thresholding)
-#' calibration step.
+#' \code{\link{AMFEWMA_PhaseI_ST}}. Default value is 0, corresponding to
+#' no soft-thresholding. If a non-negative value is provided, it is used
+#' in the AMFEWMA Phase I (soft-thresholding) calibration step.
 #' @param functional_filter_par
 #' A list with an argument \code{filter} that can be TRUE or FALSE depending
 #' on if the functional filter step must be performed or not.
@@ -1156,7 +1161,7 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 #' doi:https://doi.org/10.1080/00224065.2024.2383674.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun {
 #' set.seed(0)
 #' dat_phaseI <- simulate_data_RoMFCC(p_cellwise = 0.05,
 #'                             p_casewise = 0.05,
@@ -1181,6 +1186,7 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
                              mfdobj_tuning,
                              lambda = NULL,
                              k = NULL,
+                             fev = 0.9,
                              c = 0,
                              functional_filter_par = list(filter = TRUE),
                              imputation_par = list(method_imputation = "RoMFDI"),
@@ -1229,6 +1235,11 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
     if (!is.numeric(c) || length(c) != 1 || is.na(c) || c < 0) {
       stop("Parameter 'c' must be a single non-negative numeric value.")
     }
+  }
+
+  # fev default arguments
+  if (!is.numeric(fev) || length(fev) != 1 || is.na(fev) || fev <= 0 || fev > 1) {
+    stop("fev must be a single numeric value in (0, 1].")
   }
 
   nvar <- dim(mfdobj$coefs)[3]
@@ -1454,9 +1465,9 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
   }
 
 
-  # -----------------------------------------
-  # STEP 3 - AMFEWMA Phase I on cleaned data
-  # -----------------------------------------
+  # --------------------------------------------------------------------
+  # STEP 3 - AMFEWMA Phase I soft-thresholding version on cleaned data
+  # --------------------------------------------------------------------
 
   nobs_clean <- dim(mfd_all_clean$coefs)[2]
 
@@ -1476,6 +1487,7 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
     mfdobj_tuning = mfd_clean_tuning,
     lambda = lambda,
     k = k,
+    fev = fev,
     c = c
   )
 
