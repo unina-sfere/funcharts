@@ -932,9 +932,9 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
   eigen <- eigen(sigmaY, symmetric = TRUE)
   var_spiegata <- cumsum(eigen$values) / sum(eigen$values)
   n_eigenvalues <- which(var_spiegata > fev)[1]
-  A <- eigen$values[1:n_eigenvalues]
+  A_old <- eigen$values[1:n_eigenvalues]
   B <- eigen$vectors[, 1:n_eigenvalues, drop = FALSE]
-  inv_sigmaY_reg <- B %*% diag(1 / A) %*% t(B)
+  inv_sigmaY_reg <- B %*% diag(1 / A_old) %*% t(B)
 
   # (TUNING)
 
@@ -946,6 +946,18 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
   nobs_tun <- dim(Xeval_tun_cen)[2]
   nvar <- dim(Xeval_tun_cen)[3]
   Xtun <- matrix(aperm(Xeval_tun_cen, c(2, 1, 3)), nrow = nobs_tun)
+
+  Y_array_tun <- statisticY_EWMA_cpp(
+    Xtun,
+    lambda = lambda,
+    k = k_fun,
+    huber = huber,
+    idx = 1:nrow(Xtun)
+  )
+  score_tun <- Y_array_tun %*% B
+  score_std <- t(t(score_tun) / sqrt(A_old))
+  score_tun_sdevs <- Rfast::colVars(score_std, std = TRUE)
+  A <- A_old * score_tun_sdevs^2
 
   par_fun_tun <- function(qq) {
     idx_tun <- sample(1:nobs_tun, l_seq, replace = TRUE)
@@ -1009,7 +1021,7 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 
 
 
-# Robust Adaptive Multivariate Functional EWMA Control Chart - Phase I
+#' Robust Adaptive Multivariate Functional EWMA Control Chart - Phase I
 #'
 #' It performs Phase I of a robust version of the Adaptive Multivariate
 #' Functional EWMA control chart (RoAMFEWMA).
