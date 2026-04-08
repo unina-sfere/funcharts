@@ -1118,6 +1118,18 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 #' See \code{\link{RoMFDI}} for all the arguments and their default
 #' values.
 #' Default value is \code{list(method_imputation = "RoMFDI")}.
+#' @param casewise_par
+#' A list of parameters controlling the casewise outlier removal step based
+#' on the RoMFCC procedure.
+#' It must contain the logical argument \code{remove_casewise}, indicating
+#' whether the whole casewise outlier detection and removal step should be
+#' performed.
+#' If \code{remove_casewise = TRUE}, both Phase I and Phase II of the RoMFCC
+#' casewise procedure are applied to identify and remove casewise outliers
+#' from the Phase I data.
+#' If \code{remove_casewise = FALSE}, the entire casewise outlier removal step
+#' is skipped.
+#' Default value is \code{list(remove_casewise = TRUE)}.
 #' @param verbose
 #' If TRUE, it prints messages about the steps of the algorithm.
 #' Default is FALSE.
@@ -1129,14 +1141,16 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 #' of \code{\link{AMFEWMA_PhaseI_ST}} for a full description of its component;
 #'
 #' * \code{mfd_clean_training} training data after complete cleaning,
-#' containing no outliers at either cellwise or casewise;
-
+#' containing no outliers at either cellwise or casewise, used as training set
+#' for \code{\link{AMFEWMA_PhaseI_ST}};
+#'
 #' * \code{mfd_clean_tuning} tuning data after complete cleaning,
-#' containing no outliers at either cellwise or casewise;
+#' containing no outliers at either cellwise or casewise, used as tuning set
+#' for \code{\link{AMFEWMA_PhaseI_ST}};
 #'
 #' * \code{mfd_all_clean} full Phase I clean data (training + tuning);
 #'
-#' * \code{idx_casewise_outliers} indices of observations indetified as
+#' * \code{idx_casewise_outliers} indices of observations identified as
 #' casewise outliers by RoMFCC Phase II;
 #'
 #' * \code{ff_training} training set after the functional filter;
@@ -1202,6 +1216,7 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
                              c = 0,
                              functional_filter_par = list(filter = TRUE),
                              imputation_par = list(method_imputation = "RoMFDI"),
+                             casewise_par = list(remove_casewise = TRUE),
                              verbose = FALSE) {
 
   # -------------------------
@@ -1228,7 +1243,16 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
     imputation_par$method_imputation <- "RoMFDI"
   }
 
-  # Lambda e k dafult arguments
+  # Casewise default arguments
+  if (!is.list(casewise_par)) {
+    stop("casewise_par must be a list.")
+  }
+
+  if (is.null(casewise_par$remove_casewise)) {
+    casewise_par$remove_casewise <- TRUE
+  }
+
+  # Lambda e k default arguments
 
   if (!is.null(lambda)) {
     if (!is.numeric(lambda) || length(lambda) != 1 || is.na(lambda) || lambda <= 0 || lambda > 1) {
@@ -1412,68 +1436,82 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
   # STEP 2 - CASEWISE OUTLIERS via RoMFCC
   # ----------------------------------------
 
-
-  # --- 2A. Phase I of RoMFCC ---
-
-  if (verbose) {
-    message("Phase I: casewise detection with RoMFCC...")
-  }
-
-  RoMFCC_PhaseI_casewise_default <- formals(RoMFCC_PhaseI_casewise)
-
-  RoMFCC_PhaseI_casewise_args <- list(
-    mfdobj_imp = X_mfdimp_training_1,
-    mfdobj_imp_tuning = X_mfdimp_tuning_1
-  )
-
-  RoMFCC_PhaseI_casewise_args <- c(
-    RoMFCC_PhaseI_casewise_args,
-    RoMFCC_PhaseI_casewise_default[!(names(RoMFCC_PhaseI_casewise_default) %in%
-                                       names(RoMFCC_PhaseI_casewise_args))])
-
-  RoMFCC_PhaseI_casewise_out <- do.call(RoMFCC_PhaseI_casewise,
-                                        RoMFCC_PhaseI_casewise_args)
-
-
-  # --- 2B. Phase II of RoMFCC ---
-
-  if (verbose) {
-    message("Phase II: casewise detection with RoMFCC...")
-  }
-
   # Union of the first imputation of training and tuning
   mfd_all_imputed <- rbind_mfd(X_mfdimp_training_1, X_mfdimp_tuning_1)
 
-  RoMFCC_PhaseII_casewise_args <- list(
-    mfdobj_all_imp = mfd_all_imputed,
-    mod_phaseI_casewise = RoMFCC_PhaseI_casewise_out
-  )
+  if (casewise_par$remove_casewise) {
 
-  RoMFCC_PhaseII_casewise_out <- do.call(RoMFCC_PhaseII_casewise,
-                                         RoMFCC_PhaseII_casewise_args)
+    # --- 2A. Phase I of RoMFCC ---
 
-  casewise_outliers <- which(
-    RoMFCC_PhaseII_casewise_out$T2 > RoMFCC_PhaseII_casewise_out$T2_lim |
-      RoMFCC_PhaseII_casewise_out$SPE > RoMFCC_PhaseII_casewise_out$SPE_lim
-  )
-
-  if(length(casewise_outliers) > 0) {
-
-    if(verbose) {
-      message("Removing", length(casewise_outliers),
-              "functional casewise outliers ....")
+    if (verbose) {
+      message("Phase I: casewise detection with RoMFCC...")
     }
 
-    mfd_all_clean <- mfd_all_imputed[-casewise_outliers, ]
+    RoMFCC_PhaseI_casewise_default <- formals(RoMFCC_PhaseI_casewise)
+
+    RoMFCC_PhaseI_casewise_args <- list(
+      mfdobj_imp = X_mfdimp_training_1,
+      mfdobj_imp_tuning = X_mfdimp_tuning_1
+    )
+
+    RoMFCC_PhaseI_casewise_args <- c(
+      RoMFCC_PhaseI_casewise_args,
+      RoMFCC_PhaseI_casewise_default[!(names(RoMFCC_PhaseI_casewise_default) %in%
+                                         names(RoMFCC_PhaseI_casewise_args))])
+
+    RoMFCC_PhaseI_casewise_out <- do.call(RoMFCC_PhaseI_casewise,
+                                          RoMFCC_PhaseI_casewise_args)
+
+
+    # --- 2B. Phase II of RoMFCC ---
+
+    if (verbose) {
+      message("Phase II: casewise detection with RoMFCC...")
+    }
+
+    RoMFCC_PhaseII_casewise_args <- list(
+      mfdobj_all_imp = mfd_all_imputed,
+      mod_phaseI_casewise = RoMFCC_PhaseI_casewise_out
+    )
+
+    RoMFCC_PhaseII_casewise_out <- do.call(RoMFCC_PhaseII_casewise,
+                                           RoMFCC_PhaseII_casewise_args)
+
+    casewise_outliers <- which(
+      RoMFCC_PhaseII_casewise_out$T2 > RoMFCC_PhaseII_casewise_out$T2_lim |
+        RoMFCC_PhaseII_casewise_out$SPE > RoMFCC_PhaseII_casewise_out$SPE_lim
+    )
+
+    if (length(casewise_outliers) > 0) {
+
+      if(verbose) {
+        message("Removing ", length(casewise_outliers),
+                " functional casewise outliers.")
+      }
+
+      mfd_all_clean <- mfd_all_imputed[-casewise_outliers, ]
+    }
+
+    else {
+
+      if(verbose) {
+        message("No functional casewise outliers detected.")
+      }
+
+      mfd_all_clean <- mfd_all_imputed
+    }
   }
 
   else {
 
-    if(verbose) {
-      message("No functional casewise outliers detected.")
+    if (verbose) {
+      message("Skipping casewise outlier detection and removal step.")
     }
 
     mfd_all_clean <- mfd_all_imputed
+    casewise_outliers <- integer(0)
+    RoMFCC_PhaseI_casewise_out <- NULL
+    RoMFCC_PhaseII_casewise_out <- NULL
   }
 
 
