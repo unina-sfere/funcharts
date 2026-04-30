@@ -1214,6 +1214,7 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
                              k = NULL,
                              fev = 0.9,
                              c = 0,
+                             ARL0 = 200,
                              functional_filter_par = list(filter = TRUE),
                              imputation_par = list(method_imputation = "RoMFDI"),
                              casewise_par = list(remove_casewise = TRUE),
@@ -1276,6 +1277,11 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
   # fev default arguments
   if (!is.numeric(fev) || length(fev) != 1 || is.na(fev) || fev <= 0 || fev > 1) {
     stop("fev must be a single numeric value in (0, 1].")
+  }
+
+  # ARL0 default arguments
+  if (!is.numeric(ARL0) || length(ARL0) != 1 || is.na(ARL0) || ARL0 <= 0) {
+    stop("ARL0 must be a single positive numeric value.")
   }
 
   nvar <- dim(mfdobj$coefs)[3]
@@ -1538,7 +1544,8 @@ RoAMFEWMA_PhaseI <- function(mfdobj,
     lambda = lambda,
     k = k,
     fev = fev,
-    c = c
+    c = c,
+    ARL0 = ARL0
   )
 
   AMFEWMA_args <- c(
