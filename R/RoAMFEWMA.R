@@ -1187,7 +1187,7 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 #' doi:https://doi.org/10.1080/00224065.2024.2383674.
 #'
 #' @examples
-#' \dontrun {
+#' \dontrun{
 #' set.seed(0)
 #' dat_phaseI <- simulate_data_RoMFCC(p_cellwise = 0.05,
 #'                             p_casewise = 0.05,
