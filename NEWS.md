@@ -1,6 +1,8 @@
 # funcharts 1.8.1
 
 * Dependency on `rofanova` now works.
+* `RoAMFEWMA_PhaseI()` performs the robust version of the AMFEWMA control chart of Capezza et al. (2025).
+* `RoAMFEWMA_PhaseII()` performs the robust version of the AMFEWMA control chart of Capezza et al. (2025).
 
 # funcharts 1.8.0
 

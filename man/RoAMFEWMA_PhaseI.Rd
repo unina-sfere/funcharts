@@ -71,6 +71,11 @@ Default is 0.9.}
 no soft-thresholding. If a non-negative value is provided, it is used
 in the AMFEWMA Phase I (soft-thresholding) calibration step.}
 
+\item{ARL0}{Target in-control average run length (ARL) for the AMFEWMA control chart.
+Must be a single positive numeric value. It is passed to
+\code{\link{AMFEWMA_PhaseI_ST}} for Phase I calibration.
+Default value is \code{200}.}
+
 \item{functional_filter_par}{A list with an argument \code{filter} that can be TRUE or FALSE depending
 on if the functional filter step must be performed or not.
 All the other arguments of this list are passed as arguments to the function

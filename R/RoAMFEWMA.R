@@ -109,6 +109,7 @@
 #' plot_control_charts(out_phase2_casewise)
 #' }
 #'
+#' @noRd
 RoMFCC_PhaseI_casewise <- function(mfdobj_imp,
                                    mfdobj_imp_tuning,
                                    pca_par = list(fev = 0.7),
@@ -425,6 +426,7 @@ RoMFCC_PhaseI_casewise <- function(mfdobj_imp,
 #' plot_control_charts(out_phase2_casewise)
 #' }
 #'
+#' @noRd
 RoMFCC_PhaseII_casewise <- function(mfdobj_all_imp,
                                     mod_phaseI_casewise) {
 
@@ -691,6 +693,7 @@ RoMFCC_PhaseII_casewise <- function(mfdobj_all_imp,
 #' plot_control_charts(cc$cc, nobsI = 100)
 #' }
 #'
+#' @noRd
 AMFEWMA_PhaseI_ST <- function(mfdobj,
                               mfdobj_tuning,
                               lambda = NULL,
@@ -1097,6 +1100,11 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 #' \code{\link{AMFEWMA_PhaseI_ST}}. Default value is 0, corresponding to
 #' no soft-thresholding. If a non-negative value is provided, it is used
 #' in the AMFEWMA Phase I (soft-thresholding) calibration step.
+#' @param ARL0
+#' Target in-control average run length (ARL) for the AMFEWMA control chart.
+#' Must be a single positive numeric value. It is passed to
+#' \code{\link{AMFEWMA_PhaseI_ST}} for Phase I calibration.
+#' Default value is \code{200}.
 #' @param functional_filter_par
 #' A list with an argument \code{filter} that can be TRUE or FALSE depending
 #' on if the functional filter step must be performed or not.
