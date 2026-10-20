@@ -11,8 +11,10 @@ RoAMFEWMA_PhaseI(
   k = NULL,
   fev = 0.9,
   c = 0,
+  ARL0 = 200,
   functional_filter_par = list(filter = TRUE),
   imputation_par = list(method_imputation = "RoMFDI"),
+  casewise_par = list(remove_casewise = TRUE),
   verbose = FALSE
 )
 }
@@ -90,6 +92,18 @@ See \code{\link{RoMFDI}} for all the arguments and their default
 values.
 Default value is \code{list(method_imputation = "RoMFDI")}.}
 
+\item{casewise_par}{A list of parameters controlling the casewise outlier removal step based
+on the RoMFCC procedure.
+It must contain the logical argument \code{remove_casewise}, indicating
+whether the whole casewise outlier detection and removal step should be
+performed.
+If \code{remove_casewise = TRUE}, both Phase I and Phase II of the RoMFCC
+casewise procedure are applied to identify and remove casewise outliers
+from the Phase I data.
+If \code{remove_casewise = FALSE}, the entire casewise outlier removal step
+is skipped.
+Default value is \code{list(remove_casewise = TRUE)}.}
+
 \item{verbose}{If TRUE, it prints messages about the steps of the algorithm.
 Default is FALSE.}
 }
@@ -99,11 +113,13 @@ A list of the following elements:
 \item \code{mod_1} object returned by \code{AMFEWMA_PhaseI_ST}, see the value
 of \code{\link{AMFEWMA_PhaseI_ST}} for a full description of its component;
 \item \code{mfd_clean_training} training data after complete cleaning,
-containing no outliers at either cellwise or casewise;
+containing no outliers at either cellwise or casewise, used as training set
+for \code{\link{AMFEWMA_PhaseI_ST}};
 \item \code{mfd_clean_tuning} tuning data after complete cleaning,
-containing no outliers at either cellwise or casewise;
+containing no outliers at either cellwise or casewise, used as tuning set
+for \code{\link{AMFEWMA_PhaseI_ST}};
 \item \code{mfd_all_clean} full Phase I clean data (training + tuning);
-\item \code{idx_casewise_outliers} indices of observations indetified as
+\item \code{idx_casewise_outliers} indices of observations identified as
 casewise outliers by RoMFCC Phase II;
 \item \code{ff_training} training set after the functional filter;
 \item \code{ff_tuning} tuning set after the functional filter;

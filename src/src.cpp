@@ -31,7 +31,7 @@ arma::mat score(const arma::mat& e,
 
     phi = e;
     arma::uvec idx = find(abs(e) <= k);
-    phi.elem(idx) = e.elem(idx) * (1 - (1 - lambda) * pow(1 - square(e.elem(idx) / k.elem(idx)), 2));
+    phi.elem(idx) = e.elem(idx) % (1 - (1 - lambda) * pow(1 - square(e.elem(idx) / k.elem(idx)), 2));
 
   }
 
@@ -64,7 +64,7 @@ arma::vec score2(const arma::vec& e,
 
     phi = e;
     arma::uvec idx = find(abs(e) <= k);
-    phi.elem(idx) = e.elem(idx) * (1 - (1 - lambda) * pow(1 - square(e.elem(idx) / k.elem(idx)), 2));
+    phi.elem(idx) = e.elem(idx) % (1 - (1 - lambda) * pow(1 - square(e.elem(idx) / k.elem(idx)), 2));
 
   }
 

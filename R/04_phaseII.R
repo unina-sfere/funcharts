@@ -783,7 +783,7 @@ plot_control_charts <- function(cclist, nobsI = 0) {
                          data = dplyr::filter(df_amfewma, ooc),
                          size = 3) +
       ggplot2::xlab("Observation") +
-      ggplot2::ylab(expression(AMFEWMA~monitorng~statistic)) +
+      ggplot2::ylab(expression(AMFEWMA~monitoring~statistic)) +
       ggplot2::ggtitle(expression(AMFEWMA~CONTROL~CHART))
   }
 
