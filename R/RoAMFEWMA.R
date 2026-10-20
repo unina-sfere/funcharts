@@ -365,8 +365,7 @@ RoMFCC_PhaseI_casewise <- function(mfdobj_imp,
 #' concatenation of the fully imputed training and tuning sets to be
 #' monitored for casewise outliers.
 #' @param mod_phaseI_casewise
-#' Output obtained by applying the function \code{RoMFCC_PhaseI_casewise}
-#' to perform Phase I. See \code{\link{RoMFCC_PhaseI_casewise}}
+#' Output obtained by removing the casewise outliers from the Phase I sample.
 #'
 #' @return
 #' A \code{data.frame} with as many rows as the number of
@@ -1034,12 +1033,9 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 #'   \code{\link{functional_filter}},
 #'   \item Robust Multivariate Functional Data Imputation (RoMFDI) via
 #'   \code{\link{RoMFDI}},
-#'   \item Casewise outliers detection via RoMFCC
-#'   (\code{\link{RoMFCC_PhaseI_casewise}} and
-#'   \code{\link{RoMFCC_PhaseII_casewise}}),
-#'   on the imputed Phase I data,
+#'   \item Casewise outliers detection via RoMFCC on the imputed Phase I data,
 #'   \item AMFEWMA Phase I (soft-thresholding) calibration
-#'   (\code{\link{AMFEWMA_PhaseI_ST}}) on cellwise and casewise clean data.
+#'   on cellwise and casewise clean data.
 #' }
 #' The resulting object can be directly used as \code{mod_1} argument
 #' in \code{\link{RoAMFEWMA_PhaseII}}
@@ -1073,9 +1069,9 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 #' Lambda parameter to be used in the scoring function present in AMFEWMA.
 #' See equation (7) or (8) of Capezza et al., 2024.
 #' If supplied, it must be a number between 0 and 1. This is passed to
-#' \code{\link{AMFEWMA_PhaseI_ST}} and used as a fixed input, skipping the internal
+#' \code{\link{AMFEWMA_PhaseI}} and used as a fixed input, skipping the internal
 #' optimization step.
-#' If NULL, it is automatically selected within \code{\link{AMFEWMA_PhaseI_ST}}
+#' If NULL, it is automatically selected within \code{\link{AMFEWMA_PhaseI}}
 #' according to the optimization procedure presented in Section 2.4 of
 #' Capezza et al. (2024).
 #' The default value is NULL.
@@ -1083,9 +1079,9 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 #' Parameter k to be used in the scoring function present in AMFEWMA.
 #' See equation (7) or (8) of Capezza et al., 2024.
 #' If supplied, it must be a number greater than zero. This is passed to
-#' \code{\link{AMFEWMA_PhaseI_ST}} and used as a fixed input, skipping the
+#' \code{\link{AMFEWMA_PhaseI}} and used as a fixed input, skipping the
 #' internal optimization step.
-#' If NULL, it is automatically selected within \code{\link{AMFEWMA_PhaseI_ST}}
+#' If NULL, it is automatically selected within \code{\link{AMFEWMA_PhaseI}}
 #' according to the optimization procedure in Section 2.4 of
 #' Capezza et al. (2024).
 #' The default value is \code{NULL}.
@@ -1093,17 +1089,17 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 #' Number between 0 and 1 denoting the fraction of variability to be
 #' explained by the retained principal components in the multivariate
 #' functional PCA step performed inside
-#' \code{\link{AMFEWMA_PhaseI_ST}}.
+#' \code{\link{AMFEWMA_PhaseI}}.
 #' Default is 0.9.
 #' @param c
-#' Non-negative soft-thresholding constant passed to
-#' \code{\link{AMFEWMA_PhaseI_ST}}. Default value is 0, corresponding to
+#' Non-negative soft-thresholding.
+#' Default value is 0, corresponding to
 #' no soft-thresholding. If a non-negative value is provided, it is used
 #' in the AMFEWMA Phase I (soft-thresholding) calibration step.
 #' @param ARL0
 #' Target in-control average run length (ARL) for the AMFEWMA control chart.
 #' Must be a single positive numeric value. It is passed to
-#' \code{\link{AMFEWMA_PhaseI_ST}} for Phase I calibration.
+#' \code{\link{AMFEWMA_PhaseI}} for Phase I calibration.
 #' Default value is \code{200}.
 #' @param functional_filter_par
 #' A list with an argument \code{filter} that can be TRUE or FALSE depending
