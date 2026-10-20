@@ -1145,16 +1145,15 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 #' @return
 #' A list of the following elements:
 #'
-#' * \code{mod_1} object returned by \code{AMFEWMA_PhaseI_ST}, see the value
-#' of \code{\link{AMFEWMA_PhaseI_ST}} for a full description of its component;
+#' * \code{mod_1} object returned by \code{AMFEWMA_PhaseI};
 #'
 #' * \code{mfd_clean_training} training data after complete cleaning,
 #' containing no outliers at either cellwise or casewise, used as training set
-#' for \code{\link{AMFEWMA_PhaseI_ST}};
+#' for \code{\link{AMFEWMA_PhaseI}};
 #'
 #' * \code{mfd_clean_tuning} tuning data after complete cleaning,
 #' containing no outliers at either cellwise or casewise, used as tuning set
-#' for \code{\link{AMFEWMA_PhaseI_ST}};
+#' for \code{\link{AMFEWMA_PhaseI}};
 #'
 #' * \code{mfd_all_clean} full Phase I clean data (training + tuning);
 #'
@@ -1174,13 +1173,9 @@ AMFEWMA_PhaseI_given_pars_ST <- function(mfdobj,
 #' * \code{X_all_imputed} training + tuning data after robust multivariate
 #' functional imputation;
 #'
-#' * \code{mod_RoMFCC_phaseI_casewise} object returned by RoMFCC_PhaseI,
-#' see the value of \code{\link{RoMFCC_PhaseI_casewise}} for a full description
-#' of its component;
+#' * \code{mod_RoMFCC_phaseI_casewise} object returned by RoMFCC_PhaseI;
 #'
-#' * \code{mod_RoMFCC_phaseII_casewise} object returned by RoMFCC_PhaseII,
-#' see the value of \code{\link{RoMFCC_PhaseII_casewise}} for a full
-#' description of its component;
+#' * \code{mod_RoMFCC_phaseII_casewise} object returned by RoMFCC_PhaseII;
 #'
 #' @export
 #'
