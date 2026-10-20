@@ -17,16 +17,16 @@ statisticY_EWMA_cpp <- function(X, lambda, k, huber, idx) {
     .Call(`_funcharts_statisticY_EWMA_cpp`, X, lambda, k, huber, idx)
 }
 
-calculate_T2 <- function(Y, Vectors, Values) {
-    .Call(`_funcharts_calculate_T2`, Y, Vectors, Values)
+calculate_T2 <- function(Y, Vectors, Values, c = 0.0) {
+    .Call(`_funcharts_calculate_T2`, Y, Vectors, Values, c)
 }
 
 calculate_T2_vec <- function(Y, Vectors, Values) {
     .Call(`_funcharts_calculate_T2_vec`, Y, Vectors, Values)
 }
 
-get_RL_cpp <- function(X2, X_IC, idx2, idx_IC, lambda, k, huber, h, Values, Vectors) {
-    .Call(`_funcharts_get_RL_cpp`, X2, X_IC, idx2, idx_IC, lambda, k, huber, h, Values, Vectors)
+get_RL_cpp <- function(X2, X_IC, idx2, idx_IC, lambda, k, huber, h, Values, Vectors, c = 0.0) {
+    .Call(`_funcharts_get_RL_cpp`, X2, X_IC, idx2, idx_IC, lambda, k, huber, h, Values, Vectors, c)
 }
 
 der_c <- function(asn, smin, smax, der_0) {

@@ -47,6 +47,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Christian Capezza \email{christian.capezza@unina.it}
   \item Fabio Centofanti
   \item Davide Forcina
   \item Antonio Lepore
