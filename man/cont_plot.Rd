@@ -9,7 +9,8 @@ cont_plot(cclist, id_num, which_plot = c("T2", "spe"), print_id = FALSE)
 \arguments{
 \item{cclist}{A \code{data.frame} produced by
 \code{\link{control_charts_pca}}, \code{\link{control_charts_sof_pc}}
-\code{\link{regr_cc_fof}}, or \code{\link{regr_cc_sof}}.}
+\code{\link{regr_cc_fof}}, \code{\link{regr_cc_sof}}, or the
+\code{cc} element returned by \code{\link{AMFEWMA_PhaseII}}.}
 
 \item{id_num}{An index number giving the observation in the
 phase II data set to be plotted, i.e. 1 for the first observation,
@@ -18,7 +19,7 @@ phase II data set to be plotted, i.e. 1 for the first observation,
 \item{which_plot}{A character vector.
 Each value indicates which contribution you want to plot:
 
-"T2" indicates contribution to the Hotelling's T2 statistic,
+"T2" indicates contribution to the Hotelling's T2 or AMFEWMA V2 statistic,
 
 "spe" indicates contribution to the squared prediction error statistic.}
 
@@ -30,9 +31,11 @@ Default is FALSE.}
 \value{
 A ggplot containing the contributions of functional variables to the
 monitoring statistics.
-Each plot is a bar plot, with bars corresponding to contribution values and
-horizontal black segments denoting corresponding (empirical) upper limits.
-Bars are coloured by red if contributions exceed their limit.
+Each plot is a bar plot, with bars corresponding to contribution values.
+When contribution limits are available, horizontal black segments show the
+limits and bars exceeding them are red. Without limits, bars are grey.
+AMFEWMA contributions are signed and can be negative; no contribution limits
+or SPE contributions are produced by \code{AMFEWMA_PhaseII}.
 }
 \description{
 This function produces a contribution plot from

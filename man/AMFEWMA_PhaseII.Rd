@@ -4,7 +4,14 @@
 \alias{AMFEWMA_PhaseII}
 \title{Adaptive Multivariate Functional EWMA control chart - Phase II}
 \usage{
-AMFEWMA_PhaseII(mfdobj_2, mod_1, n_seq_2 = 1, l_seq_2 = 2000, n_skip = 100)
+AMFEWMA_PhaseII(
+  mfdobj_2,
+  mod_1,
+  n_seq_2 = 1,
+  l_seq_2 = 2000,
+  n_skip = 100,
+  include_contributions = TRUE
+)
 }
 \arguments{
 \item{mfdobj_2}{An object of class \code{mfd} containing the Phase II multivariate
@@ -29,6 +36,10 @@ tuning data to initialize each Phase II sequence. Threshold crossings during
 warm-up are ignored; run lengths count only Phase II observations. The
 default is 100, matching the default in \code{AMFEWMA_PhaseI}. Use 0 for
 zero initialization. Sampling is reproducible with \code{set.seed()}.}
+
+\item{include_contributions}{If \code{TRUE} (the default), include signed functional-variable
+contributions to the AMFEWMA statistic in \code{cc}. Set to \code{FALSE}
+to omit their calculation, for example when only run lengths are needed.}
 }
 \value{
 A list with the following elements.
@@ -52,6 +63,11 @@ AMFEWMA control chart in Phase II, with the following columns.
 \code{amfewma_monitoring_statistic} contains the AMFEWMA monitoring
 statistic values calculated on the Phase II sequence,
 \code{amfewma_monitoring_statistic_lim} is the upper control limit.
+When \code{include_contributions} is \code{TRUE}, columns named
+\code{contribution_T2_<variable>} give the signed contributions of each
+functional variable to the displayed statistic. These contributions sum
+to the AMFEWMA statistic, reflect the adaptive history, and may be negative.
+No contribution limits or SPE contributions are calculated.
 The chart shows the supplied Phase II observations in their original order,
 initialized with the warm-up sample used for the first run. When
 \code{n_seq_2 > 1}, the run lengths instead use resampled Phase II sequences.
@@ -93,6 +109,7 @@ mod <- AMFEWMA_PhaseI(mfdobj = mfdobj_I,
 cc <- AMFEWMA_PhaseII(mfdobj_2 = mfdobj_II,
                       mod_1 = mod)
 plot_control_charts(cc$cc)
+cont_plot(cc$cc, id_num = 1, which_plot = "T2")
 }
 
 }
