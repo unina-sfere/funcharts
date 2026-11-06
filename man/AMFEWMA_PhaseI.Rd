@@ -191,9 +191,9 @@ mod <- AMFEWMA_PhaseI(mfdobj = mfdobj_I,
                       lambda = 0.1,
                       k = c(1, 2))
 
-cc <- AMFEWMA_PhaseII(mfdobj_2 = rbind_mfd(mfdobj_I[1:100], mfdobj_II),
+cc <- AMFEWMA_PhaseII(mfdobj_2 = mfdobj_II,
                       mod_1 = mod)
-plot_control_charts(cc$cc, nobsI = 100)
+plot_control_charts(cc$cc)
 }
 
 

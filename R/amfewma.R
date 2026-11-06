@@ -196,9 +196,9 @@
 #'                       lambda = 0.1,
 #'                       k = c(1, 2))
 #'
-#' cc <- AMFEWMA_PhaseII(mfdobj_2 = rbind_mfd(mfdobj_I[1:100], mfdobj_II),
+#' cc <- AMFEWMA_PhaseII(mfdobj_2 = mfdobj_II,
 #'                       mod_1 = mod)
-#' plot_control_charts(cc$cc, nobsI = 100)
+#' plot_control_charts(cc$cc)
 #' }
 #'
 #'
@@ -330,11 +330,13 @@ AMFEWMA_PhaseI <- function(mfdobj,
       mod_2_AMFEWMA_big <- AMFEWMA_PhaseII(mfdobj_2 = fase2_big,
                                            mod_1 = mod_ii_jj,
                                            n_seq_2 = n_seq,
-                                           l_seq_2 = l_seq)
+                                           l_seq_2 = l_seq,
+                                           n_skip = n_skip)
       mod_2_AMFEWMA_small <- AMFEWMA_PhaseII(mfdobj_2 = fase2_small,
                                              mod_1 = mod_ii_jj,
                                              n_seq_2 = n_seq,
-                                             l_seq_2 = l_seq)
+                                             l_seq_2 = l_seq,
+                                             n_skip = n_skip)
       ARL_big <- mod_2_AMFEWMA_big$ARL_2
       ARL_small <- mod_2_AMFEWMA_small$ARL_2
 
@@ -525,7 +527,13 @@ AMFEWMA_PhaseI_given_pars <- function(mfdobj,
 #' @param l_seq_2
 #' If \code{n_seq_2} is larger than 1, this parameter sets the
 #' length of each bootstrap sequence to be generated.
-#' Default value is 2000 (which is ignored if the default value
+#' Default value is 2000 and is ignored when \code{n_seq_2} is 1.
+#' @param n_skip
+#' Number of in-control observations sampled with replacement from the Phase I
+#' tuning data to initialize each Phase II sequence. Threshold crossings during
+#' warm-up are ignored; run lengths count only Phase II observations. The
+#' default is 100, matching the default in \code{AMFEWMA_PhaseI}. Use 0 for
+#' zero initialization. Sampling is reproducible with \code{set.seed()}.
 #' @references
 #' Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2025)
 #' An Adaptive Multivariate Functional EWMA Control Chart.
@@ -538,11 +546,14 @@ AMFEWMA_PhaseI_given_pars <- function(mfdobj,
 #' * \code{ARL_2}: the average run length estimated over the
 #' bootstrap sequences. If \code{n_seq_2} is 1, it is simply the run length
 #' observed over the Phase II sequence, i.e., the number of observations
-#' up to the first alarm,
+#' up to the first alarm, after warm-up. Sequences without an alarm within the
+#' available monitoring horizon are omitted from this average; if none signal,
+#' the existing convention returns \code{1e10},
 #'
 #' * \code{RL}: the run length
 #' observed over the Phase II sequence, i.e., the number of observations
-#' up to the first alarm,
+#' up to the first alarm after warm-up, or \code{NA} if no alarm occurs within
+#' the available monitoring horizon,
 #'
 #' * \code{V2}: a list with length \code{n_seq_2}, containing the
 #' AMFEWMA monitoring statistic in Equation (8) of Capezza
@@ -554,6 +565,9 @@ AMFEWMA_PhaseI_given_pars <- function(mfdobj,
 #' \code{amfewma_monitoring_statistic} contains the AMFEWMA monitoring
 #' statistic values calculated on the Phase II sequence,
 #' \code{amfewma_monitoring_statistic_lim} is the upper control limit.
+#' The chart shows the supplied Phase II observations in their original order,
+#' initialized with the warm-up sample used for the first run. When
+#' \code{n_seq_2 > 1}, the run lengths instead use resampled Phase II sequences.
 #'
 #'
 #' @export
@@ -586,15 +600,21 @@ AMFEWMA_PhaseI_given_pars <- function(mfdobj,
 #'                       lambda = 0.1,
 #'                       k = c(1, 2))
 #'
-#' cc <- AMFEWMA_PhaseII(mfdobj_2 = rbind_mfd(mfdobj_I[1:100], mfdobj_II),
+#' cc <- AMFEWMA_PhaseII(mfdobj_2 = mfdobj_II,
 #'                       mod_1 = mod)
-#' plot_control_charts(cc$cc, nobsI = 100)
+#' plot_control_charts(cc$cc)
 #' }
 #'
 AMFEWMA_PhaseII <- function (mfdobj_2,
                              mod_1,
                              n_seq_2 = 1,
-                             l_seq_2 = 2000) {
+                             l_seq_2 = 2000,
+                             n_skip = 100) {
+
+  if (length(n_skip) != 1L || !is.numeric(n_skip) || is.na(n_skip) ||
+      !is.finite(n_skip) || n_skip < 0 || n_skip != floor(n_skip)) {
+    stop("n_skip must be a non-negative integer")
+  }
 
   mod_1 <- mod_1$mod_1
 
@@ -617,10 +637,27 @@ AMFEWMA_PhaseII <- function (mfdobj_2,
   mfdobj_2_cen_eval <- fda::eval.fd(grid_points, mfdobj_2_cen)
   X2 <- matrix(aperm(mfdobj_2_cen_eval, c(2, 1, 3)), nrow = nobs_2)
 
+  if (n_skip > 0) {
+    tuning <- mod_1$mfdobj_tuning
+    if (is.null(tuning) || is.null(dim(tuning$coefs)) ||
+        dim(tuning$coefs)[2] < 1L) {
+      stop("Phase I tuning data are required when n_skip is positive")
+    }
+    tuning_cen <- funcharts::scale_mfd(tuning, center = mean_mfdobj,
+                                      scale = FALSE)
+    tuning_eval <- fda::eval.fd(grid_points, tuning_cen)
+    nobs_tuning <- dim(tuning$coefs)[2]
+    X_IC <- matrix(aperm(tuning_eval, c(2, 1, 3)), nrow = nobs_tuning)
+  } else {
+    X_IC <- matrix(numeric(), nrow = 0L, ncol = ncol(X2))
+  }
+
   V2 <- list()
 
 
   for (jj in 1:n_seq_2) {
+    idx_IC <- if (n_skip > 0) sample.int(nobs_tuning, n_skip, replace = TRUE) else integer()
+    if (jj == 1L) idx_IC_cc <- idx_IC
     if (n_seq_2 == 1) {
       idx2 <- 1:nobs_2
     } else {
@@ -628,9 +665,9 @@ AMFEWMA_PhaseII <- function (mfdobj_2,
     }
     output <- get_RL_cpp(
       X2 = X2,
-      X_IC = matrix(),
+      X_IC = X_IC,
       idx2 = idx2,
-      idx_IC = numeric(),
+      idx_IC = idx_IC,
       lambda = lambda,
       k = k,
       huber = huber,
@@ -650,9 +687,9 @@ AMFEWMA_PhaseII <- function (mfdobj_2,
   idx2 <- 1:nobs_2
   output <- get_RL_cpp(
     X2 = X2,
-    X_IC = matrix(),
+    X_IC = X_IC,
     idx2 = idx2,
-    idx_IC = numeric(),
+    idx_IC = idx_IC_cc,
     lambda = lambda,
     k = k,
     huber = huber,
