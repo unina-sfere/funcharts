@@ -156,7 +156,8 @@ which_ooc <- function(cclist) {
 #' @param cclist
 #' A \code{data.frame} produced by
 #' \code{\link{control_charts_pca}}, \code{\link{control_charts_sof_pc}}
-#' \code{\link{regr_cc_fof}}, or \code{\link{regr_cc_sof}}.
+#' \code{\link{regr_cc_fof}}, \code{\link{regr_cc_sof}}, or the
+#' \code{cc} element returned by \code{\link{AMFEWMA_PhaseII}}.
 #' @param id_num
 #' An index number giving the observation in the
 #' phase II data set to be plotted, i.e. 1 for the first observation,
@@ -165,7 +166,7 @@ which_ooc <- function(cclist) {
 #' A character vector.
 #' Each value indicates which contribution you want to plot:
 #'
-#' "T2" indicates contribution to the Hotelling's T2 statistic,
+#' "T2" indicates contribution to the Hotelling's T2 or AMFEWMA V2 statistic,
 #'
 #' "spe" indicates contribution to the squared prediction error statistic.
 #'
@@ -178,9 +179,11 @@ which_ooc <- function(cclist) {
 #' @return
 #' A ggplot containing the contributions of functional variables to the
 #' monitoring statistics.
-#' Each plot is a bar plot, with bars corresponding to contribution values and
-#' horizontal black segments denoting corresponding (empirical) upper limits.
-#' Bars are coloured by red if contributions exceed their limit.
+#' Each plot is a bar plot, with bars corresponding to contribution values.
+#' When contribution limits are available, horizontal black segments show the
+#' limits and bars exceeding them are red. Without limits, bars are grey.
+#' AMFEWMA contributions are signed and can be negative; no contribution limits
+#' or SPE contributions are produced by \code{AMFEWMA_PhaseII}.
 #' @export
 #' @examples
 #' library(funcharts)
@@ -219,13 +222,35 @@ cont_plot <- function(cclist,
   title <- paste("Observation", id_num)
   if (print_id) title <- paste(title, cclist$id[id_num])
 
-  if (identical(which_plot, "all")) which_plot <- c("T2", "spe")
+  has_spe <- any(startsWith(names(cclist), "contribution_spe_") &
+                   !endsWith(names(cclist), "_lim"))
+  if (identical(which_plot, "all") || missing(which_plot)) {
+    which_plot <- if (has_spe) c("T2", "spe") else "T2"
+  }
 
   fun_covariates <- cclist %>%
     dplyr::select(dplyr::contains("contribution_T2")) %>%
-    dplyr::select(-dplyr::contains("_lim")) %>%
+    dplyr::select(-dplyr::ends_with("_lim")) %>%
     names() %>%
     gsub("contribution_T2_", "", .)
+
+  if (!length(fun_covariates)) stop("No T2 contribution columns found")
+  if ("spe" %in% which_plot && !has_spe) stop("No SPE contribution columns found")
+
+  get_limits <- function(prefix) {
+    limit_names <- paste0(prefix, fun_covariates, "_lim")
+    present <- limit_names %in% names(cclist)
+    out <- rep(NA_real_, length(limit_names))
+    if (any(present)) {
+      out[present] <- as.numeric(cclist[id_num, limit_names[present], drop = FALSE])
+    }
+    out
+  }
+  t2_label <- if (!is.null(cclist$amfewma_monitoring_statistic)) {
+    "Contribution to V2"
+  } else {
+    "Contribution to T2"
+  }
 
   df_hot <- df_spe <- NULL
 
@@ -234,16 +259,12 @@ cont_plot <- function(cclist,
       variables = factor(fun_covariates, levels = fun_covariates),
       contribution = cclist %>%
         dplyr::select(dplyr::contains("contribution_T2"),
-                      -dplyr::contains("_lim")) %>%
+                      -dplyr::ends_with("_lim")) %>%
         dplyr::slice(id_num) %>%
         as.numeric(),
-      limit = cclist %>%
-        dplyr::select(dplyr::contains("contribution_T2")) %>%
-        dplyr::select(dplyr::contains("_lim")) %>%
-        dplyr::slice(id_num) %>%
-        as.numeric()) %>%
-      dplyr::mutate(ooc = contribution > limit) %>%
-      dplyr::mutate(type = "Contribution to T2") %>%
+      limit = get_limits("contribution_T2_")) %>%
+      dplyr::mutate(ooc = !is.na(limit) & contribution > limit) %>%
+      dplyr::mutate(type = t2_label) %>%
       dplyr::mutate(x = seq_along(variables) - 0.35,
                     xend = seq_along(variables) + 0.35)
   }
@@ -253,22 +274,18 @@ cont_plot <- function(cclist,
       variables = factor(fun_covariates, levels = fun_covariates),
       contribution = cclist %>%
         dplyr::select(dplyr::contains("contribution_spe"),
-                      -dplyr::contains("_lim")) %>%
+                      -dplyr::ends_with("_lim")) %>%
         dplyr::slice(id_num) %>%
         as.numeric(),
-      limit = cclist %>%
-        dplyr::select(dplyr::contains("contribution_spe")) %>%
-        dplyr::select(dplyr::contains("_lim")) %>%
-        dplyr::slice(id_num) %>%
-        as.numeric()) %>%
-      dplyr::mutate(ooc = contribution > limit) %>%
+      limit = get_limits("contribution_spe_")) %>%
+      dplyr::mutate(ooc = !is.na(limit) & contribution > limit) %>%
       dplyr::mutate(type = "Contribution to SPE") %>%
       dplyr::mutate(x = seq_along(variables) - 0.35,
                     xend = seq_along(variables) + 0.35)
   }
 
   df <- dplyr::bind_rows(df_hot, df_spe) %>%
-    dplyr::mutate(type = factor(type, levels = c("Contribution to T2",
+    dplyr::mutate(type = factor(type, levels = c("Contribution to T2", "Contribution to V2",
                                                        "Contribution to SPE")))
   ggplot2::ggplot(df) +
     ggplot2::geom_col(ggplot2::aes(x = variables,
@@ -279,7 +296,7 @@ cont_plot <- function(cclist,
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5),
                    legend.position = "none") +
     ggplot2::scale_fill_manual(values = c("FALSE" = "grey", "TRUE" = "tomato1")) +
-    ggplot2::geom_segment(ggplot2::aes(
+    ggplot2::geom_segment(data = df[!is.na(df$limit), , drop = FALSE], ggplot2::aes(
       x = x,
       xend = xend,
       y = limit,

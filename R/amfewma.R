@@ -331,12 +331,14 @@ AMFEWMA_PhaseI <- function(mfdobj,
                                            mod_1 = mod_ii_jj,
                                            n_seq_2 = n_seq,
                                            l_seq_2 = l_seq,
-                                           n_skip = n_skip)
+                                           n_skip = n_skip,
+                                           include_contributions = FALSE)
       mod_2_AMFEWMA_small <- AMFEWMA_PhaseII(mfdobj_2 = fase2_small,
                                              mod_1 = mod_ii_jj,
                                              n_seq_2 = n_seq,
                                              l_seq_2 = l_seq,
-                                             n_skip = n_skip)
+                                             n_skip = n_skip,
+                                             include_contributions = FALSE)
       ARL_big <- mod_2_AMFEWMA_big$ARL_2
       ARL_small <- mod_2_AMFEWMA_small$ARL_2
 
@@ -534,6 +536,10 @@ AMFEWMA_PhaseI_given_pars <- function(mfdobj,
 #' warm-up are ignored; run lengths count only Phase II observations. The
 #' default is 100, matching the default in \code{AMFEWMA_PhaseI}. Use 0 for
 #' zero initialization. Sampling is reproducible with \code{set.seed()}.
+#' @param include_contributions
+#' If \code{TRUE} (the default), include signed functional-variable
+#' contributions to the AMFEWMA statistic in \code{cc}. Set to \code{FALSE}
+#' to omit their calculation, for example when only run lengths are needed.
 #' @references
 #' Capezza, C., Capizzi, G., Centofanti, F., Lepore, A., Palumbo, B. (2025)
 #' An Adaptive Multivariate Functional EWMA Control Chart.
@@ -565,6 +571,11 @@ AMFEWMA_PhaseI_given_pars <- function(mfdobj,
 #' \code{amfewma_monitoring_statistic} contains the AMFEWMA monitoring
 #' statistic values calculated on the Phase II sequence,
 #' \code{amfewma_monitoring_statistic_lim} is the upper control limit.
+#' When \code{include_contributions} is \code{TRUE}, columns named
+#' \code{contribution_T2_<variable>} give the signed contributions of each
+#' functional variable to the displayed statistic. These contributions sum
+#' to the AMFEWMA statistic, reflect the adaptive history, and may be negative.
+#' No contribution limits or SPE contributions are calculated.
 #' The chart shows the supplied Phase II observations in their original order,
 #' initialized with the warm-up sample used for the first run. When
 #' \code{n_seq_2 > 1}, the run lengths instead use resampled Phase II sequences.
@@ -603,17 +614,23 @@ AMFEWMA_PhaseI_given_pars <- function(mfdobj,
 #' cc <- AMFEWMA_PhaseII(mfdobj_2 = mfdobj_II,
 #'                       mod_1 = mod)
 #' plot_control_charts(cc$cc)
+#' cont_plot(cc$cc, id_num = 1, which_plot = "T2")
 #' }
 #'
 AMFEWMA_PhaseII <- function (mfdobj_2,
                              mod_1,
                              n_seq_2 = 1,
                              l_seq_2 = 2000,
-                             n_skip = 100) {
+                             n_skip = 100,
+                             include_contributions = TRUE) {
 
   if (length(n_skip) != 1L || !is.numeric(n_skip) || is.na(n_skip) ||
       !is.finite(n_skip) || n_skip < 0 || n_skip != floor(n_skip)) {
     stop("n_skip must be a non-negative integer")
+  }
+  if (!is.logical(include_contributions) || length(include_contributions) != 1L ||
+      is.na(include_contributions)) {
+    stop("include_contributions must be TRUE or FALSE")
   }
 
   mod_1 <- mod_1$mod_1
@@ -703,6 +720,35 @@ AMFEWMA_PhaseII <- function (mfdobj_2,
     amfewma_monitoring_statistic = output$T2[, 1],
     amfewma_monitoring_statistic_lim = mod_1$h
   )
+
+  if (include_contributions) {
+    # Reproduce the displayed trajectory using the same warm-up sample.  The
+    # grid columns are ordered by variable, as in the Phase II matrix X2.
+    X_chart <- rbind(X_IC[idx_IC_cc, , drop = FALSE], X2)
+    Y_chart <- statisticY_EWMA_cpp(X_chart,
+                                  lambda = lambda,
+                                  k = k,
+                                  huber = huber,
+                                  idx = seq_len(nrow(X_chart)))
+    Y_chart <- Y_chart[seq.int(n_skip + 1L, length.out = nobs_2), , drop = FALSE]
+    scores <- Y_chart %*% vectors
+    scaled_scores <- sweep(scores, 2L, values, "/")
+    n_grid <- length(grid_points)
+    contributions <- vapply(seq_len(nvar), function(j) {
+      indices <- ((j - 1L) * n_grid + 1L):(j * n_grid)
+      partial_scores <- Y_chart[, indices, drop = FALSE] %*%
+        vectors[indices, , drop = FALSE]
+      rowSums(partial_scores * scaled_scores)
+    }, numeric(nobs_2))
+    contributions <- matrix(contributions, nrow = nobs_2, ncol = nvar)
+    variable_names <- mfdobj_2$fdnames[[3]]
+    if (is.null(variable_names) || length(variable_names) != nvar ||
+        anyNA(variable_names) || any(!nzchar(variable_names))) {
+      variable_names <- paste0("V", seq_len(nvar))
+    }
+    colnames(contributions) <- paste0("contribution_T2_", make.unique(as.character(variable_names)))
+    cc <- cbind(cc, as.data.frame(contributions, check.names = FALSE))
+  }
 
   return(list(
     ARL_2 = ARL_2,
