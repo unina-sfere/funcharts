@@ -1,3 +1,8 @@
+# funcharts 1.8.2
+
+* Now `AMFEWMA_PhaseII()` also allows to produce contribution plots to find which variables are responsible for an anomalous observation.
+* Fixed Tukey score code for `AMFEWMA_PhaseI()` and `AMFEWMA_PhaseII()`.
+
 # funcharts 1.8.1
 
 * Dependency on `rofanova` now works.
